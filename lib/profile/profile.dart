@@ -4,7 +4,7 @@ import 'package:share/share.dart';
 import 'package:spotmies_partner/login/login.dart';
 
 class Profile extends StatefulWidget {
-  @override
+  @override 
   _ProfileState createState() => _ProfileState();
 }
 

@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => OTPScreen(_controller.text)));
-                // print(uid);
               },
               child: Text(
                 'Next',

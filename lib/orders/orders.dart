@@ -16,7 +16,7 @@ class _OrdersState extends State<Orders> {
     Center(
       child: Completed(),
     ),
-  ];
+  ]; 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

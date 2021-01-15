@@ -11,7 +11,6 @@ class AddImage extends StatefulWidget {
   @override
   _AddImageState createState() => _AddImageState();
 }
-
 class _AddImageState extends State<AddImage> {
   bool uploading = false;
   double val = 0;

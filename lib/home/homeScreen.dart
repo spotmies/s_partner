@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
            child: isSwitched?Online():Offline(),
             ),
-          
         ],
       )),
     );

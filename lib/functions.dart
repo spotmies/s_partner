@@ -63,7 +63,7 @@ class _FunctionsState extends State<Functions> {
                 v.data.forEach((f) {
                   fruit.add(f);
                 });
-              });
+              }); 
             }).catchError((e) {
               _scaffoldKey.currentState.showSnackBar(SnackBar(
                 content: Text("ERROR: $e"),

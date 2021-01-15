@@ -23,7 +23,6 @@ class PercentIndicator extends StatefulWidget {
   @override
   _PercentIndicatorState createState() => _PercentIndicatorState();
 }
-
 class _PercentIndicatorState extends State<PercentIndicator> {
   var perValue = 0.7;
   var accValue = 0.6;

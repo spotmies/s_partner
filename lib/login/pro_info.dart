@@ -221,7 +221,7 @@ class _ProInfoState extends State<ProInfo> {
                 ],
               )
             ],
-          ),
+          ), 
         ),
       ),
     );

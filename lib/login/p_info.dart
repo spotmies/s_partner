@@ -7,7 +7,6 @@ class PersonalInfo extends StatefulWidget {
   @override
   _PersonalInfoState createState() => _PersonalInfoState();
 }
-
 class _PersonalInfoState extends State<PersonalInfo> {
   String name;
   String dob;

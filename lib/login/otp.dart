@@ -9,7 +9,6 @@ class OTPScreen extends StatefulWidget {
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
-
 class _OTPScreenState extends State<OTPScreen> {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String _verificationCode;

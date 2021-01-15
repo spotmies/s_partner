@@ -85,7 +85,7 @@ class _OnlineState extends State<Online> {
                           children: [
                             Text(
                               'job: ' + document['job'],
-                            ),
+                            ), 
                             // Text(
                             //   'distance' + document['orderid'],
                             // ),
