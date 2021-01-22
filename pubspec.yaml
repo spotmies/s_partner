@@ -38,6 +38,10 @@ dependencies:
   image_picker: ^0.6.7+17
   cloud_functions: ^0.7.2
   date_format: ^1.0.9
+  geolocator: ^6.1.14
+  location: ^3.2.1
+  geocoder: ^0.2.1
+  
   
 
 

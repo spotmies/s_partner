@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/location.dart';
 
 class PersonalInfo extends StatefulWidget {
   @override
@@ -190,69 +191,84 @@ class _PersonalInfoState extends State<PersonalInfo> {
                       height: 7,
                     ),
                     Container(
-                        padding: EdgeInsets.all(25),
+                        padding: EdgeInsets.all(5),
                         height: 90,
                         width: 380,
+                       // alignment: Alignment.centerRight,
                         decoration: BoxDecoration(
+                         // border: Border.all(color: Colors.grey),
+                           
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          children: [
-                            // Text("data"),
-                            DropdownButton(
-                              value: dropDownValue,
-                              hint: Text(
-                                '$dropDownValue',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              icon: Icon(Icons.arrow_downward_outlined),
-                              items: [
-                                DropdownMenuItem(
-                                  value: 0,
-                                  child: Text('AC Service'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 1,
-                                  child: Text('Computer'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 2,
-                                  child: Text('TV Repair'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 3,
-                                  child: Text('development'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 4,
-                                  child: Text('tutor'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 5,
-                                  child: Text('beauty'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 6,
-                                  child: Text('photography'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 7,
-                                  child: Text('drivers'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 8,
-                                  child: Text('events'),
+                        child:
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Select your job:',style: TextStyle(fontSize: 17)),
+                                SizedBox(width: 15,),
+                                // Text("data"),
+                                DropdownButton(
+                                  
+                                 // itemHeight: 0,
+                                  value: dropDownValue,
+                                  
+                                  hint: 
+                                  //'$dropDownValue'==null?Text('select your job'):
+                                  Text(                           
+                                    '$dropDownValue',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  icon: Icon(Icons.arrow_downward_outlined),
+                                  items: [
+                                    
+                                    DropdownMenuItem(
+                                      value: 0,
+                                      child: Text('AC Service',),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 1,
+                                      child: Text('Computer'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 2,
+                                      child: Text('TV Repair'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 3,
+                                      child: Text('Development'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 4,
+                                      child: Text('Tutor'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 5,
+                                      child: Text('Beauty'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 6,
+                                      child: Text('Photography'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 7,
+                                      child: Text('Drivers'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 8,
+                                      child: Text('Events'),
+                                    ),
+                                  ],
+                                  onChanged: (newVal) {
+                                    print(dropDownValue);
+                                    setState(() {
+                                      dropDownValue = newVal;
+                                    });
+                                  },
                                 ),
                               ],
-                              onChanged: (newVal) {
-                                print(dropDownValue);
-                                setState(() {
-                                  dropDownValue = newVal;
-                                });
-                              },
                             ),
-                          ],
-                        )),
+                          
+                        ),
                   ],
                 ),
               ),
@@ -276,7 +292,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         print(now);
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => Home()),
+                            MaterialPageRoute(builder: (_) => Location()),
                             (route) => false);
                         Map<String, dynamic> postData = {
                           'name': this.name,

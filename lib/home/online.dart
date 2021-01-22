@@ -7,6 +7,8 @@ import 'package:im_animations/im_animations.dart';
 var path;
 var userid;
 var orderid;
+//int job;
+var tittle;
 Future<void> docid() async {
   path = FirebaseFirestore.instance
       .collection('partner')
@@ -74,69 +76,127 @@ class _OnlineState extends State<Online> {
                   padding: EdgeInsets.all(15),
                   children: snapshot.data.docs.map(
                     (document) {
-                      return Container(
-                        height: 400,
-                        width: 350,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: kElevationToShadow[0]),
-                        child: Column(
-                          children: [
-                            Text(
-                              'job: ' + document['job'],
-                            ), 
-                            // Text(
-                            //   'distance' + document['orderid'],
-                            // ),
-                            // Text(
-                            //   'money' + document['orderid'],
-                            // ),
-                            RaisedButton(
-                                child: Text(
-                                  'accept',
-                                  style: TextStyle(color: Colors.white),
+                      return Column(
+                        children: [
+                          Container(
+                            height: 400,
+                            width: 350,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: kElevationToShadow[0]),
+                            child: Column(
+                              children: [
+                                Text((() {
+                                  if (document['job'] == 0) {
+                                    return 'AC Service';
+                                  }
+                                  if (document['job'] == 1) {
+                                    return 'Computer';
+                                  }
+                                  if (document['job'] == 2) {
+                                    return 'TV Repair';
+                                  }
+                                  if (document['job'] == 3) {
+                                    return 'Development';
+                                  }
+                                  if (document['job'] == 4) {
+                                    return 'Tutor';
+                                  }
+                                  if (document['job'] == 5) {
+                                    return 'Beauty';
+                                  }
+                                  if (document['job'] == 6) {
+                                    return 'Photography';
+                                  }
+                                  if (document['job'] == 7) {
+                                    return 'Drivers';
+                                  }
+                                  if (document['job'] == 8) {
+                                    return 'Events';
+                                  }
+                                }())
+                                    .toString()),
+                                SizedBox(
+                                  height: 20,
                                 ),
-                                color: Colors.blue[900],
-                                onPressed: () async {
-                                  FirebaseFirestore.instance
-                                      .collection('partner')
-                                      .doc(
-                                          FirebaseAuth.instance.currentUser.uid)
-                                      .collection('orders')
-                                      .doc(document['orderid'])
-                                      .update({
-                                    'request': true,
-                                  });
-                                }),
-                            RaisedButton(
-                                child: Text(
-                                  'reject',
-                                  style: TextStyle(color: Colors.white),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    RaisedButton(
+                                        child: Text(
+                                          'accept',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue[900],
+                                        onPressed: () async {
+                                          FirebaseFirestore.instance
+                                              .collection('partner')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser.uid)
+                                              .collection('orders')
+                                              .doc(document['orderid'])
+                                              .update(
+                                            {
+                                              'request': true,
+                                            },
+                                          );
+                                          FirebaseFirestore.instance
+                                              .collection('allads')
+                                              .doc(document['orderid'])
+                                              .update({'request': true});
+                                        }),
+                                    RaisedButton(
+                                        child: Text(
+                                          'reject',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue[900],
+                                        onPressed: () {
+                                          FirebaseFirestore.instance
+                                              .collection('partner')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser.uid)
+                                              .collection('orders')
+                                              .doc(document['orderid'])
+                                              .update({
+                                            'request': false,
+                                          });
+                                          FirebaseFirestore.instance
+                                              .collection('allads')
+                                              .doc(document['orderid'])
+                                              .update({
+                                            'request': false,
+                                          });
+                                          var pid = document['token'];
+                                          FirebaseFirestore.instance
+                                              .collection('allads')
+                                              .doc(document['orderid'])
+                                              .update({
+                                            'reject.token': 'dummy',
+                                            'reject.$pid': FirebaseAuth
+                                                .instance.currentUser.uid,
+                                          });
+                                        }),
+                                    RaisedButton(
+                                        child: Text(
+                                          'update',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.blue[900],
+                                        onPressed: () {
+                                          _adUpdateDialog(context);
+                                        }),
+                                  ],
                                 ),
-                                color: Colors.blue[900],
-                                onPressed: () {
-                                  FirebaseFirestore.instance
-                                      .collection('partner')
-                                      .doc(
-                                          FirebaseAuth.instance.currentUser.uid)
-                                      .collection('orders')
-                                      .doc(document['orderid'])
-                                      .update({
-                                    'request': false,
-                                  });
-                                }),
-                            RaisedButton(
-                                child: Text(
-                                  'update',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Colors.blue[900],
-                                onPressed: () {
-                                  _adUpdateDialog(context);
-                                }),
-                          ],
-                        ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                        ],
                       );
                     },
                   ).toList(),
@@ -341,7 +401,7 @@ class CrudMethods {
   }
 
   Future<void> requestData(postData) async {
-   // docid();
+    // docid();
     print(path.id);
     if (isLoggedIn()) {
       FirebaseFirestore.instance
