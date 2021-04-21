@@ -45,17 +45,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:277034750528:android:bf8d1ecae6ae699a5b45a5",
+        "mobilesdk_app_id": "1:277034750528:android:42e3626fd9fc35775b45a5",
         "android_client_info": {
-          "package_name": "com.example.spotmies_part"
+          "package_name": "com.example.spotmies_partner"
         }
       },
       "oauth_client": [
         {
-          "client_id": "277034750528-fmokkj570hms70cn5melo33srmrav4p6.apps.googleusercontent.com",
+          "client_id": "277034750528-1hpvskrogjvgs4uppraefp42j1mf0to5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.spotmies_part",
+            "package_name": "com.example.spotmies_partner",
             "certificate_hash": "5f4b0856b12b53cdd850f8c27ef030a72e95fe4b"
           }
         },
@@ -82,17 +82,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:277034750528:android:42e3626fd9fc35775b45a5",
+        "mobilesdk_app_id": "1:277034750528:android:c2cad02e77a828755b45a5",
         "android_client_info": {
-          "package_name": "com.example.spotmies_partner"
+          "package_name": "com.spotmiespartner"
         }
       },
       "oauth_client": [
         {
-          "client_id": "277034750528-1hpvskrogjvgs4uppraefp42j1mf0to5.apps.googleusercontent.com",
+          "client_id": "277034750528-ml1p0p7kr8s9358n7hi9are421llapct.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.spotmies_partner",
+            "package_name": "com.spotmiespartner",
             "certificate_hash": "5f4b0856b12b53cdd850f8c27ef030a72e95fe4b"
           }
         },

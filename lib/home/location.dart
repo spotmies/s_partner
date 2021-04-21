@@ -3,15 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:spotmies_partner/home/home.dart';
-
-//import 'package:location/location.dart';
-// var lPath;
-// Future<void> data() async {
-//   lPath = FirebaseFirestore.instance
-//       .collection('partner')
-//       .doc(FirebaseAuth.instance.currentUser.uid);
-// }
+import 'package:im_animations/im_animations.dart';
+import 'package:spotmies_partner/login/legal_doc.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -24,6 +17,7 @@ class _LocationState extends State<Location> {
   String add1 = "";
   String add2 = "";
   String add3 = "";
+
   //function for location
   void getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -66,69 +60,127 @@ class _LocationState extends State<Location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
+        leading: Icon(
+          Icons.my_location,
+          color: Colors.black,
+        ),
         backgroundColor: Colors.white,
-        elevation: 1,
+        title: Text('Set Loction', style: TextStyle(color: Colors.black)),
+        elevation: 0,
         actions: [
-          // Container(
-          //   height: 20,
-          //   width: double.infinity,
-          //   color: Colors.amber,
-          // ),
-          TextButton(
-              onPressed: () {
-                //lantitude and longitude
-                FirebaseFirestore.instance
-                    .collection('partner')
-                    .doc(FirebaseAuth.instance.currentUser.uid)
-                    .update({
-                  'location.latitude': latitude,
-                  'location.longitude': longitude,
-                  'location.add1':add1,
-                  'location.add2':add2,
-                });
-                //address
-              
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => Home()),
-                    (route) => false);
-              },
-              child: Text('SAVE'))
+          (getCurrentLocation == null)
+              ? Text('No Data')
+              : TextButton(
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('partner')
+                        .doc(FirebaseAuth.instance.currentUser.uid)
+                        .update({
+                      'location.latitude': latitude,
+                      'location.longitude': longitude,
+                      'location.add1': add2,
+                    });
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => Addimage()),
+                        (route) => false);
+                  },
+                  child: Text('SAVE'))
         ],
       ),
-      body: Center(
+      body: Container(
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              Icons.location_on,
-              size: 46,
-              color: Colors.blue[700],
+            CircleAvatar(
+              child: ColorSonarDemo(),
+              radius: 50.0,
             ),
-            Text(
-              'Get Location',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text('$latitude,$longitude'),
-            FlatButton(
-              onPressed: () async {
-                getCurrentLocation();
-                getAddressofLocation();
-              },
-              color: Colors.blue[700],
-              child: Text(
-                'Get Current Location',
-                style: TextStyle(color: Colors.white),
+            // SizedBox(height: 70,),
+            Container(
+              height: 180,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[100],
+                    blurRadius: 5.0,
+                  )
+                ],
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your Address:',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('$latitude,$longitude'),
+                  Text(add2),
+                ],
               ),
             ),
-            Text(add1),
-            Text(add2),
-           // Text(add3)
-
-            // SizedBox(height: 10,),
+            //  FlatButton(
+            //   onPressed: () async {
+            //     //(latitude=null)? CircularProgressIndicator():
+            //   },
+            //   color: Colors.blue[700],
+            //   child: Text(
+            //     'Get Location',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            // ),
+            ElevatedButton.icon(
+              
+                //color: Colors.blue[700],
+                onPressed: () {
+                  getCurrentLocation();
+                  getAddressofLocation();
+                },
+                icon: Icon(
+                  Icons.my_location,
+                  color: Colors.white,
+                ),
+                label:
+                    Text('Get Location', style: TextStyle(color: Colors.white)))
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ColorSonarDemo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: ColorSonar(
+          contentAreaRadius: 48.0,
+          waveFall: 15.0,
+          innerWaveColor: Colors.grey[100],
+          middleWaveColor: Colors.grey[200],
+          outerWaveColor: Colors.grey[100],
+          waveMotion: WaveMotion.synced,
+          child: CircleAvatar(
+            child: Icon(
+              Icons.location_on,
+              size: 46,
+              color: Colors.blue,
+            ),
+            backgroundColor: Colors.white,
+            radius: 48.0,
+          ),
         ),
       ),
     );

@@ -1,280 +1,401 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:path/path.dart' as Path;
-import 'package:spotmies_partner/login/pro_info.dart';
+import 'package:spotmies_partner/home/home.dart';
 
-class AddImage extends StatefulWidget {
+class Addimage extends StatefulWidget {
   @override
-  _AddImageState createState() => _AddImageState();
+  _AddimageState createState() => _AddimageState();
 }
-class _AddImageState extends State<AddImage> {
-  bool uploading = false;
-  double val = 0;
-  CollectionReference imgRef;
-  firebase_storage.Reference ref;
 
-  List<File> _image = [];
-  final picker = ImagePicker();
+class _AddimageState extends State<Addimage> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(debugShowCheckedModeBanner: false, home: AdharFront());
+  }
+}
+
+class AdharFront extends StatefulWidget {
+  @override
+  _AdharFrontState createState() => _AdharFrontState();
+}
+
+class _AdharFrontState extends State<AdharFront> {
+  File _adharfront;
+  String imageLink = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Aadhar front'),
-          actions: [
-            FlatButton(
-                onPressed: () {
-                  setState(() {
-                    uploading = true;
-                  });
-                  uploadFile().whenComplete(() => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => SecondPage()),
-                      (route) => false));
-                },
-                child: Text(
-                  'upload',
-                  style: TextStyle(color: Colors.white),
-                ))
-          ],
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Upload Photo Identity Card',
+          style: TextStyle(color: Colors.black),
         ),
-        body: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(4),
-              child: GridView.builder(
-                  itemCount: _image.length + 1,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return index == 0
-                        ? Center(
-                            child: IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () =>
-                                    !uploading ? chooseImage() : null),
-                          )
-                        : Container(
-                            margin: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: FileImage(_image[index - 1]),
-                                    fit: BoxFit.cover)),
-                          );
-                  }),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //Text('First Page',style: TextStyle(fontSize: 30),),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Container(
+              height: 250,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+                // border: Border.all()
+              ),
+              child: _adharfront == null
+                  ? Icon(
+                      Icons.image,
+                      size: 100,
+                      color: Colors.grey,
+                    )
+                  : Image.file(_adharfront),
             ),
-            uploading
-                ? Center(
-                    child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        child: Text(
-                          'uploading...',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CircularProgressIndicator(
-                        value: val,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                      )
-                    ],
-                  ))
-                : Container(),
-          ],
-        ));
+          ),
+          Container(
+            height: 40,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              // border: Border.all()
+            ),
+            child: TextButton(
+                onPressed: () {
+                  adharfront();
+                },
+                // icon: Icon(Icons.select_all),
+                child: Text(
+                  'Choose Image',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                )),
+            // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
+          ),
+          SizedBox(
+            height: 65,
+          ),
+          (_adharfront == null)
+              ? Text(
+                  'Upload Aadhar Card Front Page',
+                  style: TextStyle(fontSize: 20),
+                )
+              : ElevatedButton(
+                  //color: Colors.blue[700],
+                  onPressed: () {
+                    uploadimage();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => AdharBack()),
+                        (route) => false);
+                  },
+                  child: Text(
+                    'upload',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+        ],
+      ),
+    );
   }
 
-  chooseImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+//image pick
+  Future<void> adharfront() async {
+    var front = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      imageQuality: 40,
+      preferredCameraDevice: CameraDevice.rear,
+    );
     setState(() {
-      _image.add(File(pickedFile?.path));
+      _adharfront = File(front.path);
     });
-    if (pickedFile.path == null) retrieveLostData();
   }
 
-  Future<void> retrieveLostData() async {
-    final LostData response = await picker.getLostData();
-    if (response.isEmpty) {
-      return;
-    }
-    if (response.file != null) {
-      setState(() {
-        _image.add(File(response.file.path));
-      });
-    } else {
-      print(response.file);
-    }
-  }
-
-  Future uploadFile() async {
-    int i = 1;
-
-    for (var img in _image) {
-      setState(() {
-        val = i / _image.length;
-      });
-      ref = firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('images/${Path.basename(img.path)}');
-      await ref.putFile(img).whenComplete(() async {
-        await ref.getDownloadURL().then((value) {
-          imgRef
-              .doc(FirebaseAuth.instance.currentUser.uid)
-              .collection('ID')
-              .add({'aadharFront': value});
-          i++;
-        });
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    imgRef = FirebaseFirestore.instance.collection('PartnerData');
+//image upload function
+  Future<void> uploadimage() async {
+    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+    UploadTask uploadTask = postImageRef
+        .child(DateTime.now().toString() + ".jpg")
+        .putFile(_adharfront);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    imageLink = imageUrl.toString();
+    FirebaseFirestore.instance
+        .collection('partner')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'adhar.front': imageLink});
   }
 }
 
-//Aadhar 2nd page
+//adhar back
 
-class SecondPage extends StatefulWidget {
+class AdharBack extends StatefulWidget {
   @override
-  _SecondPageState createState() => _SecondPageState();
+  _AdharBackState createState() => _AdharBackState();
 }
 
-class _SecondPageState extends State<SecondPage> {
-  bool uploading = false;
-  double val = 0;
-  CollectionReference imgRef;
-  firebase_storage.Reference ref;
-
-  List<File> _image = [];
-  final picker = ImagePicker();
+class _AdharBackState extends State<AdharBack> {
+  File _adharback;
+  String imageLink2 = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Aadhar Back'),
-          actions: [
-            FlatButton(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Upload Photo Identity Card',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Text('Second Page',style: TextStyle(fontSize: 30),),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Container(
+              height: 250,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+                // border: Border.all()
+              ),
+              child: _adharback == null
+                  ? Icon(
+                      Icons.image,
+                      size: 100,
+                      color: Colors.grey,
+                    )
+                  : Image.file(_adharback),
+            ),
+          ),
+          Container(
+            height: 40,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              // border: Border.all()
+            ),
+            child: TextButton(
                 onPressed: () {
-                  setState(() {
-                    uploading = true;
-                  });
-                  uploadFile().whenComplete(() => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => ProInfo()),
-                      (route) => false));
+                  adharfront();
                 },
+                // icon: Icon(Icons.select_all),
                 child: Text(
-                  'upload',
-                  style: TextStyle(color: Colors.white),
-                ))
+                  'Choose Image',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                )),
+            // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
+          ),
+          SizedBox(
+            height: 65,
+          ),
+          (_adharback == null)
+              ? Text(
+                  'Upload Aadhar Card Back Page',
+                  style: TextStyle(fontSize: 20),
+                )
+              : ElevatedButton(
+                  // color: Colors.blue[700],
+                  onPressed: () {
+                    uploadimage();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => ProfilePic()),
+                        (route) => false);
+                  },
+                  child: Text(
+                    'upload',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+        ],
+      ),
+    );
+  }
+
+//image pick
+  Future<void> adharfront() async {
+    var front = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      imageQuality: 40,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      _adharback = File(front.path);
+    });
+  }
+
+//image upload function
+  Future<void> uploadimage() async {
+    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+    UploadTask uploadTask = postImageRef
+        .child(DateTime.now().toString() + ".jpg")
+        .putFile(_adharback);
+    print(uploadTask);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    imageLink2 = imageUrl.toString();
+    FirebaseFirestore.instance
+        .collection('partner')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'adhar.back': imageLink2});
+  }
+}
+
+class ProfilePic extends StatefulWidget {
+  @override
+  _ProfilePicState createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+  File _profilepic;
+  String imageLink3 = "";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: Container(
+        padding: EdgeInsets.all(70),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Profile Picture',
+              style: TextStyle(fontSize: 25),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                height: 220,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
+                  // border: Border.all()
+                ),
+                child: CircleAvatar(
+                  child: ClipOval(
+                    child: Center(
+                      child: _profilepic == null
+                          ? Icon(
+                              Icons.person,
+                              color: Colors.blue,
+                              size: 65,
+                            )
+                          : Image.file(
+                              _profilepic,
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                    ),
+                  ),
+                  radius: 30,
+                  backgroundColor: Colors.grey[100],
+                ),
+              ),
+            ),
+            Container(
+              height: 40,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
+                // border: Border.all()
+              ),
+              child: TextButton(
+                  onPressed: () {
+                    profilePic();
+                  },
+                  // icon: Icon(Icons.select_all),
+                  child: Text(
+                    'Choose Image',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  )),
+              // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
+            ),
+            SizedBox(
+              height: 65,
+            ),
+            (_profilepic == null)
+                ? Text(
+                    '',
+                    style: TextStyle(fontSize: 20),
+                  )
+                : ElevatedButton(
+                    // color: Colors.blue[700],
+                    onPressed: () {
+                      uploadimage();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => Home()),
+                          (route) => false);
+                    },
+                    child: Text(
+                      'upload',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
           ],
         ),
-        body: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(4),
-              child: GridView.builder(
-                  itemCount: _image.length + 1,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return index == 0
-                        ? Center(
-                            child: IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () =>
-                                    !uploading ? chooseImage() : null),
-                          )
-                        : Container(
-                            margin: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: FileImage(_image[index - 1]),
-                                    fit: BoxFit.cover)),
-                          );
-                  }),
-            ),
-            uploading
-                ? Center(
-                    child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        child: Text(
-                          'uploading...',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CircularProgressIndicator(
-                        value: val,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                      )
-                    ],
-                  ))
-                : Container(),
-          ],
-        ));
+      ),
+    );
   }
 
-  chooseImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+//image pick
+  Future<void> profilePic() async {
+    var front = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      imageQuality: 40,
+      preferredCameraDevice: CameraDevice.rear,
+    );
     setState(() {
-      _image.add(File(pickedFile?.path));
+      _profilepic = File(front.path);
     });
-    if (pickedFile.path == null) retrieveLostData();
   }
 
-  Future<void> retrieveLostData() async {
-    final LostData response = await picker.getLostData();
-    if (response.isEmpty) {
-      return;
-    }
-    if (response.file != null) {
-      setState(() {
-        _image.add(File(response.file.path));
-      });
-    } else {
-      print(response.file);
-    }
-  }
-
-  Future uploadFile() async {
-    int j = 1;
-
-    for (var img1 in _image) {
-      setState(() {
-        val = j / _image.length;
-      });
-      ref = firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('images/${Path.basename(img1.path)}');
-      await ref.putFile(img1).whenComplete(() async {
-        await ref.getDownloadURL().then((aadharBack) {
-          imgRef
-              .doc(FirebaseAuth.instance.currentUser.uid)
-              .set({'aadharBack': aadharBack});
-          j++;
-        });
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    imgRef = FirebaseFirestore.instance.collection('PartnerData');
+//image upload function
+  Future<void> uploadimage() async {
+    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+    UploadTask uploadTask = postImageRef
+        .child(DateTime.now().toString() + ".jpg")
+        .putFile(_profilepic);
+    print('aaa');
+    print(uploadTask);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    imageLink3 = imageUrl.toString();
+    FirebaseFirestore.instance
+        .collection('partner')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'profilepic': imageLink3});
   }
 }

@@ -190,20 +190,20 @@ class _ProInfoState extends State<ProInfo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RaisedButton(
+                  ElevatedButton(
                       child: Text(
                         'Submit',
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: Colors.blue[900],
-                      splashColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                      // color: Colors.blue[900],
+                      // splashColor: Colors.blue,
+                      // shape: RoundedRectangleBorder(
+                      //     borderRadius:
+                      //         BorderRadius.all(Radius.circular(10.0))),
                       onPressed: () async {
                         print(now);
                          Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => AddImage()), (route) => false);
+        MaterialPageRoute(builder: (_) => Addimage()), (route) => false);
                         Map<String, dynamic> postData = {
                           'name': this.name,
                           'dob': this.dob,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:spotmies_partner/chat/chat.dart';
+import 'package:spotmies_partner/chat/chat_page.dart';
 import 'package:spotmies_partner/home/homeScreen.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
-
 
 void main() => runApp(Home());
 
@@ -21,7 +20,7 @@ class _HomeState extends State<Home> {
       child: HomeScreen(),
     ),
     Center(
-      child: Chat(),
+      child: ChatHome(),
     ),
     Center(
       child: Orders(),
@@ -37,29 +36,26 @@ class _HomeState extends State<Home> {
       debugShowCheckedModeBanner: false,
       //title:"Google NavBar",
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text('Google NavBar'),
-        // ),
+        backgroundColor: Colors.white,
         body: Container(
-          width: double.infinity,
-          height: double.infinity,
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 15, color: Colors.black.withOpacity(.1)),
+            BoxShadow(blurRadius: 0, color: Colors.black.withOpacity(0)),
           ]),
           child: SafeArea(
             child: Padding(
+              
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
               child: GNav(
                   gap: 8,
-                  activeColor: Colors.white,
+                  activeColor: Colors.grey[800],
                   iconSize: 24,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  duration: Duration(milliseconds: 5),
-                  tabBackgroundColor: Colors.blue[900],
+                  duration: Duration(milliseconds: 2),
+                  tabBackgroundColor: Colors.white,
                   tabs: [
                     GButton(
                       icon: Icons.home,
