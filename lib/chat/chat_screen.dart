@@ -20,12 +20,9 @@ date(msg1, msg2) {
       int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
   var daypast = DateFormat('EEE').format(
       DateTime.fromMillisecondsSinceEpoch(int.parse(temp1['timestamp'])));
-  print(daynow);
   if (ct != pt) {
     return (daypast == daynow
         ? 'Today'
-        // DateFormat('dd MMM yyyy').format(
-        //     DateTime.fromMillisecondsSinceEpoch(int.parse(temp1['timestamp'])))
         : (DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(
             int.parse(temp1['timestamp'])))));
   } else {
@@ -45,10 +42,10 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
   ScrollController _scrollController = ScrollController();
   String textInput;
   String value;
-  List<File> profilepic = [];
+  List<File> chatimages = [];
   bool uploading = false;
   double val = 0;
-
+  String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
   List imageLink = [];
   DateTime now = DateTime.now();
   _ChatScreenState(this.value);
@@ -112,7 +109,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                         var data = jsonDecode(msgData);
                         var date2 = index - 1 == -1 ? index : index - 1;
 
-                        if (data['sender'] == 'p') {
+                        if ((data['sender'] == 'p') &&
+                            (data['type'] == 'text')) {
                           return Column(
                             children: [
                               if (date(msgData, msgs[date2]) != '')
@@ -191,7 +189,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             ],
                           );
                         }
-                        if (data['sender'] == 'u') {
+                        if ((data['sender'] == 'u') &&
+                            (data['type'] == 'text')) {
                           return Column(
                             children: [
                               if (date(msgData, msgs[date2]) != '')
@@ -271,7 +270,10 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             ],
                           );
                         }
-                        if (data['type'] == 'media') {
+                        if ((data['type'] == 'media') &&
+                            (data['sender'] == 'p')) {
+                          // List<String> list = data['msg'].length;
+                          // List<Widget> widgets = list.map((name) => new Text(name)).toList();
                           return Row(
                             children: [
                               Expanded(
@@ -305,38 +307,30 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                             ],
                                           ),
                                           Image.network(
-                                            msgs[index].substring(
-                                                0, msgs[index].length - 2),
+                                            data['msg'],
                                           ),
                                         ],
                                       ),
                                     ),
                                     Container(
                                       padding:
-                                          EdgeInsets.only(bottom: 2, right: 15),
+                                          EdgeInsets.only(bottom: 2, left: 15),
                                       width: _width * 0.5,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[50],
                                           borderRadius: BorderRadius.only(
-                                              // bottomRight: Radius.circular(0),
+                                            bottomLeft: Radius.circular(30),
 
-                                              // bottomLeft:Radius.circular(30)
-                                              )),
+                                            // bottomLeft:Radius.circular(30)
+                                          )),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Text(DateFormat.jm().format((DateTime
                                               .fromMillisecondsSinceEpoch(
-                                                  (int.parse((msgs[index]
-                                                          .substring(
-                                                              (msgs[index]
-                                                                      .length) -
-                                                                  12,
-                                                              msgs[index]
-                                                                      .length -
-                                                                  2)))) *
-                                                      1000)))),
+                                                  (int.parse(
+                                                      data['timestamp'])))))),
                                         ],
                                       ),
                                     ),
@@ -349,7 +343,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             ],
                           );
                         }
-                        if (msgs[index].endsWith('ui')) {
+                        if ((data['type'] == 'media') &&
+                            (data['sender'] == 'u')) {
                           return Row(
                             children: [
                               Expanded(
@@ -383,8 +378,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                             ],
                                           ),
                                           Image.network(
-                                            msgs[index].substring(
-                                                0, msgs[index].length - 2),
+                                            data['msg'],
                                           ),
                                         ],
                                       ),
@@ -392,29 +386,22 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                     Container(
                                       padding:
                                           EdgeInsets.only(bottom: 2, left: 15),
-                                      width: _width * 0.5,
+                                      width: _width * 0.55,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[50],
                                           borderRadius: BorderRadius.only(
-                                              // bottomRight: Radius.circular(0),
+                                            bottomRight: Radius.circular(30),
 
-                                              // bottomLeft:Radius.circular(30)
-                                              )),
+                                            // bottomLeft:Radius.circular(30)
+                                          )),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Text(DateFormat.jm().format((DateTime
                                               .fromMillisecondsSinceEpoch(
-                                                  (int.parse((msgs[index]
-                                                          .substring(
-                                                              (msgs[index]
-                                                                      .length) -
-                                                                  12,
-                                                              msgs[index]
-                                                                      .length -
-                                                                  2)))) *
-                                                      1000)))),
+                                                  (int.parse(
+                                                      data['timestamp'])))))),
                                         ],
                                       ),
                                     ),
@@ -426,49 +413,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               )),
                             ],
                           );
-                        }
-                        //  if(
-                        // // if
-                        //    (msgs[index].endsWith('i'))?
-                        //  // {
-
-                        //  //} else {
-                        //  //}
-                        //  ){}
-                        // else {
-                        //   return Container(
-                        //       alignment: Alignment.center,
-                        //       height: _hight * 0.09,
-                        //       width: _width * 0.4,
-                        //       child: Column(
-                        //         children: [
-                        //           Container(
-                        //             padding: EdgeInsets.all(10),
-                        //             height: _hight * 0.06,
-                        //             width: _width * 0.7,
-                        //             decoration: BoxDecoration(
-                        //                 color: Colors.blueGrey[700],
-                        //                 borderRadius: BorderRadius.only(
-                        //                     topLeft: Radius.circular(15),
-                        //                     topRight: Radius.circular(15),
-                        //                     bottomRight: Radius.circular(15),
-                        //                     bottomLeft: Radius.circular(15))),
-                        //             child: Center(
-                        //               child: Text(
-                        //                 msgs[index].substring(
-                        //                     0, msgs[index].length - 1),
-                        //                 style: TextStyle(color: Colors.white),
-                        //               ),
-                        //             ),
-                        //           ),
-                        //           SizedBox(
-                        //             height: 5,
-                        //           ),
-                        //         ],
-                        //       ));
-                        // }
-                        else
-                          return Text('data');
+                        } else
+                          return Text('Undefined');
                       }),
                   color: Colors.white,
                 ),
@@ -536,7 +482,10 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             color: Colors.grey,
                           ),
                           onPressed: () {
-                            bottomappbar();
+                            var msgcount = document['umsgcount'];
+                            var ustatus = document['ustatus'];
+
+                            bottomappbar(msgcount, ustatus);
                           }),
                       Container(
                         height: _hight * 0.1,
@@ -552,6 +501,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
+                                  int msgcount = document['umsgcount'] + 1;
                                   _controller.clear();
                                   String timestamp = DateTime.now()
                                       .millisecondsSinceEpoch
@@ -568,7 +518,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                       .doc(value)
                                       .update({
                                     'createdAt': DateTime.now(),
-                                    'body': FieldValue.arrayUnion([temp])
+                                    'body': FieldValue.arrayUnion([temp]),
+                                    'umsgcount':
+                                        document['ustatus'] == 0 ? msgcount : 0,
                                   });
                                 })),
                       )
@@ -585,7 +537,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      profilepic.add(File(pickedFile?.path));
+      chatimages.add(File(pickedFile?.path));
     });
     if (pickedFile.path == null) retrieveLostData();
   }
@@ -597,7 +549,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
     }
     if (response.file != null) {
       setState(() {
-        profilepic.add(File(response.file.path));
+        chatimages.add(File(response.file.path));
       });
     } else {
       print(response.file);
@@ -607,22 +559,22 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
   //image upload function
   Future<void> uploadimage() async {
     int i = 1;
-    int time = DateTime.now().millisecondsSinceEpoch;
-    var timestamp = time ~/ 1000;
-    for (var img in profilepic) {
+    for (var img in chatimages) {
       setState(() {
-        val = i / profilepic.length;
+        val = i / chatimages.length;
       });
       var postImageRef = FirebaseStorage.instance.ref().child('adImages');
       UploadTask uploadTask =
           postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
-      await (await uploadTask).ref.getDownloadURL().then(
-          (value) => imageLink.add(value + '$timestamp' + 'pi'.toString()));
+      await (await uploadTask)
+          .ref
+          .getDownloadURL()
+          .then((value) => imageLink.add(value.toString()));
       i++;
     }
   }
 
-  bottomappbar() {
+  bottomappbar(int msgcount, int ustatus) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -653,7 +605,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                profilepic == null
+                chatimages == null
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -676,7 +628,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             height: _hight * 0.34,
                             width: _width * 1,
                             child: GridView.builder(
-                                itemCount: profilepic.length + 1,
+                                itemCount: chatimages.length + 1,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 5),
@@ -688,8 +640,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                               onPressed: () async {
                                                 if (!uploading) {
                                                   chooseImage();
+                                                  refresh();
                                                 }
-                                                refresh();
                                               }),
                                         )
                                       : Stack(
@@ -700,7 +652,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                 decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: FileImage(
-                                                            profilepic[
+                                                            chatimages[
                                                                 index - 1]),
                                                         fit: BoxFit.cover)),
                                               ),
@@ -714,7 +666,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                           Colors.redAccent[200],
                                                     ),
                                                     onPressed: () async {
-                                                      profilepic.removeAt(0);
+                                                      chatimages.removeAt(0);
 
                                                       refresh();
                                                     }),
@@ -728,19 +680,34 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               InkWell(
                                 onTap: () async {
                                   await uploadimage();
-                                  await FirebaseFirestore.instance
-                                      .collection('messaging')
-                                      .doc(value)
-                                      .update({
-                                    'createdAt': DateTime.now(),
-                                    'body': FieldValue.arrayUnion(imageLink)
-                                  });
-                                  Navigator.pop(context);
+                                  _controller.clear();
+
+                                  int len = imageLink.length;
+
+                                  for (int i = 0; i <= len; i++) {
+                                    var imageData = {
+                                      'msg': imageLink[i],
+                                      'timestamp': timestamp,
+                                      'sender': 'p',
+                                      'type': 'media'
+                                    };
+                                    String temp = jsonEncode(imageData);
+                                    await FirebaseFirestore.instance
+                                        .collection('messaging')
+                                        .doc(value)
+                                        .update({
+                                      'createdAt': DateTime.now(),
+                                      'body': FieldValue.arrayUnion([temp]),
+                                      'umsgcount':
+                                          ustatus == 0 ? msgcount + 1 : 0,
+                                    });
+
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(12),
                                   height: _hight * 0.07,
-                                  //width: _width * 0.1,
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(

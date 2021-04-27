@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/login/p_info.dart';
+import 'stepperpersonalinfo.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -95,14 +95,14 @@ class _OTPScreenState extends State<OTPScreen> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SplashScreen2()),
+                              builder: (context) => StepperPersonalInfo()),
                           (route) => false);
                     }
                   });
                 } catch (e) {
                   FocusScope.of(context).unfocus();
                   //_scaffoldkey.currentState
-                 //     .showSnackBar(SnackBar(content: Text('invalid OTP')));
+                  //     .showSnackBar(SnackBar(content: Text('invalid OTP')));
                 }
               },
             ),
@@ -122,7 +122,8 @@ class _OTPScreenState extends State<OTPScreen> {
             if (value.user != null) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => SplashScreen2()),
+                  MaterialPageRoute(
+                      builder: (context) => StepperPersonalInfo()),
                   (route) => false);
             }
           });
