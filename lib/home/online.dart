@@ -673,8 +673,10 @@ class _OnlineState extends State<Online> {
                                                                         [temp]),
                                                                 'chatbuild':
                                                                     false,
-                                                                'pstatus':
-                                                                    'active',
+                                                                'pstatus': 0,
+                                                                'ustatus': 0,
+                                                                'umsgcount': 0,
+                                                                'pmsgcount': 0,
                                                                 'rating': 5,
                                                                 'orderstate': 2,
                                                                 'uname': null,
