@@ -947,18 +947,21 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
       _currentStep += 1;
 
       FirebaseFirestore.instance
-          .collection('users')
+          .collection('partner')
           .doc(FirebaseAuth.instance.currentUser.uid)
           .set({
-        'joinedat': DateTime.now(),
+        'joindate': DateTime.now(),
         'name': null,
         'email': null,
         'profilepic': null,
         // 'phone': '+91$value',
         'altNum': null,
         'terms&Conditions': tca,
+        'orders': 0,
         'reference': 0,
-        'uid': FirebaseAuth.instance.currentUser.uid
+        'acceptance': 0,
+        'uid': FirebaseAuth.instance.currentUser.uid,
+        'availability': false
       });
     } else {
       Timer(
@@ -985,7 +988,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     if (_formkey.currentState.validate()) {
       _currentStep += 1;
       FirebaseFirestore.instance
-          .collection('users')
+          .collection('partner')
           .doc(FirebaseAuth.instance.currentUser.uid)
           .update({
         'name': this.name,
@@ -999,7 +1002,12 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
         'lan': ({'lan1': lan1, 'lan2': lan2, 'lan3': lan3, 'others': otherlan}),
         'businessname': businessName,
         'experience': experience,
-        'reference': 0,
+        'reference': FieldValue.arrayUnion([100]),
+        'orders': 0,
+        'rate': 100,
+        'acceptance': 100,
+        'uid': FirebaseAuth.instance.currentUser.uid,
+        'availability': false,
         'profilepic': null
       }).catchError((e) {
         print(e);
@@ -1071,7 +1079,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     imageLink3 = imageUrl.toString();
     print(imageUrl);
     FirebaseFirestore.instance
-        .collection('users')
+        .collection('partner')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .update({'profilepic': imageLink3});
   }
@@ -1112,7 +1120,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     FirebaseFirestore.instance
         .collection('partner')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'adhar.back': imageLink2});
+        .update({'adhar.front': imageLink2});
   }
 
 //image upload function
@@ -1128,7 +1136,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     FirebaseFirestore.instance
         .collection('partner')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'adhar.front': imageLink});
+        .update({'adhar.back': imageLink});
   }
 
   _pickedDate() async {

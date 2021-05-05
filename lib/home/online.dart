@@ -1,10 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-
 
 // Future<void> docid() async {
 //   path = FirebaseFirestore.instance
@@ -25,12 +25,12 @@ class Online extends StatefulWidget {
 
 class _OnlineState extends State<Online> {
   var path;
-var userid;
-var orderid;
+  var userid;
+  var orderid;
 
-String pmoney;
-DateTime pickedDate;
-TimeOfDay pickedTime;
+  String pmoney;
+  DateTime pickedDate;
+  TimeOfDay pickedTime;
   @override
   void initState() {
     super.initState();
@@ -226,7 +226,7 @@ TimeOfDay pickedTime;
                                                                                     child: Text('Done'),
                                                                                     onPressed: () async {
                                                                                       // await getProfileDatails();
-                                                                                     // await docid();
+                                                                                      // await docid();
                                                                                       Navigator.pop(context);
                                                                                       var dataa = [
                                                                                         'satishp'
@@ -622,9 +622,20 @@ TimeOfDay pickedTime;
 
                                                               // for messaging
 
-                                                              var dataa = [
-                                                                'order accepted'
-                                                              ];
+                                                              String timestamp =
+                                                                  DateTime.now()
+                                                                      .millisecondsSinceEpoch
+                                                                      .toString();
+                                                              var msgData = {
+                                                                'msg': 'Hello',
+                                                                'timestamp':
+                                                                    timestamp,
+                                                                'sender': 'p',
+                                                                'type': 'text'
+                                                              };
+                                                              String temp =
+                                                                  jsonEncode(
+                                                                      msgData);
                                                               FirebaseFirestore
                                                                   .instance
                                                                   .collection(
@@ -659,7 +670,7 @@ TimeOfDay pickedTime;
                                                                     'profilepic'],
                                                                 'body': FieldValue
                                                                     .arrayUnion(
-                                                                        dataa),
+                                                                        [temp]),
                                                                 'chatbuild':
                                                                     false,
                                                                 'pstatus':

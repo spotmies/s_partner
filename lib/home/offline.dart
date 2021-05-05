@@ -242,7 +242,7 @@ class _PercentIndicatorState extends State<PercentIndicator> {
                                   Icon(Icons.person_add, color: Colors.amber),
                                 ],
                               ),
-                              Text('Referenceces',
+                              Text('reference',
                                   style: TextStyle(
                                     fontSize: 15,
                                   )),

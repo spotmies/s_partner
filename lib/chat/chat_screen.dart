@@ -55,482 +55,518 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
+    Timer(
+        Duration(milliseconds: 300),
+        () => _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeInOut));
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blue[800],
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              FirebaseFirestore.instance
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.blue[800],
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('messaging')
+                    .doc(value)
+                    .update({'pstatus': 0});
+                Navigator.of(context).pop();
+              }),
+          title: StreamBuilder(
+              stream: FirebaseFirestore.instance
                   .collection('messaging')
                   .doc(value)
-                  .update({'pstatus': 0});
-              Navigator.of(context).pop();
-            }),
-        title: StreamBuilder(
+                  .snapshots(),
+              builder: (context, snapshot) {
+                var document = snapshot.data;
+                return Text(
+                    document['uname'] == null ? 'User' : document['uname']);
+              }),
+        ),
+        body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('messaging')
                 .doc(value)
                 .snapshots(),
             builder: (context, snapshot) {
+              if (!snapshot.hasData)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               var document = snapshot.data;
-              return Text(
-                  document['uname'] == null ? 'User' : document['uname']);
-            }),
-      ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('messaging')
-              .doc(value)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            var document = snapshot.data;
+              List<String> msgs = List.from(document['body']);
+              Timer(
+                  Duration(milliseconds: 400),
+                  () => _scrollController
+                      .jumpTo(_scrollController.position.maxScrollExtent));
+              return ListView(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    height: _hight * 0.87,
+                    width: _width * 1,
+                    child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: msgs.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          String msgData = msgs[index];
+                          var data = jsonDecode(msgData);
+                          var date2 = index - 1 == -1 ? index : index - 1;
 
-            List<String> msgs = List.from(document['body']);
-
-            return ListView(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  height: _hight * 0.87,
-                  width: _width * 1,
-                  child: ListView.builder(
-                      //reverse: true,
-                      controller: _scrollController,
-                      itemCount: msgs.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        // Iterable()
-                        String msgData = msgs[index];
-                        var data = jsonDecode(msgData);
-                        var date2 = index - 1 == -1 ? index : index - 1;
-
-                        if ((data['sender'] == 'p') &&
-                            (data['type'] == 'text')) {
-                          return Column(
-                            children: [
-                              if (date(msgData, msgs[date2]) != '')
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      height: _hight * 0.04,
-                                      width: _width * 0.3,
-                                      decoration: BoxDecoration(
-                                          color: Colors.blueGrey[800],
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Center(
-                                          child: Text(
-                                        date(msgData, msgs[date2]),
-                                        style: TextStyle(color: Colors.white),
-                                      ))),
-                                ),
-
-                              Row(
-                                children: [
-                                  Expanded(
+                          if ((data['sender'] == 'p') &&
+                              (data['type'] == 'text')) {
+                            return Column(
+                              children: [
+                                if (date(msgData, msgs[date2]) != '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        alignment: Alignment.centerRight,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              padding: EdgeInsets.only(
-                                                  top: 10, left: 15, right: 15),
-                                              width: _width * 0.55,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(15),
-                                                    topRight:
-                                                        Radius.circular(15),
-                                                  )),
-                                              child: Text(data['msg']),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                  bottom: 2, right: 15),
-                                              width: _width * 0.55,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(30),
-
-                                                    // bottomLeft:Radius.circular(30)
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(DateFormat.jm().format(DateTime
-                                                      .fromMillisecondsSinceEpoch(
-                                                          (int.parse(data[
-                                                              'timestamp']))))),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                          ],
-                                        )),
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          date(msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
                                   ),
-                                ],
-                              ),
-                              // Text("date")
-                            ],
-                          );
-                        }
-                        if ((data['sender'] == 'u') &&
-                            (data['type'] == 'text')) {
-                          return Column(
-                            children: [
-                              if (date(msgData, msgs[date2]) != '')
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      height: _hight * 0.04,
-                                      width: _width * 0.3,
-                                      decoration: BoxDecoration(
-                                          color: Colors.blueGrey[800],
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Center(
-                                          child: Text(
-                                        date(msgData, msgs[date2]),
-                                        style: TextStyle(color: Colors.white),
-                                      ))),
-                                ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.centerRight,
-                                              padding: EdgeInsets.only(
-                                                  top: 10, right: 15, left: 15),
-                                              width: _width * 0.55,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(15),
-                                                    topRight:
-                                                        Radius.circular(15),
-                                                    // bottomRight:
-                                                    //     Radius.circular(30)
-                                                  )),
-                                              child: Text(data['msg']),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                  bottom: 2, left: 15),
-                                              width: _width * 0.55,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    bottomRight:
-                                                        Radius.circular(30),
 
-                                                    // bottomLeft:Radius.circular(30)
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Text(DateFormat.jm().format((DateTime
-                                                      .fromMillisecondsSinceEpoch(
-                                                          (int.parse(data[
-                                                              'timestamp'])))))),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            // Text(date(msgData, msgs[date2])),
-                                          ],
-                                        )),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        }
-                        if ((data['type'] == 'media') &&
-                            (data['sender'] == 'p')) {
-                          // List<String> list = data['msg'].length;
-                          // List<Widget> widgets = list.map((name) => new Text(name)).toList();
-                          return Row(
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Column(
+                                Row(
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      // height: _hight * 0.3,
-                                      width: _width * 0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[50],
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            topRight: Radius.circular(15),
-                                          )),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                    Expanded(
+                                      child: Container(
+                                          alignment: Alignment.centerRight,
+                                          child: Column(
                                             children: [
-                                              Text(
-                                                'You ',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.black),
+                                              Container(
+                                                alignment: Alignment.centerLeft,
+                                                padding: EdgeInsets.only(
+                                                    top: 10,
+                                                    left: 15,
+                                                    right: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                    )),
+                                                child: Text(data['msg']),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 2, right: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      bottomLeft:
+                                                          Radius.circular(30),
+
+                                                      // bottomLeft:Radius.circular(30)
+                                                    )),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(DateFormat.jm().format(
+                                                        DateTime.fromMillisecondsSinceEpoch(
+                                                            (int.parse(data[
+                                                                'timestamp']))))),
+                                                  ],
+                                                ),
                                               ),
                                               SizedBox(
-                                                height: 10,
-                                              )
+                                                height: 5,
+                                              ),
                                             ],
-                                          ),
-                                          Image.network(
-                                            data['msg'],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.only(bottom: 2, left: 15),
-                                      width: _width * 0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[50],
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(30),
-
-                                            // bottomLeft:Radius.circular(30)
                                           )),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(DateFormat.jm().format((DateTime
-                                              .fromMillisecondsSinceEpoch(
-                                                  (int.parse(
-                                                      data['timestamp'])))))),
-                                        ],
-                                      ),
                                     ),
-                                    SizedBox(
-                                      height: 5,
-                                    )
                                   ],
                                 ),
-                              )),
-                            ],
-                          );
-                        }
-                        if ((data['type'] == 'media') &&
-                            (data['sender'] == 'u')) {
-                          return Row(
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
+                                // Text("date")
+                              ],
+                            );
+                          }
+                          if ((data['sender'] == 'u') &&
+                              (data['type'] == 'text')) {
+                            return Column(
+                              children: [
+                                if (date(msgData, msgs[date2]) != '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          date(msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+                                Row(
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      // height: _hight * 0.3,
-                                      width: _width * 0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[50],
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            topRight: Radius.circular(15),
-                                          )),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                    Expanded(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
                                             children: [
-                                              Text(
-                                                'From ' + document['pname'],
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.black),
+                                              Container(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                padding: EdgeInsets.only(
+                                                    top: 10,
+                                                    right: 15,
+                                                    left: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      // bottomRight:
+                                                      //     Radius.circular(30)
+                                                    )),
+                                                child: Text(data['msg']),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 2, left: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      bottomRight:
+                                                          Radius.circular(30),
+
+                                                      // bottomLeft:Radius.circular(30)
+                                                    )),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(DateFormat.jm().format(
+                                                        (DateTime
+                                                            .fromMillisecondsSinceEpoch(
+                                                                (int.parse(data[
+                                                                    'timestamp'])))))),
+                                                  ],
+                                                ),
                                               ),
                                               SizedBox(
-                                                height: 10,
-                                              )
+                                                height: 5,
+                                              ),
+                                              // Text(date(msgData, msgs[date2])),
                                             ],
-                                          ),
-                                          Image.network(
-                                            data['msg'],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.only(bottom: 2, left: 15),
-                                      width: _width * 0.55,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[50],
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(30),
-
-                                            // bottomLeft:Radius.circular(30)
                                           )),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(DateFormat.jm().format((DateTime
-                                              .fromMillisecondsSinceEpoch(
-                                                  (int.parse(
-                                                      data['timestamp'])))))),
-                                        ],
-                                      ),
                                     ),
-                                    SizedBox(
-                                      height: 5,
-                                    )
                                   ],
                                 ),
-                              )),
-                            ],
-                          );
-                        } else
-                          return Text('Undefined');
-                      }),
-                  color: Colors.white,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.only(right: 20),
-                        height: _hight * 0.035,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.done_all,
-                              color: document['ustatus'] == 1
-                                  ? Colors.greenAccent
-                                  : Colors.grey,
-                            ),
-                            Text(document['ustatus'] == 1 ? 'Seen' : 'Unseen'),
-                          ],
-                        )),
-                  ],
-                ),
-                Container(
-                  // color: Colors.amber,
-                  padding: EdgeInsets.all(1),
-                  child: Row(
+                              ],
+                            );
+                          }
+                          if ((data['type'] == 'media') &&
+                              (data['sender'] == 'p')) {
+                            // List<String> list = data['msg'].length;
+                            // List<Widget> widgets = list.map((name) => new Text(name)).toList();
+                            return Row(
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(10),
+                                        // height: _hight * 0.3,
+                                        width: _width * 0.5,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              topRight: Radius.circular(15),
+                                            )),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'You ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.black),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            ),
+                                            Image.network(
+                                              data['msg'],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: 2, left: 15),
+                                        width: _width * 0.5,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(30),
+
+                                              // bottomLeft:Radius.circular(30)
+                                            )),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(DateFormat.jm().format(
+                                                (DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        (int.parse(data[
+                                                            'timestamp'])))))),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      )
+                                    ],
+                                  ),
+                                )),
+                              ],
+                            );
+                          }
+                          if ((data['type'] == 'media') &&
+                              (data['sender'] == 'u')) {
+                            return Row(
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(10),
+                                        // height: _hight * 0.3,
+                                        width: _width * 0.5,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              topRight: Radius.circular(15),
+                                            )),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'From ' + document['pname'],
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.black),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            ),
+                                            Image.network(
+                                              data['msg'],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: 2, left: 15),
+                                        width: _width * 0.55,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(30),
+
+                                              // bottomLeft:Radius.circular(30)
+                                            )),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(DateFormat.jm().format(
+                                                (DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        (int.parse(data[
+                                                            'timestamp'])))))),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      )
+                                    ],
+                                  ),
+                                )),
+                              ],
+                            );
+                          } else
+                            return Text('Undefined');
+                        }),
+                    color: Colors.white,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          height: _hight * 0.1,
-                          width: _width * 0.8,
-                          child: TextField(
-                            maxLines: 4,
-                            controller: _controller,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(15)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.white)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.white)),
-                              hintStyle: TextStyle(fontSize: 17),
-                              hintText: 'Type Message......',
-                              contentPadding: EdgeInsets.all(20),
-                            ),
-                            onChanged: (value) {
-                              this.textInput = value;
-                            },
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.photo_camera,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            var msgcount = document['umsgcount'];
-                            var ustatus = document['ustatus'];
-
-                            bottomappbar(msgcount, ustatus);
-                          }),
                       Container(
-                        height: _hight * 0.1,
-                        width: _width * 0.14,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.blue[900]),
-                        padding: EdgeInsets.all(10),
-                        child: Center(
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.send,
-                                  size: 25,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  int msgcount = document['umsgcount'] + 1;
-                                  _controller.clear();
-                                  String timestamp = DateTime.now()
-                                      .millisecondsSinceEpoch
-                                      .toString();
-                                  var msgData = {
-                                    'msg': textInput,
-                                    'timestamp': timestamp,
-                                    'sender': 'p',
-                                    'type': 'text'
-                                  };
-                                  String temp = jsonEncode(msgData);
-                                  FirebaseFirestore.instance
-                                      .collection('messaging')
-                                      .doc(value)
-                                      .update({
-                                    'createdAt': DateTime.now(),
-                                    'body': FieldValue.arrayUnion([temp]),
-                                    'umsgcount':
-                                        document['ustatus'] == 0 ? msgcount : 0,
-                                  });
-                                })),
-                      )
+                          padding: EdgeInsets.only(right: 20),
+                          height: _hight * 0.035,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.done_all,
+                                color: document['ustatus'] == 1
+                                    ? Colors.greenAccent
+                                    : Colors.grey,
+                              ),
+                              Text(
+                                  document['ustatus'] == 1 ? 'Seen' : 'Unseen'),
+                            ],
+                          )),
                     ],
                   ),
-                ),
-              ],
-            );
-          }),
-    );
+                  Container(
+                    // color: Colors.amber,
+                    padding: EdgeInsets.all(1),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            height: _hight * 0.1,
+                            width: _width * 0.8,
+                            child: TextField(
+                              maxLines: 4,
+                              controller: _controller,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                border: new OutlineInputBorder(
+                                    borderSide:
+                                        new BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(15)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.white)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.white)),
+                                hintStyle: TextStyle(fontSize: 17),
+                                hintText: 'Type Message......',
+                                contentPadding: EdgeInsets.all(20),
+                              ),
+                              onChanged: (value) {
+                                this.textInput = value;
+                              },
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.photo_camera,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              var msgcount = document['umsgcount'];
+                              var ustatus = document['ustatus'];
+
+                              bottomappbar(msgcount, ustatus);
+                            }),
+                        Container(
+                          height: _hight * 0.1,
+                          width: _width * 0.14,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.blue[900]),
+                          padding: EdgeInsets.all(10),
+                          child: Center(
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.send,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    int msgcount = document['umsgcount'] + 1;
+                                    _controller.clear();
+                                    String timestamp = DateTime.now()
+                                        .millisecondsSinceEpoch
+                                        .toString();
+                                    var msgData = {
+                                      'msg': textInput,
+                                      'timestamp': timestamp,
+                                      'sender': 'p',
+                                      'type': 'text'
+                                    };
+                                    String temp = jsonEncode(msgData);
+                                    FirebaseFirestore.instance
+                                        .collection('messaging')
+                                        .doc(value)
+                                        .update({
+                                      'createdAt': DateTime.now(),
+                                      'body': FieldValue.arrayUnion([temp]),
+                                      'umsgcount': document['ustatus'] == 0
+                                          ? msgcount
+                                          : 0,
+                                    });
+                                    Timer(
+                                        Duration(milliseconds: 300),
+                                        () => _scrollController.jumpTo(
+                                            _scrollController
+                                                .position.maxScrollExtent));
+                                  })),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            Timer(
+                Duration(milliseconds: 300),
+                () => _scrollController
+                    .jumpTo(_scrollController.position.maxScrollExtent));
+          },
+          child: Icon(
+            Icons.arrow_downward,
+            color: Colors.blue[900],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop);
   }
 
   chooseImage() async {

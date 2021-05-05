@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class _ChatHomeState extends State<ChatHome> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           actions: [
             IconButton(
@@ -91,7 +93,18 @@ class _ChatHomeState extends State<ChatHome> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(20.0),
-                                      boxShadow: kElevationToShadow[0]),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey[300],
+                                            blurRadius: 2,
+                                            spreadRadius: 1,
+                                            offset: Offset(3, 3)),
+                                        BoxShadow(
+                                            color: Colors.grey[50],
+                                            blurRadius: 2,
+                                            spreadRadius: 2,
+                                            offset: Offset(-3, -3))
+                                      ]),
                                   child: ListView.builder(
                                       controller: _scrollController,
                                       itemCount: 1,
@@ -119,7 +132,7 @@ class _ChatHomeState extends State<ChatHome> {
                                                             .width,
                                                       ),
                                               ),
-                                              backgroundColor: Colors.grey[100],
+                                              backgroundColor: Colors.grey[50],
                                             ),
                                             SizedBox(
                                               width: 20,

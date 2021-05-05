@@ -219,7 +219,7 @@ class _CompletedState extends State<Completed> {
             ),
           );
         } else {
-          return Text('data');
+          return Center(child: CircularProgressIndicator());
         }
       },
     ));
