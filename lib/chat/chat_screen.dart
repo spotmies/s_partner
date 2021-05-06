@@ -71,7 +71,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 FirebaseFirestore.instance
                     .collection('messaging')
                     .doc(value)
-                    .update({'pstatus': 0});
+                    .update({'pread': false});
                 Navigator.of(context).pop();
               }),
           title: StreamBuilder(

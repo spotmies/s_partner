@@ -55,6 +55,8 @@ class _ChatHomeState extends State<ChatHome> {
                       .collection('messaging')
                       .where('partnerid',
                           isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                      .where("chatbuild", isEqualTo: true)
+                      // .orderBy("createdAt", descending: true)
                       // .orderBy('createdAt', descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
@@ -79,7 +81,7 @@ class _ChatHomeState extends State<ChatHome> {
                                   FirebaseFirestore.instance
                                       .collection('messaging')
                                       .doc(msgid)
-                                      .update({'pstatus': 1, 'pmsgcount': 0});
+                                      .update({'pread': true, 'pmsgcount': 0});
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ChatScreen(
                                       value: msgid,

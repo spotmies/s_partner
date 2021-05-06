@@ -16,10 +16,27 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 4), () {
+    Timer(Duration(seconds: 4), () async {
       if (FirebaseAuth.instance.currentUser != null) {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => Home()), (route) => false);
+        var doc = await FirebaseFirestore.instance
+            .collection('partner')
+            .doc(FirebaseAuth.instance.currentUser.uid);
+        doc.get().then((document) {
+          if (document.exists) {
+            print("doc exits");
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (_) => Home()), (route) => false);
+          } else if (!document.exists) {
+            print("doc not exits");
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => OnboardingScreen()),
+                (route) => false);
+          }
+          print("doc is $document");
+        });
+        // Navigator.pushAndRemoveUntil(context,
+        //     MaterialPageRoute(builder: (_) => Home()), (route) => false);
       } else {
         Navigator.pushAndRemoveUntil(
             context,
