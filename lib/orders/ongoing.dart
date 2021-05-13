@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:spotmies_partner/orders/orderview.dart';
 
 class OnGoing extends StatefulWidget {
   @override
@@ -23,6 +25,10 @@ class _OnGoingState extends State<OnGoing> {
 
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
         body: StreamBuilder(
@@ -45,8 +51,8 @@ class _OnGoingState extends State<OnGoing> {
                   children: snapshot.data.docs.map((document) {
                     return Column(children: [
                       Container(
-                          height: 170,
-                          width: 370,
+                          height: _hight * 0.32,
+                          width: _width * 0.93,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -65,8 +71,9 @@ class _OnGoingState extends State<OnGoing> {
                           child: Column(
                             children: [
                               Container(
-                                height: 25,
-                                width: 370,
+                                height: _hight * 0.035,
+                                width: _width * 0.93,
+                                padding: EdgeInsets.only(left: _width * 0.03),
                                 decoration: BoxDecoration(
                                     color: Colors.blue[900],
                                     borderRadius: BorderRadius.only(
@@ -75,7 +82,7 @@ class _OnGoingState extends State<OnGoing> {
                                     )),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       jobs.elementAt(document['job']),
@@ -83,155 +90,222 @@ class _OnGoingState extends State<OnGoing> {
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(
-                                      width: 150,
-                                    ),
                                     IconButton(
-                                        padding: EdgeInsets.only(bottom: 15),
+                                        padding: EdgeInsets.only(
+                                            bottom: _width * 0.05),
                                         icon: Icon(
                                           Icons.more_horiz,
                                           color: Colors.white,
-                                          size: 30,
+                                          size: _width * 0.07,
                                         ),
-                                        onPressed: () {})
+                                        onPressed: () {
+                                          String id = document['orderid'];
+                                          menu(id, context);
+                                        })
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 5,
+                                height: _hight * 0.01,
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        'https://images.indulgexpress.com/uploads/user/imagelibrary/2020/1/25/original/MaheshBabuSourceInternet.jpg'),
-                                  ),
+                                  Container(
+                                      padding: EdgeInsets.all(_width * 0.03),
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            document['media'].first),
+                                      )),
                                   Column(
                                     children: [
                                       Container(
-                                        height: 20,
-                                        width: 270,
+                                        height: _hight * 0.025,
+                                        width: _width * 0.7,
                                         child: Column(
                                           children: [
-                                            Text(document['job'].toString(),
+                                            Text(document['problem'].toString(),
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
                                           ],
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 120,
-                                            width: 120,
-                                            child: Column(
+                                      Container(
+                                        height: _hight * 0.18,
+                                        width: _width * 0.7,
+                                        // color: Colors.amber,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                SizedBox(
-                                                  height: 2,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.remove_red_eye,
-                                                      size: 20,
-                                                    ),
-                                                    Text(' Views:' +
-                                                        document['job']
-                                                            .toString()),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 11,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.person_pin_circle,
-                                                      size: 20,
-                                                    ),
-                                                    Text(' Distance:' +
-                                                        document['job']
-                                                            .toString())
-                                                  ],
-                                                ),
-                                                TextButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      'View your post',
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blue[900]),
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Container(
-                                            height: 120,
-                                            width: 120,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.attach_money,
-                                                      size: 20,
-                                                    ),
-                                                    Text('Money:' +
-                                                        document['money']
-                                                            .toString()),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.timer,
-                                                      size: 20,
-                                                    ),
-                                                    Text('14/02/2021'),
-                                                  ],
+                                                Container(
+                                                  height: _hight * 0.05,
+                                                  width: _width * 0.35,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.attach_money,
+                                                        size: 20,
+                                                      ),
+                                                      Text(' Money:' +
+                                                          document['money']
+                                                              .toString()),
+                                                    ],
+                                                  ),
                                                 ),
                                                 Container(
-                                                    height: 25,
-                                                    width: 90,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.blue[900],
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15)),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Active',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                  height: _hight * 0.05,
+                                                  width: _width * 0.35,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.attach_money,
+                                                        size: 20,
                                                       ),
-                                                    ))
+                                                      Text(' distance:' +
+                                                          '4km'.toString()),
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
                                             ),
-                                          ),
-                                        ],
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  height: _hight * 0.05,
+                                                  width: _width * 0.35,
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.timer,
+                                                            size: 20,
+                                                          ),
+                                                          Text('ScheduleDate:')
+                                                        ],
+                                                      ),
+                                                      Text(document[
+                                                          'scheduledate']),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: _hight * 0.05,
+                                                  width: _width * 0.35,
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.timer,
+                                                            size: 20,
+                                                          ),
+                                                          Text('ScheduleTime:')
+                                                        ],
+                                                      ),
+                                                      Text(document[
+                                                              'scheduletime']
+                                                          .toString()),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              height: _hight * 0.07,
+                                              width: _width * 0.7,
+                                              child: Row(
+                                                // crossAxisAlignment:
+                                                //     CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: _width * 0.35,
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .person_pin_circle,
+                                                          size: 20,
+                                                        ),
+                                                        Text(' Location:')
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Flexible(
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      width: _width * 0.5,
+                                                      padding: EdgeInsets.only(
+                                                          left: _width * 0.02),
+                                                      child: Text(document[
+                                                              'location.add1']
+                                                          .toString()),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.68,
+                                        padding: EdgeInsets.only(
+                                            right: _width * 0.07),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  var id = document['orderid'];
+                                                  print(id);
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OrderView(
+                                                                value: '$id',
+                                                              )));
+                                                },
+                                                child: Text(
+                                                  'View your post',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.blue[900]),
+                                                )),
+                                            Container(
+                                                height: _hight * 0.04,
+                                                width: _width * 0.25,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.blue[900],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Center(
+                                                  child: Text(
+                                                    'Ongoing',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -255,5 +329,49 @@ class _OnGoingState extends State<OnGoing> {
             }
           },
         ));
+  }
+
+  menu(id, BuildContext context) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                    isDefaultAction: true,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OrderView(value: id),
+                      ));
+                    },
+                    child: Text('View Order',
+                        style: TextStyle(color: Colors.black))),
+                CupertinoActionSheetAction(
+                    isDefaultAction: true,
+                    onPressed: () {
+                      //   FirebaseFirestore.instance
+                      //       .collection('users')
+                      //       .doc(id)
+                      //       .update({
+                      //     'delete': true,
+                      //   });
+                      //   FirebaseFirestore.instance
+                      //       .collection('users')
+                      //       .doc(FirebaseAuth.instance.currentUser.uid)
+                      //       .collection('adpost')
+                      //       .doc(id)
+                      //       .delete();
+                    },
+                    child:
+                        Text('Complete', style: TextStyle(color: Colors.black)))
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color: Colors.black),
+                  )),
+            ));
   }
 }

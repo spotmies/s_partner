@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,27 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 4), () {
+    Timer(Duration(seconds: 4), () async {
       if (FirebaseAuth.instance.currentUser != null) {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => Home()), (route) => false);
+        var doc = FirebaseFirestore.instance
+            .collection('partner')
+            .doc(FirebaseAuth.instance.currentUser.uid);
+        doc.get().then((document) {
+          if (document.exists) {
+            print("doc exits");
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (_) => Home()), (route) => false);
+          } else if (!document.exists) {
+            print("doc not exits");
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => OnboardingScreen()),
+                (route) => false);
+          }
+          print("doc is $document");
+        });
+        // Navigator.pushAndRemoveUntil(context,
+        //     MaterialPageRoute(builder: (_) => Home()), (route) => false);
       } else {
         Navigator.pushAndRemoveUntil(
             context,
@@ -31,22 +49,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.blue[900],
-                radius: 50,
-                child: Center(
-                    child: Icon(
-                  Icons.location_on,
-                  color: Colors.white,
-                  size: 40,
-                )),
-              ),
+              Center(
+                  child: Container(
+                      height: _hight * 0.35,
+                      width: _width * 0.30,
+                      child: Image.asset("lib/assets/spotmies.png"))),
               SizedBox(
                 height: 10,
               ),
@@ -54,21 +71,23 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Spot',
+                    'Spotmies ',
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: _width*0.09,
                         color: Colors.blue[900],
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'mies',
+                    'Partner',
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: _width*0.09,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold),
                   ),
+                  
                 ],
-              )
+              ),
+              Text('Experience the Exellence')
             ],
           ),
         ));

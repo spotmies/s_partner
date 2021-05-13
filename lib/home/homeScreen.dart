@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
 
@@ -56,21 +57,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     CircularProgressIndicator();
                     return Transform.scale(
                       scale: 0.8,
-                      child: CupertinoSwitch(
-                          activeColor: Colors.grey[100],
-                          trackColor: Colors.grey[400],
-                          value: isSwitch,
-                          onChanged: (value) {
-                            setState(() {
-                              //isSwitched = value;
-                              FirebaseFirestore.instance
-                                  .collection('partner')
-                                  .doc(FirebaseAuth.instance.currentUser.uid)
-                                  .update({
-                                'availability': value,
-                              });
-                            });
-                          }),
+                      child: Container(
+                        child: Row(
+                          children: [
+                            FlutterSwitch(
+                                activeColor: Colors.blue[900],
+                                activeIcon: Icon(Icons.done),
+                                inactiveIcon: Icon(Icons.gps_off_outlined),
+                                inactiveColor: Colors.blue[900],
+                                activeToggleColor: Colors.greenAccent[700],
+                                inactiveToggleColor: Colors.redAccent[700],
+                                activeText: 'Online',
+                                inactiveText: 'Offline',
+
+                                // activeTextFontWeight: FontWeight.normal,
+                                // activeTextColor: Colors.amber,
+                                width: 130.0,
+                                height: 40.0,
+                                valueFontSize: 25.0,
+                                toggleSize: 45.0,
+                                borderRadius: 30.0,
+                                padding: 5.0,
+                                showOnOff: true,
+                                value: isSwitch,
+                                onToggle: (value) {
+                                  setState(() {
+                                    //isSwitched = value;
+                                    FirebaseFirestore.instance
+                                        .collection('partner')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser.uid)
+                                        .update({
+                                      'availability': value,
+                                    });
+                                  });
+                                }),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Text('N',
+                            //         style: TextStyle(
+                            //             fontSize: 24,
+                            //             fontWeight: FontWeight.w900)),
+                            //     Text('FF',
+                            //         style: TextStyle(
+                            //             fontSize: 24,
+                            //             fontWeight: FontWeight.w900)),
+                            //   ],
+                            // )
+                          ],
+                        ),
+                      ),
                     );
                   }),
             )

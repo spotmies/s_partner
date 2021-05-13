@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,10 +11,10 @@ String updatedEmail;
 String updatedob;
 String updatedNum;
 String updatedtempad;
+File _profilepic;
+String imageLink1 = "";
 var updatePath = FirebaseFirestore.instance
     .collection('partner')
-    .doc(FirebaseAuth.instance.currentUser.uid)
-    .collection('ProfileInfo')
     .doc(FirebaseAuth.instance.currentUser.uid);
 
 class Setting extends StatefulWidget {
@@ -24,6 +25,10 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[100],
@@ -42,8 +47,6 @@ class _SettingState extends State<Setting> {
               stream: FirebaseFirestore.instance
                   .collection('partner')
                   .doc(FirebaseAuth.instance.currentUser.uid)
-                  .collection('ProfileInfo')
-                  .doc(FirebaseAuth.instance.currentUser.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
@@ -53,27 +56,45 @@ class _SettingState extends State<Setting> {
                 var document = snapshot.data;
                 return Center(
                     child: Container(
+                  //color: Colors.amber,
                   padding: EdgeInsets.all(15),
-                  height: double.infinity,
+                  height: _hight * 1,
                   // width: 350,
                   child: ListView(
                     children: [
                       Container(
                         padding: EdgeInsets.all(20),
-                        height: 100,
-                        // width: 330,
+                        height: _hight * 0.15,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30),
-                          // boxShadow: kElevationToShadow[1]
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CircleAvatar(
-                              radius: 35.0,
-                              backgroundImage:
-                                  NetworkImage(document['profilepic']),
+                            Container(
+                              height: _width * 0.15,
+                              width: _width * 0.15,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[100],
+                                child: ClipOval(
+                                  child: Center(
+                                    child: document['profilepic'] == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: Colors.blueGrey,
+                                            size: _width * 0.12,
+                                          )
+                                        : Image.network(
+                                            document['profilepic'],
+                                            fit: BoxFit.cover,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                          ),
+                                  ),
+                                ),
+                              ),
                             ),
                             _profilepic == null
                                 ? TextButton(
@@ -87,8 +108,8 @@ class _SettingState extends State<Setting> {
                                           color: Colors.grey[700]),
                                     ))
                                 : TextButton(
-                                    onPressed: () {
-                                      uploadprofile();
+                                    onPressed: () async {
+                                      await uploadprofile();
                                     },
                                     child: Text(
                                       'Upload',
@@ -104,7 +125,7 @@ class _SettingState extends State<Setting> {
                       ),
                       Container(
                         padding: EdgeInsets.all(20),
-                        height: 100,
+                        height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -135,7 +156,7 @@ class _SettingState extends State<Setting> {
                       ),
                       Container(
                         padding: EdgeInsets.all(20),
-                        height: 100,
+                        height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -166,7 +187,7 @@ class _SettingState extends State<Setting> {
                       ),
                       Container(
                         padding: EdgeInsets.all(20),
-                        height: 100,
+                        height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -177,7 +198,9 @@ class _SettingState extends State<Setting> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              document['altNum'],
+                              document['altnum'] == null
+                                  ? 'Not Found'
+                                  : document['altnum'],
                               style: TextStyle(fontSize: 18),
                             ),
                             TextButton(
@@ -195,34 +218,34 @@ class _SettingState extends State<Setting> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        padding: EdgeInsets.all(20),
-                        height: 100,
-                        // width: 330,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          // boxShadow: kElevationToShadow[1]
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              document['tempAd'],
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            // TextButton(
-                            //     onPressed: () {
-                            //     //  updatedtempadUpdate(context);
-                            //     },
-                            //     child: Text(
-                            //       'Change',
-                            //       style: TextStyle(
-                            //           fontSize: 18, color: Colors.grey[700]),
-                            //     ))
-                          ],
-                        ),
-                      )
+                      // Container(
+                      //   padding: EdgeInsets.all(20),
+                      //   height: _hight * 0.15,
+                      //   // width: 330,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(30),
+                      //     // boxShadow: kElevationToShadow[1]
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         document['tempAd'],
+                      //         style: TextStyle(fontSize: 18),
+                      //       ),
+                      //       TextButton(
+                      //           onPressed: () {
+                      //              updatete(context);
+                      //           },
+                      //           child: Text(
+                      //             'Change',
+                      //             style: TextStyle(
+                      //                 fontSize: 18, color: Colors.grey[700]),
+                      //           ))
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ));
@@ -230,12 +253,10 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  File _profilepic;
-  String imageLink1 = "";
   Future<void> profilePic() async {
     var profile = await ImagePicker().getImage(
       source: ImageSource.camera,
-      imageQuality: 40,
+      imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
@@ -249,22 +270,22 @@ class _SettingState extends State<Setting> {
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
         .putFile(_profilepic);
-    print('aaa');
-    print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink1 = imageUrl.toString();
-    print(imageUrl);
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('partner')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .update({'profilepic': imageLink1});
+    // setState(() {
+    //   _profilepic = null;
+    // });
   }
 }
 
 Future<void> emailUpdate(BuildContext context) async {
   return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
             title: Text('Enter Email'),
@@ -320,7 +341,7 @@ Future<void> emailUpdate(BuildContext context) async {
 Future<void> dobUpdate(BuildContext context) async {
   return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
             title: Text('Enter Date of Birth'),
@@ -376,7 +397,7 @@ Future<void> dobUpdate(BuildContext context) async {
 Future<void> altNumUpdate(BuildContext context) async {
   return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
             title: Text('Enter Number'),
@@ -417,7 +438,7 @@ Future<void> altNumUpdate(BuildContext context) async {
                           onPressed: () {
                             Navigator.of(context).pop();
 
-                            updatePath.update({'altNum': updatedNum});
+                            updatePath.update({'altnum': updatedNum});
                           },
                           child: Text(
                             'Change',
@@ -432,7 +453,7 @@ Future<void> altNumUpdate(BuildContext context) async {
 Future<void> updatedProfilePic(BuildContext context) async {
   return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
             title: Text('Enter Address'),

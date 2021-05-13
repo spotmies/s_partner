@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/login/p_info.dart';
 import 'stepperpersonalinfo.dart';
 
@@ -91,13 +92,37 @@ class _OTPScreenState extends State<OTPScreen> {
                       .signInWithCredential(PhoneAuthProvider.credential(
                           verificationId: _verificationCode, smsCode: pin))
                       .then((value) async {
-                    if (value.user != null) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StepperPersonalInfo()),
-                          (route) => false);
-                    }
+                    print("value user  ${value.user}");
+                    var doc = FirebaseFirestore.instance
+                        .collection('partner')
+                        .doc(FirebaseAuth.instance.currentUser.uid);
+                    doc.get().then((document) {
+                      if (document.exists) {
+                        print("doc exits");
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (_) => Home()),
+                            (route) => false);
+                      } else if (!document.exists) {
+                        print("doc not exits");
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StepperPersonalInfo()),
+                            (route) => false);
+                      }
+                    });
+                    //         if (value.user == null) {
+                    //           Navigator.pushAndRemoveUntil(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => StepperPersonalInfo()),
+                    //               (route) => false);
+                    //         }
+                    //         else{
+                    //             Navigator.pushAndRemoveUntil(context,
+                    // MaterialPageRoute(builder: (_) => Home()), (route) => false);
+                    //         }
                   });
                 } catch (e) {
                   FocusScope.of(context).unfocus();

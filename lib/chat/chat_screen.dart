@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies_partner/chat/userDetails.dart';
 
 date(msg1, msg2) {
   var temp1 = jsonDecode(msg1);
@@ -71,7 +73,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 FirebaseFirestore.instance
                     .collection('messaging')
                     .doc(value)
-                    .update({'pstatus': 0});
+                    .update({'pread': 0});
                 Navigator.of(context).pop();
               }),
           title: StreamBuilder(
@@ -81,8 +83,52 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 var document = snapshot.data;
-                return Text(
-                    document['uname'] == null ? 'User' : document['uname']);
+                return InkWell(
+                  onTap: () {
+                    var msgid = document['id'];
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => UserDetails(
+                        value: msgid,
+                      ),
+                    ));
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        child: AspectRatio(
+                          aspectRatio: 400 / 400,
+                          child: ClipOval(
+                            child: document['upic'] == null
+                                ? Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                    size: 30,
+                                  )
+                                : Image.network(
+                                    document['upic'].toString(),
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width,
+                                  ),
+                          ),
+                        ),
+                        backgroundColor: Colors.grey[50],
+                      ),
+                      SizedBox(
+                        width: _width * 0.03,
+                      ),
+                      Container(
+                        // padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          document['uname'] == null
+                              ? 'Costumer'
+                              : document['uname'],
+                          style: TextStyle(
+                              color: Colors.white, fontSize: _width * 0.055),
+                        ),
+                      )
+                    ],
+                  ),
+                );
               }),
         ),
         body: StreamBuilder(
@@ -159,7 +205,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                       topRight:
                                                           Radius.circular(15),
                                                     )),
-                                                child: Text(data['msg']),
+                                                child: Text(
+                                                    toBeginningOfSentenceCase(
+                                                        data['msg'])),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -181,7 +229,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                     Text(DateFormat.jm().format(
                                                         DateTime.fromMillisecondsSinceEpoch(
                                                             (int.parse(data[
-                                                                'timestamp']))))),
+                                                                    'timestamp']
+                                                                .toString()))))),
                                                   ],
                                                 ),
                                               ),
@@ -240,10 +289,11 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                           Radius.circular(15),
                                                       topRight:
                                                           Radius.circular(15),
-                                                      // bottomRight:
-                                                      //     Radius.circular(30)
                                                     )),
-                                                child: Text(data['msg']),
+                                                child: Text(
+                                                    toBeginningOfSentenceCase(
+                                                            data['msg'])
+                                                        .toString()),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -263,10 +313,10 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     Text(DateFormat.jm().format(
-                                                        (DateTime
-                                                            .fromMillisecondsSinceEpoch(
-                                                                (int.parse(data[
-                                                                    'timestamp'])))))),
+                                                        (DateTime.fromMillisecondsSinceEpoch(
+                                                            (int.parse(data[
+                                                                    'timestamp']
+                                                                .toString())))))),
                                                   ],
                                                 ),
                                               ),
@@ -344,7 +394,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                 (DateTime
                                                     .fromMillisecondsSinceEpoch(
                                                         (int.parse(data[
-                                                            'timestamp'])))))),
+                                                                'timestamp']
+                                                            .toString())))))),
                                           ],
                                         ),
                                       ),
@@ -417,7 +468,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                 (DateTime
                                                     .fromMillisecondsSinceEpoch(
                                                         (int.parse(data[
-                                                            'timestamp'])))))),
+                                                                'timestamp']
+                                                            .toString())))))),
                                           ],
                                         ),
                                       ),
@@ -444,12 +496,11 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             children: [
                               Icon(
                                 Icons.done_all,
-                                color: document['ustatus'] == 1
+                                color: document['uread'] == 1
                                     ? Colors.greenAccent
                                     : Colors.grey,
                               ),
-                              Text(
-                                  document['ustatus'] == 1 ? 'Seen' : 'Unseen'),
+                              Text(document['uread'] == 1 ? 'Seen' : 'Unseen'),
                             ],
                           )),
                     ],
@@ -500,9 +551,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             ),
                             onPressed: () {
                               var msgcount = document['umsgcount'];
-                              var ustatus = document['ustatus'];
+                              var uread = document['uread'];
 
-                              bottomappbar(msgcount, ustatus);
+                              bottomappbar(msgcount, uread);
                             }),
                         Container(
                           height: _hight * 0.1,
@@ -536,9 +587,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                         .update({
                                       'createdAt': DateTime.now(),
                                       'body': FieldValue.arrayUnion([temp]),
-                                      'umsgcount': document['ustatus'] == 0
-                                          ? msgcount
-                                          : 0,
+                                      'umsgcount':
+                                          document['uread'] == 0 ? msgcount : 0,
                                     });
                                     Timer(
                                         Duration(milliseconds: 300),
@@ -610,7 +660,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
     }
   }
 
-  bottomappbar(int msgcount, int ustatus) {
+  bottomappbar(int msgcount, int uread) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -735,7 +785,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                       'createdAt': DateTime.now(),
                                       'body': FieldValue.arrayUnion([temp]),
                                       'umsgcount':
-                                          ustatus == 0 ? msgcount + 1 : 0,
+                                          uread == 0 ? msgcount + 1 : 0,
                                     });
 
                                     Navigator.pop(context);

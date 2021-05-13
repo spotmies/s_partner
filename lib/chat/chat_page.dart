@@ -55,7 +55,7 @@ class _ChatHomeState extends State<ChatHome> {
                       .collection('messaging')
                       .where('partnerid',
                           isEqualTo: FirebaseAuth.instance.currentUser.uid)
-                      // .orderBy('createdAt', descending: true)
+                      .where("chatbuild", isEqualTo: true)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -75,11 +75,10 @@ class _ChatHomeState extends State<ChatHome> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  print('$msgid');
                                   FirebaseFirestore.instance
                                       .collection('messaging')
                                       .doc(msgid)
-                                      .update({'pstatus': 1, 'pmsgcount': 0});
+                                      .update({'pread': 1, 'pmsgcount': 0});
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ChatScreen(
                                       value: msgid,
@@ -110,40 +109,43 @@ class _ChatHomeState extends State<ChatHome> {
                                       itemCount: 1,
                                       itemBuilder:
                                           (BuildContext ctxt, int index) {
-                                        // int msgCount = 10;
                                         String msgData = msgs.last;
                                         var data = jsonDecode(msgData);
                                         return Row(
                                           children: [
                                             CircleAvatar(
-                                              child: ClipOval(
-                                                child: document['upic'] == null
-                                                    ? Icon(
-                                                        Icons.person,
-                                                        color: Colors.black,
-                                                        size: 30,
-                                                      )
-                                                    : Image.network(
-                                                        document['upic'],
-                                                        fit: BoxFit.cover,
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                      ),
+                                              child: AspectRatio(
+                                                aspectRatio: 400 / 400,
+                                                child: ClipOval(
+                                                  child: document['upic'] ==
+                                                          null
+                                                      ? Icon(
+                                                          Icons.person,
+                                                          color: Colors.black,
+                                                          size: 30,
+                                                        )
+                                                      : Image.network(
+                                                          document['upic']
+                                                              .toString(),
+                                                          fit: BoxFit.cover,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                        ),
+                                                ),
                                               ),
                                               backgroundColor: Colors.grey[50],
                                             ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
+                                            // SizedBox(
+                                            //   width: _width * 0.00,
+                                            // ),
                                             Container(
                                               padding: EdgeInsets.only(
-                                                  left: 20,
-                                                  right: 20,
-                                                  top: 10,
-                                                  bottom: 10),
-                                              // color: Colors.amber,
+                                                  left: _width * 0.04,
+                                                  right: _width * 0.04,
+                                                  top: _width * 0.02,
+                                                  bottom: _width * 0.02),
                                               width: _width * 0.69,
                                               height: _hight * 0.12,
                                               child: Row(
@@ -162,7 +164,8 @@ class _ChatHomeState extends State<ChatHome> {
                                                       Text(document['uname'] ==
                                                               null
                                                           ? 'User'
-                                                          : document['uname']),
+                                                          : document['uname']
+                                                              .toString()),
                                                       data['msg'].startsWith(
                                                               'https')
                                                           ? Row(
@@ -189,19 +192,27 @@ class _ChatHomeState extends State<ChatHome> {
                                                                 ),
                                                               ],
                                                             )
-                                                          : Text(
-                                                              data['msg'],
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: document[
-                                                                              'pmsgcount'] >
-                                                                          0
-                                                                      ? Colors
-                                                                          .black
-                                                                      : Colors.grey[
-                                                                          500]),
+                                                          : SizedBox(
+                                                              width:
+                                                                  _width * 0.3,
+                                                              child: Text(
+                                                                data['msg'],
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 1,
+                                                                softWrap: false,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: document['pmsgcount'] >
+                                                                            0
+                                                                        ? Colors
+                                                                            .black
+                                                                        : Colors
+                                                                            .grey[500]),
+                                                              ),
                                                             )
                                                     ],
                                                   ),
@@ -213,7 +224,8 @@ class _ChatHomeState extends State<ChatHome> {
                                                       Text(DateFormat.jm().format(
                                                           DateTime.fromMillisecondsSinceEpoch(
                                                               (int.parse(data[
-                                                                  'timestamp']))))),
+                                                                      'timestamp']
+                                                                  .toString()))))),
                                                       Container(
                                                         child: document[
                                                                     'pmsgcount'] >

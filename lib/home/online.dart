@@ -241,7 +241,7 @@ class _OnlineState extends State<Online> {
                                                                                         'ppic': prodoc['profilepic'],
                                                                                         'body': FieldValue.arrayUnion(dataa),
                                                                                         'chatbuild': false,
-                                                                                        'pstatus': 'active',
+                                                                                        'pread': 0,
                                                                                         'rating': 5,
                                                                                         'distance': 1
                                                                                       });
@@ -673,8 +673,8 @@ class _OnlineState extends State<Online> {
                                                                         [temp]),
                                                                 'chatbuild':
                                                                     false,
-                                                                'pstatus': 0,
-                                                                'ustatus': 0,
+                                                                'pread': 0,
+                                                                'uread': 0,
                                                                 'umsgcount': 0,
                                                                 'pmsgcount': 0,
                                                                 'rating': 5,

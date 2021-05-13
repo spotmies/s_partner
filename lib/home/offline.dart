@@ -52,7 +52,7 @@ class _PercentIndicatorState extends State<PercentIndicator> {
               child: CircularProgressIndicator(),
             );
           var document = snapshot.data;
-          List<String> reference = List.from(document['reference']);
+          // List<String> reference = List.from(document['reference']);
           var rateValue = document['rate'] / 20;
           return Center(
               child: Container(
@@ -63,31 +63,7 @@ class _PercentIndicatorState extends State<PercentIndicator> {
             child: ListView(children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   height: _hight * 0.13,
-                  //   decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(15),
-                  //       boxShadow: [
-                  //         new BoxShadow(
-                  //           color: Colors.grey[200],
-                  //           blurRadius: 1.0,
-                  //         ),
-                  //       ]),
-                  //   child: Center(
-                  //       child: Text(
-                  //     'Launching Soon',
-                  //     style: TextStyle(
-                  //         fontSize: 25,
-                  //         color: Colors.blue[700],
-                  //         fontWeight: FontWeight.bold),
-                  //   )),
-                  // ),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
                   Container(
                     width: double.infinity,
                     height: _hight * 0.35,
@@ -231,7 +207,7 @@ class _PercentIndicatorState extends State<PercentIndicator> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(reference.length.toString(),
+                                  Text(document['reference'].length.toString(),
                                       style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.w900,
