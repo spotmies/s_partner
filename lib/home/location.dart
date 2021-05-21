@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:im_animations/im_animations.dart';
+import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/login/legal_doc.dart';
 
 class Location extends StatefulWidget {
@@ -12,13 +14,72 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-  var latitude = "";
-  var longitude = "";
+  double latitude;
+  double longitude;
   String add1 = "";
   String add2 = "";
   String add3 = "";
+  Set<Marker> _marker = {};
+  BitmapDescriptor mapMarker;
 
   //function for location
+
+  @override
+  void initState() {
+    super.initState();
+    getAddressofLocation();
+    setCustomMarker();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getCurrentLocation();
+    getAddressofLocation();
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        leading: Icon(
+          Icons.arrow_back_ios,
+          size: 20,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.blue[900],
+        title: Text(
+          'Set Loction',
+        ),
+        elevation: 0,
+      ),
+      body: GoogleMap(
+          onMapCreated: onmapcreated,
+          markers: _marker,
+          myLocationButtonEnabled: true,
+          // myLocationEnabled: true,
+          mapType: MapType.terrain,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(latitude, longitude),
+            zoom: 15,
+          )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blue[900],
+        onPressed: () {
+          FirebaseFirestore.instance
+              .collection('partner')
+              .doc(FirebaseAuth.instance.currentUser.uid)
+              .update({
+            'location.latitude': latitude,
+            'location.longitude': longitude,
+            'location.add1': add2,
+          });
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (_) => Home()), (route) => false);
+        },
+        icon: Icon(Icons.gps_fixed),
+        label: Text("Save Location"),
+      ),
+    );
+  }
+
   void getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -32,15 +93,9 @@ class _LocationState extends State<Location> {
     print('$lat,$long');
 
     setState(() {
-      latitude = '${position.latitude}';
-      longitude = '${position.longitude}';
+      latitude = position.latitude;
+      longitude = position.longitude;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getAddressofLocation();
   }
 
   getAddressofLocation() async {
@@ -53,110 +108,34 @@ class _LocationState extends State<Location> {
     setState(() {
       add1 = addresses.first.featureName;
       add2 = addresses.first.addressLine;
-      add3 = addresses.first.locality;
+      add3 = addresses.first.subLocality;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        leading: Icon(
-          Icons.my_location,
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.white,
-        title: Text('Set Loction', style: TextStyle(color: Colors.black)),
-        elevation: 0,
-        actions: [
-          (getCurrentLocation == null)
-              ? Text('No Data')
-              : TextButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('partner')
-                        .doc(FirebaseAuth.instance.currentUser.uid)
-                        .update({
-                      'location.latitude': latitude,
-                      'location.longitude': longitude,
-                      'location.add1': add2,
-                    });
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => Addimage()),
-                        (route) => false);
-                  },
-                  child: Text('SAVE'))
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              child: ColorSonarDemo(),
-              radius: 50.0,
-            ),
-            // SizedBox(height: 70,),
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[100],
-                    blurRadius: 5.0,
-                  )
-                ],
-              ),
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Your Address:',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('$latitude,$longitude'),
-                  Text(add2),
-                ],
-              ),
-            ),
-            //  FlatButton(
-            //   onPressed: () async {
-            //     //(latitude=null)? CircularProgressIndicator():
-            //   },
-            //   color: Colors.blue[700],
-            //   child: Text(
-            //     'Get Location',
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            // ),
-            ElevatedButton.icon(
-              
-                //color: Colors.blue[700],
-                onPressed: () {
-                  getCurrentLocation();
-                  getAddressofLocation();
-                },
-                icon: Icon(
-                  Icons.my_location,
-                  color: Colors.white,
-                ),
-                label:
-                    Text('Get Location', style: TextStyle(color: Colors.white)))
-          ],
-        ),
-      ),
-    );
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'lib/assets/icon.png');
+  }
+
+  void onmapcreated(GoogleMapController controller) {
+    setState(() {
+      _marker.add(Marker(
+          // draggable: true,
+          // onDragEnd: ((newPostion) {
+          //   setState(() {
+          //     latitude = newPostion.latitude;
+          //     longitude = newPostion.longitude;
+          //     print('$latitude, $longitude');
+          //   });
+          // }),
+          icon: mapMarker,
+          markerId: MarkerId('id-1'),
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(
+            title: add3,
+            snippet: '$latitude,$longitude',
+          )));
+    });
   }
 }
 

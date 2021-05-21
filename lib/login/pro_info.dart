@@ -208,7 +208,7 @@ class _ProInfoState extends State<ProInfo> {
                           'name': this.name,
                           'dob': this.dob,
                           'perAd': this.perAd,
-                          'altNum': this.number,
+                          'altnum': this.number,
                           'email':this.email,
                           'tempAd': this.tempAd
                         };

@@ -98,13 +98,16 @@ class _OTPScreenState extends State<OTPScreen> {
                         .doc(FirebaseAuth.instance.currentUser.uid);
                     doc.get().then((document) {
                       if (document.exists) {
-                        print("doc exits");
+                        FirebaseFirestore.instance
+                            .collection('partner')
+                            .doc(FirebaseAuth.instance.currentUser.uid)
+                            .update({'pnum': '+91 ${widget.phone}'});
+                        //have to change to set **********
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (_) => Home()),
                             (route) => false);
                       } else if (!document.exists) {
-                        print("doc not exits");
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -112,17 +115,6 @@ class _OTPScreenState extends State<OTPScreen> {
                             (route) => false);
                       }
                     });
-                    //         if (value.user == null) {
-                    //           Navigator.pushAndRemoveUntil(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => StepperPersonalInfo()),
-                    //               (route) => false);
-                    //         }
-                    //         else{
-                    //             Navigator.pushAndRemoveUntil(context,
-                    // MaterialPageRoute(builder: (_) => Home()), (route) => false);
-                    //         }
                   });
                 } catch (e) {
                   FocusScope.of(context).unfocus();

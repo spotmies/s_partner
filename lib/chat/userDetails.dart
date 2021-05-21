@@ -38,8 +38,8 @@ class _UserDetailsState extends State<UserDetails> {
                 child: CircularProgressIndicator(),
               );
             var document = snapshot.data;
-
-            return document['upic'] != null
+            var num = document['unum'];
+            return document['revealprofile'] == true
                 ? CustomScrollView(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
@@ -63,11 +63,17 @@ class _UserDetailsState extends State<UserDetails> {
                           ],
                           background: Container(
                             width: _width * 1,
-                            color: Colors.black,
-                            child: Image.network(
-                              document['upic'],
-                              fit: BoxFit.cover,
-                            ),
+                            color: Colors.white,
+                            child: document['upic'] == null
+                                ? Icon(
+                                    Icons.person_rounded,
+                                    color: Colors.grey[300],
+                                    size: _hight * 0.5,
+                                  )
+                                : Image.network(
+                                    document['upic'],
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                       ),
@@ -111,7 +117,11 @@ class _UserDetailsState extends State<UserDetails> {
                                       left: _width * 0.03,
                                       top: _width * 0.01,
                                     ),
-                                    child: Text('18th October, 2020',
+                                    child: Text(
+                                        DateFormat('dd MMM, yyyy (EEE)').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(
+                                                    document['createdAt']))),
                                         style: TextStyle(
                                             color: Colors.grey,
                                             fontWeight: FontWeight.bold,
@@ -136,8 +146,7 @@ class _UserDetailsState extends State<UserDetails> {
                                               children: [
                                                 Container(
                                                   width: double.infinity,
-                                                  child: Text(
-                                                      '+91 ' + '8330933883',
+                                                  child: Text(num,
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize:
@@ -180,8 +189,7 @@ class _UserDetailsState extends State<UserDetails> {
                                                       color: Colors.blue[900],
                                                     ),
                                                     onPressed: () {
-                                                      launch(
-                                                          "tel://8330933883");
+                                                      launch("tel://$num");
                                                     }),
                                               ],
                                             ),
@@ -191,55 +199,55 @@ class _UserDetailsState extends State<UserDetails> {
                                 ],
                               ),
                             ),
+                            // Divider(
+                            //   thickness: 10,
+                            //   color: Colors.grey[200],
+                            // ),
+                            // Container(
+                            //   padding: EdgeInsets.only(
+                            //     left: _width * 0.07,
+                            //   ),
+                            //   height: _hight * 0.1,
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       Row(
+                            //         children: [
+                            //           Icon(
+                            //             Icons.visibility,
+                            //             color: Colors.blue[900],
+                            //           ),
+                            //           SizedBox(
+                            //             width: _width * 0.07,
+                            //           ),
+                            //           Text(
+                            //             'Reveal My Profile',
+                            //             style: TextStyle(
+                            //                 color: Colors.blue[900],
+                            //                 fontSize: _width * 0.05,
+                            //                 fontWeight: FontWeight.bold),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       Transform.scale(
+                            //         scale: 0.8,
+                            //         child: CupertinoSwitch(
+                            //             trackColor: Colors.grey[300],
+                            //             value: isSwitch,
+                            //             activeColor: Colors.blue[900],
+                            //             onChanged: (value) {
+                            //               setState(() {
+                            //                 isSwitch = value;
+                            //               });
+                            //             }),
+                            //       )
+                            //     ],
+                            //   ),
+                            // ),
                             Divider(
                               thickness: 10,
-                              color: Colors.grey[300],
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: _width * 0.07,
-                              ),
-                              height: _hight * 0.1,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.visibility,
-                                        color: Colors.blue[900],
-                                      ),
-                                      SizedBox(
-                                        width: _width * 0.07,
-                                      ),
-                                      Text(
-                                        'Reveal My Profile',
-                                        style: TextStyle(
-                                            color: Colors.blue[900],
-                                            fontSize: _width * 0.05,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Transform.scale(
-                                    scale: 0.8,
-                                    child: CupertinoSwitch(
-                                        trackColor: Colors.grey[300],
-                                        value: isSwitch,
-                                        activeColor: Colors.blue[900],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isSwitch = value;
-                                          });
-                                        }),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              thickness: 10,
-                              color: Colors.grey[300],
+                              color: Colors.grey[200],
                             ),
                             Container(
                               padding: EdgeInsets.only(
@@ -249,7 +257,7 @@ class _UserDetailsState extends State<UserDetails> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    Icons.contact_page,
+                                    Icons.important_devices,
                                     color: Colors.blue[900],
                                   ),
                                   SizedBox(
@@ -268,7 +276,7 @@ class _UserDetailsState extends State<UserDetails> {
 
                             Divider(
                               thickness: 10,
-                              color: Colors.grey[300],
+                              color: Colors.grey[200],
                             ),
                             Container(
                               padding: EdgeInsets.only(
@@ -298,7 +306,7 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                             Divider(
                               thickness: 10,
-                              color: Colors.grey[300],
+                              color: Colors.grey[200],
                             ),
                             Container(
                               padding: EdgeInsets.only(
@@ -334,10 +342,9 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                             Divider(
                               thickness: 10,
-                              color: Colors.grey[300],
+                              color: Colors.grey[200],
                             ),
-                            Container(height: 150.0),
-                            // Container(height: 150.0),
+                            Container(height: 250.0),
                           ],
                         ),
                       )

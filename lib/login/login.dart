@@ -32,16 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                       height: _hight * 0.4,
                       child: Image.asset('lib/assets/7.png')),
-                  // CircleAvatar(
-                  //   backgroundColor: Colors.white,
-                  //   radius: 50,
-                  //   child: Center(
-                  //       child: Icon(
-                  //     Icons.mobile_screen_share,
-                  //     color: Colors.blue[800],
-                  //     size: 40,
-                  //   )),
-                  // ),
+                
                   SizedBox(
                     height: 10,
                   ),
@@ -63,21 +54,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.blue[800],
                                 borderRadius: BorderRadius.circular(15),
-                                // boxShadow: [BoxShadow(color: Colors.grey,blurRadius: 0)]
                               ),
                               child: Container(
                                 margin:
                                     EdgeInsets.only(top: 0, right: 5, left: 5),
                                 padding: EdgeInsets.all(2),
-                                // height: 80,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  // boxShadow: [BoxShadow(color: Colors.grey,blurRadius: 0)]
                                 ),
                                 child: TextFormField(
-                                  // maxLength: 10,
                                   decoration: InputDecoration(
                                     border: new OutlineInputBorder(
                                         borderSide:
@@ -148,13 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
 
-                            //border: Border.all(color: Colors.blue[700]),
-                            //color: Colors.blue[800],
+                            
                           ),
                           child: ElevatedButton(
-                            // color: Colors.blue[800],
-                            // shape: RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(5.0)),
+                          
                             onPressed: () {
                               if (_formkey.currentState.validate()) {
                                 Navigator.of(context).push(MaterialPageRoute(

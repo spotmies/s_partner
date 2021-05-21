@@ -82,7 +82,7 @@ class _ProfileState extends State<Profile> {
                                     ? Icon(
                                         Icons.person,
                                         color: Colors.blue,
-                                        size: 65,
+                                        size: _width * 0.2,
                                       )
                                     : Image.network(
                                         document['profilepic'],
@@ -158,8 +158,8 @@ class _ProfileState extends State<Profile> {
                                     //   width: 70,
                                     // ),
                                     Container(
-                                        height: 50,
-                                        width: 50,
+                                       height: _hight * 0.0728,
+                                        width: _hight * 0.0728,
                                         child: Icon(
                                           Icons.arrow_forward,
                                           color: Colors.grey[600],

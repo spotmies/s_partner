@@ -51,6 +51,7 @@ dependencies:
   flutter_switch: ^0.3.1
   slider_button: ^0.6.0
   connectivity: ^3.0.3
+  google_maps_flutter:
   # firebase_messaging:
   
   
@@ -88,6 +89,7 @@ flutter:
     - lib/assets/5.png
     - lib/assets/7.png
     - lib/assets/spotmies.png
+    - lib/assets/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

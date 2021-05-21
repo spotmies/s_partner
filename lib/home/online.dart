@@ -433,8 +433,9 @@ class _OnlineState extends State<Online> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Container(
-                                                width: _width * 0.4,
+                                              Flexible(
+                                                flex: 2,
+                                                // width: _width * 0.4,
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -445,7 +446,7 @@ class _OnlineState extends State<Online> {
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .spaceBetween,
+                                                              .start,
                                                       children: [
                                                         Text(
                                                           'Money:',
@@ -454,6 +455,9 @@ class _OnlineState extends State<Online> {
                                                                   FontWeight
                                                                       .w500),
                                                         ),
+                                                        SizedBox(
+                                                          width: _width * 0.05,
+                                                        ),
                                                         Text(document['money']
                                                             .toString()),
                                                       ],
@@ -461,13 +465,16 @@ class _OnlineState extends State<Online> {
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .spaceBetween,
+                                                              .start,
                                                       children: [
                                                         Text('Location:',
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500)),
+                                                        SizedBox(
+                                                          width: _width * 0.02,
+                                                        ),
                                                         Text(document[
                                                             'location.add1']),
                                                       ],
@@ -668,11 +675,17 @@ class _OnlineState extends State<Online> {
                                                                     'name'],
                                                                 'ppic': prodoc[
                                                                     'profilepic'],
+                                                                'pnum': prodoc[
+                                                                    'pnum'],
+                                                                'location': prodoc[
+                                                                    'location.add1'],
+                                                                'revealprofile':
+                                                                    false,
                                                                 'body': FieldValue
                                                                     .arrayUnion(
                                                                         [temp]),
                                                                 'chatbuild':
-                                                                    false,
+                                                                    true,
                                                                 'pread': 0,
                                                                 'uread': 0,
                                                                 'umsgcount': 0,
