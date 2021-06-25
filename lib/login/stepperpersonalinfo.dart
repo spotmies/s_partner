@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
@@ -72,6 +73,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     super.initState();
     pickedDate = DateTime.now();
     pickedTime = TimeOfDay.now();
+    print("76 ${FirebaseAuth.instance.currentUser.uid}");
   }
 
   @override
@@ -257,23 +259,20 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
   step4() async {
     await imageUpload();
 
-    // var od = ["pan", "voter"].toString();
-
     var legalDocs = {
       "otherDocs": ["pan", "voter"],
       "adharF": adharFrontpage,
       "adharB": adharBackpage
     };
-    String docs = jsonEncode(legalDocs);
-    print(jsonEncode(legalDocs));
+
+    Object docs = jsonEncode(legalDocs);
     String lang = [lan1, lan2].toString();
 
     var body = {
-      "docs": docs,
       "partnerPic": picture.toString(),
       "lang": lang.substring(1, lang.length - 1),
       "name": this.name.toString(),
-      "phNum": 8019933883.toString(),
+      "phNum": 8341980196.toString(),
       "eMail": this.email.toString(),
       "job": 4.toString(),
       "pId": FirebaseAuth.instance.currentUser.uid.toString(),
@@ -290,13 +289,16 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
       "rate": 100.toString(),
       "perAdd": this.perAd.toString(),
       "tempAdd": this.tempAd.toString(),
+      "docs": docs
     };
-    await Server().postMethod(API.partnerRegister, body).catchError((e) {
+    var resp =
+        await Server().postMethod(API.partnerRegister, body).catchError((e) {
       if (e == null) CircularProgressIndicator();
       print(e);
     });
     print(body);
-    controller.postData();
+    // if(resp != 200)return; //write the code if post request not work well
+    // controller.postData();
     _profilepic != null
         ? Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => Home()), (route) => false)
@@ -469,6 +471,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
 
   Widget step2UI() {
     var _hight = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.all(1),
       child: Form(
@@ -479,16 +482,17 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
             Column(
               children: [
                 Container(
-                  height: 600,
-                  width: 380,
+                  height: 530,
+                  width: _width * 0.9,
+                  //color: Colors.amber,
                   child: ListView(
                     children: [
                       Container(
                         padding: EdgeInsets.all(10),
-                        height: 90,
-                        width: 380,
+                        // height: 90,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            // color: Colors.amber,
                             borderRadius: BorderRadius.circular(15)),
                         child: TextFormField(
                           keyboardType: TextInputType.name,
@@ -498,7 +502,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                             hintText: 'Name',
                             suffixIcon: Icon(Icons.person),
                             //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
+                            //contentPadding: EdgeInsets.all(20),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -511,9 +515,9 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
+                      // SizedBox(
+                      //   height: 7,
+                      // ),
                       InkWell(
                         onTap: () {
                           _pickedDate();
@@ -521,7 +525,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                         child: Container(
                           padding: EdgeInsets.all(10),
                           height: 90,
-                          width: 380,
+                          width: _width * 0.9,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15)),
@@ -540,13 +544,13 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
+                      // SizedBox(
+                      //   height: 7,
+                      // ),
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
@@ -557,7 +561,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                             hintText: 'Email',
                             suffixIcon: Icon(Icons.email),
                             //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
+                            //contentPadding: EdgeInsets.all(20),
                           ),
                           validator: (value) {
                             if (value.isEmpty || !value.contains('@')) {
@@ -577,19 +581,23 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
                         child: TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          maxLength: 10,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
-                            hintStyle: TextStyle(fontSize: 17),
-                            hintText: 'Alternative Mobile Number',
-                            suffixIcon: Icon(Icons.dialpad),
-                            //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
-                          ),
+                              hintStyle: TextStyle(fontSize: 17),
+                              hintText: 'Alternative Mobile Number',
+                              suffixIcon: Icon(Icons.dialpad),
+                              //border: InputBorder.none,
+                              // //contentPadding: EdgeInsets.all(20),
+                              counterText: ""),
                           validator: (value) {
                             if (value.isEmpty || value.length < 10) {
                               return 'Please Enter Valid Mobile Number';
@@ -608,7 +616,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
@@ -619,7 +627,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                             hintText: 'Temparary Address',
                             suffixIcon: Icon(Icons.add_road),
                             //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
+                            // //contentPadding: EdgeInsets.all(20),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -639,7 +647,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
@@ -650,7 +658,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                             hintText: 'Perminent Address',
                             suffixIcon: Icon(Icons.add_road),
                             //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
+                            ////contentPadding: EdgeInsets.all(20),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -670,7 +678,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 250,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
@@ -725,7 +733,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                                 hintText: 'others',
                                 suffixIcon: Icon(Icons.add_road),
                                 //border: InputBorder.none,
-                                contentPadding: EdgeInsets.all(20),
+                                // //contentPadding: EdgeInsets.all(20),
                               ),
                               onChanged: (value) {
                                 this.otherlan = value;
@@ -740,7 +748,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(5),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         // alignment: Alignment.centerRight,
                         decoration: BoxDecoration(
                             // border: Border.all(color: Colors.grey),
@@ -822,7 +830,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
@@ -833,7 +841,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                             hintText: 'Business Name',
                             suffixIcon: Icon(Icons.add_road),
                             //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
+                            // //contentPadding: EdgeInsets.all(20),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -853,19 +861,23 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
                       Container(
                         padding: EdgeInsets.all(10),
                         height: 90,
-                        width: 380,
+                        width: _width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
                         child: TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          maxLength: 2,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
-                            hintStyle: TextStyle(fontSize: 17),
-                            hintText: 'Experience',
-                            suffixIcon: Icon(Icons.add_road),
-                            //border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(20),
-                          ),
+                              hintStyle: TextStyle(fontSize: 17),
+                              hintText: 'Experience',
+                              suffixIcon: Icon(Icons.add_road),
+                              //border: InputBorder.none,
+                              //contentPadding: EdgeInsets.all(20),
+                              counterText: ""),
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please Enter Years of Experience';
@@ -1076,5 +1088,42 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
         )
       ],
     );
+  }
+}
+
+class register {
+  Docs docs;
+
+  register({this.docs});
+
+  register.fromJson(Map<String, dynamic> json) {
+    docs = json['docs'] != null ? new Docs.fromJson(json['docs']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.docs != null) {
+      data['docs'] = this.docs.toJson();
+    }
+    return data;
+  }
+}
+
+class Docs {
+  String adharF;
+  String adharB;
+
+  Docs({this.adharF, this.adharB});
+
+  Docs.fromJson(Map<String, dynamic> json) {
+    adharF = json['adharF'];
+    adharB = json['adharB'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['adharF'] = this.adharF;
+    data['adharB'] = this.adharB;
+    return data;
   }
 }
