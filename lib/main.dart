@@ -1,13 +1,19 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
+import 'package:spotmies_partner/login/stepperpersonalinfo.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<PartnerDetailsProvider>(
+        create: (context) => PartnerDetailsProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -27,7 +33,7 @@ class _MyAppState extends State<MyApp> {
             if (snapshot != null &&
                 snapshot.hasData &&
                 snapshot.data != ConnectivityResult.none) {
-              return SplashScreen();
+              return StepperPersonalInfo();
             } else {
               return NoInternet();
             }
