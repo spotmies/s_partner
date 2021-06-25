@@ -10,7 +10,6 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/home/home.dart';
-import 'package:spotmies_partner/home/location.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 TextEditingController nameTf = TextEditingController();
@@ -25,7 +24,7 @@ TextEditingController businessNameTf = TextEditingController();
 ScrollController _scrollController = ScrollController();
 
 class StepperPersonalInfo extends StatefulWidget {
-  String value;
+  final value;
   StepperPersonalInfo({this.value});
   @override
   _StepperPersonalInfoState createState() => _StepperPersonalInfoState(value);
@@ -78,9 +77,9 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
   @override
   Widget build(BuildContext context) {
     print(value);
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
+    // final _hight = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -1005,7 +1004,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
 
   Widget step4UI() {
     var _hight = MediaQuery.of(context).size.height;
-    var _width = MediaQuery.of(context).size.width;
+   // var _width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(

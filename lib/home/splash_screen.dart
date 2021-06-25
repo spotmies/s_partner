@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/login/onboard.dart';
-import 'package:spotmies_partner/login/otp.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

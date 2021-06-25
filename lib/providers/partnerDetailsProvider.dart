@@ -9,17 +9,32 @@ import 'package:spotmies_partner/apiCalls/testController.dart';
 class PartnerDetailsProvider extends ChangeNotifier {
   final controller = TestController();
   var partner;
-  var status;
+  var local;
 
   partnerDetails() async {
     var response = await Server().getMethod(API.partnerDetails);
     partner = jsonDecode(response);
-
-    //local data
-    final prefs = await SharedPreferences.getInstance();
-    status = (prefs.getBool(partner["availability"]));
-    prefs.setInt('status', status);
     controller.getData();
     notifyListeners();
   }
+
+  localStore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('details', jsonEncode(partner));
+  }
+
+  localData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String partnerData = prefs.getString('details');
+    Map<String, dynamic> details =
+        jsonDecode(partnerData) as Map<String, dynamic>;
+    local = details;
+    // print('print from provider');
+    print(local);
+  }
+
+  // updateLocal(value) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString(local['availability'], value);
+  // }
 }

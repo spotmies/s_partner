@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:im_animations/im_animations.dart';
 import 'package:spotmies_partner/home/home.dart';
-import 'package:spotmies_partner/login/legal_doc.dart';
 
 class Location extends StatefulWidget {
   @override
