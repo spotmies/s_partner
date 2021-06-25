@@ -33,7 +33,9 @@ class _MyAppState extends State<MyApp> {
             if (snapshot != null &&
                 snapshot.hasData &&
                 snapshot.data != ConnectivityResult.none) {
-              return StepperPersonalInfo();
+              return 
+             // SplashScreen();
+              StepperPersonalInfo();
             } else {
               return NoInternet();
             }
