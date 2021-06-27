@@ -269,10 +269,11 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     String lang = [lan1, lan2].toString();
 
     var body = {
+      "docs": docs,
       "partnerPic": picture.toString(),
       "lang": lang.substring(1, lang.length - 1),
       "name": this.name.toString(),
-      "phNum": 8341980196.toString(),
+      "phNum": 8019933883.toString(),
       "eMail": this.email.toString(),
       "job": 4.toString(),
       "pId": FirebaseAuth.instance.currentUser.uid.toString(),
@@ -280,8 +281,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
       "accountType": "student",
       "permission": 0.toString(),
       "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
-      "dob": "14-09-1997",
-      // "dob": "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}",
+      "dob": this.pickedDate.millisecondsSinceEpoch.toString(),
       "businessName": this.businessName.toString(),
       "experience": this.experience.toString(),
       "acceptance": 100.toString(),
@@ -289,20 +289,19 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
       "rate": 100.toString(),
       "perAdd": this.perAd.toString(),
       "tempAdd": this.tempAd.toString(),
-      "docs": docs
+      "isTermsAccepted":accept.toString()
     };
-    var resp =
-        await Server().postMethod(API.partnerRegister, body).catchError((e) {
+    Server().postMethod(API.partnerRegister, body).catchError((e) {
       if (e == null) CircularProgressIndicator();
       print(e);
     });
     print(body);
     // if(resp != 200)return; //write the code if post request not work well
     // controller.postData();
-    _profilepic != null
-        ? Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => Home()), (route) => false)
-        : snackbar(context, 'Need to Upload Profile Picture');
+    // _profilepic != null
+    //     ? Navigator.pushAndRemoveUntil(context,
+    //         MaterialPageRoute(builder: (_) => Home()), (route) => false)
+    //     : snackbar(context, 'Need to Upload Profile Picture');
     _currentStep += 1;
   }
 
@@ -1016,7 +1015,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
 
   Widget step4UI() {
     var _hight = MediaQuery.of(context).size.height;
-   // var _width = MediaQuery.of(context).size.width;
+    // var _width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
@@ -1091,12 +1090,12 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
   }
 }
 
-class register {
+class Register {
   Docs docs;
 
-  register({this.docs});
+  Register({this.docs});
 
-  register.fromJson(Map<String, dynamic> json) {
+  Register.fromJson(Map<String, dynamic> json) {
     docs = json['docs'] != null ? new Docs.fromJson(json['docs']) : null;
   }
 

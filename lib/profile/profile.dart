@@ -43,329 +43,379 @@ class _ProfileState extends State<Profile> {
         elevation: 0,
       ),
       backgroundColor: Colors.grey[100],
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('partner')
-              .doc(FirebaseAuth.instance.currentUser.uid)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            var document = snapshot.data;
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Setting()));
-                    },
-                    child: Container(
-                      height: _hight * 0.3,
-                      width: _width * 0.8,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        // boxShadow: kElevationToShadow[1]
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CircleAvatar(
-                            child: ClipOval(
-                              child: Center(
-                                child: document['profilepic'] == null
-                                    ? Icon(
-                                        Icons.person,
-                                        color: Colors.blue,
-                                        size: _width * 0.2,
-                                      )
-                                    : Image.network(
-                                        document['profilepic'],
-                                        fit: BoxFit.cover,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                      ),
-                              ),
-                            ),
-                            radius: 50,
-                            backgroundColor: Colors.grey[100],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                document['name'] == null
-                                    ? 'New User'
-                                    : document['name'],
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              Text(
-                                document['email'] == null
-                                    ? 'not found'
-                                    : document['email'],
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+      body: InkWell(
+          onTap: () async {
+            await FirebaseAuth.instance.signOut().then((action) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
+            }).catchError((e) {
+              print(e);
+            });
+          }, // handle your onTap here
+          child: Container(
+            height: _hight * 0.0728,
+            width: _width * 1,
+            color: Colors.white,
+            child: Row(
+              children: [
+                Container(
+                    height: _hight * 0.0728,
+                    width: _hight * 0.0728,
+                    child: Icon(
+                      Icons.power_settings_new_rounded,
+                      color: Colors.grey[600],
+                    )),
+                SizedBox(
+                  width: _width * 0.05,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 13),
+                  height: _hight * 0.0728,
+                  width: _width * 0.67,
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey[600],
                     ),
                   ),
-                  Container(
-                      height: _hight * 0.365,
-                      width: _width * 1,
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          InkWell(
-                              onTap: () => Share.share(
-                                  'https://play.google.com/store/apps/details?id=com.spotmiespartner'),
-                              // print(
-                              //     "Refer & Share"), // handle your onTap here
-                              child: Container(
-                                height: _hight * 0.0728,
-                                width: _width * 1,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.share,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: _width * 0.05,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: _hight * 0.0728,
-                                      width: _width * 0.67,
-                                      child: Text(
-                                        'Refer & Share',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 70,
-                                    // ),
-                                    Container(
-                                       height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PrivacyPolicyWebView())), // handle your onTap here
-                              child: Container(
-                                height: _hight * 0.0728,
-                                width: _width * 1,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.security,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: _width * 0.05,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: _hight * 0.0728,
-                                      width: _width * 0.67,
-                                      child: Text(
-                                        'Privacy Policy',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 70,
-                                    // ),
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          HelpAndSupport())), // handle your onTap here
-                              child: Container(
-                                height: _hight * 0.0728,
-                                width: _width * 1,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.chat,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: _width * 0.05,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: _hight * 0.0728,
-                                      width: _width * 0.67,
-                                      child: Text(
-                                        'Help & Support',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 70,
-                                    // ),
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () {
-                                print("Settings");
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Setting()));
-                              }, // handle your onTap here
-                              child: Container(
-                                height: _hight * 0.0728,
-                                width: _width * 1,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.settings,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: _width * 0.05,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: _hight * 0.0728,
-                                      width: _width * 0.67,
-                                      child: Text(
-                                        'Setting',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 70,
-                                    // ),
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () async {
-                                await FirebaseAuth.instance
-                                    .signOut()
-                                    .then((action) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LoginScreen()));
-                                }).catchError((e) {
-                                  print(e);
-                                });
-                              }, // handle your onTap here
-                              child: Container(
-                                height: _hight * 0.0728,
-                                width: _width * 1,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.power_settings_new_rounded,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: _width * 0.05,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: _hight * 0.0728,
-                                      width: _width * 0.67,
-                                      child: Text(
-                                        'Logout',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 70,
-                                    // ),
-                                    Container(
-                                        height: _hight * 0.0728,
-                                        width: _hight * 0.0728,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                        ],
-                      )),
-                ],
-              ),
-            );
-          }),
+                ),
+                // SizedBox(
+                //   width: 70,
+                // ),
+                Container(
+                    height: _hight * 0.0728,
+                    width: _hight * 0.0728,
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: Colors.grey[600],
+                    )),
+              ],
+            ),
+          )),
+      // StreamBuilder(
+      //     stream: FirebaseFirestore.instance
+      //         .collection('partner')
+      //         .doc(FirebaseAuth.instance.currentUser.uid)
+      //         .snapshots(),
+      //     builder: (context, snapshot) {
+      //       if (!snapshot.hasData)
+      //         return Center(
+      //           child: CircularProgressIndicator(),
+      //         );
+      //       var document = snapshot.data;
+      //       return Center(
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //           //crossAxisAlignment: CrossAxisAlignment.center,
+      //           children: [
+      //             InkWell(
+      //               onTap: () {
+      //                 Navigator.of(context).push(
+      //                     MaterialPageRoute(builder: (context) => Setting()));
+      //               },
+      //               child: Container(
+      //                 height: _hight * 0.3,
+      //                 width: _width * 0.8,
+      //                 decoration: BoxDecoration(
+      //                   color: Colors.white,
+      //                   borderRadius: BorderRadius.circular(30),
+      //                   // boxShadow: kElevationToShadow[1]
+      //                 ),
+      //                 child: Column(
+      //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //                   children: [
+      //                     CircleAvatar(
+      //                       child: ClipOval(
+      //                         child: Center(
+      //                           child: document['profilepic'] == null
+      //                               ? Icon(
+      //                                   Icons.person,
+      //                                   color: Colors.blue,
+      //                                   size: _width * 0.2,
+      //                                 )
+      //                               : Image.network(
+      //                                   document['profilepic'],
+      //                                   fit: BoxFit.cover,
+      //                                   width:
+      //                                       MediaQuery.of(context).size.width,
+      //                                 ),
+      //                         ),
+      //                       ),
+      //                       radius: 50,
+      //                       backgroundColor: Colors.grey[100],
+      //                     ),
+      //                     Column(
+      //                       children: [
+      //                         Text(
+      //                           document['name'] == null
+      //                               ? 'New User'
+      //                               : document['name'],
+      //                           style: TextStyle(fontSize: 25),
+      //                         ),
+      //                         Text(
+      //                           document['email'] == null
+      //                               ? 'not found'
+      //                               : document['email'],
+      //                           style: TextStyle(fontSize: 15),
+      //                         ),
+      //                       ],
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //             Container(
+      //                 height: _hight * 0.365,
+      //                 width: _width * 1,
+      //                 color: Colors.white,
+      //                 child: Column(
+      //                   children: [
+      //                     InkWell(
+      //                         onTap: () => Share.share(
+      //                             'https://play.google.com/store/apps/details?id=com.spotmiespartner'),
+      //                         // print(
+      //                         //     "Refer & Share"), // handle your onTap here
+      //                         child: Container(
+      //                           height: _hight * 0.0728,
+      //                           width: _width * 1,
+      //                           color: Colors.white,
+      //                           child: Row(
+      //                             children: [
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.share,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                               SizedBox(
+      //                                 width: _width * 0.05,
+      //                               ),
+      //                               Container(
+      //                                 padding: EdgeInsets.only(top: 13),
+      //                                 height: _hight * 0.0728,
+      //                                 width: _width * 0.67,
+      //                                 child: Text(
+      //                                   'Refer & Share',
+      //                                   style: TextStyle(
+      //                                     fontSize: 20,
+      //                                     color: Colors.grey[600],
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               // SizedBox(
+      //                               //   width: 70,
+      //                               // ),
+      //                               Container(
+      //                                  height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.arrow_forward,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                             ],
+      //                           ),
+      //                         )),
+      //                     InkWell(
+      //                         onTap: () => Navigator.of(context).push(
+      //                             MaterialPageRoute(
+      //                                 builder: (context) =>
+      //                                     PrivacyPolicyWebView())), // handle your onTap here
+      //                         child: Container(
+      //                           height: _hight * 0.0728,
+      //                           width: _width * 1,
+      //                           color: Colors.white,
+      //                           child: Row(
+      //                             children: [
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.security,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                               SizedBox(
+      //                                 width: _width * 0.05,
+      //                               ),
+      //                               Container(
+      //                                 padding: EdgeInsets.only(top: 13),
+      //                                 height: _hight * 0.0728,
+      //                                 width: _width * 0.67,
+      //                                 child: Text(
+      //                                   'Privacy Policy',
+      //                                   style: TextStyle(
+      //                                     fontSize: 20,
+      //                                     color: Colors.grey[600],
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               // SizedBox(
+      //                               //   width: 70,
+      //                               // ),
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.arrow_forward,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                             ],
+      //                           ),
+      //                         )),
+      //                     InkWell(
+      //                         onTap: () => Navigator.of(context).push(
+      //                             MaterialPageRoute(
+      //                                 builder: (context) =>
+      //                                     HelpAndSupport())), // handle your onTap here
+      //                         child: Container(
+      //                           height: _hight * 0.0728,
+      //                           width: _width * 1,
+      //                           color: Colors.white,
+      //                           child: Row(
+      //                             children: [
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.chat,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                               SizedBox(
+      //                                 width: _width * 0.05,
+      //                               ),
+      //                               Container(
+      //                                 padding: EdgeInsets.only(top: 13),
+      //                                 height: _hight * 0.0728,
+      //                                 width: _width * 0.67,
+      //                                 child: Text(
+      //                                   'Help & Support',
+      //                                   style: TextStyle(
+      //                                     fontSize: 20,
+      //                                     color: Colors.grey[600],
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               // SizedBox(
+      //                               //   width: 70,
+      //                               // ),
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.arrow_forward,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                             ],
+      //                           ),
+      //                         )),
+      //                     InkWell(
+      //                         onTap: () {
+      //                           print("Settings");
+      //                           Navigator.of(context).push(MaterialPageRoute(
+      //                               builder: (context) => Setting()));
+      //                         }, // handle your onTap here
+      //                         child: Container(
+      //                           height: _hight * 0.0728,
+      //                           width: _width * 1,
+      //                           color: Colors.white,
+      //                           child: Row(
+      //                             children: [
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.settings,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                               SizedBox(
+      //                                 width: _width * 0.05,
+      //                               ),
+      //                               Container(
+      //                                 padding: EdgeInsets.only(top: 13),
+      //                                 height: _hight * 0.0728,
+      //                                 width: _width * 0.67,
+      //                                 child: Text(
+      //                                   'Setting',
+      //                                   style: TextStyle(
+      //                                     fontSize: 20,
+      //                                     color: Colors.grey[600],
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               // SizedBox(
+      //                               //   width: 70,
+      //                               // ),
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.arrow_forward,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                             ],
+      //                           ),
+      //                         )),
+      //                     InkWell(
+      //                         onTap: () async {
+      //                           await FirebaseAuth.instance
+      //                               .signOut()
+      //                               .then((action) {
+      //                             Navigator.push(
+      //                                 context,
+      //                                 MaterialPageRoute(
+      //                                     builder: (context) => LoginScreen()));
+      //                           }).catchError((e) {
+      //                             print(e);
+      //                           });
+      //                         }, // handle your onTap here
+      //                         child: Container(
+      //                           height: _hight * 0.0728,
+      //                           width: _width * 1,
+      //                           color: Colors.white,
+      //                           child: Row(
+      //                             children: [
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.power_settings_new_rounded,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                               SizedBox(
+      //                                 width: _width * 0.05,
+      //                               ),
+      //                               Container(
+      //                                 padding: EdgeInsets.only(top: 13),
+      //                                 height: _hight * 0.0728,
+      //                                 width: _width * 0.67,
+      //                                 child: Text(
+      //                                   'Logout',
+      //                                   style: TextStyle(
+      //                                     fontSize: 20,
+      //                                     color: Colors.grey[600],
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                               // SizedBox(
+      //                               //   width: 70,
+      //                               // ),
+      //                               Container(
+      //                                   height: _hight * 0.0728,
+      //                                   width: _hight * 0.0728,
+      //                                   child: Icon(
+      //                                     Icons.arrow_forward,
+      //                                     color: Colors.grey[600],
+      //                                   )),
+      //                             ],
+      //                           ),
+      //                         )),
+      //                   ],
+      //                 )),
+      //           ],
+      //         ),
+      //       );
+      //     }),
     );
   }
 }

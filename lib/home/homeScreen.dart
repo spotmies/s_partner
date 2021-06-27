@@ -22,19 +22,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     partner = Provider.of<PartnerDetailsProvider>(context, listen: false);
-    // partner.partnerDetails();
     partner.localStore();
     partner.localData();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      if (data.local == null) return Center(child: CircularProgressIndicator());
+      // if (data.local == null) return Center(child: CircularProgressIndicator());
       var p = data.local;
-      print('object');
-      print(p);
       bool isSwitch = p['availability'];
       isSwitched = isSwitch;
       return Scaffold(

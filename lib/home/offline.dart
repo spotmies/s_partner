@@ -1,35 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
-void main() {
-  runApp(Offline());
-}
-
-class Offline extends StatelessWidget {
+class Offline extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: PercentIndicator(),
-    );
-  }
+  _OfflineState createState() => _OfflineState();
 }
 
-class PercentIndicator extends StatefulWidget {
-  @override
-  _PercentIndicatorState createState() => _PercentIndicatorState();
-}
-
-class _PercentIndicatorState extends State<PercentIndicator> {
+class _OfflineState extends State<Offline> {
   double perValue = 0.7;
   double accValue = 0.6;
   var total = 100;
+  var partner;
+
+  @override
+  void initState() {
+    partner = Provider.of<PartnerDetailsProvider>(context, listen: false);
+    // partner.partnerDetails();
+    partner.localStore();
+    partner.localData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     //hight width ratio
@@ -37,23 +30,15 @@ class _PercentIndicatorState extends State<PercentIndicator> {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    //final _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       // backgroundColor: Colors.white,
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('partner')
-            .doc(FirebaseAuth.instance.currentUser.uid)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          var document = snapshot.data;
-          // List<String> reference = List.from(document['reference']);
-          var rateValue = document['rate'] / 20;
+      body: Consumer<PartnerDetailsProvider>(
+        builder: (context, data, child) {
+          if (data.local == null)
+            return Center(child: CircularProgressIndicator());
+          var p = data.local;
           return Center(
               child: Container(
             padding: EdgeInsets.all(10),
@@ -70,166 +55,12 @@ class _PercentIndicatorState extends State<PercentIndicator> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          height: _hight * 0.35,
-                          width: _width * 0.45,
-                          padding: EdgeInsets.all(30),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                new BoxShadow(
-                                  color: Colors.grey[200],
-                                  blurRadius: 1.0,
-                                ),
-                              ]),
-                          child: CircularPercentIndicator(
-                            radius: 120,
-                            lineWidth: 13,
-                            animation: true,
-                            animationDuration: 1000,
-                            percent: document['rate'] / 100,
-                            backgroundColor: Colors.grey[200],
-                            progressColor: Colors.amber,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            footer: Text('Rating'),
-                            center: Text(
-                              rateValue.toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          height: _hight * 0.35,
-                          width: _width * 0.45,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                new BoxShadow(
-                                  color: Colors.grey[200],
-                                  blurRadius: 1.0,
-                                ),
-                              ]),
-                          child: CircularPercentIndicator(
-                            radius: 120,
-                            lineWidth: 13,
-                            animation: true,
-                            animationDuration: 1000,
-                            percent: document['acceptance'] / 100,
-                            backgroundColor: Colors.grey[200],
-                            progressColor: Colors.amber,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            footer: Text('Acceptance Ratio'),
-                            center: Text(
-                              document['acceptance'].toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0),
-                            ),
-                          ),
-                        ),
+                        progressIndicator(p['rate'], 'Rating'),
+                        count(p['orders'], 'Completed orders'),
+                        count(p['ref'], 'References'),
+                        progressIndicator(p['acceptance'], 'Acceptance'),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 230,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          height: _hight * 0.35,
-                          width: _width * 0.45,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                new BoxShadow(
-                                  color: Colors.grey[200],
-                                  blurRadius: 1.0,
-                                ),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text((document['orders'].toString()),
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w900,
-                                      )),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(
-                                    Icons.cloud_done,
-                                    color: Colors.amber,
-                                  ),
-                                ],
-                              ),
-                              Text('Orders Completed',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          height: _hight * 0.35,
-                          width: _width * 0.45,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                new BoxShadow(
-                                  color: Colors.grey[200],
-                                  blurRadius: 1.0,
-                                ),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(document['reference'].length.toString(),
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w900,
-                                      )),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(Icons.person_add, color: Colors.amber),
-                                ],
-                              ),
-                              Text('reference',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  )),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                 ],
               ),
@@ -237,6 +68,116 @@ class _PercentIndicatorState extends State<PercentIndicator> {
           ));
         },
       ),
+    );
+  }
+
+  avg(List<dynamic> args) {
+    var sum = 0;
+    var avg = args;
+
+    for (var i = 0; i < avg.length; i++) {
+      sum += avg[i];
+    }
+
+    return sum;
+  }
+
+  Widget progressIndicator(indicatorValue, String field) {
+    final _width = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        Container(
+          height: _width * 0.20,
+          width: _width * 0.20,
+          // padding: EdgeInsets.all(30),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                new BoxShadow(
+                    color: Colors.grey[200],
+                    blurRadius: 5.0,
+                    spreadRadius: 5.0),
+              ]),
+          child: CircularPercentIndicator(
+            radius: _width * 0.14,
+            lineWidth: 2,
+            animation: true,
+            animationDuration: 1000,
+            percent: avg(indicatorValue) / 100,
+            backgroundColor: Colors.grey[200],
+            progressColor: Colors.amber,
+            circularStrokeCap: CircularStrokeCap.round,
+            center: Text(
+              (field == 'Rating'
+                      ? (avg(indicatorValue) / 20)
+                      : avg(indicatorValue))
+                  .toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.w500, fontSize: _width * 0.03),
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: _width * 0.015),
+          child: Text(
+            field,
+            style: TextStyle(fontSize: _width * 0.02),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget count(value, String field) {
+    final _width = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        Container(
+          height: _width * 0.20,
+          width: _width * 0.20,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                new BoxShadow(
+                  color: Colors.grey[200],
+                  blurRadius: 1.0,
+                ),
+              ]),
+          child: Container(
+            height: _width * 0.09,
+            width: _width * 0.09,
+            child: Stack(
+              children: [
+                Center(
+                  child: Text((value.length.toString()),
+                      style: TextStyle(
+                        fontSize: _width * 0.07,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ),
+                Positioned(
+                  right: _width * 0.05,
+                  top: _width * 0.06,
+                  child: Icon(
+                    field == 'References' ? Icons.link : Icons.done_all,
+                    size: _width * 0.03,
+                    color: Colors.blue[900],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: _width * 0.015),
+          child: Text(
+            field,
+            style: TextStyle(fontSize: _width * 0.02),
+          ),
+        ),
+      ],
     );
   }
 }
