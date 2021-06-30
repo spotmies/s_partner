@@ -73,10 +73,6 @@ class _OnlineState extends State<Online> {
             if (data.orders == null)
               return Center(child: CircularProgressIndicator());
             var o = data.orders;
-            var u = o[0]['uDetails'];
-            // print(u['_id'].toString());
-
-            //return Text(o.toString());
             return Container(
                 padding: EdgeInsets.all(10),
                 child: ListView.builder(
@@ -84,7 +80,8 @@ class _OnlineState extends State<Online> {
                     itemCount: o.length,
                     padding: EdgeInsets.all(15),
                     itemBuilder: (BuildContext ctxt, int index) {
-                      // List<String> images = List.from(o[index]['media']);
+                      var u = o[index]['uDetails'];
+                      List<String> images = List.from(o[index]['media']);
                       // print(o['media'][0].length);
                       return Column(
                         children: [

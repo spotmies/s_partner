@@ -289,11 +289,15 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
       "rate": 100.toString(),
       "perAdd": this.perAd.toString(),
       "tempAdd": this.tempAd.toString(),
-      "isTermsAccepted":accept.toString()
+      "isTermsAccepted": accept.toString()
     };
-    Server().postMethod(API.partnerRegister, body).catchError((e) {
-      if (e == null) CircularProgressIndicator();
-      print(e);
+    Server().postMethod(API.partnerRegister, body).then((response) {
+      if (response.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => Home()), (route) => false);
+      } else {
+        snackbar(context, 'Need to Upload Profile Picture');
+      }
     });
     print(body);
     // if(resp != 200)return; //write the code if post request not work well
