@@ -100,31 +100,44 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Visibility(
-                        visible: !darkMode,
-                        child: IconButton(
-                            onPressed: () {
-                              setMode(true);
-                            },
-                            icon: Icon(
-                              Icons.light_mode_rounded,
-                              size: _width * 0.09,
-                              color: Colors.grey,
-                            )),
-                      ),
-                      Visibility(
-                        visible: darkMode,
-                        child: IconButton(
-                          onPressed: () {
-                            setMode(false);
-                          },
-                          icon: Icon(
-                            Icons.dark_mode_rounded,
-                            size: _width * 0.08,
-                            color: Colors.grey,
+                      // Container(
+                      //   child: Align(
+                      //     alignment: Alignment.center,
+                      //     child: TextWid(
+                      //         text: "Details",
+                      //         weight: FontWeight.w600,
+                      //         size: _width * 0.05),
+                      //   ),
+                      // ),
+                      Row(
+                        children: [
+                          Visibility(
+                            visible: !darkMode,
+                            child: IconButton(
+                                onPressed: () {
+                                  setMode(true);
+                                },
+                                icon: Icon(
+                                  Icons.light_mode_rounded,
+                                  size: _width * 0.09,
+                                  color: Colors.grey,
+                                )),
                           ),
-                        ),
-                      )
+                          Visibility(
+                            visible: darkMode,
+                            child: IconButton(
+                              onPressed: () {
+                                setMode(false);
+                              },
+                              icon: Icon(
+                                Icons.dark_mode_rounded,
+                                size: _width * 0.08,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                   Row(
