@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:spotmies_partner/chat/chat_page.dart';
-import 'package:spotmies_partner/home/homeScreen.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
+import 'package:spotmies_partner/utilities/custom_drawer/DraweInitiate.dart';
+import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(Home());
 
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
 
   static List<Widget> _widgetOptions = <Widget>[
     Center(
-      child: HomeScreen(),
+      child: DrawerInitiate(),
     ),
     Center(
       child: ChatHome(),
@@ -26,7 +27,8 @@ class _HomeState extends State<Home> {
       child: Orders(),
     ),
     Center(
-      child: Profile(),
+     // child: Profile(),
+     child: TutCategory(),
     ),
   ];
 
@@ -34,7 +36,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //title:"Google NavBar",
       home: Scaffold(
         backgroundColor: Colors.white,
         body: Container(
@@ -46,7 +47,6 @@ class _HomeState extends State<Home> {
           ]),
           child: SafeArea(
             child: Padding(
-              
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
               child: GNav(
@@ -63,18 +63,18 @@ class _HomeState extends State<Home> {
                       iconColor: Colors.grey,
                     ),
                     GButton(
-                      icon: Icons.chat,
+                      icon: Icons.chat_bubble_rounded,
                       text: 'Chat',
                       iconColor: Colors.grey,
                     ),
                     GButton(
-                      icon: Icons.explore,
+                      icon: Icons.home_repair_service_rounded,
                       text: 'Orders',
                       iconColor: Colors.grey,
                     ),
                     GButton(
-                      icon: Icons.person,
-                      text: 'Profile',
+                      icon: Icons.explore,
+                      text: 'Explore',
                       iconColor: Colors.grey,
                     ),
                   ],
