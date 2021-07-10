@@ -45,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.blue[900],
-                title: Text(pr['name'] == null ? 'User' : pr['name']),
+                title: Container(
+                    padding: EdgeInsets.only(top: 2),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Text(pr['name'] == null ? 'User' : pr['name']))),
                 actions: [
                   Container(
                       child: Transform.scale(
@@ -87,7 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ))
                 ],
               ),
-              body: isSwitch ? Online() : Offline());
+              body:
+                  isSwitch ? Online() : Offline()
+              //
+              );
         });
   }
 }
