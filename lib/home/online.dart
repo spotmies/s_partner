@@ -1,19 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
-import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-
-void main() {
-  runApp(Online());
-}
+import 'package:spotmies_partner/localDB/localGet.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Online extends StatefulWidget {
   @override
@@ -26,10 +23,18 @@ class _OnlineState extends State<Online> {
   var orderid;
   var incoming;
   var partner;
-
+  var localData;
+  // var socketincomingorder;
   String pmoney;
   DateTime pickedDate;
   TimeOfDay pickedTime;
+
+  StreamController _socketIncomingOrders;
+
+  Stream stream;
+  var onlineOrd;
+  var localOrd;
+  IO.Socket socket;
   List jobs = [
     'AC Service',
     'Computer',
@@ -41,14 +46,34 @@ class _OnlineState extends State<Online> {
     'Drivers',
     'Events'
   ];
+
+  void socketOrders() {
+    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+      "transports": ["websocket", "polling", "flashsocket"],
+      "autoConnect": false,
+    });
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on("message", (msg) {
+        print(msg);
+      });
+    });
+    socket.connect();
+    socket.emit('join-partner', FirebaseAuth.instance.currentUser.uid);
+    socket.on('inComingOrders', (socket) async {
+      _socketIncomingOrders.add(socket);
+    });
+  }
+
   @override
   void initState() {
-    incoming = Provider.of<IncomingOrdersProvider>(context, listen: false);
-    partner = Provider.of<PartnerDetailsProvider>(context, listen: false);
-    partner.localData();
-    incoming.incomingOrders();
-    incoming.localStore();
-    incoming.localGet();
+    _socketIncomingOrders = StreamController();
+    stream = _socketIncomingOrders.stream.asBroadcastStream();
+    socketOrders();
+    stream.listen((event) {
+      log(event.toString());
+    });
+
     super.initState();
     pickedDate = DateTime.now();
     pickedTime = TimeOfDay.now();
@@ -62,340 +87,402 @@ class _OnlineState extends State<Online> {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.grey[50],
-        body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          if (data.local == null)
-            return Center(child: CircularProgressIndicator());
-          var p = data.local;
+        body: FutureBuilder(
+            future: localPartnerDetailsGet(),
+            builder: (context, localPartner) {
+              if (localPartner.data == null)
+                return Center(child: CircularProgressIndicator());
+              var p = localPartner.data;
+              if (p == null) {
+                partnerDetail();
+              }
+              return FutureBuilder(
+                  future: localOrdersGet(),
+                  builder: (context, localOrders) {
+                    var ld = localOrders.data;
+                    var o = List.from(ld.reversed);
+                    if (o == null)
+                      return Center(child: CircularProgressIndicator());
+                    return StreamBuilder(
+                        stream: stream,
+                        builder: (context, orderSocket) {
+                          var neworders = orderSocket.data;
 
-          // print(p);
-          return Consumer<IncomingOrdersProvider>(
-              builder: (context, data, child) {
-            if (data.orders == null)
-              return Center(child: CircularProgressIndicator());
-            var o = data.orders;
-            return Container(
-                padding: EdgeInsets.all(10),
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: o.length,
-                    padding: EdgeInsets.all(15),
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      var u = o[index]['uDetails'];
-                      List<String> images = List.from(o[index]['media']);
-                      // print(o['media'][0].length);
-                      return Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 15, right: 10),
-                            height: _hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: Colors.blue[900],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15)),
-                                boxShadow: kElevationToShadow[0]),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  jobs.elementAt(o[index]['job']),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.more_horiz,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      moredialogue(
-                                          o[index]['uId'],
-                                          o[index]['_id'],
-                                          o[index]['ordId'],
-                                          o[index]['pId'],
-                                          u['_id'],
-                                          p['_id']);
-                                    })
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            height: _hight * 0.45,
-                            width: _width * 0.88,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15)),
-                                boxShadow: kElevationToShadow[0]),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: _hight * 0.015,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[50],
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          height: _hight * 0.15,
-                                          width: _width * 0.2,
-                                          // child: CircleAvatar(
-                                          //   backgroundImage: images == null
-                                          //       ? NetworkImage(images.first)
-                                          //       : Icon(Icons.ac_unit),
-                                          //)
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            o[index]['problem'].toString(),
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: _hight * 0.018,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(5),
-                                  height: _hight * 0.07,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[50],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        flex: 2,
-                                        // width: _width * 0.4,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Money:',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                SizedBox(
-                                                  width: _width * 0.05,
-                                                ),
-                                                Text(
-                                                    o[index]['money']
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            _width * 0.02)),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text('Location:',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                                SizedBox(
-                                                  width: _width * 0.02,
-                                                ),
-                                                Text(
-                                                    o[index]['loc'][0]
-                                                            .toString() +
-                                                        "," +
-                                                        o[index]['loc'][1]
-                                                            .toString(),
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            _width * 0.02)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: _width * 0.3,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('Date',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                                Text(
-                                                    o[index]['schedule']
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            _width * 0.02)),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('Time',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                                Text(
-                                                  o[index]['schedule']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: _width * 0.02),
-                                                ),
-                                              ],
-                                            )
-                                            // .millisecondsSinceEpoch
-                                            // .toString()),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                o[index]['ordState'] == 'req'
-                                    ? Column(
-                                        children: [
-                                          Row(
+                          if (orderSocket.data != null) {
+                            if (ld.last['ordId'] != neworders['ordId']) {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setString(
+                                    'inComingOrders',
+                                    jsonEncode(List.from(ld)
+                                      ..addAll([orderSocket.data])));
+                                setState(() {});
+                              });
+                            }
+                          }
+                          return Container(
+                              padding: EdgeInsets.all(10),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: o.length,
+                                  padding: EdgeInsets.all(15),
+                                  itemBuilder: (BuildContext ctxt, int index) {
+                                    var u = o[index]['uDetails'];
+                                    List<String> images =
+                                        List.from(o[index]['media']);
+                                    // print(o['media'][0].length);
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 15, right: 10),
+                                          height: _hight * 0.045,
+                                          decoration: BoxDecoration(
+                                              color: Colors.blue[900],
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  topRight:
+                                                      Radius.circular(15)),
+                                              boxShadow: kElevationToShadow[0]),
+                                          child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Container(
-                                                width: _width * 0.4,
-                                                child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                                    Colors.blue[
-                                                                        900])),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                            color: Colors
-                                                                .blue[900],
-                                                            child: Icon(
-                                                                Icons
-                                                                    .check_circle,
-                                                                color: Color(
-                                                                    0xff00c853))),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            'Accept',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    //color: Colors.blue[900],
-                                                    onPressed: () async {
-                                                      var ordid =
-                                                          o[index]['ordId'];
-                                                      var api = API.acceptOrder
-                                                              .toString() +
-                                                          "$ordid";
-                                                      print(api);
-                                                      Server().editMethod(api, {
-                                                        'pId':
-                                                            API.pid.toString(),
-                                                        'ordState': 'onGoing'
-                                                      }).catchError((e) {
-                                                        print(e);
-                                                      });
-                                                    }),
+                                              Text(
+                                                jobs.elementAt(o[index]['job']),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
-                                              Container(
-                                                width: _width * 0.4,
-                                                child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                                    Colors.blue[
-                                                                        900])),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          child: Text(
-                                                            'Reject  ',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Container(
-                                                            child: Icon(
-                                                                Icons.cancel,
-                                                                color: Color(
-                                                                    0xfff50000))),
-                                                      ],
-                                                    ),
-                                                    // color: Colors.blue[900],
-                                                    onPressed: () {}),
-                                              ),
+                                              IconButton(
+                                                  icon: Icon(
+                                                    Icons.more_horiz,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onPressed: () {
+                                                    moredialogue(
+                                                        o[index]['uId'],
+                                                        o[index]['_id'],
+                                                        o[index]['ordId'],
+                                                        o[index]['pId'],
+                                                        u['_id'],
+                                                        p['_id']);
+                                                  })
                                             ],
                                           ),
-                                        ],
-                                      )
-                                    : Text('Order Accepted')
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }));
-          });
-        }));
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          height: _hight * 0.45,
+                                          width: _width * 0.88,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15)),
+                                              boxShadow: kElevationToShadow[0]),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: _hight * 0.015,
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[50],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {},
+                                                      child: Container(
+                                                        height: _hight * 0.15,
+                                                        width: _width * 0.2,
+                                                        // child: CircleAvatar(
+                                                        //   backgroundImage: images == null
+                                                        //       ? NetworkImage(images.first)
+                                                        //       : Icon(Icons.ac_unit),
+                                                        //)
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: Text(
+                                                          o[index]['problem']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: _hight * 0.018,
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(5),
+                                                height: _hight * 0.07,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[50],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 2,
+                                                      // width: _width * 0.4,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'Money:',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ),
+                                                              SizedBox(
+                                                                width: _width *
+                                                                    0.05,
+                                                              ),
+                                                              Text(
+                                                                  o[index][
+                                                                          'money']
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          _width *
+                                                                              0.02)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text('Location:',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500)),
+                                                              SizedBox(
+                                                                width: _width *
+                                                                    0.02,
+                                                              ),
+                                                              Text(
+                                                                  o[index]['loc']
+                                                                              [
+                                                                              0]
+                                                                          .toString() +
+                                                                      "," +
+                                                                      o[index]['loc']
+                                                                              [
+                                                                              1]
+                                                                          .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          _width *
+                                                                              0.02)),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: _width * 0.3,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text('Date',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500)),
+                                                              Text(
+                                                                  o[index][
+                                                                          'schedule']
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          _width *
+                                                                              0.02)),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text('Time',
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500)),
+                                                              Text(
+                                                                o[index][
+                                                                        'schedule']
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        _width *
+                                                                            0.02),
+                                                              ),
+                                                            ],
+                                                          )
+                                                          // .millisecondsSinceEpoch
+                                                          // .toString()),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              o[index]['ordState'] == 'req'
+                                                  ? Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              width:
+                                                                  _width * 0.4,
+                                                              child:
+                                                                  ElevatedButton(
+                                                                      style: ButtonStyle(
+                                                                          backgroundColor: MaterialStateProperty.all(Colors.blue[
+                                                                              900])),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                              color: Colors.blue[900],
+                                                                              child: Icon(Icons.check_circle, color: Color(0xff00c853))),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Container(
+                                                                            child:
+                                                                                Text(
+                                                                              'Accept',
+                                                                              style: TextStyle(color: Colors.white),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      //color: Colors.blue[900],
+                                                                      onPressed:
+                                                                          () async {
+                                                                        var ordid =
+                                                                            o[index]['ordId'];
+                                                                        var api =
+                                                                            API.acceptOrder.toString() +
+                                                                                "$ordid";
+                                                                        Server().editMethod(
+                                                                            api, {
+                                                                          'pId': API
+                                                                              .pid
+                                                                              .toString(),
+                                                                          'ordState':
+                                                                              'onGoing'
+                                                                        }).catchError(
+                                                                            (e) {
+                                                                          print(
+                                                                              e);
+                                                                        });
+                                                                      }),
+                                                            ),
+                                                            Container(
+                                                              width:
+                                                                  _width * 0.4,
+                                                              child:
+                                                                  ElevatedButton(
+                                                                      style: ButtonStyle(
+                                                                          backgroundColor: MaterialStateProperty.all(Colors.blue[
+                                                                              900])),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            child:
+                                                                                Text(
+                                                                              'Reject  ',
+                                                                              style: TextStyle(color: Colors.white),
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Container(
+                                                                              child: Icon(Icons.cancel, color: Color(0xfff50000))),
+                                                                        ],
+                                                                      ),
+                                                                      // color: Colors.blue[900],
+                                                                      onPressed:
+                                                                          () {}),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : Text('Order Accepted')
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }));
+                        });
+                  });
+            }));
   }
 
   _pickedDate() async {
@@ -524,8 +611,6 @@ class _OnlineState extends State<Online> {
                                           "pDetails": pDetails.toString()
                                         };
                                         //print(uDetails);
-                                        print(body);
-
                                         Server()
                                             .postMethod(API.updateOrder, body);
                                       }),
@@ -547,6 +632,131 @@ class _OnlineState extends State<Online> {
                   )),
             ));
   }
+
+  // storeNewData() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   log('somthing');
+  //   var newOrder = List.from(localData)..addAll(socketincomingorder);
+  //   if (socketincomingorder != null)
+  //     prefs.setString('inComingOrders', jsonEncode(newOrder)).then((value) {
+  //       if (value == true) {
+  //         setState(() {});
+  //       }
+  //       log('$value');
+  //     });
+  // }
+
+  // FutureBuilder<Object>(
+  //     future: localGet(),
+  //     builder: (context, localOrders) {
+  //       localData = localOrders.data;
+
+  //       // if (socketincomingorder == null) {
+  //       //   socketincomingorder.add(localData);
+  //       //   // storeNewData();
+  //       //   // socketincomingorder.clear();
+  //       // }
+  //       // socketincomingorder.clear();
+  //       // setState(() {});
+  //       // if (snap.data == null) return CircularProgressIndicator();
+  //       return StreamBuilder(
+  //           stream: stream,
+  //           builder: (context, orderSocket) {
+  //             var neworders = orderSocket.data;
+  //             // log(localData.toString());
+  //             log(localData.last['ordId'].toString());
+  //             if (orderSocket.data != null)
+  //               log(neworders['ordId'].toString());
+  //             if (orderSocket.data != null) {
+  //               log('line225');
+  //               if (localData.last['ordId'] != neworders['ordId']) {
+  //                 log('true');
+  //                 WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //                   final prefs = await SharedPreferences.getInstance();
+  //                   prefs.setString(
+  //                       'inComingOrders',
+  //                       jsonEncode(List.from(localData)
+  //                         ..addAll([orderSocket.data])));
+  //                   setState(() {});
+  //                 });
+  //               }
+  //             }
+
+  //             // WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //             //   final prefs = await SharedPreferences.getInstance();
+  //             //   prefs.setString(
+  //             //       'inComingOrders',
+  //             //       jsonEncode(List.from(localData)
+  //             //         ..addAll([orderSocket.data])));
+  //             //   // setState(() {});
+  //             // });
+  //             // if (orderSocket.data != null)
+  //             //   socketincomingorder.add(orderSocket.data);
+  //             // print(socketincomingorder.toString());
+
+  //             // prefs.setString('inComingOrders', jsonEncode(newOrder));
+
+  //             // if (socketincomingorder.isNotEmpty) {
+  //             //   for (var i = [orderSocket.data].length; i > 0; i--) {
+  //             //     log('Item $i');
+  //             //     storeNewData();
+
+  //             //   }
+
+  //             // log('satish');
+  //             // log(socketincomingorder.toString());
+
+  //             //}
+  //             // // log(localData.toString());
+  //             // log(socketincomingorder.toString());
+  //             // socketincomingorder.clear();
+  //             // var s = ['oko'];
+  //             // if (localData != null && s != null) {
+  //             //   var i;
+  //             //   print('something');
+  //             //   print(orderSocket.data);
+  //             //   // test(localData);
+  //             //   //for (i = s.length - 1; i >= 0; i--) {
+  //             //   log('objects');
+  //             //   // qwerty(localData, s);
+  //             //   //}
+  //             //   //qwerty(localData, s);
+  //             // }
+  //             // test(localData);
+  //             // socketincomingorder.removeLast();
+
+  //             // print('satish');
+  //             // print(socketOrders);
+  //             // print('satish');
+
+  //             // print(orderSocket.data);
+  //             //if (localData != null && socketOrders != null) {
+  //             //socketOrders.clear();
+  //             // storeNewData(localData, socketOrders);
+  //             // }
+  //             // socketOrders.clear();
+  //             // dispose();
+  //             return ListView(
+  //               children: [
+  //                 Text(localOrders.data.toString()),
+  //                 IconButton(
+  //                     onPressed: () async {
+  //                       List da = ['three'];
+  //                       var newList = new List.from(localOrders.data)
+  //                         ..addAll(da);
+
+  //                       // da.add('satish');
+  //                       SharedPreferences prefs =
+  //                           await SharedPreferences.getInstance();
+  //                       prefs.setString(
+  //                           'inComingOrders', jsonEncode(newList));
+  //                       setState(() {});
+  //                     },
+  //                     icon: Icon(Icons.ac_unit))
+  //               ],
+  //             );
+  //           });
+  //     })
 
   // FirebaseFirestore
   //     .instance

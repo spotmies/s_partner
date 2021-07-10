@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:provider/provider.dart';
-import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/localDB/localGet.dart';
 
 class Offline extends StatefulWidget {
   @override
@@ -9,65 +8,46 @@ class Offline extends StatefulWidget {
 }
 
 class _OfflineState extends State<Offline> {
-  double perValue = 0.7;
-  double accValue = 0.6;
-  var total = 100;
-  var partner;
-
-  @override
-  void initState() {
-    partner = Provider.of<PartnerDetailsProvider>(context, listen: false);
-    // partner.partnerDetails();
-    partner.localStore();
-    partner.localData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    //hight width ratio
-
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
-    //final _width = MediaQuery.of(context).size.width;
+    // final _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      // backgroundColor: Colors.white,
-      body: Consumer<PartnerDetailsProvider>(
-        builder: (context, data, child) {
-          if (data.local == null)
-            return Center(child: CircularProgressIndicator());
-          var p = data.local;
-          return Center(
-              child: Container(
-            padding: EdgeInsets.all(10),
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(color: Colors.grey[100]),
-            child: ListView(children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: _hight * 0.35,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        progressIndicator(p['rate'], 'Rating'),
-                        count(p['orders'], 'Completed orders'),
-                        count(p['ref'], 'References'),
-                        progressIndicator(p['acceptance'], 'Acceptance'),
-                      ],
+      body: FutureBuilder(
+          future: localPartnerDetailsGet(),
+          builder: (context, localPartner) {
+            var p = localPartner.data;
+            return Center(
+                child: Container(
+              padding: EdgeInsets.all(10),
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Colors.grey[100]),
+              child: ListView(children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: _hight * 0.35,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          progressIndicator(p['rate'], 'Rating'),
+                          count(p['orders'], 'Completed orders'),
+                          count(p['ref'], 'References'),
+                          progressIndicator(p['acceptance'], 'Acceptance'),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ]),
-          ));
-        },
-      ),
+                  ],
+                ),
+              ]),
+            ));
+          }),
     );
   }
 

@@ -15,6 +15,7 @@ class API {
       "api/partner/partners/$pid"; //get with user id and parems
   static var acceptOrder = '/api/order/orders/';
   static var updateOrder = '/api/response/newResponse/';
+  static var partnerChat = '/api/chat/partner/$pid';
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"
