@@ -1,8 +1,7 @@
-import 'dart:html';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/login/login.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/custom_drawer/app_theme.dart';
 
 class HomeDrawer extends StatefulWidget {
@@ -23,6 +22,7 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
+  bool darkMode = false;
   @override
   void initState() {
     setDrawerListArray();
@@ -72,79 +72,186 @@ class _HomeDrawerState extends State<HomeDrawer> {
     });
   }
 
+  void setMode(darkModeValue) {
+    setState(() {
+      darkMode = darkModeValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double _height = MediaQuery.of(context).size.height;
+    double _width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppTheme.notWhite.withOpacity(0.5),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 40.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  AnimatedBuilder(
-                    animation: widget.iconAnimationController,
-                    builder: (BuildContext context, Widget child) {
-                      return ScaleTransition(
-                        scale: AlwaysStoppedAnimation<double>(
-                            1.0 - (widget.iconAnimationController.value) * 0.2),
-                        child: RotationTransition(
-                          turns: AlwaysStoppedAnimation<double>(Tween<double>(
-                                      begin: 0.0, end: 24.0)
-                                  .animate(CurvedAnimation(
-                                      parent: widget.iconAnimationController,
-                                      curve: Curves.fastOutSlowIn))
-                                  .value /
-                              360),
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: AppTheme.grey.withOpacity(0.6),
-                                    offset: const Offset(2.0, 2.0),
-                                    blurRadius: 4),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.network(
-                                  "https://media-exp1.licdn.com/dms/image/C5103AQFRucSLgIFAlw/profile-displayphoto-shrink_200_200/0/1573798441279?e=1630540800&v=beta&t=G1LqAys5hHVqICreo5l-jNop6uzcbcangKxKAFvwQZ8"),
-                            ),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Visibility(
+                        visible: !darkMode,
+                        child: IconButton(
+                            onPressed: () {
+                              setMode(true);
+                            },
+                            icon: Icon(
+                              Icons.light_mode_rounded,
+                              size: _width * 0.09,
+                              color: Colors.grey,
+                            )),
+                      ),
+                      Visibility(
+                        visible: darkMode,
+                        child: IconButton(
+                          onPressed: () {
+                            setMode(false);
+                          },
+                          icon: Icon(
+                            Icons.dark_mode_rounded,
+                            size: _width * 0.08,
+                            color: Colors.grey,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                  Container(
-                    color: Colors.amber,
-                    padding: EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Sekhar javvadi',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.grey,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        child: Text("Computer shop"),
                       )
                     ],
-                  )
+                  ),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: AnimatedBuilder(
+                            animation: widget.iconAnimationController,
+                            builder: (BuildContext context, Widget child) {
+                              return ScaleTransition(
+                                scale: AlwaysStoppedAnimation<double>(1.0 -
+                                    (widget.iconAnimationController.value) *
+                                        0.2),
+                                child: RotationTransition(
+                                  turns: AlwaysStoppedAnimation<double>(
+                                      Tween<double>(begin: 0.0, end: 24.0)
+                                              .animate(CurvedAnimation(
+                                                  parent: widget
+                                                      .iconAnimationController,
+                                                  curve: Curves.fastOutSlowIn))
+                                              .value /
+                                          360),
+                                  child: Container(
+                                    height: _width * 0.27,
+                                    width: _width * 0.27,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: AppTheme.grey
+                                                  .withOpacity(0.6),
+                                              offset: const Offset(2.0, 2.0),
+                                              blurRadius: 4),
+                                        ],
+                                        border: Border.all(
+                                            width: 1.0, color: Colors.grey)),
+                                    child: Stack(children: [
+                                      ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(60.0)),
+                                        child: Image.network(
+                                            "https://media-exp1.licdn.com/dms/image/C5103AQFRucSLgIFAlw/profile-displayphoto-shrink_200_200/0/1573798441279?e=1630540800&v=beta&t=G1LqAys5hHVqICreo5l-jNop6uzcbcangKxKAFvwQZ8"),
+                                      ),
+                                      Positioned(
+                                          right: 10,
+                                          bottom: 10,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            width: 10,
+                                            height: 10,
+                                          ))
+                                    ]),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: TextWid(
+                                    text: "SekharJavvadi",
+                                    weight: FontWeight.w600,
+                                    size: _width * 0.05),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWid(
+                                        text: "KK solutions",
+                                        weight: FontWeight.w300,
+                                        size: _width * 0.03),
+                                    TextWid(
+                                        text: "8341980196",
+                                        weight: FontWeight.w300,
+                                        size: _width * 0.03),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            child: TextWid(
+                                                text: "Computer & Laptop",
+                                                weight: FontWeight.w300,
+                                                size: _width * 0.025),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(right: 5),
+                                            child: Row(
+                                              children: [
+                                                TextWid(
+                                                    text: "4.5",
+                                                    weight: FontWeight.w300,
+                                                    size: _width * 0.025),
+                                                Icon(Icons.star_rate_rounded,
+                                                    color: Colors.amber,
+                                                    size: _width * 0.035),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -197,10 +304,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
         ],
       ),
     );
-  }
-
-  void onTapped() {
-    print('Doing Something...'); // Print to console.
   }
 
   Widget inkwell(DrawerList listData) {

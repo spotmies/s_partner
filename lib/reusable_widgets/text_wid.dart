@@ -20,7 +20,9 @@ class TextWid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
+        
         letterSpacing: lSpace ?? 0,
         fontSize: size ?? 14,
         color: color ?? Colors.black,
