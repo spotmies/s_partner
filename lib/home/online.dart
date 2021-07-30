@@ -130,8 +130,8 @@ class _OnlineState extends State<Online> {
                                   padding: EdgeInsets.all(15),
                                   itemBuilder: (BuildContext ctxt, int index) {
                                     var u = o[index]['uDetails'];
-                                    List<String> images =
-                                        List.from(o[index]['media']);
+                                    // List<String> images =
+                                    //     List.from(o[index]['media']);
                                     // print(o['media'][0].length);
                                     return Column(
                                       children: [

@@ -9,11 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
-import 'package:spotmies_partner/providers/chattingProviders.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 date(msg1, msg2) {
@@ -953,7 +950,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                       'sender': 'p',
                                       'type': 'media'
                                     };
-                                    String temp = jsonEncode(imageData);
+                                    // String temp = jsonEncode(imageData);
                                     // await FirebaseFirestore.instance
                                     //     .collection('messaging')
                                     //     .doc(value)

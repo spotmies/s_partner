@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
 import 'package:spotmies_partner/login/login.dart';
-import 'package:spotmies_partner/profile/settings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class Profile extends StatefulWidget {

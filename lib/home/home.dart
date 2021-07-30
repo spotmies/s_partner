@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:spotmies_partner/chat/chat_page.dart';
 import 'package:spotmies_partner/orders/orders.dart';
-import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/utilities/custom_drawer/DraweInitiate.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
