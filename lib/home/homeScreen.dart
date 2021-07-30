@@ -45,7 +45,16 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.blue[900],
-                title: Text(pr['name'] == null ? 'User' : pr['name']),
+                title: Text(
+                  pr['name'] == null ? 'User' : pr['name'],
+                  overflow: TextOverflow.ellipsis,
+                ),
+                leading: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.menu,
+                      size: 20,
+                    )),
                 actions: [
                   Container(
                       child: Transform.scale(
