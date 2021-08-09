@@ -158,7 +158,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                       Tween<double>(begin: 0.0, end: 24.0)
                                               .animate(CurvedAnimation(
                                                   parent: widget
-                                                      .iconAnimationController,
+                                                      .iconAnimationController, 
                                                   curve: Curves.fastOutSlowIn))
                                               .value /
                                           360),

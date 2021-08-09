@@ -944,12 +944,12 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   int len = imageLink.length;
 
                                   for (int i = 0; i <= len; i++) {
-                                    var imageData = {
-                                      'msg': imageLink[i],
-                                      'timestamp': timestamp,
-                                      'sender': 'p',
-                                      'type': 'media'
-                                    };
+                                    // var imageData = {
+                                    //   'msg': imageLink[i],
+                                    //   'timestamp': timestamp,
+                                    //   'sender': 'p',
+                                    //   'type': 'media'
+                                    // };
                                     // String temp = jsonEncode(imageData);
                                     // await FirebaseFirestore.instance
                                     //     .collection('messaging')

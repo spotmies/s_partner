@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:spotmies_partner/chat/chat_page.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/drawer.dart';
 import 'package:spotmies_partner/orders/orders.dart';
-import 'package:spotmies_partner/utilities/custom_drawer/DraweInitiate.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(Home());
@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
 
   static List<Widget> _widgetOptions = <Widget>[
     Center(
-      child: DrawerInitiate(),
+      child: HomePage(),
     ),
     Center(
       child: ChatHome(),
@@ -26,8 +26,8 @@ class _HomeState extends State<Home> {
       child: Orders(),
     ),
     Center(
-     // child: Profile(),
-     child: TutCategory(),
+      // child: Profile(),
+      child: TutCategory(),
     ),
   ];
 
@@ -42,12 +42,11 @@ class _HomeState extends State<Home> {
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 0, color: Colors.black.withOpacity(0)),
+            BoxShadow(blurRadius: 5, color: Colors.black.withOpacity(0)),
           ]),
           child: SafeArea(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
               child: GNav(
                   gap: 8,
                   activeColor: Colors.grey[800],
