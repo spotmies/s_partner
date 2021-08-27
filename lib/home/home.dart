@@ -81,8 +81,9 @@ class _HomeState extends State<Home> {
       child: HomePage(),
     ),
     Center(
-      child: ChatList(),
-      // child: ChatHome(),
+      // child: ChatList(IO.socket socket),
+      // child: ChatList(IO.Socket)
+      child: ChatHome(),
     ),
     Center(
       child: Orders(),

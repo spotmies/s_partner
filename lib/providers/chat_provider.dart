@@ -24,8 +24,8 @@ class ChatProvider extends ChangeNotifier {
       if (allChats[i]['msgId'] == msgId) {
         allChats[i]['msgs'].add(value['object']);
         // log(allChats[0]['msgs'].toString());
-        allChats.insert(0, allChats[i]);
-        allChats.removeAt(i + 1);
+        // allChats.insert(0, allChats[i]);
+        // allChats.removeAt(i + 1);
         chatList = allChats;
         break;
       }
