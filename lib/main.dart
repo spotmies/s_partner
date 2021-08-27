@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/chattingProviders.dart';
 
 void main() async {
@@ -15,6 +16,7 @@ void main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider<ChattingProvider>(
           create: (context) => ChattingProvider()),
+      ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
     ], child: MyApp()));
   });
 }
@@ -29,8 +31,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-     
-
       home: StreamBuilder(
           stream: Connectivity().onConnectivityChanged,
           builder: (BuildContext context,

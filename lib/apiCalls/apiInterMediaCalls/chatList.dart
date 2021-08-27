@@ -16,3 +16,9 @@ chattingList() async {
   log(chat.toString());
   controller.getData();
 }
+
+getChatListFromDb() async {
+  var response = await Server().getMethod(API.partnerChat);
+  chat = jsonDecode(response);
+  return chat;
+}
