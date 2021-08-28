@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
-  var chatList;
-  var sendMessageQueue;
+  var chatList = [];
+  var sendMessageQueue = {};
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
