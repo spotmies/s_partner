@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Container chatInputField() {
+Container chatInputField(sendCallBack) {
+  TextEditingController inputController = TextEditingController();
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10),
     color: Colors.transparent,
@@ -26,6 +27,7 @@ Container chatInputField() {
                 ),
                 Expanded(
                   child: TextField(
+                    controller: inputController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Type your message ...',
@@ -44,11 +46,17 @@ Container chatInputField() {
         SizedBox(
           width: 16,
         ),
-        CircleAvatar(
-          backgroundColor: Colors.grey[500],
-          child: Icon(
-            Icons.send,
-            color: Colors.white,
+        GestureDetector(
+          onTap: () {
+            sendCallBack(inputController.text);
+            inputController.text = "";
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.grey[500],
+            child: Icon(
+              Icons.send,
+              color: Colors.white,
+            ),
           ),
         )
       ],

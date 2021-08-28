@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
     getChatList();
     // var chatData = Provider.of<ChattingProvider>(context, listen: false);
@@ -81,10 +81,10 @@ class _HomeState extends State<Home> {
       child: HomePage(),
     ),
     Center(
-      // child: ChatList(IO.socket socket),
-      // child: ChatList(IO.Socket)
-      child: ChatHome(),
-    ),
+        // child: ChatList(IO.socket socket),
+        child: ChatList(IO.Socket)
+        // child: ChatHome(),
+        ),
     Center(
       child: Orders(),
     ),
@@ -95,12 +95,27 @@ class _HomeState extends State<Home> {
   ];
   @override
   void didChangeDependencies() {
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    chatProvider = Provider.of<ChatProvider>(context, listen: true);
+    var newMessageObject = chatProvider.newMessagetemp();
+    if (!newMessageObject.isEmpty) {
+      log("new msg $newMessageObject");
+      socket.emitWithAck('sendNewMessageCallback', newMessageObject,
+          ack: (var callback) {
+        if (callback == 'success') {
+          print('working Fine');
+          chatProvider.setSendMessage({});
+          chatProvider.addnewMessage(newMessageObject);
+        } else {
+          log('notSuccess');
+        }
+      });
+    }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("rendering >>>>>>>>");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

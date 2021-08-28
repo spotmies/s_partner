@@ -59,7 +59,7 @@ class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     List chatList = Provider.of<ChatProvider>(context).getChatList;
-    print(chatList);
+    // print(chatList);
     return Scaffold(
       appBar: AppBar(title: Text("appbar")),
       body: Container(

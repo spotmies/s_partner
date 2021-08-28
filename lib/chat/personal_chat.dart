@@ -19,7 +19,10 @@ class PersonalChat extends StatefulWidget {
 
 class _PersonalChatState extends State<PersonalChat> {
   ChatProvider chatProvider;
-
+  ScrollController _scrollController = ScrollController();
+  List chatList = [];
+  Map targetChat = {};
+  Map user = {};
   @override
   void initState() {
     super.initState();
@@ -28,73 +31,112 @@ class _PersonalChatState extends State<PersonalChat> {
   @override
   void didChangeDependencies() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    log("new change");
+    Timer(
+        Duration(milliseconds: 600),
+        () => _scrollController
+            .jumpTo(_scrollController.position.maxScrollExtent));
     super.didChangeDependencies();
   }
 
   getTargetChat(list, msgId) {
-    print(list.length);
+    // print(list.length);
     List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
 
     return currentChatData[0];
   }
 
+  sendMessageHandler(value) {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    Map<String, String> msgData = {
+      'msg': value.toString(),
+      'time': timestamp,
+      'sender': 'partner',
+      'type': 'text'
+    };
+    Map<String, dynamic> target = {
+      'uId': user['uId'],
+      'pId': FirebaseAuth.instance.currentUser.uid,
+      'msgId': widget.msgId,
+      'ordId': targetChat['ordId'],
+    };
+    Map<String, Object> sendPayload = {
+      "object": jsonEncode(msgData),
+      "target": target
+    };
+
+    chatProvider.setSendMessage(sendPayload);
+  }
+
   @override
   Widget build(BuildContext context) {
-    List chatList = Provider.of<ChatProvider>(context).getChatList;
-    Map targetChat = getTargetChat(chatList, widget.msgId);
-    Map user = targetChat['uDetails'];
+    chatList = Provider.of<ChatProvider>(context).getChatList;
+    targetChat = getTargetChat(chatList, widget.msgId);
+    user = targetChat['uDetails'];
     List messages = targetChat['msgs'];
-    print(messages);
+    // print(messages);
     return Scaffold(
-      appBar: _buildAppBar(context, user['pic'], user['name']),
-      body: Container(
-        child: Column(children: [
-          Expanded(
-            child: Container(
-              child: ListView.builder(
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Map rawMsgData = jsonDecode(messages[index]);
-                    String message = rawMsgData['msg'];
-                    String sender = rawMsgData['sender'];
+        appBar: _buildAppBar(context, user['pic'], user['name']),
+        body: Container(
+          child: Column(children: [
+            Expanded(
+              child: Container(
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Map rawMsgData = jsonDecode(messages[index]);
+                      String message = rawMsgData['msg'];
+                      String sender = rawMsgData['sender'];
 
-                    String time = DateFormat.jm().format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                            (int.parse(rawMsgData['time'].toString()))));
+                      String time = DateFormat.jm().format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              (int.parse(rawMsgData['time'].toString()))));
 
-                    return Container(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: sender == "user"
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            constraints: new BoxConstraints(
-                                minHeight: 30, minWidth: 90, maxWidth: 130),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.amber,
-                            ),
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                message,
-                                softWrap: true,
-                                maxLines: 100,
+                      return Container(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: sender == "user"
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              constraints: new BoxConstraints(
+                                  minHeight: 30, minWidth: 90, maxWidth: 130),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.amber,
+                              ),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  message,
+                                  softWrap: true,
+                                  maxLines: 100,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
             ),
+            chatInputField(sendMessageHandler)
+          ]),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            _scrollController
+                .jumpTo(_scrollController.position.maxScrollExtent);
+          },
+          child: Icon(
+            Icons.arrow_downward,
+            color: Colors.blue[900],
           ),
-          chatInputField()
-        ]),
-      ),
-    );
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop);
   }
 
   Widget _buildAppBar(BuildContext context, profile, name) {
