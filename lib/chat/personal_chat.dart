@@ -1,14 +1,13 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
@@ -23,24 +22,18 @@ class _PersonalChatState extends State<PersonalChat> {
   List chatList = [];
   Map targetChat = {};
   Map user = {};
+  void scrollToBottom() {
+    log("scroll");
+    _scrollController?.jumpTo(_scrollController.position.maxScrollExtent);
+  }
+
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    log("new change");
-    Timer(
-        Duration(milliseconds: 600),
-        () => _scrollController
-            .jumpTo(_scrollController.position.maxScrollExtent));
-    super.didChangeDependencies();
   }
 
   getTargetChat(list, msgId) {
-    // print(list.length);
     List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
 
     return currentChatData[0];
@@ -56,9 +49,11 @@ class _PersonalChatState extends State<PersonalChat> {
     };
     Map<String, dynamic> target = {
       'uId': user['uId'],
+      // 'uId': "FtaZm2dasvN7cL9UumTG98ksk6I3",
       'pId': FirebaseAuth.instance.currentUser.uid,
       'msgId': widget.msgId,
       'ordId': targetChat['ordId'],
+      // 'ordId': "2"
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -66,60 +61,68 @@ class _PersonalChatState extends State<PersonalChat> {
     };
 
     chatProvider.setSendMessage(sendPayload);
+    scrollToBottom();
   }
 
   @override
   Widget build(BuildContext context) {
-    chatList = Provider.of<ChatProvider>(context).getChatList;
-    targetChat = getTargetChat(chatList, widget.msgId);
-    user = targetChat['uDetails'];
-    List messages = targetChat['msgs'];
-    // print(messages);
+    log("======== render chat screen =============");
     return Scaffold(
-        appBar: _buildAppBar(context, user['pic'], user['name']),
+        appBar: _buildAppBar(context),
         body: Container(
           child: Column(children: [
             Expanded(
               child: Container(
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Map rawMsgData = jsonDecode(messages[index]);
-                      String message = rawMsgData['msg'];
-                      String sender = rawMsgData['sender'];
+                child: Consumer<ChatProvider>(
+                  builder: (context, data, child) {
+                    chatList = data.getChatList2();
+                    targetChat = getTargetChat(chatList, widget.msgId);
+                    user = targetChat['uDetails'];
+                    List messages = targetChat['msgs'];
+                    // if (data.getScroll() || !data.getScroll()) scrollToBottom();
+                    return ListView.builder(
+                        controller: _scrollController,
+                        itemCount: messages.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Map rawMsgData = jsonDecode(messages[index]);
+                          String message = rawMsgData['msg'];
+                          String sender = rawMsgData['sender'];
 
-                      String time = DateFormat.jm().format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              (int.parse(rawMsgData['time'].toString()))));
+                          String time = DateFormat.jm().format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  (int.parse(rawMsgData['time'].toString()))));
 
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: sender == "user"
-                              ? MainAxisAlignment.start
-                              : MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              constraints: new BoxConstraints(
-                                  minHeight: 30, minWidth: 90, maxWidth: 130),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.amber,
-                              ),
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  message,
-                                  softWrap: true,
-                                  maxLines: 100,
+                          return Container(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: sender == "user"
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  constraints: new BoxConstraints(
+                                      minHeight: 30,
+                                      minWidth: 90,
+                                      maxWidth: 130),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.amber,
+                                  ),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      message,
+                                      softWrap: true,
+                                      maxLines: 100,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }),
+                          );
+                        });
+                  },
+                ),
               ),
             ),
             chatInputField(sendMessageHandler)
@@ -139,7 +142,7 @@ class _PersonalChatState extends State<PersonalChat> {
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop);
   }
 
-  Widget _buildAppBar(BuildContext context, profile, name) {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 3,
       actions: [
@@ -151,37 +154,33 @@ class _PersonalChatState extends State<PersonalChat> {
           ),
         )
       ],
-      title: Row(
-        children: [
-          Stack(
+      title: Consumer<ChatProvider>(
+        builder: (context, data, child) {
+          chatList = data.getChatList2();
+          targetChat = getTargetChat(chatList, widget.msgId);
+          user = targetChat['uDetails'];
+          return Row(
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(profile ?? ""),
-                radius: 20,
+              ProfilePic(
+                name: user['name'],
+                profile: user['pic'],
+                status: false,
               ),
-              Positioned(
-                bottom: 2,
-                right: 0,
-                child: CircleAvatar(
-                  radius: 4,
-                  backgroundColor: true ? Colors.green : Colors.transparent,
+              SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: Text(
+                  user['name'] ?? "Unknown",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              )
-            ],
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Expanded(
-            child: Text(
-              name ?? "Unknown",
-              maxLines: 1,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

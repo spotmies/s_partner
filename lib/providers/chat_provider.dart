@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class ChatProvider extends ChangeNotifier {
   var chatList = [];
   var sendMessageQueue = {};
+  bool scrollEvent = false;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -16,13 +17,12 @@ class ChatProvider extends ChangeNotifier {
     return chatList;
   }
 
+  getChatList2() => chatList;
   Map get newMessage {
     return sendMessageQueue;
   }
 
-  newMessagetemp() {
-    return sendMessageQueue;
-  }
+  newMessagetemp() => sendMessageQueue;
 
   addnewMessage(value) {
     var msgId = value['target']['msgId'];
@@ -39,12 +39,19 @@ class ChatProvider extends ChangeNotifier {
         break;
       }
     }
+    scrollEvent = !scrollEvent;
     notifyListeners();
   }
 
   setSendMessage(payload) {
-    // log("payload came>>> $payload");
     sendMessageQueue = payload;
     notifyListeners();
   }
+
+  setScroll() {
+    scrollEvent = !scrollEvent;
+    notifyListeners();
+  }
+
+  getScroll() => scrollEvent;
 }

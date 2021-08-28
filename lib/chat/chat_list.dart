@@ -1,87 +1,52 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/chat/chat_screen.dart';
+
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
-import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class ChatList extends StatefulWidget {
-  final dynamic socket;
-  ChatList(this.socket);
   @override
-  _ChatListState createState() => _ChatListState(socket);
+  _ChatListState createState() => _ChatListState();
 }
 
 class _ChatListState extends State<ChatList> {
-  ChatProvider chatProvider;
-  var socket;
-  _ChatListState(socket);
   @override
   void initState() {
     super.initState();
-    // var msgData = {
-    //   'msg': "textInput",
-    //   'time': "1625338441313",
-    //   'sender': 'partner',
-    //   'type': 'text'
-    // };
-    // var target = {
-    //   'uId': "FtaZm2dasvN7cL9UumTG98ksk6I3",
-    //   'pId': FirebaseAuth.instance.currentUser.uid,
-    //   'msgId': "1621909636273",
-    //   'ordId': "123",
-    // };
-    // String temp = jsonEncode(msgData);
-    // log(widget.socket.toString());
-    // widget.socket.emitWithAck(
-    //     'sendNewMessageCallback', {"object": temp, "target": target},
-    //     ack: (var callback) {
-    //   if (callback == 'success') {
-    //     print('working Fine');
-    //   } else {
-    //     log('notSuccess');
-    //   }
-    // });
-  }
-
-  @override
-  void didChangeDependencies() {
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    List chatList = Provider.of<ChatProvider>(context).getChatList;
-    // print(chatList);
     return Scaffold(
       appBar: AppBar(title: Text("appbar")),
-      body: Container(
-        child: chatList != null
-            ? RecentChats(chatList)
-            : CircularProgressIndicator(),
-      ),
+      body: Container(child: RecentChats()),
     );
   }
 }
 
 class RecentChats extends StatefulWidget {
-  final List chatList;
-  const RecentChats(this.chatList);
-
   @override
   _RecentChatsState createState() => _RecentChatsState();
 }
 
 class _RecentChatsState extends State<RecentChats> {
+  ChatProvider chatProvider;
+  @override
+  void initState() {
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('======render chatList screen =======');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -96,22 +61,26 @@ class _RecentChatsState extends State<RecentChats> {
                 topLeft: Radius.circular(5.0),
                 topRight: Radius.circular(30.0),
               ),
-              child: ListView.builder(
-                itemCount: widget.chatList?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map user = widget.chatList[index]['uDetails'];
-                  List messages = widget.chatList[index]['msgs'];
+              child: Consumer<ChatProvider>(
+                builder: (context, data, child) {
+                  return ListView.builder(
+                    itemCount: data.getChatList2()?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Map user = data.getChatList2()[index]['uDetails'];
+                      List messages = data.getChatList2()[index]['msgs'];
 
-                  var lastMessage = jsonDecode(messages.last);
+                      var lastMessage = jsonDecode(messages.last);
 
-                  return ChatListCard(
-                      user['pic'],
-                      user['name'],
-                      lastMessage['msg'].toString(),
-                      DateFormat.jm().format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              (int.parse(lastMessage['time'].toString())))),
-                      widget.chatList[index]['msgId']);
+                      return ChatListCard(
+                          user['pic'],
+                          user['name'],
+                          lastMessage['msg'].toString(),
+                          DateFormat.jm().format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  (int.parse(lastMessage['time'].toString())))),
+                          data.getChatList2()[index]['msgId']);
+                    },
+                  );
                 },
               ),
             ),
@@ -131,31 +100,9 @@ class ChatListCard extends StatelessWidget {
   const ChatListCard(
       this.profile, this.name, this.lastMessage, this.time, this.msgId);
 
-  Widget _activeIcon(isActive) {
-    if (isActive) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: EdgeInsets.all(3),
-          width: 16,
-          height: 16,
-          color: Colors.white,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Container(
-              color: Color(0xff43ce7d), // flat green
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         log(msgId);
         Navigator.of(context).push(MaterialPageRoute(
@@ -172,7 +119,7 @@ class ChatListCard extends StatelessWidget {
           children: [
             Row(
               children: <Widget>[
-                profilePic(),
+                ProfilePic(profile: profile, name: name),
                 SizedBox(
                   width: 15.0,
                 ),
@@ -238,43 +185,6 @@ class ChatListCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Container profilePic() {
-    return Container(
-      child: profile != null
-          ? Stack(
-              children: [
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage: NetworkImage(profile ?? ""),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: _activeIcon(true),
-                ),
-              ],
-            )
-          : Stack(
-              children: [
-                CircleAvatar(
-                  radius: 25.0,
-                  child: Center(
-                    child: TextWid(
-                      text: name[0],
-                      size: 30.0,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: _activeIcon(true),
-                ),
-              ],
-            ),
     );
   }
 }
