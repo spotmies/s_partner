@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 
 class PersonalChat extends StatefulWidget {
@@ -88,10 +89,6 @@ class _PersonalChatState extends State<PersonalChat> {
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
 
-                          String time = DateFormat.jm().format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  (int.parse(rawMsgData['time'].toString()))));
-
                           return Container(
                             padding: EdgeInsets.all(10),
                             child: Row(
@@ -106,15 +103,25 @@ class _PersonalChatState extends State<PersonalChat> {
                                       maxWidth: 130),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.amber,
+                                    color: sender == "user"
+                                        ? Colors.grey[400]
+                                        : Colors.blue,
                                   ),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      message,
-                                      softWrap: true,
-                                      maxLines: 100,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          message,
+                                          softWrap: true,
+                                          maxLines: 100,
+                                        ),
+                                      ),
+                                      Container(
+                                          alignment: Alignment.centerRight,
+                                          child:
+                                              Text(getTime(rawMsgData['time'])))
+                                    ],
                                   ),
                                 ),
                               ],

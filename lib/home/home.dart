@@ -58,21 +58,18 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  Future<void> initState() {
+  initState() {
     super.initState();
-    // chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
     getChatList();
-    // var chatData = Provider.of<ChattingProvider>(context, listen: false);
+
     _chatResponse = StreamController();
 
     stream = _chatResponse.stream.asBroadcastStream();
-    // chatData.chatInfo(_chatResponse == null ? false : true);
+
     socketResponse();
     stream.listen((event) {
       chatProvider.addnewMessage(event);
-
-      // var newEvent = jsonEncode(event['object']);
-      // log("event >>>>>> ${newEvent.toString()}");
     });
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -113,25 +110,6 @@ class _HomeState extends State<Home> {
       child: TutCategory(),
     ),
   ];
-  // @override
-  // void didChangeDependencies() {
-  //   chatProvider = Provider.of<ChatProvider>(context, listen: true);
-  //   var newMessageObject = chatProvider.newMessagetemp();
-  //   if (!newMessageObject.isEmpty) {
-  //     log("new msg $newMessageObject");
-  //     socket.emitWithAck('sendNewMessageCallback', newMessageObject,
-  //         ack: (var callback) {
-  //       if (callback == 'success') {
-  //         print('working Fine');
-  //         chatProvider.setSendMessage({});
-  //         chatProvider.addnewMessage(newMessageObject);
-  //       } else {
-  //         log('notSuccess');
-  //       }
-  //     });
-  //   }
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {

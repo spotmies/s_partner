@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/chat/chat_screen.dart';
 
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -63,6 +65,13 @@ class _RecentChatsState extends State<RecentChats> {
               ),
               child: Consumer<ChatProvider>(
                 builder: (context, data, child) {
+                  if (data.getChatList2().length < 1) {
+                    return Center(
+                        child: TextWid(
+                      text: "No Chats Available",
+                      size: 30,
+                    ));
+                  }
                   return ListView.builder(
                     itemCount: data.getChatList2()?.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -75,9 +84,7 @@ class _RecentChatsState extends State<RecentChats> {
                           user['pic'],
                           user['name'],
                           lastMessage['msg'].toString(),
-                          DateFormat.jm().format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  (int.parse(lastMessage['time'].toString())))),
+                          getTime(lastMessage['time']),
                           data.getChatList2()[index]['msgId']);
                     },
                   );
@@ -107,6 +114,8 @@ class ChatListCard extends StatelessWidget {
         log(msgId);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => PersonalChat(msgId.toString())));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => ChatScreen(msgid: msgId.toString())));
       },
       child: Container(
         margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
