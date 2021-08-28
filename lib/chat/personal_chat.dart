@@ -32,6 +32,12 @@ class _PersonalChatState extends State<PersonalChat> {
   void initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        chatProvider.resetMessageCount(widget.msgId);
+      }
+    });
   }
 
   getTargetChat(list, msgId) {
@@ -62,7 +68,7 @@ class _PersonalChatState extends State<PersonalChat> {
     };
 
     chatProvider.setSendMessage(sendPayload);
-    scrollToBottom();
+    // scrollToBottom();
   }
 
   @override
@@ -138,8 +144,9 @@ class _PersonalChatState extends State<PersonalChat> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            _scrollController
-                .jumpTo(_scrollController.position.maxScrollExtent);
+            scrollToBottom();
+            // _scrollController
+            //     .jumpTo(_scrollController.position.maxScrollExtent);
           },
           child: Icon(
             Icons.arrow_downward,

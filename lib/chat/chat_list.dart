@@ -22,6 +22,7 @@ class _ChatListState extends State<ChatList> {
   @override
   void initState() {
     super.initState();
+    log("chatlist inti>>>>>>");
   }
 
   @override
@@ -65,7 +66,9 @@ class _RecentChatsState extends State<RecentChats> {
               ),
               child: Consumer<ChatProvider>(
                 builder: (context, data, child) {
-                  if (data.getChatList2().length < 1) {
+                  List chatList = data.getChatList2();
+                  // log(chatList[0].toString());
+                  if (chatList.length < 1) {
                     return Center(
                         child: TextWid(
                       text: "No Chats Available",
@@ -73,10 +76,12 @@ class _RecentChatsState extends State<RecentChats> {
                     ));
                   }
                   return ListView.builder(
-                    itemCount: data.getChatList2()?.length,
+                    itemCount: chatList?.length,
                     itemBuilder: (BuildContext context, int index) {
-                      Map user = data.getChatList2()[index]['uDetails'];
-                      List messages = data.getChatList2()[index]['msgs'];
+                      Map user = chatList[index]['uDetails'];
+                      List messages = chatList[index]['msgs'];
+                      int count = chatList[index]['pCount'];
+                      log("count $count");
 
                       var lastMessage = jsonDecode(messages.last);
 
@@ -85,7 +90,8 @@ class _RecentChatsState extends State<RecentChats> {
                           user['name'],
                           lastMessage['msg'].toString(),
                           getTime(lastMessage['time']),
-                          data.getChatList2()[index]['msgId']);
+                          chatList[index]['msgId'],
+                          count);
                     },
                   );
                 },
@@ -104,8 +110,9 @@ class ChatListCard extends StatelessWidget {
   final String lastMessage;
   final String time;
   final String msgId;
-  const ChatListCard(
-      this.profile, this.name, this.lastMessage, this.time, this.msgId);
+  final int count;
+  const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
+      this.msgId, this.count);
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +171,31 @@ class ChatListCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
+                count > 0
+                    ? Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(30.0)),
+                        alignment: Alignment.center,
+                        child: Container(
+                          child: Text(
+                            count.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: 40.0,
+                        height: 20.0,
+                      ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   time,
                   style: TextStyle(
@@ -171,24 +203,6 @@ class ChatListCard extends StatelessWidget {
                     fontSize: 15.0,
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: 40.0,
-                  height: 20.0,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'New',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )
               ],
             )
           ],

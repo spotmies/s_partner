@@ -4,8 +4,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
-  var chatList = [];
-  var sendMessageQueue = {};
+  List<dynamic> chatList = [];
+  Map<dynamic, dynamic> sendMessageQueue = {};
+  String currentMsgId = "";
   bool scrollEvent = false;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
@@ -13,25 +14,17 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List get getChatList {
-    return chatList;
-  }
-
   getChatList2() => chatList;
-  Map get newMessage {
-    return sendMessageQueue;
-  }
 
   newMessagetemp() => sendMessageQueue;
 
   addnewMessage(value) {
-    var msgId = value['target']['msgId'];
-    var allChats = chatList;
-    // log(allChats[0]['msgs'].toString());
-    // log(jsonEncode(value['object']));
+    String msgId = value['target']['msgId'];
+    List<dynamic> allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
         allChats[i]['msgs'].add(value['object']);
+        allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
         // log(allChats[0]['msgs'].toString());
         // allChats.insert(0, allChats[i]);
         // allChats.removeAt(i + 1);
@@ -40,6 +33,16 @@ class ChatProvider extends ChangeNotifier {
       }
     }
     scrollEvent = !scrollEvent;
+    notifyListeners();
+  }
+
+  resetMessageCount(msgId) {
+    int index =
+        chatList.indexWhere((element) => element['msgId'].toString() == msgId);
+    log(chatList[index]['pCount'].toString());
+    chatList[index]['pCount'] = 0;
+    log(chatList[index]['pCount'].toString());
+
     notifyListeners();
   }
 
@@ -54,4 +57,10 @@ class ChatProvider extends ChangeNotifier {
   }
 
   getScroll() => scrollEvent;
+
+  getMsgId() => currentMsgId;
+
+  setMsgId(msgId) {
+    currentMsgId = msgId;
+  }
 }
