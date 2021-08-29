@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,8 +26,10 @@ class _PersonalChatState extends State<PersonalChat> {
   Map user = {};
   int msgCount = 20;
   void scrollToBottom() {
-    log("scroll");
-    _scrollController?.jumpTo(_scrollController.position?.maxScrollExtent);
+    Timer(
+        Duration(milliseconds: 200),
+        () => _scrollController
+            .jumpTo(_scrollController.position.minScrollExtent));
   }
 
   @override
@@ -154,23 +157,25 @@ class _PersonalChatState extends State<PersonalChat> {
                 ),
               ),
             ),
-            chatInputField(sendMessageHandler)
+            chatInputField(sendMessageHandler, context)
           ]),
         ),
         floatingActionButton: Container(
-          height: _hight*0.25,
+          height: _hight * 0.2,
+          padding: EdgeInsets.only(bottom: _hight * 0.1),
           child: FloatingActionButton(
             mini: true,
             backgroundColor: Colors.white,
             onPressed: () {
               scrollToBottom();
+
               // _scrollController
               //     .jumpTo(_scrollController.position.maxScrollExtent);
             },
             child: Icon(
               Icons.keyboard_arrow_down,
               color: Colors.blue[900],
-              size: _width*0.07,
+              size: _width * 0.07,
             ),
           ),
         ),
@@ -180,6 +185,9 @@ class _PersonalChatState extends State<PersonalChat> {
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 3,
+      leading: IconButton(onPressed: (){
+        Navigator.pop(context, false);
+      }, icon: Icon(Icons.arrow_back)),
       actions: [
         Padding(
           padding: const EdgeInsets.all(16),

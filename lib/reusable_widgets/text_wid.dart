@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextWid extends StatelessWidget {
   final String text;
@@ -21,14 +22,12 @@ class TextWid extends StatelessWidget {
     return Text(
       text,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        
+      style:GoogleFonts.josefinSans(
         letterSpacing: lSpace ?? 0,
         fontSize: size ?? 14,
         color: color ?? Colors.black,
         fontWeight: weight ?? FontWeight.normal,
-        // fontFamily: family ?? ConstantsVariables.defaultfontcode
-      ),
+      )
     );
   }
 }

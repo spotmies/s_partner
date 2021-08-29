@@ -12,19 +12,19 @@ class ProfilePic extends StatelessWidget {
   final String profile;
   final String name;
   final bool status;
-  Widget _activeIcon() {
+  Widget _activeIcon(double hight, double width) {
     if (status) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: EdgeInsets.all(3),
-          width: 16,
-          height: 16,
+          width: width*0.04,
+          height: width*0.04,
           color: Colors.white,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Container(
-              color: Color(0xff43ce7d), // flat green
+              color: Colors.greenAccent, // flat green
             ),
           ),
         ),
@@ -36,36 +36,43 @@ class ProfilePic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Container(
       child: profile != null
           ? Stack(
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  backgroundColor: ([...Colors.primaries]..shuffle()).first,
+                  radius: _width*0.07,
                   backgroundImage: NetworkImage(profile ?? ""),
                 ),
                 Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(),
+                  child: _activeIcon(_hight,_width),
                 ),
               ],
             )
           : Stack(
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  backgroundColor: ([...Colors.primaries]..shuffle()).first,
+                   radius: _width*0.07,
                   child: Center(
                     child: TextWid(
                       text: name[0],
-                      size: 30.0,
+                      color: Colors.white,
+                      size: _width*0.1,
                     ),
                   ),
                 ),
                 Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(),
+                  child: _activeIcon(_hight,_width),
                 ),
               ],
             ),

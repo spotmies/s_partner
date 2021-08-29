@@ -1,8 +1,16 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-Container chatInputField(sendCallBack) {
-  bool isInput = false;
-  TextEditingController inputController = TextEditingController();
+import 'package:flutter/material.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
+
+String chatInput;
+TextEditingController inputController = TextEditingController();
+
+Container chatInputField(sendCallBack, BuildContext context) {
+  // bool isInput = false;
+
+  // var formkey = GlobalKey<FormState>();
+
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10),
     color: Colors.transparent,
@@ -29,10 +37,12 @@ Container chatInputField(sendCallBack) {
                 Expanded(
                   child: TextField(
                     controller: inputController,
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Type your message ...',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      hintStyle: TextStyle(fontSize: 17),
+                      hintText: 'Type Message......',
+                      contentPadding: EdgeInsets.all(20),
                     ),
                   ),
                 ),
@@ -49,9 +59,13 @@ Container chatInputField(sendCallBack) {
         ),
         InkWell(
           onTap: () {
-            if (inputController.text.isEmpty) return;
-            sendCallBack(inputController.text);
-            inputController.text = "";
+            if (inputController.text == "") {
+              snackbar(context, 'Enter Message');
+            } else {
+              sendCallBack(inputController.text);
+              inputController.clear();
+            }
+            log(inputController.text);
           },
           child: CircleAvatar(
             backgroundColor: Colors.blue,
