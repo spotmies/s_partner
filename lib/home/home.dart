@@ -11,6 +11,7 @@ import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/chat/chat_page.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/drawer.dart';
 import 'package:spotmies_partner/orders/orders.dart';
+import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -107,7 +108,7 @@ class _HomeState extends State<Home> {
     ),
     Center(
       // child: Profile(),
-      child: TutCategory(),
+      child: Profile(),
     ),
   ];
 

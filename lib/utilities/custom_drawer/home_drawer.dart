@@ -158,7 +158,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                       Tween<double>(begin: 0.0, end: 24.0)
                                               .animate(CurvedAnimation(
                                                   parent: widget
-                                                      .iconAnimationController, 
+                                                      .iconAnimationController,
                                                   curve: Curves.fastOutSlowIn))
                                               .value /
                                           360),
@@ -293,7 +293,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
           Column(
             children: <Widget>[
               ListTile(
-                onTap: signOut,
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut().then((action) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                  }).catchError((e) {
+                    print(e);
+                  });
+                },
                 title: Text(
                   'Sign Out',
                   style: TextStyle(

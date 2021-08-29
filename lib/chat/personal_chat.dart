@@ -82,6 +82,10 @@ class _PersonalChatState extends State<PersonalChat> {
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: _buildAppBar(context),
         body: Container(
@@ -153,19 +157,24 @@ class _PersonalChatState extends State<PersonalChat> {
             chatInputField(sendMessageHandler)
           ]),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
-          onPressed: () {
-            scrollToBottom();
-            // _scrollController
-            //     .jumpTo(_scrollController.position.maxScrollExtent);
-          },
-          child: Icon(
-            Icons.arrow_downward,
-            color: Colors.blue[900],
+        floatingActionButton: Container(
+          height: _hight*0.25,
+          child: FloatingActionButton(
+            mini: true,
+            backgroundColor: Colors.white,
+            onPressed: () {
+              scrollToBottom();
+              // _scrollController
+              //     .jumpTo(_scrollController.position.maxScrollExtent);
+            },
+            child: Icon(
+              Icons.keyboard_arrow_down,
+              color: Colors.blue[900],
+              size: _width*0.07,
+            ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop);
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }
 
   Widget _buildAppBar(BuildContext context) {

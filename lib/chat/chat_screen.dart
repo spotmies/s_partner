@@ -787,7 +787,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 ),
               ),
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.endTop);
+                  FloatingActionButtonLocation.endFloat);
         });
     // });
   }
