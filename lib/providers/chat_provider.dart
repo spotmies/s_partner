@@ -8,6 +8,7 @@ class ChatProvider extends ChangeNotifier {
   Map<dynamic, dynamic> sendMessageQueue = {};
   String currentMsgId = "";
   bool scrollEvent = false;
+  int msgCount = 20;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -20,11 +21,15 @@ class ChatProvider extends ChangeNotifier {
 
   addnewMessage(value) {
     String msgId = value['target']['msgId'];
+    log("$msgId $currentMsgId");
     List<dynamic> allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
         allChats[i]['msgs'].add(value['object']);
-        allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
+        if (msgId != currentMsgId) {
+          allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
+        }
+
         // log(allChats[0]['msgs'].toString());
         // allChats.insert(0, allChats[i]);
         // allChats.removeAt(i + 1);
@@ -62,5 +67,11 @@ class ChatProvider extends ChangeNotifier {
 
   setMsgId(msgId) {
     currentMsgId = msgId;
+  }
+
+  getMsgCount() => msgCount;
+  setMsgCount(count) {
+    msgCount = count;
+    notifyListeners();
   }
 }

@@ -44,7 +44,15 @@ class _RecentChatsState extends State<RecentChats> {
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
+    chatProvider.setMsgId("");
     super.initState();
+  }
+
+  cardOnClick(msgId) {
+    chatProvider.setMsgCount(20);
+    chatProvider.resetMessageCount(msgId);
+    chatProvider.setMsgId(msgId);
   }
 
   @override
@@ -86,12 +94,14 @@ class _RecentChatsState extends State<RecentChats> {
                       var lastMessage = jsonDecode(messages.last);
 
                       return ChatListCard(
-                          user['pic'],
-                          user['name'],
-                          lastMessage['msg'].toString(),
-                          getTime(lastMessage['time']),
-                          chatList[index]['msgId'],
-                          count);
+                        user['pic'],
+                        user['name'],
+                        lastMessage['msg'].toString(),
+                        getTime(lastMessage['time']),
+                        chatList[index]['msgId'],
+                        count,
+                        callBack: cardOnClick,
+                      );
                     },
                   );
                 },
@@ -111,14 +121,17 @@ class ChatListCard extends StatelessWidget {
   final String time;
   final String msgId;
   final int count;
+  final Function callBack;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
-      this.msgId, this.count);
+      this.msgId, this.count,
+      {this.callBack});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         log(msgId);
+        callBack(msgId);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => PersonalChat(msgId.toString())));
         // Navigator.of(context).push(MaterialPageRoute(

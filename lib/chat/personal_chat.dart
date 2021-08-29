@@ -23,20 +23,28 @@ class _PersonalChatState extends State<PersonalChat> {
   List chatList = [];
   Map targetChat = {};
   Map user = {};
+  int msgCount = 20;
   void scrollToBottom() {
     log("scroll");
-    _scrollController?.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController?.jumpTo(_scrollController.position?.maxScrollExtent);
   }
 
   @override
   void initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        chatProvider.resetMessageCount(widget.msgId);
+        log("at top >>>");
+        chatProvider.setMsgCount(chatProvider.getMsgCount() + 20);
       }
+      // if (_scrollController.position.pixels ==
+      //     _scrollController.position.minScrollExtent) {
+      //   chatProvider.resetMessageCount(widget.msgId);
+      //   log('at Bottom >>>>>>>>>>>>');
+      // }
     });
   }
 
@@ -88,10 +96,14 @@ class _PersonalChatState extends State<PersonalChat> {
                     List messages = targetChat['msgs'];
                     // if (data.getScroll() || !data.getScroll()) scrollToBottom();
                     return ListView.builder(
+                        reverse: true,
                         controller: _scrollController,
-                        itemCount: messages.length,
+                        itemCount: data.getMsgCount() < messages.length
+                            ? data.getMsgCount()
+                            : messages.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Map rawMsgData = jsonDecode(messages[index]);
+                          Map rawMsgData = jsonDecode(
+                              messages[(messages.length - 1) - index]);
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
 
