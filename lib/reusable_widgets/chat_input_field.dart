@@ -1,61 +1,89 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 String chatInput;
 TextEditingController inputController = TextEditingController();
 
-Container chatInputField(sendCallBack, BuildContext context) {
+Container chatInputField(
+    sendCallBack, BuildContext context, double hight, double width) {
   // bool isInput = false;
 
   // var formkey = GlobalKey<FormState>();
 
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10),
+    padding: EdgeInsets.all(10),
     color: Colors.transparent,
     height: 70,
     child: Row(
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 14),
-            height: 60,
+            // padding: EdgeInsets.symmetric(horizontal: 14),
+            height: hight * 0.08,
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[200],
+                  blurRadius: 2,
+                  spreadRadius: 2
+                )
+              ],
               borderRadius: BorderRadius.circular(25),
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.mic,
-                  color: Colors.grey[500],
-                ),
-                SizedBox(
-                  width: 10,
-                ),
+               
                 Expanded(
                   child: TextField(
+                    style: fonts(width * 0.05, FontWeight.w500,
+                                  Colors.grey[900]),
                     controller: inputController,
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
+                      suffixIcon:inputController.text.isEmpty? IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.attach_file,
+                          color: Colors.grey[500],
+                          size: width*0.05,
+                        ),
+                      ):IconButton(
+                        onPressed: () {
+                          inputController.clear();
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.grey[500],
+                          size: width*0.05,
+                        ),
+                      ),
+                      prefixIcon: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.mic,
+                          color: Colors.grey[500],
+                          size: width*0.07,
+                        ),
+                      ),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(fontSize: 17),
+                      hintStyle:fonts(width * 0.05, FontWeight.w400,
+                                  Colors.grey[400]),
+                                
                       hintText: 'Type Message......',
-                      contentPadding: EdgeInsets.all(20),
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.attach_file,
-                  color: Colors.grey[500],
-                )
+               
               ],
             ),
           ),
         ),
         SizedBox(
-          width: 16,
+          width:width*0.03,
         ),
         InkWell(
           onTap: () {
@@ -68,7 +96,8 @@ Container chatInputField(sendCallBack, BuildContext context) {
             log(inputController.text);
           },
           child: CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blueGrey[500],
+            radius: width*0.065,
             child: Icon(
               Icons.send,
               color: Colors.white,

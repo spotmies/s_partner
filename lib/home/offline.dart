@@ -52,7 +52,7 @@ class _OfflineState extends State<Offline> {
                         ],
                       ),
                       SizedBox(
-                        width: _width * 0.04,
+                        width: _width * 0.035,
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

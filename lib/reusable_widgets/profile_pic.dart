@@ -6,12 +6,16 @@ class ProfilePic extends StatelessWidget {
       {Key key,
       @required this.profile,
       @required this.name,
+      @required this.bgColor,
+      this.size,
       this.status = true})
       : super(key: key);
 
   final String profile;
   final String name;
   final bool status;
+  final Color bgColor;
+  final double size;
   Widget _activeIcon(double hight, double width) {
     if (status) {
       return ClipRRect(
@@ -45,8 +49,8 @@ class ProfilePic extends StatelessWidget {
           ? Stack(
               children: [
                 CircleAvatar(
-                  backgroundColor: ([...Colors.primaries]..shuffle()).first,
-                  radius: _width*0.07,
+                  backgroundColor: bgColor ?? ([...Colors.primaries]..shuffle()).first,
+                  radius:size?? _width*0.07,
                   backgroundImage: NetworkImage(profile ?? ""),
                 ),
                 Positioned(
@@ -59,13 +63,13 @@ class ProfilePic extends StatelessWidget {
           : Stack(
               children: [
                 CircleAvatar(
-                  backgroundColor: ([...Colors.primaries]..shuffle()).first,
-                   radius: _width*0.07,
+                  backgroundColor:bgColor ?? ([...Colors.primaries]..shuffle()).first,
+                   radius:size?? _width*0.07,
                   child: Center(
                     child: TextWid(
                       text: name[0],
                       color: Colors.white,
-                      size: _width*0.1,
+                      size: _width*0.06,
                     ),
                   ),
                 ),

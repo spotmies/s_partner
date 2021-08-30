@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/chat/chat_screen.dart';
-
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
@@ -29,9 +27,9 @@ class _ChatListState extends State<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
+    // final _hight = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -147,9 +145,9 @@ class ChatListCard extends StatefulWidget {
 class _ChatListCardState extends State<ChatListCard> {
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
+    // final _hight = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return ListTile(
         onTap: () async {
@@ -171,7 +169,7 @@ class _ChatListCardState extends State<ChatListCard> {
             size: _width * 0.035,
             weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
             color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
-        leading: ProfilePic(profile: widget.profile, name: widget.name),
+        leading: ProfilePic(profile: widget.profile, name: widget.name, bgColor: ([...Colors.primaries]..shuffle()).first,),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[

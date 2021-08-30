@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
-import 'package:spotmies_partner/chat/chat_page.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/drawer.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
-import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() => runApp(Home());
@@ -130,7 +126,7 @@ class _HomeState extends State<Home> {
           ]),
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.3),
               child: GNav(
                   gap: 8,
                   activeColor: Colors.grey[800],

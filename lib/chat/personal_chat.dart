@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
@@ -90,7 +91,7 @@ class _PersonalChatState extends State<PersonalChat> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: _buildAppBar(context),
+        appBar: _buildAppBar(context, _hight, _width),
         body: Container(
           child: Column(children: [
             Expanded(
@@ -113,39 +114,73 @@ class _PersonalChatState extends State<PersonalChat> {
                               messages[(messages.length - 1) - index]);
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
+                          String type = rawMsgData['type'];
 
                           return Container(
-                            padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.only(
+                                left: sender == "user" ? 10 : 0,
+                                bottom: 5,
+                                right: sender == "user" ? 0 : 10),
                             child: Row(
                               mainAxisAlignment: sender == "user"
                                   ? MainAxisAlignment.start
                                   : MainAxisAlignment.end,
                               children: [
                                 Container(
-                                  constraints: new BoxConstraints(
-                                      minHeight: 30,
-                                      minWidth: 90,
-                                      maxWidth: 130),
+                                  constraints: BoxConstraints(
+                                      minHeight: _hight * 0.05,
+                                      minWidth: 30,
+                                      maxWidth: _width * 0.55),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: sender == "user"
-                                        ? Colors.grey[400]
-                                        : Colors.blue,
-                                  ),
+                                      color: sender == "user"
+                                          ? Colors.white
+                                          : Colors.blueGrey[500],
+                                      border: Border.all(
+                                          color: Colors.blueGrey[500],
+                                          width: 0.3),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                          bottomRight: Radius.circular(
+                                              sender == "user" ? 15 : 0),
+                                          bottomLeft: Radius.circular(
+                                              sender != "user" ? 15 : 0))),
                                   child: Column(
                                     children: [
                                       Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          message,
-                                          softWrap: true,
-                                          maxLines: 100,
-                                        ),
-                                      ),
+                                          padding: EdgeInsets.only(
+                                              left: 10, top: 10, right: 10),
+                                          alignment: Alignment.centerLeft,
+                                          child: type == "text"
+                                              ? TextWid(
+                                                  text:
+                                                      toBeginningOfSentenceCase(
+                                                          message),
+                                                  maxlines: 200,
+                                                  lSpace: 1.5,
+                                                  color: sender != "user"
+                                                      ? Colors.white
+                                                      : Colors.grey[900],
+                                                )
+                                              : type != "audio"
+                                                  ? Image.network(message)
+                                                  : type != "video"
+                                                      ? Text('audio')
+                                                      : Text('video')),
                                       Container(
-                                          alignment: Alignment.centerRight,
-                                          child:
-                                              Text(getTime(rawMsgData['time'])))
+                                        padding:
+                                            EdgeInsets.only(right: 10, top: 5),
+                                        alignment: Alignment.centerRight,
+                                        child: TextWid(
+                                          text: getTime(rawMsgData['time']),
+                                          size: _width * 0.03,
+                                          color: sender != "user"
+                                              ? Colors.grey[50]
+                                              : Colors.grey[500],
+                                          weight: FontWeight.w600,
+                                        ),
+                                      )
+                                      // Text(getTime(rawMsgData['time'])))
                                     ],
                                   ),
                                 ),
@@ -157,7 +192,7 @@ class _PersonalChatState extends State<PersonalChat> {
                 ),
               ),
             ),
-            chatInputField(sendMessageHandler, context)
+            chatInputField(sendMessageHandler, context, _hight, _width)
           ]),
         ),
         floatingActionButton: Container(
@@ -182,20 +217,33 @@ class _PersonalChatState extends State<PersonalChat> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, double hight, double width) {
     return AppBar(
-      elevation: 3,
-      leading: IconButton(onPressed: (){
-        Navigator.pop(context, false);
-      }, icon: Icon(Icons.arrow_back)),
+      elevation: 0,
+      backgroundColor: Colors.grey[50],
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          )),
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Icon(
-            Icons.phone,
-            color: Colors.white,
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.read_more,
+            color: Colors.grey[900],
           ),
-        )
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.phone,
+            color: Colors.grey[900],
+          ),
+        ),
       ],
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {
@@ -208,19 +256,26 @@ class _PersonalChatState extends State<PersonalChat> {
                 name: user['name'],
                 profile: user['pic'],
                 status: false,
+                bgColor: Colors.blueGrey[600],
+                size: width * 0.045,
               ),
               SizedBox(
                 width: 8,
               ),
               Expanded(
-                child: Text(
-                  user['name'] ?? "Unknown",
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
+                  child: TextWid(
+                text: user['name'] ?? "Spotmies User",
+                size: width * 0.058,
+                weight: FontWeight.w600,
+              )
+                  // Text(
+                  //   user['name'] ?? "Unknown",
+                  //   maxLines: 1,
+                  //   style: TextStyle(
+                  //     fontWeight: FontWeight.w600,
+                  //   ),
+                  // ),
                   ),
-                ),
-              ),
             ],
           );
         },
