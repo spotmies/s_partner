@@ -29,6 +29,9 @@ class ChatProvider extends ChangeNotifier {
     List<dynamic> allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
+        allChats[i]['lastModified'] =
+            int.parse(DateTime.now().millisecondsSinceEpoch.toString());
+
         allChats[i]['msgs'].add(value['object']);
         if (sender == "partner") {
           allChats[i]['pState'] = 0;
@@ -36,7 +39,9 @@ class ChatProvider extends ChangeNotifier {
         if (msgId != currentMsgId) {
           allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
         }
-
+        allChats.sort((a, b) {
+          return b['lastModified'].compareTo(a['lastModified']);
+        });
         chatList = allChats;
         break;
       }
