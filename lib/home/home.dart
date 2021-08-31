@@ -91,7 +91,8 @@ class _HomeState extends State<Home> {
               print('working Fine');
               if (i == newMessageObject.length - 1) {
                 log("clear msg queue");
-                chatProvider.clearMessageQueue();
+                var msgId = item['target']['msgId'];
+                chatProvider.clearMessageQueue(msgId);
               }
               // chatProvider.addnewMessage(item);
             } else {

@@ -193,16 +193,8 @@ class _PersonalChatState extends State<PersonalChat> {
                                     Visibility(
                                       visible:
                                           index == 0 && sender == "partner",
-                                      child: Container(
-                                          padding: EdgeInsets.only(right: 5),
-                                          alignment: Alignment.centerRight,
-                                          child: Icon(
-                                            // Icons.done,
-                                            Icons.done_all,
-                                            // Icons.watch_later,
-                                            color: Colors.grey[400],
-                                            size: _width * 0.05,
-                                          )),
+                                      child: readReciept(
+                                          _width, targetChat['pState']),
                                     )
                                   ],
                                 ),
@@ -244,6 +236,35 @@ class _PersonalChatState extends State<PersonalChat> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+  }
+
+  Container readReciept(double _width, status) {
+    getIcon() {
+      switch (status) {
+        case 0:
+          return Icons.watch_later;
+        case 1:
+          return Icons.done;
+        case 2:
+          return Icons.watch_later;
+
+          break;
+        default:
+          return Icons.done;
+      }
+    }
+
+    return Container(
+        padding: EdgeInsets.only(right: 5),
+        alignment: Alignment.centerRight,
+        child: Icon(
+          getIcon(),
+          // Icons.done,
+          // Icons.done_all,
+          // Icons.watch_later,
+          color: Colors.grey[400],
+          size: _width * 0.05,
+        ));
   }
 
   Widget _buildAppBar(BuildContext context, double hight, double width) {
