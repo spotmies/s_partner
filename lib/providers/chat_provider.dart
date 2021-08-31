@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
-  Map<dynamic, dynamic> sendMessageQueue = {};
+  var sendMessageQueue = [];
+  bool readyToSend = true;
   String currentMsgId = "";
   bool scrollEvent = false;
   int msgCount = 20;
+  bool enableFoat = true;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -51,7 +53,14 @@ class ChatProvider extends ChangeNotifier {
   }
 
   setSendMessage(payload) {
-    sendMessageQueue = payload;
+    sendMessageQueue.add(payload);
+    log(sendMessageQueue.toString());
+    notifyListeners();
+  }
+
+  clearMessageQueue() {
+    sendMessageQueue.clear();
+    readyToSend = true;
     notifyListeners();
   }
 
@@ -66,11 +75,24 @@ class ChatProvider extends ChangeNotifier {
 
   setMsgId(msgId) {
     currentMsgId = msgId;
+    readyToSend = true;
+    notifyListeners();
   }
 
   getMsgCount() => msgCount;
   setMsgCount(count) {
     msgCount = count;
     notifyListeners();
+  }
+
+  getFloat() => enableFoat;
+  setFloat(state) {
+    enableFoat = state;
+    notifyListeners();
+  }
+
+  getReadyToSend() => readyToSend;
+  setReadyToSend(state) {
+    readyToSend = state;
   }
 }

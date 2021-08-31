@@ -71,19 +71,35 @@ class _HomeState extends State<Home> {
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     chatProvider.addListener(() {
+      log("event");
       var newMessageObject = chatProvider.newMessagetemp();
-      if (!newMessageObject.isEmpty) {
-        log("new msg $newMessageObject");
-        socket.emitWithAck('sendNewMessageCallback', newMessageObject,
-            ack: (var callback) {
-          if (callback == 'success') {
-            print('working Fine');
-            chatProvider.setSendMessage({});
-            chatProvider.addnewMessage(newMessageObject);
-          } else {
-            log('notSuccess');
-          }
-        });
+      if (chatProvider.getReadyToSend() == false) {
+        log(chatProvider.getReadyToSend().toString());
+        return;
+      }
+
+      if (newMessageObject.length > 0) {
+        log("sending");
+        chatProvider.setReadyToSend(false);
+        for (int i = 0; i < newMessageObject.length; i++) {
+          var item = newMessageObject[i];
+
+          log("new msg $item");
+          socket.emitWithAck('sendNewMessageCallback', item,
+              ack: (var callback) {
+            if (callback == 'success') {
+              print('working Fine');
+              if (i == newMessageObject.length - 1) {
+                log("clear msg queue");
+                chatProvider.clearMessageQueue();
+              }
+              // chatProvider.addnewMessage(item);
+            } else {
+              log('notSuccess');
+            }
+          });
+        }
+        log("loop end");
       }
     });
   }
