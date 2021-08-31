@@ -58,7 +58,8 @@ dependencies:
   socket_io_client: ^1.0.1
   google_fonts:
   fl_chart: 0.36.2
-  custom_navigation_bar: ^0.8.2
+  animated_bottom_navigation_bar: ^0.3.2 
+  video_player: ^2.1.14
   
 
 

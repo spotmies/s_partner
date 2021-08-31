@@ -11,6 +11,8 @@ import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 void main() => runApp(Home());
 
@@ -124,61 +126,90 @@ class _HomeState extends State<Home> {
     ),
   ];
 
+  setBottomBarIndex(index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  List icons = [
+    Icons.home,
+    Icons.chat,
+    Icons.home_repair_service,
+    Icons.person
+  ];
+
+  List text = ['Home', 'Chat', 'Jobs', 'Learn'];
+
   @override
   Widget build(BuildContext context) {
     log("rendering >>>>>>>>");
+    final width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[200],
         body: Consumer<ChatProvider>(builder: (context, notifier, child) {
           return Container(
             child: _widgetOptions.elementAt(_selectedIndex),
           );
         }),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 5, color: Colors.black.withOpacity(0)),
-          ]),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.3),
-              child: GNav(
-                  gap: 8,
-                  activeColor: Colors.grey[800],
-                  iconSize: 24,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  duration: Duration(milliseconds: 2),
-                  tabBackgroundColor: Colors.white,
-                  tabs: [
-                    GButton(
-                      icon: Icons.home,
-                      text: 'Home',
-                      iconColor: Colors.grey,
-                    ),
-                    GButton(
-                      icon: Icons.chat_bubble_rounded,
-                      text: 'Chat',
-                      iconColor: Colors.grey,
-                    ),
-                    GButton(
-                      icon: Icons.home_repair_service_rounded,
-                      text: 'Orders',
-                      iconColor: Colors.grey,
-                    ),
-                    GButton(
-                      icon: Icons.explore,
-                      text: 'Explore',
-                      iconColor: Colors.grey,
-                    ),
-                  ],
-                  selectedIndex: _selectedIndex,
-                  onTabChange: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  }),
-            ),
+          height: width * 0.163,
+          child: AnimatedBottomNavigationBar.builder(
+            itemCount: icons.length,
+            tabBuilder: (int index, bool isActive) {
+              final color = isActive ? Colors.grey[800] : Colors.grey;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Icon(
+                            icons[index],
+                            size: 24,
+                            color: color,
+                          ),
+                          TextWid(
+                            text: text[index],
+                            color: color,
+                          )
+                        ],
+                      ),
+                      if (index == 1)
+                        Consumer<ChatProvider>(builder: (context, data, child) {
+                          List chatList = data.getChatList2();
+                          int count = chatList.isEmpty ? 0:chatList[0]['pCount'];
+                          log(chatList.length.toString());
+                          
+
+                          return Positioned(
+                              right: 0,
+                              top: 0,
+                              child: CircleAvatar(
+                                radius: 4,
+                                backgroundColor: count == 0
+                                    ? Colors.transparent
+                                    : Colors.greenAccent,
+                              ));
+                        })
+                    ],
+                  ),
+                ],
+              );
+            },
+            backgroundColor: Colors.white,
+            activeIndex: _selectedIndex,
+            splashColor: Colors.grey[200],
+            splashSpeedInMilliseconds: 300,
+            notchSmoothness: NotchSmoothness.verySmoothEdge,
+            gapLocation: GapLocation.none,
+            leftCornerRadius: 32,
+            rightCornerRadius: 32,
+            onTap: (index) => setState(() => _selectedIndex = index),
           ),
         ),
       ),

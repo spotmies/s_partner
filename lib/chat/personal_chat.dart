@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies_partner/controllers/chat_controller.dart';
 
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,11 @@ class PersonalChat extends StatefulWidget {
   _PersonalChatState createState() => _PersonalChatState();
 }
 
-class _PersonalChatState extends State<PersonalChat> {
+class _PersonalChatState extends StateMVC<PersonalChat> {
+  ChatController _chatController;
+  _PersonalChatState() : super(ChatController()) {
+    this._chatController = controller;
+  }
   ChatProvider chatProvider;
   ScrollController _scrollController = ScrollController();
   List chatList = [];
@@ -62,13 +68,13 @@ class _PersonalChatState extends State<PersonalChat> {
     return currentChatData[0];
   }
 
-  sendMessageHandler(value) {
+  sendMessageHandler(value, String type) {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
       'msg': value.toString(),
       'time': timestamp,
       'sender': 'partner',
-      'type': 'text'
+      'type': typeofData(type)
     };
     Map<String, dynamic> target = {
       'uId': user['uId'],
@@ -87,6 +93,24 @@ class _PersonalChatState extends State<PersonalChat> {
     // scrollToBottom();
   }
 
+  typeofData(type) {
+    switch (type) {
+      case 'text':
+        return 'text';
+        break;
+      case 'img':
+        return 'img';
+      case 'video':
+        return 'video';
+      case 'audio':
+        return 'audio';
+
+        break;
+      default:
+        return 'text';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
@@ -95,6 +119,7 @@ class _PersonalChatState extends State<PersonalChat> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
         body: Container(
           child: Column(children: [
@@ -141,7 +166,7 @@ class _PersonalChatState extends State<PersonalChat> {
                                       decoration: BoxDecoration(
                                           color: sender == "user"
                                               ? Colors.white
-                                              : Colors.blueGrey[500],
+                                              : Colors.blueGrey[400],
                                           border: Border.all(
                                               color: Colors.blueGrey[500],
                                               width: 0.3),
@@ -170,7 +195,9 @@ class _PersonalChatState extends State<PersonalChat> {
                                                           : Colors.grey[900],
                                                     )
                                                   : type != "audio"
-                                                      ? Image.network(message)
+                                                      ? Container(
+                                                          child: Image.network(
+                                                              message))
                                                       : type != "video"
                                                           ? Text('audio')
                                                           : Text('video')),
@@ -214,7 +241,8 @@ class _PersonalChatState extends State<PersonalChat> {
                 ),
               ),
             ),
-            chatInputField(sendMessageHandler, context, _hight, _width)
+            chatInputField(
+                sendMessageHandler, context, _hight, _width, _chatController)
           ]),
         ),
         floatingActionButton: Container(

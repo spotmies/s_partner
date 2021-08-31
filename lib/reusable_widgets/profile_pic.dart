@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class ProfilePic extends StatelessWidget {
@@ -6,7 +7,7 @@ class ProfilePic extends StatelessWidget {
       {Key key,
       @required this.profile,
       @required this.name,
-      @required this.bgColor,
+      this.bgColor,
       this.size,
       this.status = true})
       : super(key: key);
@@ -22,8 +23,8 @@ class ProfilePic extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: EdgeInsets.all(3),
-          width: width*0.04,
-          height: width*0.04,
+          width: width * 0.04,
+          height: width * 0.04,
           color: Colors.white,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
@@ -49,37 +50,90 @@ class ProfilePic extends StatelessWidget {
           ? Stack(
               children: [
                 CircleAvatar(
-                  backgroundColor: bgColor ?? ([...Colors.primaries]..shuffle()).first,
-                  radius:size?? _width*0.07,
+                  backgroundColor:
+                      bgColor ??  ([...Colors.primaries]..shuffle()).first,
+                  radius: size ?? _width * 0.07,
                   backgroundImage: NetworkImage(profile ?? ""),
                 ),
                 Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(_hight,_width),
+                  child: _activeIcon(_hight, _width),
                 ),
               ],
             )
           : Stack(
               children: [
                 CircleAvatar(
-                  backgroundColor:bgColor ?? ([...Colors.primaries]..shuffle()).first,
-                   radius:size?? _width*0.07,
+                  backgroundColor: bgColor ?? avatarColor(name[0].toLowerCase()),
+                  radius: size ?? _width * 0.07,
                   child: Center(
                     child: TextWid(
-                      text: name[0],
+                      text: toBeginningOfSentenceCase(name[0]),
                       color: Colors.white,
-                      size: _width*0.06,
+                      size: _width * 0.06,
                     ),
                   ),
                 ),
                 Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(_hight,_width),
+                  child: _activeIcon(_hight, _width),
                 ),
               ],
             ),
     );
   }
+}
+
+List colors = [
+  Colors.red,
+  Colors.green,
+  Colors.orange,
+  Colors.amber,
+  Colors.blue,
+  Colors.indigo,
+  Colors.pink,
+  Colors.blueGrey,
+  Colors.lightBlue,
+  Colors.redAccent,
+  Colors.greenAccent,
+  Colors.black,
+  Colors.brown,
+  Colors.grey,
+  Colors.cyanAccent,
+  Colors.teal,
+  Colors.deepPurple,
+  Colors.indigoAccent,
+  Colors.purple,
+];
+
+avatarColor(String name) {
+  if (name == 'a') return colors[1];
+  if (name == 'b') return colors[2];
+  if (name == 'c') return colors[3];
+  if (name == 'd') return colors[4];
+  if (name == 'e') return colors[5];
+  if (name == 'f') return colors[6];
+  if (name == 'g') return colors[7];
+  if (name == 'h') return colors[8];
+  if (name == 'i') return colors[9];
+  if (name == 'j') return colors[10];
+  if (name == 'k') return colors[11];
+  if (name == 'l') return colors[12];
+  if (name == 'm') return colors[13];
+  if (name == 'n') return colors[14];
+  if (name == 'o') return colors[15];
+  if (name == 'p') return colors[16];
+  if (name == 'q') return colors[17];
+  if (name == 'r') return colors[18];
+  if (name == 's') return colors[19];
+  if (name == 't') return colors[1];
+  if (name == 'u') return colors[2];
+  if (name == 'v') return colors[3];
+  if (name == 'w') return colors[4];
+  if (name == 'x') return colors[5];
+  if (name == 'y') return colors[6];
+  if (name == 'z') return colors[7];
+  
 }

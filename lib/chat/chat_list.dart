@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
@@ -92,7 +93,7 @@ class _RecentChatsState extends State<RecentChats> {
                     return Center(
                         child: TextWid(
                       text: "No Chats Available",
-                      size: 30,
+                      size: 18,
                     ));
                   }
                   return ListView.builder(
@@ -160,7 +161,7 @@ class _ChatListCardState extends State<ChatListCard> {
           }
         },
         title: TextWid(
-            text: widget.name,
+            text: toBeginningOfSentenceCase(widget.name),
             size: _width * 0.045,
             weight: FontWeight.w600,
             color: widget.count > 0 ? Colors.black : Colors.grey[700]),
