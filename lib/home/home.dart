@@ -45,6 +45,9 @@ class _HomeState extends State<Home> {
     socket.on('recieveNewMessage', (socket) {
       _chatResponse.add(socket);
     });
+    socket.on("chatReadReceipt", (data) {
+      chatProvider.chatReadReceipt(data['object']['msgId']);
+    });
   }
 
   //socket
@@ -57,7 +60,7 @@ class _HomeState extends State<Home> {
   @override
   initState() {
     super.initState();
-
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
     getChatList();
 
     _chatResponse = StreamController();
@@ -69,7 +72,6 @@ class _HomeState extends State<Home> {
       chatProvider.addnewMessage(event);
     });
 
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
     chatProvider.addListener(() {
       log("event");
       var newMessageObject = chatProvider.newMessagetemp();

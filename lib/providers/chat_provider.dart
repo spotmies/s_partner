@@ -61,11 +61,20 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  readReceipt(msgId, status) {
+    chatList[chatList.indexWhere((element) => element['msgId'] == msgId)]
+        ['pState'] = status;
+  }
+
+  chatReadReceipt(msgId) {
+    readReceipt(msgId, 2);
+    notifyListeners();
+  }
+
   clearMessageQueue(msgId) {
     sendMessageQueue.clear();
     readyToSend = true;
-    chatList[chatList.indexWhere((element) => element['msgId'] == msgId)]
-        ['pState'] = 1;
+    readReceipt(msgId, 1);
 
     notifyListeners();
   }
