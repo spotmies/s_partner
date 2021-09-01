@@ -331,7 +331,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
 
   //image pick
   Future<void> profilePic() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
@@ -343,7 +343,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
 
   //image pick
   Future<void> adharfront() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
@@ -354,7 +354,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
   }
 
   Future<void> adharBack() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,

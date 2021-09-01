@@ -9,7 +9,6 @@ import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
-
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 // bool isCountHigh = true;
@@ -81,13 +80,10 @@ class _RecentChatsState extends State<RecentChats> {
               color: Colors.white,
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                topRight: Radius.circular(30.0),
-              ),
               child: Consumer<ChatProvider>(
                 builder: (context, data, child) {
                   List chatList = data.getChatList2();
+                  
                   // log(chatList[0].toString());
                   if (chatList.length < 1) {
                     return Center(
@@ -102,9 +98,13 @@ class _RecentChatsState extends State<RecentChats> {
                       Map user = chatList[index]['uDetails'];
                       List messages = chatList[index]['msgs'];
                       int count = chatList[index]['pCount'];
+
+                      
+                      
                       log("count $count");
 
                       var lastMessage = jsonDecode(messages.last);
+                      log(lastMessage['type'].toString());
 
                       return ChatListCard(
                         user['pic'],
@@ -113,6 +113,7 @@ class _RecentChatsState extends State<RecentChats> {
                         getTime(lastMessage['time']),
                         chatList[index]['msgId'],
                         count,
+                        lastMessage['type'],
                         callBack: cardOnClick,
                       );
                     },
@@ -127,6 +128,45 @@ class _RecentChatsState extends State<RecentChats> {
   }
 }
 
+typeofLastMessage(type, lastMessage,data) {
+ 
+ if(data != 'icon' ){
+    switch (type) {
+    case 'text':
+      return lastMessage;
+      break;
+    case 'img':
+      return 'Image File';
+      break;
+    case 'video':
+      return 'Video File';
+      break;
+    case 'audio':
+      return 'Audio File';
+      break;
+    default:
+      return 'Unknown';
+  }
+ }else{
+    switch (type) {
+    case 'text':
+      return Icons.textsms;
+      break;
+    case 'img':
+      return Icons.image;
+      break;
+    case 'video':
+      return Icons.slow_motion_video;
+      break;
+    case 'audio':
+      return Icons.mic;
+      break;
+    default:
+      return Icons.connect_without_contact;
+  }
+ }
+}
+
 class ChatListCard extends StatefulWidget {
   final String profile;
   final String name;
@@ -135,8 +175,9 @@ class ChatListCard extends StatefulWidget {
   final String msgId;
   final int count;
   final Function callBack;
+  final String type;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
-      this.msgId, this.count,
+      this.msgId, this.count, this.type,
       {this.callBack});
 
   @override
@@ -166,15 +207,20 @@ class _ChatListCardState extends State<ChatListCard> {
             size: _width * 0.045,
             weight: FontWeight.w600,
             color: widget.count > 0 ? Colors.black : Colors.grey[700]),
-        subtitle: TextWid(
-            text: widget.lastMessage,
-            size: _width * 0.035,
-            weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-            color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+        subtitle: Row(
+          children: [
+            Icon(typeofLastMessage(widget.type, widget.lastMessage, 'icon'),size: 12,color: widget.count > 0 ? Colors.black : Colors.grey[500],),
+            SizedBox(width: 3,),
+            TextWid(
+                text: toBeginningOfSentenceCase(typeofLastMessage(widget.type,widget.lastMessage,'text'),),
+                size: _width * 0.035,
+                weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
+                color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+          ],
+        ),
         leading: ProfilePic(
           profile: widget.profile,
           name: widget.name,
-          bgColor: ([...Colors.primaries]..shuffle()).first,
         ),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

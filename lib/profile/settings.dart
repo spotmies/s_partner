@@ -252,7 +252,7 @@ class _SettingState extends State<Setting> {
   }
 
   Future<void> profilePic() async {
-    var profile = await ImagePicker().getImage(
+    var profile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,

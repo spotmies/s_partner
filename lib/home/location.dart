@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:im_animations/im_animations.dart';
+// import 'package:im_animations/im_animations.dart';
 import 'package:spotmies_partner/home/home.dart';
 
 class Location extends StatefulWidget {
@@ -138,29 +138,29 @@ class _LocationState extends State<Location> {
   }
 }
 
-class ColorSonarDemo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: ColorSonar(
-          contentAreaRadius: 48.0,
-          waveFall: 15.0,
-          innerWaveColor: Colors.grey[100],
-          middleWaveColor: Colors.grey[200],
-          outerWaveColor: Colors.grey[100],
-          waveMotion: WaveMotion.synced,
-          child: CircleAvatar(
-            child: Icon(
-              Icons.location_on,
-              size: 46,
-              color: Colors.blue,
-            ),
-            backgroundColor: Colors.white,
-            radius: 48.0,
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class ColorSonarDemo extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: ColorSonar(
+//           contentAreaRadius: 48.0,
+//           waveFall: 15.0,
+//           innerWaveColor: Colors.grey[100],
+//           middleWaveColor: Colors.grey[200],
+//           outerWaveColor: Colors.grey[100],
+//           waveMotion: WaveMotion.synced,
+//           child: CircleAvatar(
+//             child: Icon(
+//               Icons.location_on,
+//               size: 46,
+//               color: Colors.blue,
+//             ),
+//             backgroundColor: Colors.white,
+//             radius: 48.0,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/reusable_widgets/audio.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
@@ -11,7 +9,7 @@ String chatInput;
 TextEditingController inputController = TextEditingController();
 
 Container chatInputField(sendCallBack, BuildContext context, double hight,
-    double width, ChatController chatController) {
+    double width, ChatController chatController, SoundRecorder recorder) {
   // bool isInput = false;
 
   // var formkey = GlobalKey<FormState>();
@@ -70,7 +68,7 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
                             ? IconButton(
                                 onPressed: () async {
                                   await attachments(context, hight, width,
-                                      chatController, sendCallBack);
+                                      chatController, sendCallBack,recorder);
                                 },
                                 icon: Icon(
                                   Icons.attach_file,
@@ -104,7 +102,7 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
             if (inputController.text == "") {
               snackbar(context, 'Enter Message');
             } else {
-              sendCallBack(inputController.text);
+              sendCallBack(inputController.text,'text');
               inputController.clear();
             }
             log(inputController.text);
@@ -124,7 +122,7 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
 }
 
 Future attachments(BuildContext context, double hight, double width,
-    ChatController chatController, sendCallBack) {
+    ChatController chatController, sendCallBack, SoundRecorder recorder) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -188,7 +186,10 @@ Future attachments(BuildContext context, double hight, double width,
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        audioRecoder(context, hight, width,recorder);
+                        log('data');
+                      },
                       icon: Icon(Icons.mic),
                     ),
                     TextWid(

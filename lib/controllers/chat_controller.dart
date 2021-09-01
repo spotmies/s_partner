@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -29,7 +28,7 @@ class ChatController extends ControllerMVC {
      chatimages.removeAt(0);
 
     }
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera,imageQuality: 10,);
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera,imageQuality: 10,);
     setState(() {
       chatimages.add(File(pickedFile?.path));
     });
@@ -39,18 +38,9 @@ class ChatController extends ControllerMVC {
  
 
   pickVideo(sendCallBack) async {
-    //   if(videoLink.isNotEmpty){
-     
-    //  await videoLink.removeAt(0);
-    //  chatVideo.removeAt(0);
-
-    // }
-    PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera);
+    PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera,maxDuration: Duration(seconds: 10));
      chatVideo.add( File(pickedFile.path));
-    videoPlayerController = VideoPlayerController.file(chatVideo[0])..initialize().then((_) {
-      setState(() { });
-      videoPlayerController.play();
-    });
+    videoPlayerController = VideoPlayerController.file(chatVideo[0]);
     uploadVideo(sendCallBack);
 }
 
@@ -76,15 +66,15 @@ class ChatController extends ControllerMVC {
       });
       var postImageRef = FirebaseStorage.instance.ref().child('adImages');
       UploadTask uploadTask =
-          postImageRef.child(DateTime.now().toString() + ".mp4").putFile(img);
+          postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
       await (await uploadTask)
           .ref
           .getDownloadURL()
           .then((value) => imageLink.add(value.toString()));
       i++;
     }
-    if(videoLink.isNotEmpty){
-      sendCallBack(videoLink[0],'video').runtimeType;
+    if(imageLink.isNotEmpty){
+      sendCallBack(imageLink[0],'img').runtimeType;
        
     }
   }
@@ -100,15 +90,15 @@ class ChatController extends ControllerMVC {
       });
       var postImageRef = FirebaseStorage.instance.ref().child('adImages');
       UploadTask uploadTask =
-          postImageRef.child(DateTime.now().toString() + ".jpg").putFile(video);
+          postImageRef.child(DateTime.now().toString() + ".mp4").putFile(video);
       await (await uploadTask)
           .ref
           .getDownloadURL()
           .then((value) => videoLink.add(value.toString()));
       i++;
     }
-    if(chatVideo.isNotEmpty){
-      sendCallBack(chatVideo[0],'video').runtimeType;
+    if(videoLink.isNotEmpty){
+      sendCallBack(videoLink[0],'video').runtimeType;
        
     }
   }

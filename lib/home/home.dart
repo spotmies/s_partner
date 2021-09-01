@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';

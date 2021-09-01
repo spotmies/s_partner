@@ -794,7 +794,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
 
   chooseImage() async {
     final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       chatimages.add(File(pickedFile?.path));
     });

@@ -9,6 +9,9 @@ class TextWid extends StatelessWidget {
   final String family;
   final double lSpace;
   final int maxlines;
+  final TextOverflow flow;
+  final TextDecoration decoration;
+  final TextAlign align;
 
   TextWid(
       {this.text,
@@ -17,14 +20,19 @@ class TextWid extends StatelessWidget {
       this.weight,
       this.family,
       this.maxlines,
+      this.decoration,
+      this.flow,
+      this.align,
       this.lSpace});
 
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        overflow: TextOverflow.ellipsis,
+        overflow:flow?? TextOverflow.ellipsis,
+        textAlign:align?? TextAlign.start,
         maxLines: maxlines,
         style: GoogleFonts.josefinSans(
+          decoration: decoration?? TextDecoration.none,
           letterSpacing: lSpace ?? 0,
           fontSize: size ?? 14,
           color: color ?? Colors.black,

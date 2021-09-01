@@ -115,7 +115,7 @@ class _AdharFrontState extends State<AdharFront> {
 
 //image pick
   Future<void> adharfront() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear,
@@ -239,7 +239,7 @@ class _AdharBackState extends State<AdharBack> {
 
 //image pick
   Future<void> adharfront() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear,
@@ -373,7 +373,7 @@ class _ProfilePicState extends State<ProfilePic> {
 
 //image pick
   Future<void> profilePic() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear,

@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/reusable_widgets/audio.dart';
 
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
+import 'package:spotmies_partner/reusable_widgets/image_viewer.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/reusable_widgets/video_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
@@ -28,6 +32,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
   ChatProvider chatProvider;
   ScrollController _scrollController = ScrollController();
+
   List chatList = [];
   Map targetChat = {};
   Map user = {};
@@ -39,6 +44,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             .jumpTo(_scrollController.position.minScrollExtent));
   }
 
+  final recorder = SoundRecorder();
   @override
   void initState() {
     super.initState();
@@ -60,6 +66,15 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         }
       }
     });
+
+    //recorder
+    recorder.init();
+  }
+
+  @override
+  void dispose(){
+    recorder.dispose();
+    super.dispose();
   }
 
   getTargetChat(list, msgId) {
@@ -107,7 +122,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
         break;
       default:
-        return 'text';}}
+        return 'text';
+    }
+  }
+
   dateCompare(msg1, msg2) {
     var time1 = msg1;
     var time2 = msg2;
@@ -185,13 +203,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                       children: [
                                         Container(
                                           constraints: BoxConstraints(
-                                              minHeight: _hight * 0.05,
-                                              minWidth: 30,
-                                              maxWidth: _width * 0.55),
+                                            minHeight: _hight * 0.05,
+                                            minWidth: 30,
+                                            maxWidth: _width * 0.55,
+                                          ),
                                           decoration: BoxDecoration(
                                               color: sender == "user"
                                                   ? Colors.white
-                                                  : Colors.blueGrey[500],
+                                                  : Colors.blueGrey[50],
                                               border: Border.all(
                                                   color: Colors.blueGrey[500],
                                                   width: 0.3),
@@ -210,30 +229,27 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             children: [
                                               Container(
                                                   padding: EdgeInsets.only(
-                                                      left: 10,
-                                                      top: 10,
-                                                      right: 10),
+                                                    left: 10,
+                                                    top: 5,
+                                                  ),
                                                   alignment:
                                                       Alignment.centerLeft,
-                                                  child: type == "text"
-                                                      ? TextWid(
-                                                          text:
-                                                              toBeginningOfSentenceCase(
-                                                                  message),
-                                                          maxlines: 200,
-                                                          lSpace: 1.5,
-                                                          color: sender !=
-                                                                  "user"
-                                                              ? Colors.white
-                                                              : Colors
-                                                                  .grey[900],
-                                                        )
-                                                      : type != "audio"
-                                                          ? Image.network(
-                                                              message)
-                                                          : type != "video"
-                                                              ? Text('audio')
-                                                              : Text('video')),
+                                                  child: TextWid(
+                                                    weight: FontWeight.w800,
+                                                    color: Colors.grey[600],
+                                                    text: sender != 'user'
+                                                        ? 'You'
+                                                        : user['name'],
+                                                  )),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    top: 10,
+                                                    right: 10),
+                                                alignment: Alignment.centerLeft,
+                                                child: typeofChat(type, message,
+                                                    sender, _hight, _width),
+                                              ),
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     right: 10, top: 5),
@@ -244,7 +260,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                       rawMsgData['time']),
                                                   size: _width * 0.03,
                                                   color: sender != "user"
-                                                      ? Colors.grey[50]
+                                                      ? Colors.grey[500]
                                                       : Colors.grey[500],
                                                   weight: FontWeight.w600,
                                                 ),
@@ -304,7 +320,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               ),
             ),
             chatInputField(
-                sendMessageHandler, context, _hight, _width, _chatController)
+                sendMessageHandler, context, _hight, _width, _chatController,recorder)
           ]),
         ),
         floatingActionButton: Container(
@@ -334,6 +350,70 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+  }
+
+  typeofChat(type, message, sender, double hight, double width) {
+    String isLink = message.toString();
+
+    if ((isLink.contains('http') ||
+            isLink.contains('https') ||
+            isLink.contains('.com')) &&
+        type == 'text') {
+      return TextButton(
+          onPressed: () {
+            launch(message);
+          },
+          child: TextWid(
+              text: message,
+              weight: FontWeight.w600,
+              color: Colors.indigo,
+              decoration: TextDecoration.underline));
+    } else {
+      switch (type) {
+        case 'text':
+          return TextWid(
+            text: toBeginningOfSentenceCase(message),
+            maxlines: 200,
+            lSpace: 1.5,
+            color: sender != "user" ? Colors.grey[800] : Colors.grey[900],
+            weight: sender != "user" ? FontWeight.w600 : FontWeight.w600,
+          );
+          break;
+        case 'img':
+          return InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ImageViewer(imageLink: message)));
+              },
+              child: Container(
+                  height: width * 0.55,
+                  width: width * 0.55,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(message), fit: BoxFit.cover))));
+
+          break;
+        case 'video':
+          return TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Video(videoLink: message)));
+              },
+              child: TextWid(
+                  text: 'Tap to View Video',
+                  weight: FontWeight.w600,
+                  color: Colors.indigo,
+                  decoration: TextDecoration.underline));
+          break;
+        case 'audio':
+          return Text('audio');
+          break;
+        default:
+          return TextWid(
+            text: 'Fetching Data....',
+          );
+      }
+    }
   }
 
   Container readReciept(double _width, status) {
