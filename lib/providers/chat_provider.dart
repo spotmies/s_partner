@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -22,18 +23,25 @@ class ChatProvider extends ChangeNotifier {
 
   addnewMessage(value) {
     String msgId = value['target']['msgId'];
-    log("$msgId $currentMsgId");
+    var sender = jsonDecode(value['object']);
+    sender = sender['sender'];
+    log("$msgId $currentMsgId $sender");
     List<dynamic> allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
+        allChats[i]['lastModified'] =
+            int.parse(DateTime.now().millisecondsSinceEpoch.toString());
+
         allChats[i]['msgs'].add(value['object']);
+        if (sender == "partner") {
+          allChats[i]['pState'] = 0;
+        }
         if (msgId != currentMsgId) {
           allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
         }
-
-        // log(allChats[0]['msgs'].toString());
-        // allChats.insert(0, allChats[i]);
-        // allChats.removeAt(i + 1);
+        allChats.sort((a, b) {
+          return b['lastModified'].compareTo(a['lastModified']);
+        });
         chatList = allChats;
         break;
       }
@@ -58,9 +66,21 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  clearMessageQueue() {
+  readReceipt(msgId, status) {
+    chatList[chatList.indexWhere((element) => element['msgId'] == msgId)]
+        ['pState'] = status;
+  }
+
+  chatReadReceipt(msgId) {
+    readReceipt(msgId, 2);
+    notifyListeners();
+  }
+
+  clearMessageQueue(msgId) {
     sendMessageQueue.clear();
     readyToSend = true;
+    readReceipt(msgId, 1);
+
     notifyListeners();
   }
 

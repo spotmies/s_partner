@@ -107,7 +107,27 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
         break;
       default:
-        return 'text';
+        return 'text';}}
+  dateCompare(msg1, msg2) {
+    var time1 = msg1;
+    var time2 = msg2;
+    if (time1.runtimeType != int) time1 = int.parse(time1);
+    if (time2.runtimeType != int) time2 = int.parse(time2);
+    var ct =
+        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time1));
+    var pt =
+        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time2));
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast =
+        DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(time1));
+    if (ct != pt) {
+      return (daypast == daynow
+          ? 'Today'
+          : (DateFormat('dd MMM yyyy')
+              .format(DateTime.fromMillisecondsSinceEpoch(time1))));
+    } else {
+      return "false";
     }
   }
 
@@ -141,6 +161,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         itemBuilder: (BuildContext context, int index) {
                           Map rawMsgData = jsonDecode(
                               messages[(messages.length - 1) - index]);
+                          Map rawMsgDataprev = jsonDecode(
+                              messages[(messages.length - 1) - (index + 1)]);
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
@@ -150,88 +172,128 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                 left: sender == "user" ? 10 : 0,
                                 bottom: 5,
                                 right: sender == "user" ? 0 : 10),
-                            child: Row(
-                              mainAxisAlignment: sender == "user"
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.end,
+                            child: Column(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                Row(
+                                  mainAxisAlignment: sender == "user"
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.end,
                                   children: [
-                                    Container(
-                                      constraints: BoxConstraints(
-                                          minHeight: _hight * 0.05,
-                                          minWidth: 30,
-                                          maxWidth: _width * 0.55),
-                                      decoration: BoxDecoration(
-                                          color: sender == "user"
-                                              ? Colors.white
-                                              : Colors.blueGrey[400],
-                                          border: Border.all(
-                                              color: Colors.blueGrey[500],
-                                              width: 0.3),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                              bottomRight: Radius.circular(
-                                                  sender == "user" ? 15 : 0),
-                                              bottomLeft: Radius.circular(
-                                                  sender != "user" ? 15 : 0))),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 10, top: 10, right: 10),
-                                              alignment: Alignment.centerLeft,
-                                              child: type == "text"
-                                                  ? TextWid(
-                                                      text:
-                                                          toBeginningOfSentenceCase(
-                                                              message),
-                                                      maxlines: 200,
-                                                      lSpace: 1.5,
-                                                      color: sender != "user"
-                                                          ? Colors.white
-                                                          : Colors.grey[900],
-                                                    )
-                                                  : type != "audio"
-                                                      ? Container(
-                                                          child: Image.network(
-                                                              message))
-                                                      : type != "video"
-                                                          ? Text('audio')
-                                                          : Text('video')),
-                                          Container(
-                                            padding: EdgeInsets.only(
-                                                right: 10, top: 5),
-                                            alignment: Alignment.centerRight,
-                                            child: TextWid(
-                                              text: getTime(rawMsgData['time']),
-                                              size: _width * 0.03,
-                                              color: sender != "user"
-                                                  ? Colors.grey[50]
-                                                  : Colors.grey[500],
-                                              weight: FontWeight.w600,
-                                            ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          constraints: BoxConstraints(
+                                              minHeight: _hight * 0.05,
+                                              minWidth: 30,
+                                              maxWidth: _width * 0.55),
+                                          decoration: BoxDecoration(
+                                              color: sender == "user"
+                                                  ? Colors.white
+                                                  : Colors.blueGrey[500],
+                                              border: Border.all(
+                                                  color: Colors.blueGrey[500],
+                                                  width: 0.3),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(15),
+                                                  bottomRight: Radius.circular(
+                                                      sender == "user"
+                                                          ? 15
+                                                          : 0),
+                                                  bottomLeft: Radius.circular(
+                                                      sender != "user"
+                                                          ? 15
+                                                          : 0))),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10,
+                                                      top: 10,
+                                                      right: 10),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: type == "text"
+                                                      ? TextWid(
+                                                          text:
+                                                              toBeginningOfSentenceCase(
+                                                                  message),
+                                                          maxlines: 200,
+                                                          lSpace: 1.5,
+                                                          color: sender !=
+                                                                  "user"
+                                                              ? Colors.white
+                                                              : Colors
+                                                                  .grey[900],
+                                                        )
+                                                      : type != "audio"
+                                                          ? Image.network(
+                                                              message)
+                                                          : type != "video"
+                                                              ? Text('audio')
+                                                              : Text('video')),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 10, top: 5),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: TextWid(
+                                                  text: getTime(
+                                                      rawMsgData['time']),
+                                                  size: _width * 0.03,
+                                                  color: sender != "user"
+                                                      ? Colors.grey[50]
+                                                      : Colors.grey[500],
+                                                  weight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              index == 0 && sender == "partner",
+                                          child: readReciept(
+                                              _width, targetChat['pState']),
+                                        )
+                                      ],
                                     ),
-                                    Visibility(
-                                      visible:
-                                          index == 0 && sender == "partner",
-                                      child: Container(
-                                          padding: EdgeInsets.only(right: 5),
-                                          alignment: Alignment.centerRight,
-                                          child: Icon(
-                                            // Icons.done,
-                                            Icons.done_all,
-                                            // Icons.watch_later,
-                                            color: Colors.grey[400],
-                                            size: _width * 0.05,
-                                          )),
-                                    )
                                   ],
+                                ),
+                                Visibility(
+                                  visible: dateCompare(rawMsgData['time'],
+                                          rawMsgDataprev['time']) !=
+                                      "false",
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 7,
+                                              bottom: 7),
+                                          alignment: Alignment.center,
+                                          child: TextWid(
+                                            text: dateCompare(
+                                                rawMsgData['time'],
+                                                rawMsgDataprev['time']),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -272,6 +334,35 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+  }
+
+  Container readReciept(double _width, status) {
+    getIcon() {
+      switch (status) {
+        case 0:
+          return Icons.watch_later;
+        case 1:
+          return Icons.done;
+        case 2:
+          return Icons.watch_later;
+
+          break;
+        default:
+          return Icons.done;
+      }
+    }
+
+    return Container(
+        padding: EdgeInsets.only(right: 5),
+        alignment: Alignment.centerRight,
+        child: Icon(
+          getIcon(),
+          // Icons.done,
+          // Icons.done_all,
+          // Icons.watch_later,
+          color: Colors.grey[400],
+          size: _width * 0.05,
+        ));
   }
 
   Widget _buildAppBar(BuildContext context, double hight, double width) {

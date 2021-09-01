@@ -154,11 +154,12 @@ class _ChatListCardState extends State<ChatListCard> {
         onTap: () async {
           widget.callBack(widget.msgId, widget.msgId);
           //navigate strore msg count value
+
           final count = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
-          if (count == false) {
-            widget.callBack(widget.msgId, "");
-          }
+          log("fback $count");
+
+          widget.callBack(widget.msgId, "");
         },
         title: TextWid(
             text: toBeginningOfSentenceCase(widget.name),
@@ -170,7 +171,11 @@ class _ChatListCardState extends State<ChatListCard> {
             size: _width * 0.035,
             weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
             color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
-        leading: ProfilePic(profile: widget.profile, name: widget.name, bgColor: ([...Colors.primaries]..shuffle()).first,),
+        leading: ProfilePic(
+          profile: widget.profile,
+          name: widget.name,
+          bgColor: ([...Colors.primaries]..shuffle()).first,
+        ),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
@@ -186,7 +191,7 @@ class _ChatListCardState extends State<ChatListCard> {
                 ? Container(
                     width: _width * 0.1,
                     height: _width * 0.055,
-                    margin: EdgeInsets.only(right:_width * 0.035 ),
+                    margin: EdgeInsets.only(right: _width * 0.035),
                     decoration: BoxDecoration(
                         color: Colors.greenAccent,
                         borderRadius: BorderRadius.circular(30.0)),
@@ -205,8 +210,5 @@ class _ChatListCardState extends State<ChatListCard> {
                   ),
           ],
         ));
-    
   }
 }
-
-
