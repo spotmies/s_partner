@@ -325,6 +325,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 sendMessageHandler, context, _hight, _width, _chatController)
                 // recorder
                 
+            // chatInputField(sendMessageHandler, context, _hight, _width,
+            //     _chatController, recorder)
           ]),
         ),
         floatingActionButton: Container(
@@ -428,7 +430,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         case 1:
           return Icons.done;
         case 2:
-          return Icons.watch_later;
+        case 3:
+          return Icons.done_all;
 
           break;
         default:
@@ -444,7 +447,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           // Icons.done,
           // Icons.done_all,
           // Icons.watch_later,
-          color: Colors.grey[400],
+          color: status == 3 ? Colors.blue : Colors.grey[400],
           size: _width * 0.05,
         ));
   }
