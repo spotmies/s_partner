@@ -46,8 +46,8 @@ class _HomeState extends State<Home> {
     socket.on('recieveNewMessage', (socket) {
       _chatResponse.add(socket);
     });
-    socket.on("chatReadReceipt", (data) {
-      chatProvider.chatReadReceipt(data['object']['msgId']);
+    socket.on("recieveReadReciept", (data) {
+      chatProvider.chatReadReceipt(data['msgId']);
     });
   }
 
@@ -76,6 +76,11 @@ class _HomeState extends State<Home> {
     chatProvider.addListener(() {
       log("event");
       var newMessageObject = chatProvider.newMessagetemp();
+      if (chatProvider.getReadReceipt().length > 0) {
+        log("readReceipt evewnt");
+        socket.emit("sendReadReciept", chatProvider.getReadReceipt()[0]);
+        chatProvider.setReadReceipt("clear");
+      }
       if (chatProvider.getReadyToSend() == false) {
         log(chatProvider.getReadyToSend().toString());
         return;
@@ -184,9 +189,9 @@ class _HomeState extends State<Home> {
                       if (index == 1)
                         Consumer<ChatProvider>(builder: (context, data, child) {
                           List chatList = data.getChatList2();
-                          int count = chatList.isEmpty ? 0:chatList[0]['pCount'];
+                          int count =
+                              chatList.isEmpty ? 0 : chatList[0]['pCount'];
                           log(chatList.length.toString());
-                          
 
                           return Positioned(
                               right: 0,

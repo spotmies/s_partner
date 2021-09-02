@@ -60,8 +60,14 @@ class _RecentChatsState extends State<RecentChats> {
     super.initState();
   }
 
-  cardOnClick(msgId, msgId2) {
+  cardOnClick(msgId, msgId2, readReceiptObj) {
     log("$msgId $msgId2");
+
+    if (readReceiptObj != "" &&
+        chatProvider.getChatDetailsByMsgId(msgId)['pCount'] > 0) {
+      log("readdd////////////////////");
+      chatProvider.setReadReceipt(readReceiptObj);
+    }
     chatProvider.setMsgCount(20);
     chatProvider.resetMessageCount(msgId);
     chatProvider.setMsgId(msgId2);
@@ -83,7 +89,7 @@ class _RecentChatsState extends State<RecentChats> {
               child: Consumer<ChatProvider>(
                 builder: (context, data, child) {
                   List chatList = data.getChatList2();
-                  
+
                   // log(chatList[0].toString());
                   if (chatList.length < 1) {
                     return Center(
@@ -99,12 +105,10 @@ class _RecentChatsState extends State<RecentChats> {
                       List messages = chatList[index]['msgs'];
                       int count = chatList[index]['pCount'];
 
-                      
-                      
-                      log("count $count");
+                      // log("count $count");
 
                       var lastMessage = jsonDecode(messages.last);
-                      log(lastMessage['type'].toString());
+                      // log(lastMessage['type'].toString());
 
                       return ChatListCard(
                         user['pic'],
@@ -114,6 +118,8 @@ class _RecentChatsState extends State<RecentChats> {
                         chatList[index]['msgId'],
                         count,
                         lastMessage['type'],
+                        chatList[index]['uId'],
+                        chatList[index]['pId'],
                         callBack: cardOnClick,
                       );
                     },
@@ -128,43 +134,42 @@ class _RecentChatsState extends State<RecentChats> {
   }
 }
 
-typeofLastMessage(type, lastMessage,data) {
- 
- if(data != 'icon' ){
+typeofLastMessage(type, lastMessage, data) {
+  if (data != 'icon') {
     switch (type) {
-    case 'text':
-      return lastMessage;
-      break;
-    case 'img':
-      return 'Image File';
-      break;
-    case 'video':
-      return 'Video File';
-      break;
-    case 'audio':
-      return 'Audio File';
-      break;
-    default:
-      return 'Unknown';
-  }
- }else{
+      case 'text':
+        return lastMessage;
+        break;
+      case 'img':
+        return 'Image File';
+        break;
+      case 'video':
+        return 'Video File';
+        break;
+      case 'audio':
+        return 'Audio File';
+        break;
+      default:
+        return 'Unknown';
+    }
+  } else {
     switch (type) {
-    case 'text':
-      return Icons.textsms;
-      break;
-    case 'img':
-      return Icons.image;
-      break;
-    case 'video':
-      return Icons.slow_motion_video;
-      break;
-    case 'audio':
-      return Icons.mic;
-      break;
-    default:
-      return Icons.connect_without_contact;
+      case 'text':
+        return Icons.textsms;
+        break;
+      case 'img':
+        return Icons.image;
+        break;
+      case 'video':
+        return Icons.slow_motion_video;
+        break;
+      case 'audio':
+        return Icons.mic;
+        break;
+      default:
+        return Icons.connect_without_contact;
+    }
   }
- }
 }
 
 class ChatListCard extends StatefulWidget {
@@ -176,8 +181,10 @@ class ChatListCard extends StatefulWidget {
   final int count;
   final Function callBack;
   final String type;
+  final String uId;
+  final String pId;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
-      this.msgId, this.count, this.type,
+      this.msgId, this.count, this.type, this.uId, this.pId,
       {this.callBack});
 
   @override
@@ -193,14 +200,20 @@ class _ChatListCardState extends State<ChatListCard> {
     final _width = MediaQuery.of(context).size.width;
     return ListTile(
         onTap: () async {
-          widget.callBack(widget.msgId, widget.msgId);
+          Map readReceiptobject = {
+            "uId": widget.uId,
+            "pId": widget.pId,
+            "msgId": widget.msgId,
+            "sender": "partner"
+          };
+          widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
           //navigate strore msg count value
 
           final count = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
           log("fback $count");
 
-          widget.callBack(widget.msgId, "");
+          widget.callBack(widget.msgId, "", "");
         },
         title: TextWid(
             text: toBeginningOfSentenceCase(widget.name),
@@ -209,13 +222,22 @@ class _ChatListCardState extends State<ChatListCard> {
             color: widget.count > 0 ? Colors.black : Colors.grey[700]),
         subtitle: Row(
           children: [
-            Icon(typeofLastMessage(widget.type, widget.lastMessage, 'icon'),size: 12,color: widget.count > 0 ? Colors.black : Colors.grey[500],),
-            SizedBox(width: 3,),
+            Icon(
+              typeofLastMessage(widget.type, widget.lastMessage, 'icon'),
+              size: 12,
+              color: widget.count > 0 ? Colors.black : Colors.grey[500],
+            ),
+            SizedBox(
+              width: 3,
+            ),
             TextWid(
-                text: toBeginningOfSentenceCase(typeofLastMessage(widget.type,widget.lastMessage,'text'),),
+                text: toBeginningOfSentenceCase(
+                  typeofLastMessage(widget.type, widget.lastMessage, 'text'),
+                ),
                 size: _width * 0.035,
                 weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-                color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+                color:
+                    widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
           ],
         ),
         leading: ProfilePic(
