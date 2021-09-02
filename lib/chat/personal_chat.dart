@@ -44,9 +44,12 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             .jumpTo(_scrollController.position.minScrollExtent));
   }
 
-  final recorder = SoundRecorder();
+  // final recorder = SoundRecorder();
   @override
   void initState() {
+    //recorder
+    //recorder.init();
+    //recorder
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
@@ -67,15 +70,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       }
     });
 
-    //recorder
-    recorder.init();
+    
   }
 
-  @override
-  void dispose(){
-    recorder.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose(){
+  //   recorder.dispose();
+  //   super.dispose();
+  // }
 
   getTargetChat(list, msgId) {
     List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
@@ -320,7 +322,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               ),
             ),
             chatInputField(
-                sendMessageHandler, context, _hight, _width, _chatController,recorder)
+                sendMessageHandler, context, _hight, _width, _chatController)
+                // recorder
+                
           ]),
         ),
         floatingActionButton: Container(

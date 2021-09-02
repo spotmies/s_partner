@@ -8,8 +8,14 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 String chatInput;
 TextEditingController inputController = TextEditingController();
 
-Container chatInputField(sendCallBack, BuildContext context, double hight,
-    double width, ChatController chatController, SoundRecorder recorder) {
+Container chatInputField(
+  sendCallBack,
+  BuildContext context,
+  double hight,
+  double width,
+  ChatController chatController,
+) {
+  // SoundRecorder recorder
   // bool isInput = false;
 
   // var formkey = GlobalKey<FormState>();
@@ -67,8 +73,13 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
                         child: inputController.text.isEmpty
                             ? IconButton(
                                 onPressed: () async {
-                                  await attachments(context, hight, width,
-                                      chatController, sendCallBack,recorder);
+                                  await attachments(
+                                    context,
+                                    hight,
+                                    width,
+                                    chatController,
+                                    sendCallBack,
+                                  );
                                 },
                                 icon: Icon(
                                   Icons.attach_file,
@@ -102,7 +113,7 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
             if (inputController.text == "") {
               snackbar(context, 'Enter Message');
             } else {
-              sendCallBack(inputController.text,'text');
+              sendCallBack(inputController.text, 'text');
               inputController.clear();
             }
             log(inputController.text);
@@ -122,7 +133,7 @@ Container chatInputField(sendCallBack, BuildContext context, double hight,
 }
 
 Future attachments(BuildContext context, double hight, double width,
-    ChatController chatController, sendCallBack, SoundRecorder recorder) {
+    ChatController chatController, sendCallBack) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -173,7 +184,7 @@ Future attachments(BuildContext context, double hight, double width,
                     IconButton(
                       onPressed: () {
                         chatController.pickVideo(sendCallBack);
-                         Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                       icon: Icon(Icons.video_camera_back),
                     ),
@@ -187,8 +198,11 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () {
-                        audioRecoder(context, hight, width,recorder);
-                        log('data');
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) => AudioRecorder()));
+                        //  AudioRecorder();
+                        // audioRecoder(context, hight, width,recorder,chatController);
+                        log('audio');
                       },
                       icon: Icon(Icons.mic),
                     ),
