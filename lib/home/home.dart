@@ -76,9 +76,13 @@ class _HomeState extends State<Home> {
     chatProvider.addListener(() {
       log("event");
       var newMessageObject = chatProvider.newMessagetemp();
-      if (chatProvider.getReadReceipt().length > 0) {
+      var readReceiptsList = chatProvider.getReadReceipt();
+      if (readReceiptsList.length > 0) {
         log("readReceipt evewnt");
-        socket.emit("sendReadReciept", chatProvider.getReadReceipt()[0]);
+        for (var item in readReceiptsList) {
+          socket.emit("sendReadReciept", item);
+        }
+
         chatProvider.setReadReceipt("clear");
       }
       if (chatProvider.getReadyToSend() == false) {
@@ -111,6 +115,7 @@ class _HomeState extends State<Home> {
         log("loop end");
       }
     });
+    // chatProvider.confirmReceiveAllMessages();
   }
 
   int _selectedIndex = 0;
