@@ -204,7 +204,8 @@ class _ChatListCardState extends State<ChatListCard> {
             "uId": widget.uId,
             "pId": widget.pId,
             "msgId": widget.msgId,
-            "sender": "partner"
+            "sender": "partner",
+            "status": 3
           };
           widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
           //navigate strore msg count value

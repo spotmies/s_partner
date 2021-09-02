@@ -44,15 +44,15 @@ class ChatProvider extends ChangeNotifier {
         } else {
           //read receipt code
           log("read receipt provider");
-          if (currentMsgId == msgId) {
-            Map object = {
-              "uId": allChats[i]['uId'],
-              "pId": allChats[i]['pId'],
-              "msgId": allChats[i]['msgId'],
-              "sender": "partner"
-            };
-            setReadReceipt(object);
-          }
+
+          Map object = {
+            "uId": allChats[i]['uId'],
+            "pId": allChats[i]['pId'],
+            "msgId": allChats[i]['msgId'],
+            "sender": "partner",
+            "status": currentMsgId == msgId ? 3 : 2
+          };
+          setReadReceipt(object);
         }
         if (msgId != currentMsgId) {
           allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
@@ -89,8 +89,8 @@ class ChatProvider extends ChangeNotifier {
         ['pState'] = status;
   }
 
-  chatReadReceipt(msgId) {
-    readReceipt(msgId, 2);
+  chatReadReceipt(msgId, status) {
+    readReceipt(msgId, status ?? 2);
     notifyListeners();
   }
 

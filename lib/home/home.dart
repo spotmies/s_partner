@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
       _chatResponse.add(socket);
     });
     socket.on("recieveReadReciept", (data) {
-      chatProvider.chatReadReceipt(data['msgId']);
+      chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
   }
 
