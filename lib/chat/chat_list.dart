@@ -231,14 +231,18 @@ class _ChatListCardState extends State<ChatListCard> {
             SizedBox(
               width: 3,
             ),
-            TextWid(
-                text: toBeginningOfSentenceCase(
-                  typeofLastMessage(widget.type, widget.lastMessage, 'text'),
-                ),
-                size: _width * 0.035,
-                weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-                color:
-                    widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+            Container(
+              width: _width*0.5,
+              child: TextWid(
+                  text: toBeginningOfSentenceCase(
+                    typeofLastMessage(widget.type, widget.lastMessage, 'text'),
+                  ),
+                  size: _width * 0.035,
+                  flow: TextOverflow.ellipsis,
+                  weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
+                  color:
+                      widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+            ),
           ],
         ),
         leading: ProfilePic(

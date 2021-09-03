@@ -9,6 +9,8 @@ class ProfilePic extends StatelessWidget {
       @required this.name,
       this.bgColor,
       this.size,
+      this.textSize,
+      this.textColor,
       this.status = true})
       : super(key: key);
 
@@ -16,6 +18,8 @@ class ProfilePic extends StatelessWidget {
   final String name;
   final bool status;
   final Color bgColor;
+  final double textSize;
+  final Color textColor;
   final double size;
   Widget _activeIcon(double hight, double width) {
     if (status) {
@@ -70,8 +74,8 @@ class ProfilePic extends StatelessWidget {
                   child: Center(
                     child: TextWid(
                       text: toBeginningOfSentenceCase(name[0]),
-                      color: Colors.white,
-                      size: _width * 0.06,
+                      color:textColor?? Colors.white,
+                      size:textSize ?? _width * 0.06,
                     ),
                   ),
                 ),

@@ -1,3 +1,415 @@
+import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+
+Future audioRecoder(BuildContext context, double hight, double width,
+    ChatController chatController, sendCallBack) {
+  return showModalBottomSheet(
+      context: context,
+      elevation: 22,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: hight * 0.25,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: FeatureButtonsView(
+                        chatController: chatController,
+                        sendCallBack: sendCallBack),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      });
+}
+
+class FeatureButtonsView extends StatefulWidget {
+  final Function onUploadComplete;
+  final ChatController chatController;
+  final Function sendCallBack;
+  final String message;
+  const FeatureButtonsView({
+    Key key,
+    this.onUploadComplete,
+    this.chatController,
+    this.sendCallBack,
+    this.message,
+  }) : super(key: key);
+  @override
+  _FeatureButtonsViewState createState() => _FeatureButtonsViewState();
+}
+
+class _FeatureButtonsViewState extends State<FeatureButtonsView> {
+  bool _isPlaying;
+  // bool _isUploading;
+  bool _isRecorded;
+  bool _isRecording;
+
+  AudioPlayer _audioPlayer;
+  String _filePath;
+
+  FlutterAudioRecorder2 _audioRecorder;
+
+  @override
+  void initState() {
+    super.initState();
+    _isPlaying = false;
+    // _isUploading = false;
+    _isRecorded = false;
+    _isRecording = false;
+    _audioPlayer = AudioPlayer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var hight = MediaQuery.of(context).size.height;
+    return Center(
+      child: _isRecorded
+          ? widget.chatController.isUploading
+              ? Container(
+                  height: hight * 0.2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.indigo[100],
+                          color: Colors.indigo[900],
+                        ),
+                      ),
+                      TextWid(text: 'Sending...'),
+                    ],
+                  ),
+                )
+              : Container(
+                  alignment: Alignment.center,
+                  height: hight * 0.2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.replay),
+                        onPressed: _onRecordAgainButtonPressed,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          _isPlaying ? Icons.pause : Icons.play_circle,
+                          size: hight * 0.05,
+                        ),
+                        onPressed: () {
+                          _onPlayButtonPressed(widget.message);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.done),
+                        onPressed: () {
+                          widget.chatController
+                              .audioUpload(_filePath, widget.sendCallBack);
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                )
+          : widget.message == null
+              ? Container(
+                  height: hight * 0.2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextWid(
+                          text: _isRecording
+                              ? 'Recording...'
+                              : 'Start Recording'),
+                      IconButton(
+                        icon: _isRecording
+                            ? Icon(
+                                Icons.pause,
+                                size: hight * 0.05,
+                              )
+                            : Icon(
+                                Icons.mic,
+                                size: hight * 0.05,
+                              ),
+                        onPressed: _onRecordButtonPressed,
+                      ),
+                    ],
+                  ),
+                )
+              : Container(
+                  alignment: Alignment.center,
+                  height: hight * 0.2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          _isPlaying ? Icons.pause : Icons.play_circle,
+                          size: hight * 0.05,
+                        ),
+                        onPressed: () {
+                          _onPlayButtonPressed(widget.message);
+                        },
+                      ),
+                      TextWid(
+                        text: _isPlaying
+                            ? '    Stop Playing....'
+                            : '    Start Playing....',
+                      ),
+                    ],
+                  ),
+                ),
+    );
+  }
+
+  void _onRecordAgainButtonPressed() {
+    setState(() {
+      _isRecorded = false;
+    });
+  }
+
+  Future<void> _onRecordButtonPressed() async {
+    if (_isRecording) {
+      _audioRecorder.stop();
+      _isRecording = false;
+      _isRecorded = true;
+    } else {
+      _isRecorded = false;
+      _isRecording = true;
+
+      await _startRecording();
+    }
+    setState(() {});
+  }
+
+  void _onPlayButtonPressed(String message) {
+    if (!_isPlaying) {
+      _isPlaying = true;
+
+      _audioPlayer.play(message == null ? _filePath : message, isLocal: true);
+      _audioPlayer.onPlayerCompletion.listen((duration) {
+        setState(() {
+          _isPlaying = false;
+        });
+      });
+    } else {
+      _audioPlayer.pause();
+      _isPlaying = false;
+    }
+    setState(() {});
+  }
+
+  Future<void> _startRecording() async {
+    final bool hasRecordingPermission =
+        await FlutterAudioRecorder2.hasPermissions;
+
+    if (hasRecordingPermission ?? false) {
+      Directory directory = await getApplicationDocumentsDirectory();
+      String filepath = directory.path +
+          '/' +
+          DateTime.now().millisecondsSinceEpoch.toString() +
+          '.aac';
+      _audioRecorder =
+          FlutterAudioRecorder2(filepath, audioFormat: AudioFormat.AAC);
+      await _audioRecorder.initialized;
+      _audioRecorder.start();
+      _filePath = filepath;
+      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Center(child: Text('Please enable recording permission'))));
+    }
+  }
+}
+
+
+
+
+
+
+//Future _onUploadComplete() async {
+// FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+// ListResult listResult =
+//     await firebaseStorage.ref().child('upload-voice-firebase').list();
+// setState(() {
+// var references = listResult.items;
+// chatController.refresh();
+//});
+//}
+
+// class HomeView extends StatefulWidget {
+//   @override
+//   _HomeViewState createState() => _HomeViewState();
+// }
+
+// class _HomeViewState extends State<HomeView> {
+//   List<Reference> references = [];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _onUploadComplete();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       child: Scaffold(
+//         body: Column(
+//           children: [
+//             Expanded(
+//               flex: 4,
+//               child: references.isEmpty
+//                   ? Center(
+//                       child: Text('No File uploaded yet'),
+//                     )
+//                   : CloudRecordListView(
+//                       references: references,
+//                     ),
+//             ),
+//             Expanded(
+//               flex: 2,
+//               child: FeatureButtonsView(
+//                 onUploadComplete: _onUploadComplete,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Future<void> _onUploadComplete() async {
+//     FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+//     ListResult listResult =
+//         await firebaseStorage.ref().child('upload-voice-firebase').list();
+//     setState(() {
+//       references = listResult.items;
+//     });
+//   }
+// }
+
+// class CloudRecordListView extends StatefulWidget {
+//   final List<Reference> references;
+//   const CloudRecordListView({
+//     Key key,
+//     @required this.references,
+//   }) : super(key: key);
+
+//   @override
+//   _CloudRecordListViewState createState() => _CloudRecordListViewState();
+// }
+
+// class _CloudRecordListViewState extends State<CloudRecordListView> {
+//   bool isPlaying;
+//   `  ` audioPlayer;
+//   int selectedIndex;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     isPlaying = false;
+//     audioPlayer = AudioPlayer();
+//     selectedIndex = -1;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//       itemCount: widget.references.length,
+//       reverse: true,
+//       itemBuilder: (BuildContext context, int index) {
+//         return ListTile(
+//           title: Text(widget.references.elementAt(index).name),
+//           trailing: IconButton(
+//             icon: selectedIndex == index
+//                 ? Icon(Icons.pause)
+//                 : Icon(Icons.play_arrow),
+//             onPressed: () => _onListTileButtonPressed(index),
+//           ),
+//         );
+//       },
+//     );
+//   }
+
+//   Future<void> _onListTileButtonPressed(int index) async {
+//     setState(() {
+//       selectedIndex = index;
+//     });
+//     audioPlayer.play(await widget.references.elementAt(index).getDownloadURL(),
+//         isLocal: false);
+
+//     audioPlayer.onPlayerCompletion.listen((duration) {
+//       setState(() {
+//         selectedIndex = -1;
+//       });
+//     });
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Future _onFileUploadButtonPressed() async {
+  //   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  //   setState(() {
+  //     widget.chatController.uploading;
+  //   });
+  //   try {
+  //     await firebaseStorage
+  //         .ref('upload-voice-firebase')
+  //         .child(
+  //             _filePath.substring(_filePath.lastIndexOf('/'), _filePath.length))
+  //         .putFile(File(_filePath));
+  //     widget.onUploadComplete();
+  //   } catch (error) {
+  //     print('Error occured while uplaoding to Firebase ${error.toString()}');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Error occured while uplaoding'),
+  //       ),
+  //     );
+  //   } finally {
+  //     setState(() {
+  //       widget.chatController.uploading;
+  //     });
+  //   }
+  // }
+
+
+
+
+
+
+
 // import 'dart:async';
 // import 'dart:developer';
 // import 'dart:io';

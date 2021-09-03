@@ -65,6 +65,9 @@ dependencies:
   flutter_sound_lite: ^8.3.10
   permission_handler: ^8.1.4+2
   assets_audio_player: ^3.0.3+6
+  flutter_audio_recorder2: ^0.0.2
+  audioplayers: ^0.19.1
+  path_provider: ^2.0.3
   
 
 

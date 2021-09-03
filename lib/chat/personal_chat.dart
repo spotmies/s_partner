@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
 
@@ -69,15 +71,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         }
       }
     });
-
-    
   }
-
-  // @override
-  // void dispose(){
-  //   recorder.dispose();
-  //   super.dispose();
-  // }
 
   getTargetChat(list, msgId) {
     List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
@@ -171,7 +165,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                     targetChat = getTargetChat(chatList, widget.msgId);
                     user = targetChat['uDetails'];
                     List messages = targetChat['msgs'];
-                    // if (data.getScroll() || !data.getScroll()) scrollToBottom();
                     return ListView.builder(
                         reverse: true,
                         controller: _scrollController,
@@ -186,6 +179,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
+
 
                           return Container(
                             padding: EdgeInsets.only(
@@ -249,8 +243,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                     top: 10,
                                                     right: 10),
                                                 alignment: Alignment.centerLeft,
-                                                child: typeofChat(type, message,
-                                                    sender, _hight, _width),
+                                                child: typeofChat(
+                                                    type,
+                                                    message,
+                                                    sender,
+                                                    _hight,
+                                                    _width,
+                                                    _chatController),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -323,10 +322,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             chatInputField(
                 sendMessageHandler, context, _hight, _width, _chatController)
-                // recorder
-                
-            // chatInputField(sendMessageHandler, context, _hight, _width,
-            //     _chatController, recorder)
+           
           ]),
         ),
         floatingActionButton: Container(
@@ -342,8 +338,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       onPressed: () {
                         scrollToBottom();
 
-                        // _scrollController
-                        //     .jumpTo(_scrollController.position.maxScrollExtent);
+                       
                       },
                       child: Icon(
                         Icons.keyboard_arrow_down,
@@ -358,8 +353,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }
 
-  typeofChat(type, message, sender, double hight, double width) {
+  typeofChat(type, message, sender, double hight, double width,
+      ChatController chatController) {
     String isLink = message.toString();
+    // bool isPlaying = false;
 
     if ((isLink.contains('http') ||
             isLink.contains('https') ||
@@ -405,14 +402,45 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => Video(videoLink: message)));
               },
-              child: TextWid(
-                  text: 'Tap to View Video',
-                  weight: FontWeight.w600,
-                  color: Colors.indigo,
-                  decoration: TextDecoration.underline));
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.slow_motion_video,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  TextWid(
+                      text: 'Play Video',
+                      weight: FontWeight.w600,
+                      color: Colors.indigo,
+                      decoration: TextDecoration.underline),
+                ],
+              ));
           break;
         case 'audio':
-          return Text('audio');
+          return TextButton(
+              onPressed: () {
+                playAudio(context, hight, width, message);
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.audiotrack,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  TextWid(
+                      text: 'Play Audio',
+                      weight: FontWeight.w600,
+                      color: Colors.indigo,
+                      decoration: TextDecoration.underline),
+                ],
+              ));
+        
           break;
         default:
           return TextWid(
@@ -420,6 +448,24 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           );
       }
     }
+  }
+
+  Future playAudio(BuildContext context, double hight, double width, message) {
+    return showModalBottomSheet(
+        context: context,
+        elevation: 22,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            height: hight * 0.2,
+            child: FeatureButtonsView(message:message)
+          );
+        });
   }
 
   Container readReciept(double _width, status) {
@@ -485,33 +531,40 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           chatList = data.getChatList2();
           targetChat = getTargetChat(chatList, widget.msgId);
           user = targetChat['uDetails'];
-          return Row(
-            children: [
-              ProfilePic(
-                name: user['name'],
-                profile: user['pic'],
-                status: false,
-                bgColor: Colors.blueGrey[600],
-                size: width * 0.045,
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                  child: TextWid(
-                text: user['name'] ?? "Spotmies User",
-                size: width * 0.058,
-                weight: FontWeight.w600,
-              )
-                  // Text(
-                  //   user['name'] ?? "Unknown",
-                  //   maxLines: 1,
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.w600,
-                  //   ),
-                  // ),
-                  ),
-            ],
+          log(user.toString());
+          return InkWell(
+            onTap: (){
+               Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UserDetails(userDetails: user)));
+            },
+            child: Row(
+              children: [
+                ProfilePic(
+                  name: user['name'],
+                  profile: user['pic'],
+                  status: false,
+                  bgColor: Colors.blueGrey[600],
+                  size: width * 0.045,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                    child: TextWid(
+                  text: user['name'] ?? "Spotmies User",
+                  size: width * 0.058,
+                  weight: FontWeight.w600,
+                )
+                    // Text(
+                    //   user['name'] ?? "Unknown",
+                    //   maxLines: 1,
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
+                    ),
+              ],
+            ),
           );
         },
       ),

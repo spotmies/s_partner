@@ -198,11 +198,9 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => AudioRecorder()));
-                        //  AudioRecorder();
-                        // audioRecoder(context, hight, width,recorder,chatController);
-                        log('audio');
+                      Navigator.pop(context);
+                        audioRecoder(context, hight, width,chatController,sendCallBack);
+                        
                       },
                       icon: Icon(Icons.mic),
                     ),

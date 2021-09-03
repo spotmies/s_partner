@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserDetails extends StatefulWidget {
-  final String value;
-  UserDetails({this.value});
+  final Map userDetails;
+  UserDetails({this.userDetails});
   @override
-  _UserDetailsState createState() => _UserDetailsState(value);
+  _UserDetailsState createState() => _UserDetailsState();
 }
 
 class _UserDetailsState extends State<UserDetails> {
-  String value;
-  _UserDetailsState(this.value);
   bool isSwitch = false;
   @override
   Widget build(BuildContext context) {
@@ -22,155 +22,175 @@ class _UserDetailsState extends State<UserDetails> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      // backgroundColor: Colors.black,
-      // appBar: AppBar(
-      //   title: Text('Customer Details'),
-      //   backgroundColor: Colors.blue[900],
-      // ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('messaging')
-              .doc(value)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            var document = snapshot.data;
-            var num = document['unum'];
-            return document['revealprofile'] == true
-                ? CustomScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    slivers: [
-                      SliverAppBar(
-                        backgroundColor: Colors.blue[900],
-                        stretch: true,
-                        onStretchTrigger: () {
-                          // Function callback for stretch
-                          return Future<void>.value();
+        // backgroundColor: Colors.black,
+        // appBar: AppBar(
+        //   title: Text('Customer Details'),
+        //   backgroundColor: Colors.blue[900],
+        // ),
+        body: widget.userDetails['userState'] == 'active'
+            ? CustomScrollView(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                slivers: [
+                  SliverAppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.grey[100],
+                    stretch: true,
+                    leading: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                        pinned: true,
-                        title: Text(document['uname']),
-                        snap: false,
-                        floating: true,
-                        expandedHeight: _hight * 0.5,
-                        flexibleSpace: FlexibleSpaceBar(
-                          stretchModes: <StretchMode>[
-                            StretchMode.zoomBackground,
-                            StretchMode.fadeTitle,
-                          ],
-                          background: Container(
-                            width: _width * 1,
-                            color: Colors.white,
-                            child: document['upic'] == null
-                                ? Icon(
-                                    Icons.person_rounded,
-                                    color: Colors.grey[300],
-                                    size: _hight * 0.5,
-                                  )
-                                : Image.network(
-                                    document['upic'],
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        ),
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.grey[900],
+                        )),
+                    onStretchTrigger: () {
+                      return Future<void>.value();
+                    },
+                    pinned: true,
+                   
+                    snap: false,
+                    floating: true,
+                    expandedHeight: _hight * 0.4,
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: <StretchMode>[
+                        StretchMode.zoomBackground,
+                        StretchMode.fadeTitle,
+                      ],
+                      // titlePadding: EdgeInsets.only(left: _width*0.15,bottom: _width*0.04),
+                      title: TextWid(
+                      text:
+                          toBeginningOfSentenceCase(widget.userDetails['name']),
+                      size: _width * 0.06,
+                      color: Colors.grey[900],
+                      weight: FontWeight.w600,
+                    ),
+                    centerTitle: false,
+                      background: Container(
+                        width: _width * 1,
+                        color: Colors.white,
+                        child: widget.userDetails['pic'] == null
+                            ? Center(
+                                child: ProfilePic(
+                                  name: widget.userDetails['name'],
+                                  profile: widget.userDetails['pic'],
+                                  status: false,
+                                  bgColor: Colors.grey[100],
+                                  textColor: Colors.grey[900],
+                                  textSize: _width * 0.25,
+                                  size: _width * 0.25,
+                                ),
+                              )
+                            : Image.network(
+                                widget.userDetails['pic'],
+                                fit: BoxFit.cover,
+                              ),
                       ),
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Divider(
-                              thickness: 5,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              height: _hight * 0.25,
-                              child: Column(
-                                children: [
-                                  Container(
-                                      padding: EdgeInsets.only(
-                                          left: _width * 0.03,
-                                          top: _width * 0.03,
-                                          bottom: _width * 0.03),
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                        'About and Phone Number',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: _width * 0.05),
-                                      )),
-                                  Container(
-                                    alignment: Alignment.bottomLeft,
-                                    padding: EdgeInsets.only(
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Divider(
+                          thickness: 5,
+                          color: Colors.white,
+                        ),
+                        Container(
+                          height: _hight * 0.27,
+                          child: Column(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(
                                       left: _width * 0.03,
                                       top: _width * 0.03,
-                                    ),
-                                    child: Text('Chating From',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: _width * 0.05)),
+                                      bottom: _width * 0.03),
+                                  alignment: Alignment.bottomLeft,
+                                  child: TextWid(
+                                    text: 'About and phone number',
+                                    size: _width * 0.055,
+                                    weight: FontWeight.w600,
+                                  )),
+                              Container(
+                                  alignment: Alignment.bottomLeft,
+                                  padding: EdgeInsets.only(
+                                    left: _width * 0.03,
+                                    top: _width * 0.03,
                                   ),
-                                  Container(
-                                    alignment: Alignment.bottomLeft,
-                                    padding: EdgeInsets.only(
-                                      left: _width * 0.03,
-                                      top: _width * 0.01,
-                                    ),
-                                    child: Text(
-                                        DateFormat('dd MMM, yyyy (EEE)').format(
+                                  child: TextWid(
+                                    text: 'Spotmies Using From',
+                                    size: _width * 0.05,
+                                    color: Colors.grey[700],
+                                    weight: FontWeight.w600,
+                                  )),
+                              Container(
+                                  alignment: Alignment.bottomLeft,
+                                  padding: EdgeInsets.only(
+                                    left: _width * 0.03,
+                                    top: _width * 0.01,
+                                  ),
+                                  child: TextWid(
+                                    text: DateFormat('dd MMM, yyyy (EEE)')
+                                        .format(
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                int.parse(
-                                                    document['createdAt']))),
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: _width * 0.04)),
-                                  ),
-                                  Divider(
-                                    indent: _width * 0.04,
-                                    endIndent: _width * 0.04,
-                                    thickness: 1,
-                                    color: Colors.grey[300],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                          flex: 2,
-                                          child: Container(
+                                                int.parse(widget
+                                                    .userDetails['join']
+                                                    .toString()))),
+                                    size: _width * 0.035,
+                                    color: Colors.grey[700],
+                                    weight: FontWeight.w600,
+                                  )),
+                              SizedBox(
+                                height: _hight * 0.01,
+                              ),
+                              Divider(
+                                indent: _width * 0.04,
+                                endIndent: _width * 0.04,
+                                thickness: 1,
+                                color: Colors.grey[300],
+                              ),
+                              Container(
+                                height: _hight * 0.10,
+                                padding: EdgeInsets.only(left: _width * 0.03),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWid(
+                                      text: 'Contact',
+                                      size: _width * 0.05,
+                                      color: Colors.grey[700],
+                                      weight: FontWeight.w600,
+                                      align: TextAlign.start,
+                                    ),
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: _width * 0.45,
                                             padding: EdgeInsets.only(
                                               left: _width * 0.03,
                                               top: _width * 0.01,
                                             ),
                                             child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Container(
-                                                  width: double.infinity,
-                                                  child: Text(num,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize:
-                                                              _width * 0.05)),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: _width * 0.1,
-                                                      top: _width * 0.01),
-                                                  width: double.infinity,
-                                                  child: Text('Mobile',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              _width * 0.04)),
-                                                ),
+                                                    width: double.infinity,
+                                                    child: TextWid(
+                                                      text: widget
+                                                          .userDetails['phNum']
+                                                          .toString(),
+                                                      size: _width * 0.04,
+                                                      color: Colors.grey[800],
+                                                      weight: FontWeight.w600,
+                                                    )),
                                               ],
                                             ),
-                                          )),
-                                      Expanded(
-                                          flex: 2,
-                                          child: Container(
+                                          ),
+                                          Container(
+                                            width: _width * 0.45,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
@@ -178,7 +198,7 @@ class _UserDetailsState extends State<UserDetails> {
                                                 IconButton(
                                                     icon: Icon(
                                                       Icons.message,
-                                                      color: Colors.blue[900],
+                                                      color: Colors.indigo[900],
                                                     ),
                                                     onPressed: () {
                                                       Navigator.pop(context);
@@ -186,173 +206,166 @@ class _UserDetailsState extends State<UserDetails> {
                                                 IconButton(
                                                     icon: Icon(
                                                       Icons.call,
-                                                      color: Colors.blue[900],
+                                                      color: Colors.indigo[900],
                                                     ),
                                                     onPressed: () {
                                                       launch("tel://$num");
                                                     }),
                                               ],
                                             ),
-                                          )),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            // Divider(
-                            //   thickness: 10,
-                            //   color: Colors.grey[200],
-                            // ),
-                            // Container(
-                            //   padding: EdgeInsets.only(
-                            //     left: _width * 0.07,
-                            //   ),
-                            //   height: _hight * 0.1,
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Row(
-                            //         children: [
-                            //           Icon(
-                            //             Icons.visibility,
-                            //             color: Colors.blue[900],
-                            //           ),
-                            //           SizedBox(
-                            //             width: _width * 0.07,
-                            //           ),
-                            //           Text(
-                            //             'Reveal My Profile',
-                            //             style: TextStyle(
-                            //                 color: Colors.blue[900],
-                            //                 fontSize: _width * 0.05,
-                            //                 fontWeight: FontWeight.bold),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       Transform.scale(
-                            //         scale: 0.8,
-                            //         child: CupertinoSwitch(
-                            //             trackColor: Colors.grey[300],
-                            //             value: isSwitch,
-                            //             activeColor: Colors.blue[900],
-                            //             onChanged: (value) {
-                            //               setState(() {
-                            //                 isSwitch = value;
-                            //               });
-                            //             }),
-                            //       )
-                            //     ],
-                            //   ),
-                            // ),
-                            Divider(
-                              thickness: 10,
-                              color: Colors.grey[200],
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: _width * 0.07,
-                              ),
-                              height: _hight * 0.1,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.important_devices,
-                                    color: Colors.blue[900],
-                                  ),
-                                  SizedBox(
-                                    width: _width * 0.07,
-                                  ),
-                                  Text(
-                                    'Available on Message',
-                                    style: TextStyle(
-                                        color: Colors.blue[900],
-                                        fontSize: _width * 0.05,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-
-                            Divider(
-                              thickness: 10,
-                              color: Colors.grey[200],
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: _width * 0.07,
-                              ),
-                              height: _hight * 0.1,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.block,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(
-                                    width: _width * 0.07,
-                                  ),
-                                  Text(
-                                    'Block ' +
-                                        toBeginningOfSentenceCase(
-                                            document['uname']),
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: _width * 0.05,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              thickness: 10,
-                              color: Colors.grey[200],
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: _width * 0.07,
-                              ),
-                              height: _hight * 0.1,
-                              // decoration: BoxDecoration(boxShadow: [
-                              //   BoxShadow(
-                              //       color: Colors.grey[200],
-                              //       spreadRadius: 0,
-                              //       blurRadius: 5)
-                              // ]),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.report_problem,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(
-                                    width: _width * 0.07,
-                                  ),
-                                  Text(
-                                    'Report on ' +
-                                        toBeginningOfSentenceCase(
-                                            document['uname']),
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: _width * 0.05,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              thickness: 10,
-                              color: Colors.grey[200],
-                            ),
-                            Container(height: 250.0),
-                          ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      )
-                    ],
+                        Divider(
+                          thickness: 10,
+                          color: Colors.grey[200],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: _width * 0.07,
+                          ),
+                          height: _hight * 0.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.visibility,
+                                    color: Colors.grey[900],
+                                  ),
+                                  SizedBox(
+                                    width: _width * 0.07,
+                                  ),
+                                  TextWid(
+                                    text: 'Reveal My Profile',
+                                    size: _width * 0.05,
+                                    color: Colors.grey[800],
+                                    weight: FontWeight.w600,
+                                  )
+                                ],
+                              ),
+                              Transform.scale(
+                                scale: 0.8,
+                                child: CupertinoSwitch(
+                                    trackColor: Colors.grey[300],
+                                    value: isSwitch,
+                                    activeColor: Colors.blue[900],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isSwitch = value;
+                                      });
+                                    }),
+                              )
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 10,
+                          color: Colors.grey[200],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: _width * 0.07,
+                          ),
+                          height: _hight * 0.1,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.call,
+                                color: Colors.grey[900],
+                              ),
+                              SizedBox(
+                                width: _width * 0.07,
+                              ),
+                              TextWid(
+                                text: 'Available to Recieve Calls',
+                                size: _width * 0.05,
+                                color: Colors.grey[800],
+                                weight: FontWeight.w600,
+                              )
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 10,
+                          color: Colors.grey[200],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: _width * 0.07,
+                          ),
+                          height: _hight * 0.1,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.block,
+                                color: Colors.redAccent,
+                              ),
+                              SizedBox(
+                                width: _width * 0.07,
+                              ),
+                                TextWid(
+                                text:  'Block ' +
+                                    toBeginningOfSentenceCase(
+                                        widget.userDetails['name']),
+                                size: _width * 0.05,
+                                color: Colors.redAccent,
+                                weight: FontWeight.w600,
+                              )
+                             
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 10,
+                          color: Colors.grey[200],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: _width * 0.07,
+                          ),
+                          height: _hight * 0.1,
+                         
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.report_problem,
+                                color: Colors.redAccent,
+                              ),
+                              SizedBox(
+                                width: _width * 0.07,
+                              ),
+                               TextWid(
+                                text:  'Report on ' +
+                                    toBeginningOfSentenceCase(
+                                        widget.userDetails['name']),
+                                size: _width * 0.05,
+                                color: Colors.redAccent,
+                                weight: FontWeight.w600,
+                              ),
+                              
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 10,
+                          color: Colors.grey[200],
+                        ),
+                        Container(height: 250.0),
+                      ],
+                    ),
                   )
-                : Center(child: Text('User not revealed deatils'));
-          }),
-    );
+                ],
+              )
+            : Center(child: Text('User not revealed deatils')));
   }
 }
 
