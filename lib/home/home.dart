@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.white,
         body: Consumer<ChatProvider>(builder: (context, notifier, child) {
           return Container(
             child: _widgetOptions.elementAt(_selectedIndex),
@@ -169,6 +169,7 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: Container(
           height: width * 0.163,
           child: AnimatedBottomNavigationBar.builder(
+            elevation: 0,
             itemCount: icons.length,
             tabBuilder: (int index, bool isActive) {
               final color = isActive ? Colors.grey[800] : Colors.grey;

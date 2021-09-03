@@ -68,6 +68,7 @@ dependencies:
   flutter_audio_recorder2: ^0.0.2
   audioplayers: ^0.19.1
   path_provider: ^2.0.3
+  flutter_svg:
   
 
 
@@ -96,14 +97,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/1.png
-    - lib/assets/2.png
-    - lib/assets/3.png
-    - lib/assets/4.png
-    - lib/assets/5.png
-    - lib/assets/7.png
-    - lib/assets/spotmies.png
-    - lib/assets/icon.png
+    - assets/1.png
+    - assets/2.png
+    - assets/3.png
+    - assets/4.png
+    - assets/5.png
+    - assets/7.png
+    - assets/spotmies.png
+    - assets/icon.png
+    - assets/like.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

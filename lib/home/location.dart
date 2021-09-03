@@ -113,7 +113,7 @@ class _LocationState extends State<Location> {
 
   void setCustomMarker() async {
     mapMarker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'lib/assets/icon.png');
+        ImageConfiguration(), 'assets/icon.png');
   }
 
   void onmapcreated(GoogleMapController controller) {

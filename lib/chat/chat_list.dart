@@ -232,7 +232,7 @@ class _ChatListCardState extends State<ChatListCard> {
               width: 3,
             ),
             Container(
-              width: _width*0.5,
+              width: _width*0.47,
               child: TextWid(
                   text: toBeginningOfSentenceCase(
                     typeofLastMessage(widget.type, widget.lastMessage, 'text'),

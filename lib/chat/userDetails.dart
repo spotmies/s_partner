@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -359,7 +360,12 @@ class _UserDetailsState extends State<UserDetails> {
                           thickness: 10,
                           color: Colors.grey[200],
                         ),
-                        Container(height: 250.0),
+
+                        Container(height: 250.0,
+                        child:  Center(child: Container(
+                          height: _hight*0.15,
+                          child: SvgPicture.asset('assets/like.svg'))),
+                        ),
                       ],
                     ),
                   )
