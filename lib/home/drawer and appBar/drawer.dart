@@ -3,19 +3,23 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/appbar.dart';
+import 'package:intl/intl.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
+import 'package:spotmies_partner/localDB/localGet.dart';
+import 'package:spotmies_partner/orders/completed.dart';
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [DrawerScreen(), HomeScreen()],
-      ),
-    );
-  }
-}
+// class HomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         // children: [DrawerScreen(), HomeScreen()],
+//       ),
+//     );
+//   }
+// }
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -29,84 +33,106 @@ class _DrawerScreenState extends State<DrawerScreen> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Container(
-      color: primaryGreen,
-      padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: _hight * 0.03,
-                child: ClipOval(
-                  child: Image.network(
-                      "https://pbs.twimg.com/media/Ey0G0DYU8AEr1D5.jpg",
-                      width: _width * 0.4,
-                      fit: BoxFit.fill),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Prabhas Uppalapati',
-                      style: GoogleFonts.josefinSans(
-                        color: Colors.grey[900],
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  Text('Active Now',
-                      style: GoogleFonts.josefinSans(
-                        color: Colors.grey[900],
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ))
-                ],
-              )
-            ],
-          ),
-          SizedBox(
-            height: _hight * 0.05,
-          ),
-          Column(
-            children: drawerItems
-                .map((element) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: () {
-                          log(element['title']);
-                        },
-                        child: Row(
+    return FutureBuilder(
+        future: localPartnerDetailsGet(),
+        builder: (context, snapshot) {
+          var pr = snapshot.data;
+          if (pr == null) {
+            return Center(child: CircularProgressIndicator());
+          }
+          // log(pr.toString());
+          return Container(
+            color: primaryGreen,
+            padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    ProfilePic(
+                      badge: false,
+                      profile: pr['partnerPic'],
+                      name: pr['name'],
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWid(
+                          text: toBeginningOfSentenceCase(
+                            pr['name'],
+                          ),
+                          size: _width * 0.045,
+                          weight: FontWeight.w600,
+                        ),
+                        Row(
                           children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                element['icon'],
-                                color: Colors.grey[900],
-                                size: _width * 0.05,
+                            TextWid(
+                              text: toBeginningOfSentenceCase(
+                                pr['availability'] == false
+                                    ? 'Inactive Now'
+                                    : 'Active Now',
                               ),
+                              size: _width * 0.03,
+                              weight: FontWeight.w500,
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(element['title'],
-                                style: GoogleFonts.josefinSans(
-                                  color: Colors.grey[900],
-                                  fontSize: _width * 0.045,
-                                  fontWeight: FontWeight.w600,
-                                ))
+                            Text('  |  '),
+                             TextWid(
+                              text: toBeginningOfSentenceCase(jobs[pr['job']]),
+                              
+                              
+                              size: _width * 0.03,
+                              weight: FontWeight.w500,)
+                            
                           ],
                         ),
-                      ),
-                    ))
-                .toList(),
-          ),
-        ],
-      ),
-    );
+                      
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: _hight * 0.05,
+                ),
+                Column(
+                  children: drawerItems
+                      .map((element) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                // log(element['title']);
+                              },
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      element['icon'],
+                                      color: Colors.grey[900],
+                                      size: _width * 0.05,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(element['title'],
+                                      style: GoogleFonts.josefinSans(
+                                        color: Colors.grey[900],
+                                        fontSize: _width * 0.045,
+                                        fontWeight: FontWeight.w600,
+                                      ))
+                                ],
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
 

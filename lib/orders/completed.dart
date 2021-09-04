@@ -4,13 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spotmies_partner/orders/orderview.dart';
 
-class Completed extends StatefulWidget {
-  @override
-  _CompletedState createState() => _CompletedState();
-}
-
-class _CompletedState extends State<Completed> {
-  List jobs = [
+List jobs = [
     'AC Service',
     'Computer',
     'TV Repair',
@@ -21,6 +15,14 @@ class _CompletedState extends State<Completed> {
     'drivers',
     'events'
   ];
+
+class Completed extends StatefulWidget {
+  @override
+  _CompletedState createState() => _CompletedState();
+}
+
+class _CompletedState extends State<Completed> {
+  
   
 
   @override

@@ -14,7 +14,7 @@ class _DrawerInitiateState extends State<DrawerInitiate> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = HomeScreen();
+    // screenView = AppBarScreen();
     super.initState();
   }
 

@@ -5,14 +5,19 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class Online extends StatefulWidget {
+  Online(pr);
+
   @override
   _OnlineState createState() => _OnlineState();
 }
@@ -93,16 +98,14 @@ class _OnlineState extends State<Online> {
               if (localPartner.data == null)
                 return Center(child: CircularProgressIndicator());
               var p = localPartner.data;
-              if (p == null) {
-                partnerDetail();
-              }
               return FutureBuilder(
                   future: localOrdersGet(),
                   builder: (context, localOrders) {
                     var ld = localOrders.data;
+                 
                     var o = List.from(ld.reversed);
                     if (o == null)
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: circleProgress());
                     return StreamBuilder(
                         stream: stream,
                         builder: (context, orderSocket) {
@@ -123,16 +126,16 @@ class _OnlineState extends State<Online> {
                             }
                           }
                           return Container(
-                              padding: EdgeInsets.all(10),
+                              // padding: EdgeInsets.all(10),
                               child: ListView.builder(
                                   scrollDirection: Axis.vertical,
                                   itemCount: o.length,
                                   padding: EdgeInsets.all(15),
                                   itemBuilder: (BuildContext ctxt, int index) {
                                     var u = o[index]['uDetails'];
-                                    // List<String> images =
-                                    //     List.from(o[index]['media']);
-                                    // print(o['media'][0].length);
+                                    List<String> images =
+                                        List.from(o[index]['media']);
+                                    // print(o[index]['media'][0].length);
                                     return Column(
                                       children: [
                                         Container(
@@ -140,7 +143,7 @@ class _OnlineState extends State<Online> {
                                               left: 15, right: 10),
                                           height: _hight * 0.045,
                                           decoration: BoxDecoration(
-                                              color: Colors.blue[900],
+                                              color: Colors.indigo[900],
                                               borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(15),
                                                   topRight:
@@ -150,12 +153,12 @@ class _OnlineState extends State<Online> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                jobs.elementAt(o[index]['job']),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                              TextWid(
+                                                text: jobs
+                                                    .elementAt(o[index]['job']),
+                                                size: _width * 0.04,
+                                                color: Colors.white,
+                                                weight: FontWeight.w600,
                                               ),
                                               IconButton(
                                                   icon: Icon(
@@ -175,11 +178,12 @@ class _OnlineState extends State<Online> {
                                           ),
                                         ),
                                         Container(
+                                          margin: EdgeInsets.only(bottom: 10),
                                           padding: EdgeInsets.all(10),
-                                          height: _hight * 0.45,
-                                          width: _width * 0.88,
+                                          height: _hight * 0.27,
+                                          // width: _width * 0.88,
                                           decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: Colors.grey[200],
                                               borderRadius: BorderRadius.only(
                                                   bottomLeft:
                                                       Radius.circular(15),
@@ -188,11 +192,9 @@ class _OnlineState extends State<Online> {
                                               boxShadow: kElevationToShadow[0]),
                                           child: Column(
                                             children: [
-                                              SizedBox(
-                                                height: _hight * 0.015,
-                                              ),
                                               Container(
                                                 padding: EdgeInsets.all(10),
+                                                height: _hight * 0.1,
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey[50],
                                                     borderRadius:
@@ -208,32 +210,34 @@ class _OnlineState extends State<Online> {
                                                       child: Container(
                                                         height: _hight * 0.15,
                                                         width: _width * 0.2,
-                                                        // child: CircleAvatar(
-                                                        //   backgroundImage: images == null
+                                                        // child:
+                                                        //  CircleAvatar(
+                                                        //   child: images == null
                                                         //       ? NetworkImage(images.first)
                                                         //       : Icon(Icons.ac_unit),
-                                                        //)
+                                                        // )
                                                       ),
                                                     ),
-                                                    Expanded(
-                                                      child: Container(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: Text(
+                                                    Container(
+                                                      width: _width * 0.6,
+                                                      child: TextWid(
+                                                        text:
+                                                            toBeginningOfSentenceCase(
                                                           o[index]['problem']
                                                               .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 20),
                                                         ),
+                                                        align: TextAlign.center,
+                                                        flow: TextOverflow
+                                                            .visible,
+                                                        size: _width * 0.04,
                                                       ),
-                                                    )
+                                                    ),
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(
-                                                height: _hight * 0.018,
-                                              ),
                                               Container(
+                                                margin: EdgeInsets.only(
+                                                    top: 5, bottom: 10),
                                                 padding: EdgeInsets.all(5),
                                                 height: _hight * 0.07,
                                                 decoration: BoxDecoration(
@@ -262,25 +266,25 @@ class _OnlineState extends State<Online> {
                                                                 MainAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              Text(
-                                                                'Money:',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
+                                                              TextWid(
+                                                                text: 'Money: ',
+                                                                size: _width *
+                                                                    0.03,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                               SizedBox(
                                                                 width: _width *
                                                                     0.05,
                                                               ),
-                                                              Text(
-                                                                  o[index][
-                                                                          'money']
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          _width *
-                                                                              0.02)),
+                                                              TextWid(
+                                                                text: o[index][
+                                                                        'money']
+                                                                    .toString(),
+                                                                size: _width *
+                                                                    0.03,
+                                                              )
                                                             ],
                                                           ),
                                                           Row(
@@ -288,29 +292,30 @@ class _OnlineState extends State<Online> {
                                                                 MainAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              Text('Location:',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500)),
+                                                              TextWid(
+                                                                text:
+                                                                    'Location: ',
+                                                                size: _width *
+                                                                    0.03,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
                                                               SizedBox(
                                                                 width: _width *
                                                                     0.02,
                                                               ),
-                                                              Text(
-                                                                  o[index]['loc']
-                                                                              [
-                                                                              0]
-                                                                          .toString() +
-                                                                      "," +
-                                                                      o[index]['loc']
-                                                                              [
-                                                                              1]
-                                                                          .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          _width *
-                                                                              0.02)),
+                                                              TextWid(
+                                                                text: o[index]['loc']
+                                                                            [0]
+                                                                        .toString() +
+                                                                    "," +
+                                                                    o[index]['loc']
+                                                                            [1]
+                                                                        .toString(),
+                                                                size: _width *
+                                                                    0.03,
+                                                              ),
                                                             ],
                                                           ),
                                                         ],
@@ -331,19 +336,24 @@ class _OnlineState extends State<Online> {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              Text('Date',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500)),
-                                                              Text(
-                                                                  o[index][
+                                                              
+                                                               TextWid(
+                                                                text:
+                                                                    'Date: ',
+                                                                size: _width *
+                                                                    0.04,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                               TextWid(
+                                                                text:  o[index][
                                                                           'schedule']
                                                                       .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          _width *
-                                                                              0.02)),
+                                                                size: _width *
+                                                                    0.03,
+                                                              ),
+                                                            
                                                             ],
                                                           ),
                                                           Row(
@@ -351,32 +361,32 @@ class _OnlineState extends State<Online> {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              Text('Time',
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500)),
-                                                              Text(
-                                                                o[index][
+                                                                TextWid(
+                                                                text:
+                                                                    'Time: ',
+                                                                size: _width *
+                                                                    0.04,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                               TextWid(
+                                                                text:
+                                                                     o[index][
                                                                         'schedule']
                                                                     .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        _width *
-                                                                            0.02),
+                                                                size: _width *
+                                                                    0.03,
+                                                               
                                                               ),
+                                                            
                                                             ],
                                                           )
-                                                          // .millisecondsSinceEpoch
-                                                          // .toString()),
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
                                               ),
                                               o[index]['ordState'] == 'req'
                                                   ? Column(
@@ -386,94 +396,91 @@ class _OnlineState extends State<Online> {
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            Container(
-                                                              width:
-                                                                  _width * 0.4,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                      style: ButtonStyle(
-                                                                          backgroundColor: MaterialStateProperty.all(Colors.blue[
-                                                                              900])),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                              color: Colors.blue[900],
-                                                                              child: Icon(Icons.check_circle, color: Color(0xff00c853))),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          Container(
-                                                                            child:
-                                                                                Text(
-                                                                              'Accept',
-                                                                              style: TextStyle(color: Colors.white),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      //color: Colors.blue[900],
-                                                                      onPressed:
-                                                                          () async {
-                                                                        var ordid =
-                                                                            o[index]['ordId'];
-                                                                        var api =
-                                                                            API.acceptOrder.toString() +
-                                                                                "$ordid";
-                                                                        Server().editMethod(
-                                                                            api, {
-                                                                          'pId': API
-                                                                              .pid
-                                                                              .toString(),
-                                                                          'ordState':
-                                                                              'onGoing'
-                                                                        }).catchError(
-                                                                            (e) {
-                                                                          print(
-                                                                              e);
-                                                                        });
-                                                                      }),
+                                                            ElevatedButtonWidget(
+                                                              buttonName:
+                                                                  'Reject',
+                                                              height:
+                                                                  _hight * 0.05,
+                                                              minWidth:
+                                                                  _width * 0.3,
+                                                              bgColor: Colors
+                                                                  .indigo[50],
+                                                              textColor: Colors
+                                                                  .grey[900],
+                                                              textSize:
+                                                                  _width * 0.04,
+                                                              leadingIcon: Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                        .grey[
+                                                                    900],
+                                                                size: _width *
+                                                                    0.04,
+                                                              ),
+                                                              borderRadius:
+                                                                  15.0,
+                                                              borderSideColor:
+                                                                  Colors.indigo[
+                                                                      50],
+                                                              onClick: () {},
                                                             ),
-                                                            Container(
-                                                              width:
-                                                                  _width * 0.4,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                      style: ButtonStyle(
-                                                                          backgroundColor: MaterialStateProperty.all(Colors.blue[
-                                                                              900])),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            child:
-                                                                                Text(
-                                                                              'Reject  ',
-                                                                              style: TextStyle(color: Colors.white),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          Container(
-                                                                              child: Icon(Icons.cancel, color: Color(0xfff50000))),
-                                                                        ],
-                                                                      ),
-                                                                      // color: Colors.blue[900],
-                                                                      onPressed:
-                                                                          () {}),
+                                                            ElevatedButtonWidget(
+                                                              buttonName:
+                                                                  'Accept',
+                                                              height:
+                                                                  _hight * 0.05,
+                                                              minWidth:
+                                                                  _width * 0.55,
+                                                              bgColor: Colors
+                                                                  .indigo[900],
+                                                              textColor:
+                                                                  Colors.white,
+                                                              textSize:
+                                                                  _width * 0.04,
+                                                              trailingIcon:
+                                                                  Icon(
+                                                                Icons.check,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: _width *
+                                                                    0.04,
+                                                              ),
+                                                              borderRadius:
+                                                                  15.0,
+                                                              borderSideColor:
+                                                                  Colors.indigo[
+                                                                      100],
+                                                              onClick:
+                                                                  () async {
+                                                                var ordid = o[
+                                                                        index]
+                                                                    ['ordId'];
+                                                                var api = API
+                                                                        .acceptOrder
+                                                                        .toString() +
+                                                                    "$ordid";
+                                                                Server()
+                                                                    .editMethod(
+                                                                        api, {
+                                                                  'pId': API.pid
+                                                                      .toString(),
+                                                                  'ordState':
+                                                                      'onGoing'
+                                                                }).catchError(
+                                                                        (e) {
+                                                                  print(e);
+                                                                });
+                                                              },
                                                             ),
                                                           ],
                                                         ),
                                                       ],
                                                     )
-                                                  : Text('Order Accepted')
+                                                  : TextWid(
+                                                      text: 'Order Accepted',
+                                                      size: _width * 0.05,
+                                                      weight: FontWeight.w600,
+                                                    )
                                             ],
                                           ),
                                         ),

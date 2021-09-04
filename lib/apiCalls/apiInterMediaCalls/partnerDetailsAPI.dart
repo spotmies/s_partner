@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
@@ -12,6 +13,7 @@ partnerDetail() async {
   var response = await Server().getMethod(API.partnerDetails);
   partner = jsonDecode(response);
   // log(partner.toString());
+  // log(response.statusCode.toString());
   localPartnerDetailsStore(partner);
 
   controller.getData();
