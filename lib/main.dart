@@ -7,7 +7,7 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/orders.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
-import 'package:spotmies_partner/providers/chattingProviders.dart';
+import 'package:spotmies_partner/providers/universal_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +15,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<ChattingProvider>(
-          create: (context) => ChattingProvider()),
+      ChangeNotifierProvider<UniversalProvider>(
+          create: (context) => UniversalProvider()),
       ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
     ], child: MyApp()));
   });

@@ -100,13 +100,13 @@ class _AppBarScreenState extends State<AppBarScreen> {
                         setState(() {
                           isSwitched = !isSwitched;
                         });
-                        var body = {
-                          "availability": value.toString(),
-                        };
-                        setState(() {
-                          var res= Server().editMethod(API.partnerStatus, body);
-                          log(res.toString());
-                        });
+                        // var body = {
+                        //   "availability": value.toString(),
+                        // };
+                        // setState(() {
+                        //   var res= Server().editMethod(API.partnerStatus, body);
+                        //   log(res.toString());
+                        // });
                       //  var response = Server().editMethod(API.partnerStatus, body);
                       //  log(response.toString());
                       //   partner.updateLocal(value);
