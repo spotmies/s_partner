@@ -11,6 +11,7 @@ import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 void main() => runApp(Home());
@@ -21,6 +22,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  UniversalProvider universalProvider;
   ChatProvider chatProvider;
 //socket
 
@@ -45,6 +47,7 @@ class _HomeState extends State<Home> {
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
       _chatResponse.add(socket);
+      universalProvider.setChatBadge();
     });
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
@@ -62,6 +65,7 @@ class _HomeState extends State<Home> {
   initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     getChatList();
 
     _chatResponse = StreamController();
@@ -118,8 +122,6 @@ class _HomeState extends State<Home> {
     // chatProvider.confirmReceiveAllMessages();
   }
 
-  int _selectedIndex = 0;
-
   static List<Widget> _widgetOptions = <Widget>[
     Center(
       child: HomePage(),
@@ -138,12 +140,6 @@ class _HomeState extends State<Home> {
     ),
   ];
 
-  setBottomBarIndex(index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   List icons = [
     Icons.home,
     Icons.chat,
@@ -159,73 +155,67 @@ class _HomeState extends State<Home> {
     final width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Consumer<ChatProvider>(builder: (context, notifier, child) {
-          return Container(
-            child: _widgetOptions.elementAt(_selectedIndex),
-          );
-        }),
-        bottomNavigationBar: Container(
-          height: width * 0.163,
-          child: AnimatedBottomNavigationBar.builder(
-            elevation: 0,
-            itemCount: icons.length,
-            tabBuilder: (int index, bool isActive) {
-              final color = isActive ? Colors.grey[800] : Colors.grey;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
+      home: Consumer<UniversalProvider>(builder: (context, data, child) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: _widgetOptions.elementAt(data.getCurrentPage),
+          ),
+          bottomNavigationBar: Container(
+            height: width * 0.163,
+            child: AnimatedBottomNavigationBar.builder(
+                elevation: 0,
+                itemCount: icons.length,
+                tabBuilder: (int index, bool isActive) {
+                  final color = isActive ? Colors.grey[800] : Colors.grey;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
+                      Stack(
                         children: [
-                          Icon(
-                            icons[index],
-                            size: 24,
-                            color: color,
+                          Column(
+                            children: [
+                              Icon(
+                                icons[index],
+                                size: 24,
+                                color: color,
+                              ),
+                              TextWid(
+                                text: text[index],
+                                color: color,
+                              )
+                            ],
                           ),
-                          TextWid(
-                            text: text[index],
-                            color: color,
-                          )
+                          if (index == 1)
+                            Positioned(
+                                right: 0,
+                                top: 0,
+                                child: CircleAvatar(
+                                  radius: 4,
+                                  backgroundColor: data.getChatBadge
+                                      ? Colors.indigo[800]
+                                      : Colors.transparent,
+                                ))
                         ],
                       ),
-                      if (index == 1)
-                        Consumer<ChatProvider>(builder: (context, data, child) {
-                          List chatList = data.getChatList2();
-                          int count =
-                              chatList.isEmpty ? 0 : chatList[0]['pCount'];
-                          log(chatList.length.toString());
-
-                          return Positioned(
-                              right: 0,
-                              top: 0,
-                              child: CircleAvatar(
-                                radius: 4,
-                                backgroundColor: count == 0
-                                    ? Colors.transparent
-                                    : Colors.greenAccent,
-                              ));
-                        })
                     ],
-                  ),
-                ],
-              );
-            },
-            backgroundColor: Colors.white,
-            activeIndex: _selectedIndex,
-            splashColor: Colors.grey[200],
-            splashSpeedInMilliseconds: 300,
-            notchSmoothness: NotchSmoothness.verySmoothEdge,
-            gapLocation: GapLocation.none,
-            leftCornerRadius: 32,
-            rightCornerRadius: 32,
-            onTap: (index) => setState(() => _selectedIndex = index),
+                  );
+                },
+                backgroundColor: Colors.white,
+                activeIndex: data.getCurrentPage,
+                splashColor: Colors.grey[200],
+                splashSpeedInMilliseconds: 300,
+                notchSmoothness: NotchSmoothness.verySmoothEdge,
+                gapLocation: GapLocation.none,
+                leftCornerRadius: 32,
+                rightCornerRadius: 32,
+                onTap: (index) {
+                  data.setCurrentPage(index);
+                }),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

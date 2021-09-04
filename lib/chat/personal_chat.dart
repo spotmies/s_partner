@@ -180,7 +180,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
 
-
                           return Container(
                             padding: EdgeInsets.only(
                                 left: sender == "user" ? 10 : 0,
@@ -322,7 +321,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             chatInputField(
                 sendMessageHandler, context, _hight, _width, _chatController)
-           
           ]),
         ),
         floatingActionButton: Container(
@@ -337,8 +335,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       backgroundColor: Colors.white,
                       onPressed: () {
                         scrollToBottom();
-
-                       
                       },
                       child: Icon(
                         Icons.keyboard_arrow_down,
@@ -440,7 +436,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       decoration: TextDecoration.underline),
                 ],
               ));
-        
+
           break;
         default:
           return TextWid(
@@ -462,9 +458,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         ),
         builder: (BuildContext context) {
           return Container(
-            height: hight * 0.2,
-            child: FeatureButtonsView(message:message)
-          );
+              height: hight * 0.2, child: FeatureButtonsView(message: message));
         });
   }
 
@@ -531,11 +525,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           chatList = data.getChatList2();
           targetChat = getTargetChat(chatList, widget.msgId);
           user = targetChat['uDetails'];
-          log(user.toString());
+          // log(user.toString());
           return InkWell(
-            onTap: (){
-               Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UserDetails(userDetails: user)));
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserDetails(userDetails: user)));
             },
             child: Row(
               children: [
