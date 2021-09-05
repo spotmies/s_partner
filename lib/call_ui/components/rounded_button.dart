@@ -22,16 +22,16 @@ class RoundedButton extends StatelessWidget {
     return SizedBox(
       height: getProportionateScreenHeight(size),
       width: getProportionateScreenWidth(size),
-      child: FlatButton(
-          // padding: EdgeInsets.all(15 / 64 * size),
-          color: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
+      child: TextButton(
           onPressed: press,
-          child: SvgPicture.asset(
-            iconSrc,
-            color: iconColor,
+          child: Container(
+            padding: EdgeInsets.all(15 / 64 * size),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(60), color: color),
+            child: SvgPicture.asset(
+              iconSrc,
+              color: iconColor,
+            ),
           )),
     );
   }
