@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies_partner/call_ui/audioCallWithImage/audio_call_with_image_screen.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
@@ -513,7 +514,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AudioCallWithImage()));
+          },
           icon: Icon(
             Icons.phone,
             color: Colors.grey[900],
