@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
+import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(15),
                             bottomRight: Radius.circular(15))),
-                    child: isSwitched == true ? Online() : Offline(),
+                    child: isSwitched == true ? MyCalling() : Offline(),
                   )
                 ],
               ),
