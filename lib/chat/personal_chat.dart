@@ -537,6 +537,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   name: user['name'],
                   profile: user['pic'],
                   status: false,
+                  badge: false,
                   bgColor: Colors.blueGrey[600],
                   size: width * 0.045,
                 ),

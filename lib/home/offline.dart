@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
@@ -7,11 +9,15 @@ import 'package:spotmies_partner/home/offlinePage/singleBarGraph.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
 
 class Offline extends StatefulWidget {
+  final pr;
+  Offline(this.pr);
+
   @override
   _OfflineState createState() => _OfflineState();
 }
 
 class _OfflineState extends State<Offline> {
+  
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -20,11 +26,7 @@ class _OfflineState extends State<Offline> {
     final _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: FutureBuilder(
-          future: localPartnerDetailsGet(),
-          builder: (context, localPartner) {
-            var p = localPartner.data;
-            return Center(
+      body:Center(
                 child: Container(
               height: _hight,
               width: _width,
@@ -38,7 +40,7 @@ class _OfflineState extends State<Offline> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           circularIndicator(_hight * 0.35, _width * 0.44,
-                              Colors.blue[900], 'Rating', Icons.reviews, 69),
+                              Colors.blue[900], 'Rating', Icons.reviews, widget.pr['rate'][0] == null ? 100:avg(widget.pr['rate'])),
                           SizedBox(
                             height: _hight * 0.02,
                           ),
@@ -73,7 +75,7 @@ class _OfflineState extends State<Offline> {
                               Colors.lightBlue[700],
                               'Acceptance',
                               Icons.done_rounded,
-                              48),
+                              76),
                         ],
                       )
                     ],
@@ -181,8 +183,8 @@ class _OfflineState extends State<Offline> {
                   height: _width * 0.25,
                 ),
               ]),
-            ));
-          }),
+            ))
+          
     );
   }
 }
@@ -194,8 +196,9 @@ avg(List<dynamic> args) {
   for (var i = 0; i < avg.length; i++) {
     sum += avg[i];
   }
+  // log((sum/100).toString());
 
-  return sum;
+  return sum ;
 }
 
 indicator(_width) {

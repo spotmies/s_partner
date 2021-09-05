@@ -80,6 +80,7 @@ class _UserDetailsState extends State<UserDetails> {
                                   textColor: Colors.grey[900],
                                   textSize: _width * 0.25,
                                   size: _width * 0.25,
+                                  badge: false,
                                 ),
                               )
                             : Image.network(

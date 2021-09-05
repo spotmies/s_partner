@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/login/onboard.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           if (document.exists) {
             print("doc exits");
             Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (_) => Home()), (route) => false);
+                MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
           } else if (!document.exists) {
             print("doc not exits");
             Navigator.pushAndRemoveUntil(

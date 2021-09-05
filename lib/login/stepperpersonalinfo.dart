@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
-import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 TextEditingController nameTf = TextEditingController();
@@ -294,7 +294,7 @@ class _StepperPersonalInfoState extends State<StepperPersonalInfo> {
     Server().postMethod(API.partnerRegister, body).then((response) {
       if (response.statusCode == 200) {
         Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => Home()), (route) => false);
+            MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
       } else {
         snackbar(context, 'Need to Upload Profile Picture');
       }

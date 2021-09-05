@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'stepperpersonalinfo.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -99,7 +99,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         //have to change to set **********
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => Home()),
+                            MaterialPageRoute(builder: (_) => NavBar()),
                             (route) => false);
                       } else if (!document.exists) {
                         var phone = widget.phone;

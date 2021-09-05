@@ -11,6 +11,7 @@ class ProfilePic extends StatelessWidget {
       this.size,
       this.textSize,
       this.textColor,
+      this.badge,
       this.status = true})
       : super(key: key);
 
@@ -20,6 +21,7 @@ class ProfilePic extends StatelessWidget {
   final Color bgColor;
   final double textSize;
   final Color textColor;
+  final bool badge;
   final double size;
   Widget _activeIcon(double hight, double width) {
     if (status) {
@@ -59,10 +61,10 @@ class ProfilePic extends StatelessWidget {
                   radius: size ?? _width * 0.07,
                   backgroundImage: NetworkImage(profile ?? ""),
                 ),
-                Positioned(
+               Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(_hight, _width),
+                  child:badge == true?  _activeIcon(_hight, _width):Container(),
                 ),
               ],
             )
@@ -82,7 +84,7 @@ class ProfilePic extends StatelessWidget {
                 Positioned(
                   right: 0,
                   bottom: 0,
-                  child: _activeIcon(_hight, _width),
+                  child: badge == true?  _activeIcon(_hight, _width):Container(),
                 ),
               ],
             ),

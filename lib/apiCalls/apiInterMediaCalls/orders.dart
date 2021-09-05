@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
@@ -14,9 +15,14 @@ final controller = TestController();
   };
 
 incomingOrders() async {
+    
     var response =
         await Server().getMethodParems(API.incomingorders, queryParameters);
+    log('api called');
+    // log(response.toString());
+    log(response.body.toString());
     orders = jsonDecode(response);
+    // log(orders);
     controller.getData();
     localOrdersStore(orders);
   }

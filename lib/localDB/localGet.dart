@@ -8,14 +8,25 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.d
 //get orders from local db
 
 localOrdersGet() async {
+  
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  
   String ico = prefs.getString('inComingOrders');
-  List<dynamic> inComing = jsonDecode(ico);
-  if (inComing == null) {
+  log(ico);
+   if (ico == null) {
     incomingOrders();
-    log('orders api called');
   }
-  return inComing;
+  // log(ico);
+  //  Map<String,dynamic> inComings = jsonDecode(ico) as Map<String,dynamic>;
+  
+  
+  // log(inComings.toString());
+  // // log('message');
+  // if (inComings == null) {
+  //   incomingOrders();
+  //   log('orders api called');
+  // }
+  return jsonDecode(ico);
 }
 
 //get partner details from local db
@@ -24,6 +35,7 @@ localPartnerDetailsGet() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String pd = prefs.getString('localPartnerDetails');
   Map<String, dynamic> parData = jsonDecode(pd) as Map<String, dynamic>;
+  
   if (parData == null) {
     partnerDetail();
   }

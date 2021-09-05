@@ -5,7 +5,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:im_animations/im_animations.dart';
-import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -71,7 +71,7 @@ class _LocationState extends State<Location> {
             'location.add1': add2,
           });
           Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (_) => Home()), (route) => false);
+              MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
         },
         icon: Icon(Icons.gps_fixed),
         label: Text("Save Location"),
