@@ -439,6 +439,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       decoration: TextDecoration.underline),
                 ],
               ));
+        case "call":
+          return TextWid(
+            text: sender != "user" ? "OutGoing Call" : "Incoming Call",
+            maxlines: 200,
+            lSpace: 1.5,
+            color: sender != "user" ? Colors.grey[800] : Colors.grey[900],
+            weight: sender != "user" ? FontWeight.w600 : FontWeight.w600,
+          );
 
           break;
         default:
@@ -518,7 +526,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MyCalling()));
+                builder: (context) => MyCalling(msgId:widget.msgId,ordId: targetChat['ordId'],uId: user['uId'],pId: FirebaseAuth.instance.currentUser.uid,isIncoming: false,)));
           },
           icon: Icon(
             Icons.phone,

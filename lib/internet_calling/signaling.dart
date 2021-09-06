@@ -35,7 +35,7 @@ class Signaling {
 
     registerPeerConnectionListeners();
 
-    localStream.getTracks().forEach((track) {
+    localStream?.getTracks()?.forEach((track) {
       peerConnection?.addTrack(track, localStream);
     });
 

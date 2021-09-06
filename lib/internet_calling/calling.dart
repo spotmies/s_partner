@@ -1,16 +1,35 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/components/body.dart';
 import 'package:spotmies_partner/internet_calling/signaling.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 
 class MyCalling extends StatefulWidget {
+    final String msgId;
+    final dynamic ordId;
+    final dynamic uId;
+    final dynamic pId;
+      final bool isIncoming;
+  final dynamic roomId;
+
+     MyCalling(
+      {@required this.msgId,
+      @required this.pId,
+      @required this.uId,
+      @required this.ordId,
+      @required this.isIncoming,
+      this.roomId});
   @override
   _MyCallingState createState() => _MyCallingState();
 }
 
 class _MyCallingState extends State<MyCalling> {
+    ChatProvider chatProvider;
   Signaling signaling = Signaling();
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
@@ -20,6 +39,27 @@ class _MyCallingState extends State<MyCalling> {
 Future<void> createRoomId() async {
  roomId = await signaling.createRoom(_remoteRenderer);
  log("room is is $roomId");
+     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    Map<String, String> msgData = {
+      'msg': roomId.toString(),
+      'time': timestamp,
+      'sender': 'partner',
+      'type': "call"
+    };
+    Map<String, dynamic> target = {
+      'uId': widget.uId,
+      'pId':widget.pId,
+      'msgId': widget.msgId,
+      'ordId': widget.ordId,
+      'type':'call',
+      'roomId': roomId.toString()
+    };
+    Map<String, Object> sendPayload = {
+      "object": jsonEncode(msgData),
+      "target": target
+    };
+    chatProvider.addnewMessage(sendPayload);
+    chatProvider.setSendMessage(sendPayload);
  setState(() {});
 }
 
@@ -28,10 +68,17 @@ Future<void> handUpCall() async {
 await signaling.hangUp(_localRenderer);
 Navigator.pop(context);
 }
-
+  void joinOnRoom() {
+    log("joing call////");
+    signaling.joinRoom(
+      widget.roomId,
+      _remoteRenderer,
+    );
+  }
 
   @override
   void initState() {
+      chatProvider = Provider.of<ChatProvider>(context, listen: false);
     _localRenderer.initialize();
     _remoteRenderer.initialize();
 
@@ -40,7 +87,9 @@ Navigator.pop(context);
       setState(() {});
     });
     signaling.openUserMedia(_localRenderer, _remoteRenderer);
-    createRoomId();
+        if (!widget.isIncoming) {
+      createRoomId();
+    }
    
     super.initState();
   }
@@ -57,7 +106,7 @@ Navigator.pop(context);
   
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
-    return CallingUi(isInComingScreen: false,onHangUp: handUpCall,);
+    return CallingUi(isInComingScreen: widget.isIncoming,onHangUp: handUpCall,onAccept:joinOnRoom);
     // Scaffold(
     //   appBar: AppBar(
     //     title: Text("Welcome to Flutter Explained - WebRTC"),
