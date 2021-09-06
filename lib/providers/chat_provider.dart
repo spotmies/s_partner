@@ -12,6 +12,8 @@ class ChatProvider extends ChangeNotifier {
   bool scrollEvent = false;
   int msgCount = 20;
   bool enableFoat = true;
+  bool acceptCalls = true;
+  int callDuration = 0;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -27,6 +29,12 @@ class ChatProvider extends ChangeNotifier {
   }
 
   newMessagetemp() => sendMessageQueue;
+
+  getUdetailsByMsgId(msgId) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    return chatList[index]['uDetails'];
+  }
 
   addnewMessage(value) {
     String msgId = value['target']['msgId'];
@@ -162,4 +170,21 @@ class ChatProvider extends ChangeNotifier {
   }
 
   getReadReceipt() => readReceipts;
+
+  bool get getAcceptCall => acceptCalls;
+  void setAcceptCall(state) {
+    acceptCalls = state;
+    notifyListeners();
+  }
+
+  int get duration => callDuration;
+
+  void incrementDuration() {
+    callDuration++;
+    notifyListeners();
+  }
+
+  void resetDuration() {
+    callDuration = 0;
+  }
 }

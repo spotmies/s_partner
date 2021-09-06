@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 typedef void StreamStateCallback(MediaStream stream);
@@ -24,6 +25,7 @@ class Signaling {
   String roomId;
   String currentRoomText;
   StreamStateCallback onAddRemoteStream;
+    BuildContext context;
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -121,7 +123,7 @@ class Signaling {
 
       registerPeerConnectionListeners();
 
-      localStream?.getTracks().forEach((track) {
+      localStream?.getTracks()?.forEach((track) {
         peerConnection?.addTrack(track, localStream);
       });
 
@@ -180,12 +182,16 @@ class Signaling {
         });
       });
     }
+
+
   }
 
   Future<void> openUserMedia(
     RTCVideoRenderer localVideo,
     RTCVideoRenderer remoteVideo,
+    BuildContext contextt
   ) async {
+    context = contextt;
     var stream = await navigator.mediaDevices
         .getUserMedia({'video': false, 'audio': true});
 
@@ -229,6 +235,10 @@ class Signaling {
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       log('Connection state change: $state');
+            if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected || state ==  RTCPeerConnectionState.RTCPeerConnectionStateFailed) {
+        log("connection diconted");
+        Navigator.pop(context);
+      }
     };
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
