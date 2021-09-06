@@ -245,7 +245,7 @@ class _ChatListCardState extends State<ChatListCard> {
             ),
           ],
         ),
-        leading: ProfilePic(
+        leading: ProfilePic( 
           badge: true,
           profile: widget.profile,
           name: widget.name,

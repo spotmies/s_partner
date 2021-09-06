@@ -28,7 +28,7 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
-  ChatController _chatController;
+  ChatController _chatController; 
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
@@ -152,6 +152,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
+    log(_chatController.isUploading.toString());
     return Scaffold(
         key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
