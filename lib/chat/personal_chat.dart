@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/audio_call_with_image_screen.dart';
+import 'package:spotmies_partner/call_ui/audioCallWithImage/components/body.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
 
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
@@ -515,8 +517,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AudioCallWithImage()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyCalling()));
           },
           icon: Icon(
             Icons.phone,

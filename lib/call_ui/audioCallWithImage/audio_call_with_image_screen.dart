@@ -8,8 +8,8 @@ class AudioCallWithImage extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Body(
-        isDialScreen: true,
+      body: CallingUi(
+        isInComingScreen: true,
       ),
     );
   }
