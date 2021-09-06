@@ -98,16 +98,16 @@ class ChatProvider extends ChangeNotifier {
   resetMessageCount(msgId) {
     int index =
         chatList.indexWhere((element) => element['msgId'].toString() == msgId);
-    log(chatList[index]['pCount'].toString());
+    //log(chatList[index]['pCount'].toString());
     chatList[index]['pCount'] = 0;
-    log(chatList[index]['pCount'].toString());
+    //log(chatList[index]['pCount'].toString());
 
     notifyListeners();
   }
 
   setSendMessage(payload) {
     sendMessageQueue.add(payload);
-    log(sendMessageQueue.toString());
+    //log(sendMessageQueue.toString());
     notifyListeners();
   }
 

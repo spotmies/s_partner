@@ -211,7 +211,7 @@ class _NavBarState extends State<NavBar> {
                           List chatList = data.getChatList2();
                           int count =
                               chatList.isEmpty ? 0 : chatList[0]['pCount'];
-                          log(chatList.length.toString());
+                       
 
                           return Positioned(
                               right: 0,

@@ -193,7 +193,7 @@ class Signaling {
   ) async {
     context = contextt;
     var stream = await navigator.mediaDevices
-        .getUserMedia({'video': false, 'audio': true});
+        .getUserMedia({'audio': true});
 
     localVideo.srcObject = stream;
     localStream = stream;

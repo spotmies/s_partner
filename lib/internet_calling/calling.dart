@@ -74,7 +74,8 @@ class _MyCallingState extends State<MyCalling> {
     Navigator.pop(context);
   }
 
-  void joinOnRoom() {
+  Future<void> joinOnRoom() async {
+    await signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     log("joing call////");
     signaling.joinRoom(
       widget.roomId,
