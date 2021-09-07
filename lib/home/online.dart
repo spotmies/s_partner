@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/controllers/incomingOrders_controller.dart';
@@ -15,7 +13,6 @@ import 'package:spotmies_partner/localDB/localGet.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
-import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
@@ -70,10 +67,12 @@ class _OnlineState extends StateMVC<Online> {
               return Consumer<IncomingOrdersProvider>(
                   builder: (context, data, child) {
                 var ld = data.local;
-
+                if(ld == null){
+                  _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
+                }
                 var o = List.from(ld.reversed);
-                if (o == null) return Center(child: circleProgress());
-                log(data.local[0]['problem'].toString());
+                if (o == null ||ld == null) return Center(child: circleProgress());
+                // log(data.local[0]['problem'].toString());
                 return StreamBuilder(
                     stream: _incomingOrdersController.stream,
                     builder: (context, orderSocket) {
