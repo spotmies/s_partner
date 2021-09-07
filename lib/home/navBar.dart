@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -44,6 +45,20 @@ class _NavBarState extends State<NavBar> {
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
+            var typeCheck = socket['target']['type'];
+      if (typeCheck == "call") {
+        log("======== incoming call ===========");
+        chatProvider.startCallTimeout();
+        var newTarget = socket['target'];
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MyCalling(
+                uId: newTarget['uId'],
+                pId: newTarget['pId'],
+                msgId: newTarget['msgId'],
+                ordId: newTarget['ordId'],
+                isIncoming: true,
+                roomId: newTarget['roomId'])));
+      }
       _chatResponse.add(socket);
     });
     socket.on("recieveReadReciept", (data) {
@@ -197,7 +212,7 @@ class _NavBarState extends State<NavBar> {
                           List chatList = data.getChatList2();
                           int count =
                               chatList.isEmpty ? 0 : chatList[0]['pCount'];
-                          log(chatList.length.toString());
+                       
 
                           return Positioned(
                               right: 0,

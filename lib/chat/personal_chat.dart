@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies_partner/chat/personal_chat_ui_methods.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -20,27 +22,29 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
-  ChatController _chatController; 
+  ChatController _chatController;
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
- 
 
   // final recorder = SoundRecorder();
   @override
   void initState() {
     super.initState();
-    _chatController.chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    _chatController.chatProvider =
+        Provider.of<ChatProvider>(context, listen: false);
 
-   _chatController.scrollController.addListener(() {
+    _chatController.scrollController.addListener(() {
       if (_chatController.scrollController.position.pixels ==
           _chatController.scrollController.position.maxScrollExtent) {
         // log("at top >>>");
-       _chatController.chatProvider.setMsgCount(_chatController.chatProvider.getMsgCount() + 20);
+        _chatController.chatProvider
+            .setMsgCount(_chatController.chatProvider.getMsgCount() + 20);
       }
       if (_chatController.scrollController.position.pixels < 40) {
         // log('disable float >>>>>>>>>>>>');
-        if (_chatController.chatProvider.getFloat()) _chatController.chatProvider.setFloat(false);
+        if (_chatController.chatProvider.getFloat())
+          _chatController.chatProvider.setFloat(false);
       } else if (_chatController.scrollController.position.pixels > 40) {
         if (!_chatController.chatProvider.getFloat()) {
           _chatController.chatProvider.setFloat(true);
@@ -49,8 +53,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       }
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +72,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 child: Consumer<ChatProvider>(
                   builder: (context, data, child) {
                     _chatController.chatList = data.getChatList2();
-                    _chatController.targetChat = _chatController.getTargetChat(_chatController.chatList, widget.msgId);
-                   _chatController. user = _chatController.targetChat['uDetails'];
+                    _chatController.targetChat = _chatController.getTargetChat(
+                        _chatController.chatList, widget.msgId);
+                    _chatController.user =
+                        _chatController.targetChat['uDetails'];
                     List messages = _chatController.targetChat['msgs'];
                     return ListView.builder(
                         reverse: true,
@@ -142,7 +146,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                     color: Colors.grey[600],
                                                     text: sender != 'user'
                                                         ? 'You'
-                                                        : _chatController.user['name'],
+                                                        : _chatController
+                                                            .user['name'],
                                                   )),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -157,8 +162,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                     _hight,
                                                     _width,
                                                     _chatController,
-                                                    context
-                                                    ),
+                                                    context),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -182,14 +186,17 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                           visible:
                                               index == 0 && sender == "partner",
                                           child: readReciept(
-                                              _width, _chatController.targetChat['pState']),
+                                              _width,
+                                              _chatController
+                                                  .targetChat['pState']),
                                         )
                                       ],
                                     ),
                                   ],
                                 ),
                                 Visibility(
-                                  visible: _chatController.dateCompare(rawMsgData['time'],
+                                  visible: _chatController.dateCompare(
+                                          rawMsgData['time'],
                                           rawMsgDataprev['time']) !=
                                       "false",
                                   child: Container(
@@ -229,8 +236,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 ),
               ),
             ),
-            chatInputField(
-               _chatController.sendMessageHandler, context, _hight, _width, _chatController,widget.msgId)
+            chatInputField(_chatController.sendMessageHandler, context, _hight,
+                _width, _chatController, widget.msgId)
           ]),
         ),
         floatingActionButton: Container(
@@ -244,7 +251,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       mini: true,
                       backgroundColor: Colors.white,
                       onPressed: () {
-                       _chatController.scrollToBottom();
+                        _chatController.scrollToBottom();
                       },
                       child: Icon(
                         Icons.keyboard_arrow_down,
@@ -258,10 +265,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }
-
-  
-
- 
 
   Widget _buildAppBar(BuildContext context, double hight, double width) {
     return AppBar(
@@ -284,7 +287,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyCalling(
+                      msgId: widget.msgId,
+                      ordId: _chatController.targetChat['ordId'],
+                      uId: _chatController.user['uId'],
+                      pId: FirebaseAuth.instance.currentUser.uid,
+                      isIncoming: false,
+                    )));
+          },
           icon: Icon(
             Icons.phone,
             color: Colors.grey[900],
@@ -293,14 +305,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       ],
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {
-         _chatController.chatList = data.getChatList2();
-         _chatController.targetChat = _chatController.getTargetChat(_chatController.chatList, widget.msgId);
-         _chatController.user = _chatController.targetChat['uDetails'];
+          _chatController.chatList = data.getChatList2();
+          _chatController.targetChat = _chatController.getTargetChat(
+              _chatController.chatList, widget.msgId);
+          _chatController.user = _chatController.targetChat['uDetails'];
           // log(user.toString());
           return InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UserDetails(userDetails: _chatController.user)));
+                  builder: (context) =>
+                      UserDetails(userDetails: _chatController.user)));
             },
             child: Row(
               children: [
@@ -320,9 +334,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   text: _chatController.user['name'] ?? "Spotmies User",
                   size: width * 0.058,
                   weight: FontWeight.w600,
-                )
-                  
-                    ),
+                )),
               ],
             ),
           );
