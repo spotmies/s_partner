@@ -17,4 +17,5 @@ partnerDetail() async {
   localPartnerDetailsStore(partner);
 
   controller.getData();
+  return partner;
 }

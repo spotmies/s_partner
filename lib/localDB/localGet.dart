@@ -31,14 +31,15 @@ localOrdersGet() async {
 //get partner details from local db
 
 localPartnerDetailsGet() async {
+  
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String pd = prefs.getString('localPartnerDetails');
-  Map<String, dynamic> parData = jsonDecode(pd) as Map<String, dynamic>;
-  
-  if (parData == null) {
-    partnerDetail();
+  if (pd == null) {
+   return partnerDetail();
   }
-  return parData;
+  Map<String, dynamic> parData = jsonDecode(pd) as Map<String, dynamic>;
+    return parData;
+  
 }
 
 // get chatting list from db
