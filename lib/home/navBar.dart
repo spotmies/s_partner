@@ -48,6 +48,7 @@ class _NavBarState extends State<NavBar> {
             var typeCheck = socket['target']['type'];
       if (typeCheck == "call") {
         log("======== incoming call ===========");
+        chatProvider.startCallTimeout();
         var newTarget = socket['target'];
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MyCalling(

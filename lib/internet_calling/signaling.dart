@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 
 typedef void StreamStateCallback(MediaStream stream);
 
@@ -26,6 +28,7 @@ class Signaling {
   String currentRoomText;
   StreamStateCallback onAddRemoteStream;
     BuildContext context;
+     ChatProvider chatProvider;
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -192,6 +195,7 @@ class Signaling {
     BuildContext contextt
   ) async {
     context = contextt;
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
     var stream = await navigator.mediaDevices
         .getUserMedia({'audio': true});
 
@@ -237,7 +241,8 @@ class Signaling {
       log('Connection state change: $state');
             if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected || state ==  RTCPeerConnectionState.RTCPeerConnectionStateFailed) {
         log("connection diconted");
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        chatProvider.setCallDisconnected(true);
       }
     };
 

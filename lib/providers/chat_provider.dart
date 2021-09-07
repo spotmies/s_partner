@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -12,8 +13,15 @@ class ChatProvider extends ChangeNotifier {
   bool scrollEvent = false;
   int msgCount = 20;
   bool enableFoat = true;
+
+  //calling variables
   bool acceptCalls = true;
   int callDuration = 0;
+  int callInitTimeOut = 15;
+  bool stopTimer = false;
+  bool isCallDisconnected = false;
+  int callStatus = 0;
+
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -50,6 +58,7 @@ class ChatProvider extends ChangeNotifier {
         allChats[i]['msgs'].add(value['object']);
         if (sender == "partner") {
           allChats[i]['pState'] = 0;
+          callStatus = 0;
         } else {
           //read receipt code
           log("read receipt provider");
@@ -118,6 +127,7 @@ class ChatProvider extends ChangeNotifier {
 
   chatReadReceipt(msgId, status) {
     readReceipt(msgId, status ?? 2);
+    callStatus = status ?? 2;
     notifyListeners();
   }
 
@@ -187,4 +197,38 @@ class ChatProvider extends ChangeNotifier {
   void resetDuration() {
     callDuration = 0;
   }
+
+  int get getCallStatus => callStatus;
+
+  void resetCallInitTimeout() {
+    callInitTimeOut = 15;
+  }
+  
+  void setStopTimer(){
+    stopTimer = true;
+    notifyListeners();
+  }
+
+  void startCallTimeout() {
+    log("timer started");
+    Timer.periodic(Duration(seconds: 1), (timer) {
+     
+      callInitTimeOut--;
+      if (callInitTimeOut < 1) notifyListeners();
+      if (!acceptCalls || stopTimer){ 
+        timer.cancel();
+        stopTimer = false;
+        log("timer stopped");
+
+        }
+    });
+  }
+
+  int get callTimeout => callInitTimeOut;
+
+  void setCallDisconnected(status) {
+    isCallDisconnected = status;
+  }
+
+  bool get callDisconnectStatus => isCallDisconnected;
 }

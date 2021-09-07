@@ -66,10 +66,20 @@ class _MyCallingState extends State<MyCalling> {
     setState(() {});
   }
 
+  Future<void> rejectCall() async {
+    log('call rejected');
+    chatProvider.resetDuration();
+    chatProvider.setAcceptCall(true);
+    chatProvider.resetCallInitTimeout();
+    chatProvider.setStopTimer();
+    Navigator.pop(context);
+  }
+
   Future<void> handUpCall() async {
     log("===== handUp call =======");
     await signaling.hangUp(_localRenderer);
     chatProvider.setAcceptCall(true);
+    chatProvider.resetCallInitTimeout();
     chatProvider.resetDuration();
     Navigator.pop(context);
   }
@@ -103,6 +113,14 @@ class _MyCallingState extends State<MyCalling> {
       createRoomId();
     }
 
+    chatProvider.addListener(() {
+      if(chatProvider.callDisconnectStatus){
+         chatProvider.setCallDisconnected(false);
+        handUpCall();
+       
+      }
+    });
+
     super.initState();
   }
 
@@ -111,7 +129,7 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
-    chatProvider.setAcceptCall(true);
+    // chatProvider.setAcceptCall(true);
     super.dispose();
   }
 
@@ -119,11 +137,13 @@ class _MyCallingState extends State<MyCalling> {
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
-      Map uDetails =  data.getUdetailsByMsgId(widget.msgId);     
+      Map uDetails = data.getUdetailsByMsgId(widget.msgId);
+      if (data.callTimeout == 0) rejectCall();
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
         onAccept: joinOnRoom,
+        onReject: rejectCall,
         name: uDetails['name'],
         image: uDetails['pic'],
       );
