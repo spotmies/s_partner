@@ -19,8 +19,9 @@ class ChatProvider extends ChangeNotifier {
   int callDuration = 0;
   int callInitTimeOut = 15;
   bool stopTimer = false;
-  bool isCallDisconnected = false;
-  int callStatus = 0;
+
+  int callStatus = 0; // 0- connecting or new connection 1-calling 2- ringing
+  //3- connected 4- rejected 5- not lifted 6- call failed or disconnected
 
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
@@ -127,7 +128,7 @@ class ChatProvider extends ChangeNotifier {
 
   chatReadReceipt(msgId, status) {
     readReceipt(msgId, status ?? 2);
-    callStatus = status ?? 2;
+    callStatus = status == 3 ? 2 : status;
     notifyListeners();
   }
 
@@ -189,9 +190,15 @@ class ChatProvider extends ChangeNotifier {
 
   int get duration => callDuration;
 
-  void incrementDuration() {
-    callDuration++;
-    notifyListeners();
+  void startCallDuration() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+        callDuration++;
+        notifyListeners();
+      if (callStatus != 3){
+        // callDuration = 0;
+ timer.cancel();
+      }
+    });
   }
 
   void resetDuration() {
@@ -200,11 +207,16 @@ class ChatProvider extends ChangeNotifier {
 
   int get getCallStatus => callStatus;
 
+  void setCallStatus(state) {
+    callStatus = state ?? 0;
+    notifyListeners();
+  }
+
   void resetCallInitTimeout() {
     callInitTimeOut = 15;
   }
-  
-  void setStopTimer(){
+
+  void setStopTimer() {
     stopTimer = true;
     notifyListeners();
   }
@@ -212,23 +224,24 @@ class ChatProvider extends ChangeNotifier {
   void startCallTimeout() {
     log("timer started");
     Timer.periodic(Duration(seconds: 1), (timer) {
-     
       callInitTimeOut--;
       if (callInitTimeOut < 1) notifyListeners();
-      if (!acceptCalls || stopTimer){ 
+      if (!acceptCalls || stopTimer) {
         timer.cancel();
         stopTimer = false;
         log("timer stopped");
-
-        }
+      }
     });
   }
 
   int get callTimeout => callInitTimeOut;
 
-  void setCallDisconnected(status) {
-    isCallDisconnected = status;
+  void resetAllCallingVariables(){
+      acceptCalls = true;
+     callDuration = 0;
+     callInitTimeOut = 15;
+     stopTimer = false;
+     callStatus = 0;
+     notifyListeners();
   }
-
-  bool get callDisconnectStatus => isCallDisconnected;
 }

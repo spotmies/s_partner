@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +33,8 @@ class _MyCallingState extends State<MyCalling> {
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   String roomId;
+  bool timerFlag = true;
+  bool callDisconnectFlag = true;
   TextEditingController textEditingController = TextEditingController(text: '');
 
   Future<void> createRoomId() async {
@@ -72,16 +72,15 @@ class _MyCallingState extends State<MyCalling> {
     chatProvider.setAcceptCall(true);
     chatProvider.resetCallInitTimeout();
     chatProvider.setStopTimer();
-    Navigator.pop(context);
   }
 
   Future<void> handUpCall() async {
+    chatProvider.setCallStatus(0);
     log("===== handUp call =======");
     await signaling.hangUp(_localRenderer);
     chatProvider.setAcceptCall(true);
     chatProvider.resetCallInitTimeout();
     chatProvider.resetDuration();
-    Navigator.pop(context);
   }
 
   Future<void> joinOnRoom() async {
@@ -92,10 +91,6 @@ class _MyCallingState extends State<MyCalling> {
       _remoteRenderer,
     );
     chatProvider.setAcceptCall(false);
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      chatProvider.incrementDuration();
-      if (chatProvider.getAcceptCall) timer.cancel();
-    });
   }
 
   @override
@@ -103,7 +98,7 @@ class _MyCallingState extends State<MyCalling> {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     _localRenderer.initialize();
     _remoteRenderer.initialize();
-
+    //chatProvider.resetAllCallingVariables();
     signaling.onAddRemoteStream = ((stream) {
       _remoteRenderer.srcObject = stream;
       setState(() {});
@@ -114,10 +109,11 @@ class _MyCallingState extends State<MyCalling> {
     }
 
     chatProvider.addListener(() {
-      if(chatProvider.callDisconnectStatus){
-         chatProvider.setCallDisconnected(false);
-        handUpCall();
-       
+      int callState = chatProvider.getCallStatus;
+
+ if (callState == 3 && timerFlag) {
+        timerFlag = false;
+        chatProvider.startCallDuration();
       }
     });
 
@@ -129,7 +125,6 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
-    // chatProvider.setAcceptCall(true);
     super.dispose();
   }
 
@@ -137,8 +132,8 @@ class _MyCallingState extends State<MyCalling> {
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
+      if(data.callTimeout == 0)rejectCall();
       Map uDetails = data.getUdetailsByMsgId(widget.msgId);
-      if (data.callTimeout == 0) rejectCall();
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
@@ -148,90 +143,6 @@ class _MyCallingState extends State<MyCalling> {
         image: uDetails['pic'],
       );
     });
-    // Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Welcome to Flutter Explained - WebRTC"),
-    //   ),
-    //   body: Column(
-    //     children: [
-    //       SizedBox(height: 8),
-    //       SingleChildScrollView(
-    //         scrollDirection: Axis.horizontal,
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 signaling.openUserMedia(_localRenderer, _remoteRenderer);
-    //               },
-    //               child: Text("Open camera & microphone"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () async {
-    //                 roomId = await signaling.createRoom(_remoteRenderer);
-    //                 textEditingController.text = roomId;
-    //                 setState(() {});
-    //               },
-    //               child: Text("Create room"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 // Add roomId
-    //                 signaling.joinRoom(
-    //                   textEditingController.text,
-    //                   _remoteRenderer,
-    //                 );
-    //               },
-    //               child: Text("Join room"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 signaling.hangUp(_localRenderer);
-    //               },
-    //               child: Text("Hangup"),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       SizedBox(height: 8),
-    //       Expanded(
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               Expanded(child: RTCVideoView(_localRenderer, mirror: true)),
-    //               Expanded(child: RTCVideoView(_remoteRenderer)),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       Padding(
-    //         padding: const EdgeInsets.all(8.0),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             Text("Join the following Room: "),
-    //             Flexible(
-    //               child: TextFormField(
-    //                 controller: textEditingController,
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       SizedBox(height: 8)
-    //     ],
-    //   ),
-    // );
+   
   }
 }

@@ -8,7 +8,7 @@ import '../size.config.dart';
 
 class CallingUi extends StatefulWidget {
   CallingUi(
-      {this.isInComingScreen,
+      {@required this.isInComingScreen,
       this.image = "",
       this.name = "unknown",
       this.onAccept,
@@ -31,6 +31,39 @@ class CallingUi extends StatefulWidget {
 
 class _CallingUiState extends State<CallingUi> {
   ChatProvider chatProvider;
+ String screenType = '';
+   callStatus(state) {
+    switch (state) {
+      case 0:
+        return "connecting...";
+      case 1:
+        return "Calling...";
+      case 2:
+        return "Ringing...";
+      case 3:
+        return "Connected";
+      case 6:
+        return "Terminated....";
+        break;
+      default:
+        return "connecting...";
+    }
+  }
+
+    changeScreen(screenName) {
+    setState(() {
+      screenType = screenName;
+    });
+  }
+
+  
+  @override
+  initState() {
+    setState(() {
+      screenType = widget.isInComingScreen ? "incoming" : "outgoing";
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -68,14 +101,15 @@ class _CallingUiState extends State<CallingUi> {
                     ),
                     VerticalSpacing(of: 10),
                     Text(
-                      !data.getAcceptCall
-                          ? "Duration ${data.duration} ".toUpperCase()
+                      screenType == "outgoing"
+                          ? "Duration ${data.duration}   ${callStatus(data.getCallStatus)}"
+                              .toUpperCase()
                           : "INCOMING CALL.....",
                       style: TextStyle(color: Colors.white60),
                     ),
                     Spacer(),
                     Visibility(
-                      visible: !data.getAcceptCall,
+                      visible: screenType == "outgoing",
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -90,6 +124,7 @@ class _CallingUiState extends State<CallingUi> {
                           RoundedButton(
                             press: () {
                               widget.onHangUp();
+                               Navigator.pop(context);
                             },
                             color: kRedColor,
                             iconColor: Colors.white,
@@ -107,12 +142,13 @@ class _CallingUiState extends State<CallingUi> {
                       ),
                     ),
                     Visibility(
-                      visible: data.getAcceptCall,
+                      visible: screenType == "incoming",
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           RoundedButton(
                             press: () {
+                              changeScreen("outgoing");
                               widget.onAccept();
                             },
                             color: Colors.green,
@@ -122,6 +158,7 @@ class _CallingUiState extends State<CallingUi> {
                           RoundedButton(
                             press: () {
                               widget.onReject();
+                              Navigator.pop(context);
                             },
                             color: Colors.red,
                             iconColor: Colors.white,

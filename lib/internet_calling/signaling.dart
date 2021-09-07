@@ -239,10 +239,15 @@ class Signaling {
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       log('Connection state change: $state');
-            if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected || state ==  RTCPeerConnectionState.RTCPeerConnectionStateFailed) {
+            if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected || state ==  RTCPeerConnectionState.RTCPeerConnectionStateFailed || state == RTCPeerConnectionState.RTCPeerConnectionStateClosed) {
         log("connection diconted");
         // Navigator.pop(context);
-        chatProvider.setCallDisconnected(true);
+       if(chatProvider.getCallStatus !=0) chatProvider.setCallStatus(6);
+      }
+      if(state == RTCPeerConnectionState.RTCPeerConnectionStateConnected){
+        //call connected
+        log("=============     call connected       ================");
+        chatProvider.setCallStatus(3);
       }
     };
 
