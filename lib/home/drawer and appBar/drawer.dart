@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
@@ -14,20 +17,10 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/signoutBS.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
 import 'package:spotmies_partner/orders/completed.dart';
 import 'package:spotmies_partner/profile/profile.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
-import 'package:spotmies_partner/reusable_widgets/zoom_drawer.dart';
 
-// class HomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         // children: [DrawerScreen(), HomeScreen()],
-//       ),
-//     );
-//   }
-// }
 
 class DrawerScreen extends StatefulWidget {
   final drawerController;
@@ -37,18 +30,35 @@ class DrawerScreen extends StatefulWidget {
   _DrawerScreenState createState() => _DrawerScreenState();
 }
 
-class _DrawerScreenState extends State<DrawerScreen> {
+class _DrawerScreenState extends StateMVC<DrawerScreen> {
+
+  DrawerandAppBarController _drawerController;
+  _DrawerScreenState() : super(DrawerandAppBarController()) {
+    this._drawerController = controller;
+  }
+
+  PartnerDetailsProvider partnerDetailsProvider;
+   var isLoading = false;
+
+  @override
+  void initState() {
+    partnerDetailsProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    partnerDetailsProvider.localDetailsGet();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return FutureBuilder(
-        future: localPartnerDetailsGet(),
-        builder: (context, snapshot) {
-          var pr = snapshot.data;
-          if (pr == null) {
+    return Consumer<PartnerDetailsProvider>(
+        
+        builder: (context, data,child) {
+          var pd = data.partnerLocal;
+          if (pd == null) {
             return Center(child: CircularProgressIndicator());
           }
           // log(pr.toString());
@@ -62,8 +72,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   children: [
                     ProfilePic(
                       badge: false,
-                      profile: pr['partnerPic'],
-                      name: pr['name'],
+                      profile: pd['partnerPic'],
+                      name: pd['name'],
                     ),
                     SizedBox(
                       width: 10,
@@ -73,7 +83,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       children: [
                         TextWid(
                           text: toBeginningOfSentenceCase(
-                            pr['name'],
+                            pd['name'],
                           ),
                           size: _width * 0.045,
                           weight: FontWeight.w600,
@@ -82,7 +92,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           children: [
                             TextWid(
                               text: toBeginningOfSentenceCase(
-                                pr['availability'] == false
+                                pd['availability'] == false
                                     ? 'Inactive Now'
                                     : 'Active Now',
                               ),
@@ -91,7 +101,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             ),
                             Text('  |  '),
                             TextWid(
-                              text: toBeginningOfSentenceCase(jobs[pr['job']]),
+                              text: toBeginningOfSentenceCase(jobs[pd['job']]),
                               size: _width * 0.03,
                               weight: FontWeight.w500,
                             )
@@ -112,7 +122,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                               onTap: () {
                                 widget.drawerController.toggle();
                                 drawerItemsFunction(element['title'], context,
-                                    _hight, _width, pr);
+                                    _hight, _width, pd,partnerDetailsProvider,_drawerController);
                                 log(element['title']);
                               },
                               child: Row(
@@ -148,7 +158,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
 }
 
 drawerItemsFunction(
-    element, BuildContext context, double hight, double width, pr) {
+    element, BuildContext context, double hight, double width, pr, PartnerDetailsProvider partnerDetailsProvider, DrawerandAppBarController drawerController) {
   switch (element) {
     case 'Sign Out':
       return signOut(context, hight, width);
@@ -157,7 +167,7 @@ drawerItemsFunction(
       return settings(context, hight, width);
       break;
     case 'Edit Details':
-      return editDetails(context, hight, width, pr);
+      return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
       break;
     case 'Service History':
       return history(context, hight, width);

@@ -7,6 +7,7 @@ import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 
 void main() async {
@@ -19,6 +20,8 @@ void main() async {
           create: (context) => UniversalProvider()),
        ChangeNotifierProvider<IncomingOrdersProvider>(
           create: (context) => IncomingOrdersProvider()),
+      ChangeNotifierProvider<PartnerDetailsProvider>(
+          create: (context) => PartnerDetailsProvider()),
       ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
     ], child: MyApp()));
   });

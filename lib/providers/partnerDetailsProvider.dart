@@ -13,6 +13,17 @@ class PartnerDetailsProvider extends ChangeNotifier {
   var partnerLocal;
   // var local;
 
+
+  localDetailsGet() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String pd = prefs.getString('partnerDetails');
+    if (pd == null) {
+      partnerDetails();
+    }
+    partnerLocal = jsonDecode(pd);
+  }
+
   partnerDetails() async {
     var response = await Server().getMethod(API.partnerDetails);
     partnerLocal = jsonDecode(response);
@@ -23,7 +34,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
   localPartnerDetailsStore(partnerLocal) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('details', jsonEncode(partnerLocal));
+    prefs.setString('partnerDetails', jsonEncode(partnerLocal));
   }
 
   // localData() async {

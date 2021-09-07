@@ -95,8 +95,9 @@ class _OnlineState extends StateMVC<Online> {
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.grey[300],
-                                          blurRadius: 2,
-                                          spreadRadius: 2)
+                                          blurRadius: 4,
+                                          spreadRadius: 1,
+                                          )
                                     ],
                                     //  boxShadow: kElevationToShadow[1],
                                     borderRadius: BorderRadius.only(
@@ -344,7 +345,7 @@ class _OnlineState extends StateMVC<Online> {
                                                                       .acceptOrder
                                                                       .toString() +
                                                                   "$ordid";
-                                                              Server()
+                                                           await Server()
                                                                   .editMethod(
                                                                       api, {
                                                                 'pId': API.pid
@@ -355,6 +356,9 @@ class _OnlineState extends StateMVC<Online> {
                                                                       (e) {
                                                                 print(e);
                                                               });
+
+                                                            await  _incomingOrdersController.incomingOrdersProvider.incomingOrders();
+                                                              setState(() { });
                                                             },
                                                           ),
                                                         ],
@@ -604,7 +608,7 @@ class _OnlineState extends StateMVC<Online> {
                               };
                               log(body.toString());
                               _incomingOrdersController.moneyController.clear();
-                              // Server().postMethod(API.updateOrder, body);
+                              Server().postMethod(API.updateOrder, body);
                             }
                           },
                         ),
