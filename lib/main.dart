@@ -3,10 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/orders.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 
 void main() async {
@@ -17,6 +17,8 @@ void main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider<UniversalProvider>(
           create: (context) => UniversalProvider()),
+       ChangeNotifierProvider<IncomingOrdersProvider>(
+          create: (context) => IncomingOrdersProvider()),
       ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
     ], child: MyApp()));
   });

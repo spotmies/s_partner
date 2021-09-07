@@ -12,11 +12,10 @@ localOrdersGet() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   
   String ico = prefs.getString('inComingOrders');
-  log(ico);
+  // log(ico);
    if (ico == null) {
     incomingOrders();
   }
-  // log(ico);
   //  Map<String,dynamic> inComings = jsonDecode(ico) as Map<String,dynamic>;
   
   

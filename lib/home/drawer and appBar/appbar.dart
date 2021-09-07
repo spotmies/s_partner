@@ -96,21 +96,16 @@ class _AppBarScreenState extends State<AppBarScreen> {
                       padding: 5.0,
                       showOnOff: true,
                       value: isSwitched,
-                      onToggle: (value) {
+                      onToggle: (value) async{
                         setState(() {
                           isSwitched = !isSwitched;
                         });
-                        // var body = {
-                        //   "availability": value.toString(),
-                        // };
-                        // setState(() {
-                        //   var res= Server().editMethod(API.partnerStatus, body);
-                        //   log(res.toString());
-                        // });
-                      //  var response = Server().editMethod(API.partnerStatus, body);
-                      //  log(response.toString());
-                      //   partner.updateLocal(value);
-                      //   partner.partnerDetails();
+                        var body = {
+                          "availability": value.toString(),
+                        };
+                       var response = await Server().editMethod(API.partnerStatus, body);
+                       var data =response.body;
+                       log(data[0]);
                       }),
                 ),
               ],

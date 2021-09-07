@@ -2,18 +2,23 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/controllers/incomingOrders_controller.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
+import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 
 class Online extends StatefulWidget {
   Online(pr);
@@ -22,66 +27,29 @@ class Online extends StatefulWidget {
   _OnlineState createState() => _OnlineState();
 }
 
-class _OnlineState extends State<Online> {
-  var path;
-  var userid;
-  var orderid;
-  var incoming;
-  var partner;
-  var localData;
-  // var socketincomingorder;
-  String pmoney;
-  DateTime pickedDate;
-  TimeOfDay pickedTime;
-
-  StreamController _socketIncomingOrders;
-
-  Stream stream;
-  var onlineOrd;
-  var localOrd;
-  IO.Socket socket;
-  List jobs = [
-    'AC Service',
-    'Computer',
-    'TV Repair',
-    'Development',
-    'Tutor',
-    'Beauty',
-    'Photography',
-    'Drivers',
-    'Events'
-  ];
-
-  void socketOrders() {
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-      "transports": ["websocket", "polling", "flashsocket"],
-      "autoConnect": false,
-    });
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-      });
-    });
-    socket.connect();
-    socket.emit('join-partner', FirebaseAuth.instance.currentUser.uid);
-    socket.on('inComingOrders', (socket) async {
-      _socketIncomingOrders.add(socket);
-    });
+class _OnlineState extends StateMVC<Online> {
+  IncomingOrdersController _incomingOrdersController;
+  _OnlineState() : super(IncomingOrdersController()) {
+    this._incomingOrdersController = controller;
   }
 
   @override
   void initState() {
-    _socketIncomingOrders = StreamController();
-    stream = _socketIncomingOrders.stream.asBroadcastStream();
-    socketOrders();
-    stream.listen((event) {
+    _incomingOrdersController.incomingOrdersProvider =
+        Provider.of<IncomingOrdersProvider>(context, listen: false);
+    _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
+    _incomingOrdersController.socketIncomingOrders = StreamController();
+    _incomingOrdersController.stream = _incomingOrdersController
+        .socketIncomingOrders.stream
+        .asBroadcastStream();
+    _incomingOrdersController.socketOrders();
+    _incomingOrdersController.stream.listen((event) {
       log(event.toString());
     });
 
     super.initState();
-    pickedDate = DateTime.now();
-    pickedTime = TimeOfDay.now();
+    _incomingOrdersController.pickedDate = DateTime.now();
+    _incomingOrdersController.pickedTime = TimeOfDay.now();
   }
 
   @override
@@ -91,6 +59,7 @@ class _OnlineState extends State<Online> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        key: _incomingOrdersController.incomingscaffoldkey,
         backgroundColor: Colors.grey[50],
         body: FutureBuilder(
             future: localPartnerDetailsGet(),
@@ -98,421 +67,556 @@ class _OnlineState extends State<Online> {
               if (localPartner.data == null)
                 return Center(child: CircularProgressIndicator());
               var p = localPartner.data;
-              return FutureBuilder(
-                  future: localOrdersGet(),
-                  builder: (context, localOrders) {
-                    var ld = localOrders.data;
-                 
-                    var o = List.from(ld.reversed);
-                    if (o == null)
-                      return Center(child: circleProgress());
-                    return StreamBuilder(
-                        stream: stream,
-                        builder: (context, orderSocket) {
-                          var neworders = orderSocket.data;
+              return Consumer<IncomingOrdersProvider>(
+                  builder: (context, data, child) {
+                var ld = data.local;
 
-                          if (orderSocket.data != null) {
-                            if (ld.last['ordId'] != neworders['ordId']) {
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((_) async {
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.setString(
-                                    'inComingOrders',
-                                    jsonEncode(List.from(ld)
-                                      ..addAll([orderSocket.data])));
-                                setState(() {});
-                              });
-                            }
-                          }
-                          return Container(
-                              // padding: EdgeInsets.all(10),
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: o.length,
-                                  padding: EdgeInsets.all(15),
-                                  itemBuilder: (BuildContext ctxt, int index) {
-                                    var u = o[index]['uDetails'];
-                                    List<String> images =
-                                        List.from(o[index]['media']);
-                                    // print(o[index]['media'][0].length);
-                                    return Column(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(
-                                              left: 15, right: 10),
-                                          height: _hight * 0.045,
-                                          decoration: BoxDecoration(
-                                              color: Colors.indigo[900],
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight:
-                                                      Radius.circular(15)),
-                                              boxShadow: kElevationToShadow[0]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              TextWid(
-                                                text: jobs
-                                                    .elementAt(o[index]['job']),
-                                                size: _width * 0.04,
-                                                color: Colors.white,
-                                                weight: FontWeight.w600,
-                                              ),
-                                              IconButton(
-                                                  icon: Icon(
-                                                    Icons.more_horiz,
-                                                    color: Colors.white,
-                                                  ),
-                                                  onPressed: () {
-                                                    moredialogue(
-                                                        o[index]['uId'],
-                                                        o[index]['_id'],
-                                                        o[index]['ordId'],
-                                                        o[index]['pId'],
-                                                        u['_id'],
-                                                        p['_id']);
-                                                  })
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 10),
-                                          padding: EdgeInsets.all(10),
-                                          height: _hight * 0.27,
-                                          // width: _width * 0.88,
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(15),
-                                                  bottomRight:
-                                                      Radius.circular(15)),
-                                              boxShadow: kElevationToShadow[0]),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets.all(10),
-                                                height: _hight * 0.1,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey[50],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {},
-                                                      child: Container(
-                                                        height: _hight * 0.15,
-                                                        width: _width * 0.2,
-                                                        // child:
-                                                        //  CircleAvatar(
-                                                        //   child: images == null
-                                                        //       ? NetworkImage(images.first)
-                                                        //       : Icon(Icons.ac_unit),
-                                                        // )
-                                                      ),
+                var o = List.from(ld.reversed);
+                if (o == null) return Center(child: circleProgress());
+                log(data.local[0]['problem'].toString());
+                return StreamBuilder(
+                    stream: _incomingOrdersController.stream,
+                    builder: (context, orderSocket) {
+                      var neworders = orderSocket.data;
+
+                      _incomingOrdersController.addDataToSocket(neworders, ld);
+                      return Container(
+                          // padding: EdgeInsets.all(10),
+                          child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: o.length,
+                              padding: EdgeInsets.all(15),
+                              itemBuilder: (BuildContext ctxt, int index) {
+                                var u = o[index]['uDetails'];
+                                List<String> images =
+                                    List.from(o[index]['media']);
+                                // print(o[index]['media'][0].length);
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey[300],
+                                          blurRadius: 2,
+                                          spreadRadius: 2)
+                                    ],
+                                    //  boxShadow: kElevationToShadow[1],
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15)),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 10),
+                                        height: _hight * 0.11,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15)),
+                                            boxShadow: kElevationToShadow[0]),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                TextWid(
+                                                  text:
+                                                      _incomingOrdersController
+                                                          .jobs
+                                                          .elementAt(
+                                                              o[index]['job']),
+                                                  size: _width * 0.04,
+                                                  color: Colors.grey[900],
+                                                  weight: FontWeight.w600,
+                                                ),
+                                                IconButton(
+                                                    icon: Icon(
+                                                      Icons.more_horiz,
+                                                      color: Colors.grey[900],
                                                     ),
-                                                    Container(
-                                                      width: _width * 0.6,
-                                                      child: TextWid(
-                                                        text:
-                                                            toBeginningOfSentenceCase(
-                                                          o[index]['problem']
-                                                              .toString(),
-                                                        ),
-                                                        align: TextAlign.center,
-                                                        flow: TextOverflow
-                                                            .visible,
+                                                    onPressed: () {
+                                                      onlineOrdersButtomMenu(
+                                                          o[index]['uId'],
+                                                          o[index]['_id'],
+                                                          o[index]['ordId'],
+                                                          o[index]['pId'],
+                                                          u['_id'],
+                                                          p['_id'],
+                                                          _hight,
+                                                          _width);
+                                                    })
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: _width * 0.45,
+                                                  // color: Colors.red,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.schedule,
+                                                        color: Colors.grey[900],
+                                                        size: _width * 0.045,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      TextWid(
+                                                        text: getDate(o[index]
+                                                            ['schedule']),
+                                                        color: Colors.grey[900],
                                                         size: _width * 0.04,
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 5, bottom: 10),
-                                                padding: EdgeInsets.all(5),
-                                                height: _hight * 0.07,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey[50],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 2,
-                                                      // width: _width * 0.4,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              TextWid(
-                                                                text: 'Money: ',
-                                                                size: _width *
-                                                                    0.03,
-                                                                weight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                              SizedBox(
-                                                                width: _width *
-                                                                    0.05,
-                                                              ),
-                                                              TextWid(
-                                                                text: o[index][
-                                                                        'money']
-                                                                    .toString(),
-                                                                size: _width *
-                                                                    0.03,
-                                                              )
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              TextWid(
-                                                                text:
-                                                                    'Location: ',
-                                                                size: _width *
-                                                                    0.03,
-                                                                weight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                              SizedBox(
-                                                                width: _width *
-                                                                    0.02,
-                                                              ),
-                                                              TextWid(
-                                                                text: o[index]['loc']
-                                                                            [0]
-                                                                        .toString() +
-                                                                    "," +
-                                                                    o[index]['loc']
-                                                                            [1]
-                                                                        .toString(),
-                                                                size: _width *
-                                                                    0.03,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                      TextWid(
+                                                        text: '-' +
+                                                            getTime(o[index]
+                                                                ['schedule']),
+                                                        color: Colors.grey[900],
+                                                        size: _width * 0.04,
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: _width * 0.3,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              
-                                                               TextWid(
-                                                                text:
-                                                                    'Date: ',
-                                                                size: _width *
-                                                                    0.04,
-                                                                weight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                               TextWid(
-                                                                text:  o[index][
-                                                                          'schedule']
-                                                                      .toString(),
-                                                                size: _width *
-                                                                    0.03,
-                                                              ),
-                                                            
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                                TextWid(
-                                                                text:
-                                                                    'Time: ',
-                                                                size: _width *
-                                                                    0.04,
-                                                                weight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                               TextWid(
-                                                                text:
-                                                                     o[index][
-                                                                        'schedule']
-                                                                    .toString(),
-                                                                size: _width *
-                                                                    0.03,
-                                                               
-                                                              ),
-                                                            
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              o[index]['ordState'] == 'req'
-                                                  ? Column(
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            ElevatedButtonWidget(
-                                                              buttonName:
-                                                                  'Reject',
-                                                              height:
-                                                                  _hight * 0.05,
-                                                              minWidth:
-                                                                  _width * 0.3,
-                                                              bgColor: Colors
-                                                                  .indigo[50],
-                                                              textColor: Colors
-                                                                  .grey[900],
-                                                              textSize:
-                                                                  _width * 0.04,
-                                                              leadingIcon: Icon(
-                                                                Icons.close,
-                                                                color: Colors
-                                                                        .grey[
-                                                                    900],
-                                                                size: _width *
-                                                                    0.04,
-                                                              ),
-                                                              borderRadius:
-                                                                  15.0,
-                                                              borderSideColor:
-                                                                  Colors.indigo[
-                                                                      50],
-                                                              onClick: () {},
-                                                            ),
-                                                            ElevatedButtonWidget(
-                                                              buttonName:
-                                                                  'Accept',
-                                                              height:
-                                                                  _hight * 0.05,
-                                                              minWidth:
-                                                                  _width * 0.55,
-                                                              bgColor: Colors
-                                                                  .indigo[900],
-                                                              textColor:
-                                                                  Colors.white,
-                                                              textSize:
-                                                                  _width * 0.04,
-                                                              trailingIcon:
-                                                                  Icon(
-                                                                Icons.check,
-                                                                color: Colors
-                                                                    .white,
-                                                                size: _width *
-                                                                    0.04,
-                                                              ),
-                                                              borderRadius:
-                                                                  15.0,
-                                                              borderSideColor:
-                                                                  Colors.indigo[
-                                                                      100],
-                                                              onClick:
-                                                                  () async {
-                                                                var ordid = o[
-                                                                        index]
-                                                                    ['ordId'];
-                                                                var api = API
-                                                                        .acceptOrder
-                                                                        .toString() +
-                                                                    "$ordid";
-                                                                Server()
-                                                                    .editMethod(
-                                                                        api, {
-                                                                  'pId': API.pid
-                                                                      .toString(),
-                                                                  'ordState':
-                                                                      'onGoing'
-                                                                }).catchError(
-                                                                        (e) {
-                                                                  print(e);
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : TextWid(
-                                                      text: 'Order Accepted',
-                                                      size: _width * 0.05,
-                                                      weight: FontWeight.w600,
-                                                    )
-                                            ],
-                                          ),
+                                                Container(
+                                                  width: _width * 0.35,
+                                                  //  color: Colors.amber,
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: TextWid(
+                                                    text: 'Rs:  ' +
+                                                        o[index]['money']
+                                                            .toString() +
+                                                        ' /-',
+                                                    color: Colors.grey[900],
+                                                    size: _width * 0.04,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    );
-                                  }));
-                        });
-                  });
+                                      ),
+                                      Container(
+                                        // margin: EdgeInsets.only(bottom: 20),
+                                        padding: EdgeInsets.all(10),
+                                        height: _hight * 0.21,
+                                        // width: _width * 0.88,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[50],
+
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15)),
+                                          // boxShadow: kElevationToShadow[0]
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: _hight * 0.11,
+                                              decoration: BoxDecoration(
+                                                  // color: Colors.grey[50],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                        // height: _hight * 0.15,
+                                                        width: _width * 0.13,
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          child: images == null
+                                                              ? NetworkImage(
+                                                                  images.first)
+                                                              : Icon(
+                                                                  Icons
+                                                                      .home_repair_service_outlined,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      900],
+                                                                ),
+                                                        )),
+                                                  ),
+                                                  Container(
+                                                    // color: Colors.amber,
+                                                    width: _width * 0.53,
+                                                    child: TextWid(
+                                                      text:
+                                                          toBeginningOfSentenceCase(
+                                                        o[index]['problem']
+                                                            .toString(),
+                                                      ),
+                                                      align: TextAlign.center,
+                                                      flow:
+                                                          TextOverflow.visible,
+                                                      size: _width * 0.04,
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(
+                                                        Icons.info,
+                                                        color: Colors.grey[400],
+                                                      ))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: _hight * 0.015,
+                                            ),
+                                            o[index]['ordState'] == 'req'
+                                                ? Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          ElevatedButtonWidget(
+                                                            buttonName:
+                                                                'Reject',
+                                                            height:
+                                                                _hight * 0.05,
+                                                            minWidth:
+                                                                _width * 0.3,
+                                                            bgColor: Colors
+                                                                .grey[200],
+                                                            textColor: Colors
+                                                                .grey[900],
+                                                            textSize:
+                                                                _width * 0.04,
+                                                            leadingIcon: Icon(
+                                                              Icons.close,
+                                                              color: Colors
+                                                                  .grey[900],
+                                                              size:
+                                                                  _width * 0.04,
+                                                            ),
+                                                            borderRadius: 15.0,
+                                                            borderSideColor:
+                                                                Colors.grey[50],
+                                                            onClick: () {},
+                                                          ),
+                                                          ElevatedButtonWidget(
+                                                            buttonName:
+                                                                'Accept',
+                                                            height:
+                                                                _hight * 0.05,
+                                                            minWidth:
+                                                                _width * 0.55,
+                                                            bgColor: Colors
+                                                                .grey[900],
+                                                            textColor:
+                                                                Colors.white,
+                                                            textSize:
+                                                                _width * 0.04,
+                                                            trailingIcon: Icon(
+                                                              Icons.check,
+                                                              color:
+                                                                  Colors.white,
+                                                              size:
+                                                                  _width * 0.04,
+                                                            ),
+                                                            borderRadius: 15.0,
+                                                            borderSideColor:
+                                                                Colors
+                                                                    .grey[100],
+                                                            onClick: () async {
+                                                              var ordid =
+                                                                  o[index]
+                                                                      ['ordId'];
+                                                              var api = API
+                                                                      .acceptOrder
+                                                                      .toString() +
+                                                                  "$ordid";
+                                                              Server()
+                                                                  .editMethod(
+                                                                      api, {
+                                                                'pId': API.pid
+                                                                    .toString(),
+                                                                'ordState':
+                                                                    'onGoing'
+                                                              }).catchError(
+                                                                      (e) {
+                                                                print(e);
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )
+                                                : TextWid(
+                                                    text: 'Order Accepted',
+                                                    size: _width * 0.05,
+                                                    weight: FontWeight.w600,
+                                                  )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: _hight * 0.01,
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }));
+                    });
+              });
             }));
   }
 
-  _pickedDate() async {
-    DateTime date = await showDatePicker(
+  onlineOrdersButtomMenu(uid, ordDetails, ordid, pid, uDetails, pDetails,
+      double hight, double width) {
+    showModalBottomSheet(
         context: context,
-        initialDate: pickedDate,
-        firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
-            DateTime.now().day - 0),
-        lastDate: DateTime(DateTime.now().year + 1));
-    if (date != null) {
-      setState(() async {
-        TimeOfDay t = await showTimePicker(
-          context: context,
-          initialTime: pickedTime,
-        );
-        if (t != null) {
-          setState(() {
-            pickedTime = t;
-          });
-        }
-        pickedDate = date;
-      });
-    }
+        elevation: 22,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            height: hight * 0.15,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        radius: width * 0.06,
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    TextWid(
+                      text: 'Close',
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        log('Post View');
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        radius: width * 0.06,
+                        child: Icon(
+                          Icons.remove_red_eye,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    TextWid(
+                      text: 'View',
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        bidSendingBottomSheet(
+                          hight,
+                          width,
+                          uid,
+                          ordDetails,
+                          ordid,
+                          pid,
+                          uDetails,
+                          pDetails,
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        radius: width * 0.06,
+                        child: Icon(
+                          Icons.receipt,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ),
+                    TextWid(
+                      text: 'Bid',
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  bidSendingBottomSheet(double hight, double width, uid, ordDetails, ordid, pid,
+      uDetails, pDetails) {
+    return showModalBottomSheet(
+        context: context,
+        elevation: 22,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            height: hight * 0.35,
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Form(
+              key: _incomingOrdersController.updateFormKey,
+              child: ListView(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(left: 15, top: 10),
+                    child: TextWid(
+                      text: 'Create Bid',
+                      size: width * 0.055,
+                      weight: FontWeight.w600,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _incomingOrdersController.pickedDateandTime();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                      alignment: Alignment.center,
+                      height: hight * 0.07,
+                      width: width * 0.8,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey)),
+                      child: TextWid(
+                        text: 'Schedule:  ' +
+                            ' ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}' +
+                            '@' +
+                            '${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
+                        size: width * 0.045,
+                        weight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    child: TextFieldWidget(
+                      controller: _incomingOrdersController.moneyController,
+                      hint: 'Money',
+                      enableBorderColor: Colors.grey,
+                      focusBorderColor: Colors.grey[900],
+                      enableBorderRadius: 15,
+                      focusBorderRadius: 15,
+                      errorBorderRadius: 15,
+                      focusErrorRadius: 15,
+                      validateMsg: 'Enter Valid Money',
+                      maxLines: 1,
+                      postIcon: Icon(Icons.change_circle),
+                      postIconColor: Colors.grey[900],
+                    ),
+                  ),
+                  SizedBox(
+                    height: hight * 0.01,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 11, right: 11),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButtonWidget(
+                          bgColor: Colors.grey[300],
+                          minWidth: width * 0.3,
+                          height: hight * 0.06,
+                          borderRadius: 15.0,
+                          textColor: Colors.grey[900],
+                          textSize: width * 0.04,
+                          buttonName: 'Close',
+                          leadingIcon: Icon(
+                            Icons.close,
+                            color: Colors.grey[900],
+                          ),
+                          onClick: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ElevatedButtonWidget(
+                          bgColor: Colors.grey[900],
+                          borderSideColor: Colors.white,
+                          minWidth: width * 0.55,
+                          height: hight * 0.06,
+                          borderRadius: 15.0,
+                          textSize: width * 0.04,
+                          textColor: Colors.white,
+                          buttonName: 'Change',
+                          trailingIcon: Icon(Icons.send),
+                          onClick: () {
+                            if (_incomingOrdersController
+                                .updateFormKey.currentState
+                                .validate()) {
+                              var body = {
+                                "money":
+                                    _incomingOrdersController.moneyController.text.toString(),
+                                "schedule": _incomingOrdersController
+                                    .pickedDate.millisecondsSinceEpoch
+                                    .toString(),
+                                "uId": uid.toString(),
+                                "pId": API.pid.toString(),
+                                "ordId": ordid.toString(),
+                                "orderDetails": ordDetails.toString(),
+                                "responseId": DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
+                                "join": DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
+                                "loc.0": 17.236.toString(),
+                                "loc.1": 83.697.toString(),
+                                "uDetails": uDetails.toString(),
+                                "pDetails": pDetails.toString()
+                              };
+                              log(body.toString());
+                              _incomingOrdersController.moneyController.clear();
+                              // Server().postMethod(API.updateOrder, body);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   moredialogue(uid, ordDetails, ordid, pid, uDetails, pDetails) {
@@ -536,7 +640,8 @@ class _OnlineState extends State<Online> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        _pickedDate();
+                                        _incomingOrdersController
+                                            .pickedDateandTime();
                                       },
                                       child: Container(
                                         //padding: EdgeInsets.all(10),
@@ -551,10 +656,10 @@ class _OnlineState extends State<Online> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                                'Date:  ${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
+                                                'Date:  ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}',
                                                 style: TextStyle(fontSize: 15)),
                                             Text(
-                                                'Time:  ${pickedTime.hour}:${pickedTime.minute}',
+                                                'Time:  ${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
                                                 style: TextStyle(fontSize: 15))
                                           ],
                                         ),
@@ -584,7 +689,8 @@ class _OnlineState extends State<Online> {
                                           contentPadding: EdgeInsets.all(20),
                                         ),
                                         onChanged: (value) {
-                                          pmoney = value;
+                                          _incomingOrdersController.pmoney =
+                                              value;
                                         },
                                       ),
                                     ),
@@ -598,9 +704,11 @@ class _OnlineState extends State<Online> {
                                       child: Text('Done'),
                                       onPressed: () async {
                                         var body = {
-                                          "money": pmoney.toString(),
-                                          "schedule": pickedDate
-                                              .millisecondsSinceEpoch
+                                          "money": _incomingOrdersController
+                                              .pmoney
+                                              .toString(),
+                                          "schedule": _incomingOrdersController
+                                              .pickedDate.millisecondsSinceEpoch
                                               .toString(),
                                           "uId": uid.toString(),
                                           "pId": API.pid.toString(),
@@ -639,6 +747,139 @@ class _OnlineState extends State<Online> {
                   )),
             ));
   }
+
+  // Container(
+  //   margin: EdgeInsets.only(
+  //       top: 5, bottom: 10),
+  //   padding: EdgeInsets.all(5),
+  //   height: _hight * 0.07,
+  //   decoration: BoxDecoration(
+  //       color: Colors.grey[50],
+  //       borderRadius:
+  //           BorderRadius.circular(10)),
+  //   child: Row(
+  //     mainAxisAlignment:
+  //         MainAxisAlignment
+  //             .spaceBetween,
+  //     children: [
+  //       Flexible(
+  //         flex: 2,
+  //         // width: _width * 0.4,
+  //         child: Column(
+  //           mainAxisAlignment:
+  //               MainAxisAlignment
+  //                   .spaceBetween,
+  //           crossAxisAlignment:
+  //               CrossAxisAlignment
+  //                   .start,
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment:
+  //                   MainAxisAlignment
+  //                       .start,
+  //               children: [
+  //                 TextWid(
+  //                   text: 'Money: ',
+  //                   size: _width * 0.03,
+  //                   weight:
+  //                       FontWeight.w600,
+  //                 ),
+  //                 SizedBox(
+  //                   width:
+  //                       _width * 0.05,
+  //                 ),
+  //                 TextWid(
+  //                   text: o[index]
+  //                           ['money']
+  //                       .toString(),
+  //                   size: _width * 0.03,
+  //                 )
+  //               ],
+  //             ),
+  //             Row(
+  //               mainAxisAlignment:
+  //                   MainAxisAlignment
+  //                       .start,
+  //               children: [
+  //                 TextWid(
+  //                   text: 'Location: ',
+  //                   size: _width * 0.03,
+  //                   weight:
+  //                       FontWeight.w600,
+  //                 ),
+  //                 SizedBox(
+  //                   width:
+  //                       _width * 0.02,
+  //                 ),
+  //                 TextWid(
+  //                   text: o[index]['loc']
+  //                               [0]
+  //                           .toString() +
+  //                       "," +
+  //                       o[index]['loc']
+  //                               [1]
+  //                           .toString(),
+  //                   size: _width * 0.03,
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       Container(
+  //         width: _width * 0.3,
+  //         child: Column(
+  //           mainAxisAlignment:
+  //               MainAxisAlignment
+  //                   .spaceBetween,
+  //           crossAxisAlignment:
+  //               CrossAxisAlignment
+  //                   .start,
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment:
+  //                   MainAxisAlignment
+  //                       .spaceBetween,
+  //               children: [
+  //                 TextWid(
+  //                   text: 'Date: ',
+  //                   size: _width * 0.04,
+  //                   weight:
+  //                       FontWeight.w600,
+  //                 ),
+  //                 TextWid(
+  //                   text: o[index]
+  //                           ['schedule']
+  //                       .toString(),
+  //                   size: _width * 0.03,
+  //                 ),
+  //               ],
+  //             ),
+  //             Row(
+  //               mainAxisAlignment:
+  //                   MainAxisAlignment
+  //                       .spaceBetween,
+  //               children: [
+  //                 TextWid(
+  //                   text: 'Time: ',
+  //                   size: _width * 0.04,
+  //                   weight:
+  //                       FontWeight.w600,
+  //                 ),
+  //                 TextWid(
+  //                   text: o[index]
+  //                           ['schedule']
+  //                       .toString(),
+  //                   size: _width * 0.03,
+  //                 ),
+  //               ],
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   ),
+  // ),
 
   // storeNewData() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();

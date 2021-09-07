@@ -13,7 +13,7 @@ Container chatInputField(
   BuildContext context,
   double hight,
   double width,
-  ChatController chatController,
+  ChatController chatController, String msgId,
 ) {
   // SoundRecorder recorder
   // bool isInput = false;
@@ -79,6 +79,7 @@ Container chatInputField(
                                     width,
                                     chatController,
                                     sendCallBack,
+                                    msgId
                                   );
                                 },
                                 icon: Icon(
@@ -113,7 +114,7 @@ Container chatInputField(
             if (inputController.text == "") {
               snackbar(context, 'Enter Message');
             } else {
-              sendCallBack(inputController.text, 'text');
+              sendCallBack(inputController.text, 'text',msgId);
               inputController.clear();
             }
             log(inputController.text);
@@ -133,7 +134,7 @@ Container chatInputField(
 }
 
 Future attachments(BuildContext context, double hight, double width,
-    ChatController chatController, sendCallBack) {
+    ChatController chatController, sendCallBack, String msgId) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -154,7 +155,7 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () async {
-                        chatController.chooseImage(sendCallBack);
+                        chatController.chooseImage(sendCallBack,msgId);
                         Navigator.pop(context);
 
                         // imageGallery(context, chatController);
@@ -183,7 +184,7 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () {
-                        chatController.pickVideo(sendCallBack);
+                        chatController.pickVideo(sendCallBack,msgId);
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.video_camera_back),
@@ -199,7 +200,7 @@ Future attachments(BuildContext context, double hight, double width,
                     IconButton(
                       onPressed: () {
                       Navigator.pop(context);
-                        audioRecoder(context, hight, width,chatController,sendCallBack);
+                        audioRecoder(context, hight, width,chatController,sendCallBack,msgId);
                         
                       },
                       icon: Icon(Icons.mic),

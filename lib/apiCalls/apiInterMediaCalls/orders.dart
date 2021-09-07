@@ -15,14 +15,13 @@ final controller = TestController();
   };
 
 incomingOrders() async {
-    
+  
     var response =
         await Server().getMethodParems(API.incomingorders, queryParameters);
     log('api called');
-    // log(response.toString());
-    log(response.body.toString());
+    // log(response);
     orders = jsonDecode(response);
-    // log(orders);
+    log(orders.toString());
     controller.getData();
     localOrdersStore(orders);
   }

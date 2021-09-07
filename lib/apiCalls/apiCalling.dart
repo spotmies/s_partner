@@ -67,7 +67,7 @@ class Server {
           await http.put(uri, body: body).timeout(Duration(seconds: 30));
       print(processResponse(response));
 
-      return processResponse(response);
+      return response;
     } on SocketException {
       throw FetchDataException('No Internet Connection', uri.toString());
     } on TimeoutException {

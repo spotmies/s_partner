@@ -103,6 +103,12 @@ flutter:
     - assets/spotmies.png
     - assets/icon.png
     - assets/like.svg
+    - assets/edit.svg
+    - assets/exit.svg
+    - assets/help.svg
+    - assets/history.svg
+    - assets/settings.svg
+    - assets/share.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

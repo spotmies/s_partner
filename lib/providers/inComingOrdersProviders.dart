@@ -1,59 +1,72 @@
-// import 'dart:convert';
-// import 'dart:developer';
-
-// import 'package:flutter/cupertino.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:spotmies_partner/apiCalls/apiCalling.dart';
-// import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-// import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/apiCalls/testController.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
-// class IncomingOrdersProvider extends ChangeNotifier {
-//   final controller = TestController();
-//   var orders;
-//   // var local;
+class IncomingOrdersProvider extends ChangeNotifier {
+  final controller = TestController();
+  var orders;
+  var local;
 
-//   final queryParameters = {
-//     'showOnly': 'inComingOrders',
-//     'extractData': 'true',
-//     'ordState': 'req'
-//   };
+  final queryParameters = {
+    'showOnly': 'inComingOrders',
+    'extractData': 'true',
+    'ordState': 'req'
+  };
 
-//   // incomingordersinfo(status) async {
-//   //   status == false ? print('null') : print('not null');
-//   //   if (status == false) {
-//   //     if (local == null) {
-//   //       incomingOrders();
-//   //       localStore();
-//   //       localGet();
-//   //     }
-//   //     localGet();
-//   //   }
-//   //   if (status == true) {
-//   //     await incomingOrders();
-//   //     await localStore();
-//   //     await localGet();
-//   //   }
-//   // }
+  localOrdersGet() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-//   // incomingOrders() async {
-//   //   var response =
-//   //       await Server().getMethodParems(API.incomingorders, queryParameters);
-//   //   orders = jsonDecode(response);
-//   //   controller.getData();
-//   //   localOrdersStore(orders);
-//   //   notifyListeners();
-//   // }
+    String ico = prefs.getString('inComingOrders');
+    if (ico == null) {
+      incomingOrders();
+    }
+    local = jsonDecode(ico);
+  }
 
-//   // localStore() async {
-//   //   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   //   prefs.setString('details', jsonEncode(orders));
-//   // }
+  incomingOrders() async {
+    var response =
+        await Server().getMethodParems(API.incomingorders, queryParameters);
+    orders = jsonDecode(response);
+    // controller.getData();
+    localOrdersStore(orders);
+    notifyListeners();
+  }
 
-//   // localGet() async {
-//   //   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   //   String partnerData = prefs.getString('details');
-//   //   List<dynamic> details = local == null ? jsonDecode(partnerData) : local;
-//   //   local = details;
-//   // }
-// }
+  localOrdersStore(orders) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('inComingOrders', jsonEncode(orders));
+  }
+
+  // incomingordersinfo(status) async {
+  //   status == false ? print('null') : print('not null');
+  //   if (status == false) {
+  //     if (local == null) {
+  //       incomingOrders();
+  //       localStore();
+  //       localGet();
+  //     }
+  //     localGet();
+  //   }
+  //   if (status == true) {
+  //     await incomingOrders();
+  //     await localStore();
+  //     await localGet();
+  //   }
+  // }
+
+  // localStore() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('details', jsonEncode(orders));
+  // }
+
+  // localGet() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String partnerData = prefs.getString('details');
+  //   List<dynamic> details = local == null ? jsonDecode(partnerData) : local;
+  //   local = details;
+  // }
+}

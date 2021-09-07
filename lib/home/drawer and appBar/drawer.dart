@@ -5,10 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/inviteBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/serviceHistoryBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/settingsBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/signoutBS.dart';
 import 'package:spotmies_partner/localDB/localGet.dart';
 import 'package:spotmies_partner/orders/completed.dart';
+import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/reusable_widgets/zoom_drawer.dart';
 
 // class HomePage extends StatelessWidget {
 //   @override
@@ -22,6 +30,9 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 // }
 
 class DrawerScreen extends StatefulWidget {
+  final drawerController;
+  DrawerScreen(this.drawerController);
+
   @override
   _DrawerScreenState createState() => _DrawerScreenState();
 }
@@ -79,16 +90,13 @@ class _DrawerScreenState extends State<DrawerScreen> {
                               weight: FontWeight.w500,
                             ),
                             Text('  |  '),
-                             TextWid(
+                            TextWid(
                               text: toBeginningOfSentenceCase(jobs[pr['job']]),
-                              
-                              
                               size: _width * 0.03,
-                              weight: FontWeight.w500,)
-                            
+                              weight: FontWeight.w500,
+                            )
                           ],
                         ),
-                      
                       ],
                     )
                   ],
@@ -102,7 +110,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               onTap: () {
-                                // log(element['title']);
+                                widget.drawerController.toggle();
+                                drawerItemsFunction(element['title'], context,
+                                    _hight, _width, pr);
+                                log(element['title']);
                               },
                               child: Row(
                                 children: [
@@ -133,6 +144,36 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ),
           );
         });
+  }
+}
+
+drawerItemsFunction(
+    element, BuildContext context, double hight, double width, pr) {
+  switch (element) {
+    case 'Sign Out':
+      return signOut(context, hight, width);
+      break;
+    case 'Settings':
+      return settings(context, hight, width);
+      break;
+    case 'Edit Details':
+      return editDetails(context, hight, width, pr);
+      break;
+    case 'Service History':
+      return history(context, hight, width);
+      break;
+    case 'Help & Support':
+      return helpAndSupport(context, hight, width);
+      break;
+    case 'Privacy Policies':
+      return Navigator.push(
+          context, MaterialPageRoute(builder: (_) => PrivacyPolicyWebView()));
+      break;
+    case 'Invite':
+      return invites(context, hight, width,pr);
+      break;
+    default:
+      return '';
   }
 }
 

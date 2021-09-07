@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
             angle: 0.0,
             closeCurve: Curves.easeOut,
             style: DrawerStyle.Style1,
-            menuScreen: DrawerScreen(),
+            menuScreen: DrawerScreen(drawerController),
             mainScreen: AppBarScreen(drawerController)));
   }
 }

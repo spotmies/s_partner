@@ -9,7 +9,7 @@ import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Future audioRecoder(BuildContext context, double hight, double width,
-    ChatController chatController, sendCallBack) {
+    ChatController chatController, sendCallBack, String msgId) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -30,7 +30,7 @@ Future audioRecoder(BuildContext context, double hight, double width,
                     flex: 2,
                     child: FeatureButtonsView(
                         chatController: chatController,
-                        sendCallBack: sendCallBack),
+                        sendCallBack: sendCallBack,msgId :msgId),
                   ),
                 ],
               )
@@ -45,12 +45,13 @@ class FeatureButtonsView extends StatefulWidget {
   final ChatController chatController;
   final Function sendCallBack;
   final String message;
+  final String msgId;
   const FeatureButtonsView({
     Key key,
     this.onUploadComplete,
     this.chatController,
     this.sendCallBack,
-    this.message,
+    this.message, this.msgId,
   }) : super(key: key);
   @override
   _FeatureButtonsViewState createState() => _FeatureButtonsViewState();
@@ -123,7 +124,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                         icon: Icon(Icons.done),
                         onPressed: () {
                           widget.chatController
-                              .audioUpload(_filePath, widget.sendCallBack);
+                              .audioUpload(_filePath, widget.sendCallBack,widget.msgId);
                           setState(() {});
                         },
                       ),
