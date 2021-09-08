@@ -40,7 +40,7 @@ class _OfflineState extends State<Offline> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           circularIndicator(_hight * 0.35, _width * 0.44,
-                              Colors.blue[900], 'Rating', Icons.reviews, widget.pr['rate'][0] == null ? 100:avg(widget.pr['rate'])),
+                              Colors.blue[900], 'Rating', Icons.reviews, 100),
                           SizedBox(
                             height: _hight * 0.02,
                           ),

@@ -1,16 +1,18 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/drawer.dart';
+import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
-import 'package:spotmies_partner/internet_calling/calling.dart';
-import 'package:spotmies_partner/localDB/localGet.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -24,9 +26,23 @@ class AppBarScreen extends StatefulWidget {
   _AppBarScreenState createState() => _AppBarScreenState();
 }
 
-class _AppBarScreenState extends State<AppBarScreen> {
-  // final drawerController = ZoomDrawerController();
+class _AppBarScreenState extends StateMVC<AppBarScreen> {
+  DrawerandAppBarController _appBarController;
+  _AppBarScreenState() : super(DrawerandAppBarController()) {
+    this._appBarController = controller;
+  }
   bool isSwitched = false;
+  PartnerDetailsProvider partnerDetailsProvider;
+  var isLoading = false;
+
+  @override
+  void initState() {
+    partnerDetailsProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    partnerDetailsProvider.localDetailsGet();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,89 +50,103 @@ class _AppBarScreenState extends State<AppBarScreen> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return FutureBuilder(
-        future: localPartnerDetailsGet(),
-        builder: (context, snapshot) {
-          var pr = snapshot.data;
-          if (pr == null) {
-            return circleProgress();
-          }
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.grey[100],
-              leading: InkWell(
-                onTap: (){
-                 widget.drawerController.toggle();
-                },
-                child:  Icon(
-                    Icons.menu,
-                    color: Colors.grey[900],
-                  ),),
-              title: TextWid(
-                text: pr['name'] == null
-                    ? 'User'
-                    : toBeginningOfSentenceCase(pr['name']),
-                color: Colors.grey[900],
-                size: _width * 0.045,
-                weight: FontWeight.w600,
-              ),
-              actions: [
-                Container(
-                  padding: EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 2,
-                            spreadRadius: 2,
-                            color: Colors.grey[100]),
-                      ]),
-                  child: FlutterSwitch(
-                      activeColor: Colors.grey[200],
-                      activeIcon: Icon(
-                        Icons.done,
-                        color: Colors.white,
-                      ),
-                      inactiveIcon: Icon(
-                        Icons.work_off,
-                        color: Colors.white,
-                      ),
-                      inactiveColor: Colors.grey[200],
-                      activeToggleColor: Colors.greenAccent[700],
-                      inactiveToggleColor: Colors.redAccent[700],
-                      activeText: 'Online',
-                      activeTextColor: Colors.grey[900],
-                      inactiveTextColor: Colors.grey[900],
-                      inactiveText: 'Offline',
-                      width: _width * 0.2,
-                      height: _hight * 0.04,
-                      valueFontSize: _width * 0.03,
-                      toggleSize: _width * 0.05,
-                      borderRadius: 30.0,
-                      padding: 5.0,
-                      showOnOff: true,
-                      value: isSwitched,
-                      onToggle: (value) async{
-                        setState(() {
-                          isSwitched = !isSwitched;
-                        });
-                        var body = {
-                          "availability": value.toString(),
-                        };
-                       var response = await Server().editMethod(API.partnerStatus, body);
-                       var data =response.body;
-                       log(data[0]);
-                      }),
-                ),
-              ],
+
+    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+      var pd =
+          data.partnerLocal ?? {'name': 'Fetching...', 'availability': false};
+
+      if (pd == null || isLoading == true) {
+        return circleProgress();
+      }
+
+      return Scaffold(
+        key: _appBarController.drawerAppbarScoffoldKey,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.grey[100],
+          leading: InkWell(
+            onTap: () {
+              widget.drawerController.toggle();
+            },
+            child: Icon(
+              Icons.menu,
+              color: Colors.grey[900],
             ),
-            body: Container(
-              child: isSwitched == true ? Online(pr) : Offline(pr),
+          ),
+          title: TextWid(
+            text: pd['name'] == 'Fetching...'
+                ? 'User'
+                : toBeginningOfSentenceCase(pd['name']),
+            color: Colors.grey[900],
+            size: _width * 0.045,
+            weight: FontWeight.w600,
+          ),
+          actions: [
+            Container(
+              padding: EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 2,
+                        spreadRadius: 2,
+                        color: Colors.grey[100]),
+                  ]),
+              child: FlutterSwitch(
+                  activeColor: Colors.grey[200],
+                  activeIcon: Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  ),
+                  inactiveIcon: Icon(
+                    Icons.work_off,
+                    color: Colors.white,
+                  ),
+                  inactiveColor: Colors.grey[200],
+                  activeToggleColor: Colors.greenAccent[700],
+                  inactiveToggleColor: Colors.redAccent[700],
+                  activeText: 'Online',
+                  activeTextColor: Colors.grey[900],
+                  inactiveTextColor: Colors.grey[900],
+                  inactiveText: 'Offline',
+                  width: _width * 0.2,
+                  height: _hight * 0.04,
+                  valueFontSize: _width * 0.03,
+                  toggleSize: _width * 0.05,
+                  borderRadius: 30.0,
+                  padding: 5.0,
+                  showOnOff: true,
+                  value: pd['availability'],
+                  onToggle: (value) async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    var body = {
+                      "availability": value.toString(),
+                    };
+                    await updatePartnerData(body);
+                    await partnerDetailsProvider.localDetailsGet();
+                    setState(() {
+                      isLoading = false;
+                    });
+                    //  log(data['availability'].toString());
+                  }),
             ),
-          );
-        });
+          ],
+        ),
+        body: Container(
+          child: pd['availability'] == true ? Online(pd) : Offline(pd),
+        ),
+      );
+    });
   }
+}
+
+updatePartnerData(body) async {
+  var response = await Server().editMethod(API.partnerStatus, body);
+  var data = jsonDecode(response.body) as Map<String, dynamic>;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('partnerDetails', jsonEncode(data));
 }
 
 
