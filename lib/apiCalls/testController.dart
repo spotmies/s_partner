@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/baseController.dart';
@@ -8,7 +10,7 @@ class TestController extends BaseController {
     var response =
         await Server().getMethod(API.partnerDetails).catchError(handleError);
     if (response == null) return;
-    print(response);
+    log(response);
   }
 
   void postData() async {
@@ -16,6 +18,6 @@ class TestController extends BaseController {
     var response =
         await Server().postMethod(API.partnerRegister,request).catchError(handleError);
     if (response == null) return;
-    print(response);
+    log(response);
   }
 }

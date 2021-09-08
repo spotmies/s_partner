@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/appbar.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
@@ -17,14 +20,20 @@ List<Map<String, Object>> data = [
   },
 ];
 
-Future editDetails(BuildContext context, double hight, double width, pr) {
+Future editDetails(
+    BuildContext context,
+    double hight,
+    double width,
+    pr,
+    PartnerDetailsProvider partnerDetailsProvider,
+    DrawerandAppBarController drawerController) {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNoController = TextEditingController();
   var nameformkey = GlobalKey<FormState>();
   var emailformkey = GlobalKey<FormState>();
   var mobileformkey = GlobalKey<FormState>();
-  log(pr.toString());
+  // log(pr.toString());
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -119,10 +128,13 @@ Future editDetails(BuildContext context, double hight, double width, pr) {
                                     textSize: width * 0.045,
                                     trailingIcon: Icon(Icons.update),
                                     borderRadius: 15.0,
-                                    onClick: () {
+                                    onClick: () async {
                                       var body = {'name': nameController.text};
                                       if (nameformkey.currentState.validate()) {
                                         log(body.toString());
+                                        await updatePartnerData(body);
+                                        await partnerDetailsProvider
+                                            .localDetailsGet();
                                       }
                                     },
                                   ),
@@ -191,13 +203,16 @@ Future editDetails(BuildContext context, double hight, double width, pr) {
                                     textSize: width * 0.045,
                                     buttonName: 'Change',
                                     trailingIcon: Icon(Icons.update),
-                                    onClick: () {
+                                    onClick: () async {
                                       var body = {
                                         'eMail': emailController.text
                                       };
                                       if (emailformkey.currentState
                                           .validate()) {
                                         log(body.toString());
+                                        await updatePartnerData(body);
+                                        await partnerDetailsProvider
+                                            .localDetailsGet();
                                       }
                                     },
                                   ),
@@ -240,21 +255,16 @@ Future editDetails(BuildContext context, double hight, double width, pr) {
                             key: mobileformkey,
                             child: Column(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(15),
-                                  child: TextFieldWidget(
-                                    controller: mobileNoController,
-                                    hint: 'Mobile',
-                                    enableBorderColor: Colors.grey,
-                                    focusBorderColor: Colors.indigo[900],
-                                    enableBorderRadius: 15,
-                                    focusBorderRadius: 15,
-                                    errorBorderRadius: 15,
-                                    focusErrorRadius: 15,
-                                    validateMsg: 'Enter Valid Name',
-                                    maxLines: 1,
-                                    postIcon: Icon(Icons.change_circle),
-                                    postIconColor: Colors.indigo[900],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextWid(
+                                    text:
+                                        'You cannot change register mobile number,If its neccessary to change your number please contact to custmer care',
+                                    size: width * 0.045,
+                                    weight: FontWeight.w600,
+                                    flow: TextOverflow.visible,
+                                    align: TextAlign.center,
+                                    color: Colors.indigo[900],
                                   ),
                                 ),
                                 Container(
@@ -266,17 +276,9 @@ Future editDetails(BuildContext context, double hight, double width, pr) {
                                     textColor: Colors.white,
                                     borderRadius: 15.0,
                                     textSize: width * 0.045,
-                                    buttonName: 'Change',
-                                    trailingIcon: Icon(Icons.update),
-                                    onClick: () {
-                                      var body = {
-                                        'phNum':mobileNoController.text
-                                      };
-                                      if (mobileformkey.currentState
-                                          .validate()) {
-                                        log(body.toString());
-                                      }
-                                    },
+                                    buttonName: 'Contact',
+                                    trailingIcon: Icon(Icons.contact_support),
+                                    onClick: () async {},
                                   ),
                                 ),
                               ],
@@ -332,7 +334,7 @@ Future editDetails(BuildContext context, double hight, double width, pr) {
                                         height: hight * 0.07,
                                         textColor: Colors.white,
                                         borderRadius: 15.0,
-                                        textSize: width*0.045,
+                                        textSize: width * 0.045,
                                         buttonName: 'Request to Change',
                                         trailingIcon: Icon(Icons.update),
                                         onClick: () {},
