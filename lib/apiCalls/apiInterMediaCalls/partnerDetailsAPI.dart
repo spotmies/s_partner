@@ -10,7 +10,9 @@ var partner;
 // var local;
 
 partnerDetail() async {
-  var response = await Server().getMethod(API.partnerDetails);
+
+ var response = await Server().getMethod(API.partnerDetails);
+
   partner = jsonDecode(response);
   // log(partner.toString());
   // log(response.statusCode.toString());
@@ -18,4 +20,15 @@ partnerDetail() async {
 
   controller.getData();
   return partner;
+}
+
+
+partnerDetailsFull() async{
+  Map<String, String> query = {
+    'extractData': 'true',
+  };
+
+  var response = await Server().getMethodParems(API.partnerDetails, query);
+  var partnerDetails = jsonDecode(response);
+  return partnerDetails;
 }
