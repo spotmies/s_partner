@@ -48,7 +48,7 @@ class _NavBarState extends State<NavBar> {
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
-            var typeCheck = socket['target']['type'];
+      var typeCheck = socket['target']['type'];
       if (typeCheck == "call") {
         log("======== incoming call ===========");
         chatProvider.startCallTimeout();
@@ -67,6 +67,10 @@ class _NavBarState extends State<NavBar> {
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
+    socket.on('inComingOrders', (socket) {
+      partnerProvider.addNewIncomingOrder(socket);
+      log("incoming ord $socket");
+    });
   }
 
   //socket
@@ -78,14 +82,14 @@ class _NavBarState extends State<NavBar> {
     var details = await partnerDetailsFull();
     partnerProvider.setPartnerDetails(details);
     // log("details $details");
-    
   }
 
   @override
   initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    partnerProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
     hittingAllApis();
 
     _chatResponse = StreamController();
@@ -221,7 +225,6 @@ class _NavBarState extends State<NavBar> {
                           List chatList = data.getChatList2();
                           int count =
                               chatList.isEmpty ? 0 : chatList[0]['pCount'];
-                       
 
                           return Positioned(
                               right: 0,

@@ -17,13 +17,24 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map profileDetails;
   List inComingOrders;
   List orders;
+  bool inComingOrdersLoader = false;
 
-  void setPartnerDetails(data){
+  bool get inComingLoader => inComingOrdersLoader;
+  void setInComingLoader(loaderState) {
+    inComingOrdersLoader = loaderState;
+    notifyListeners();
+  }
+
+  void setPartnerDetails(data) {
     var dataTemp = data;
     partnerDetailsFull = dataTemp;
     inComingOrders = dataTemp['inComingOrders'];
+    inComingOrders.sort((a, b) {
+      return a['join'].compareTo(b['join']);
+    });
     orders = dataTemp['orders'];
-    dataTemp.removeWhere((key, value) => key == "inComingOrders" || key == "orders");
+    dataTemp.removeWhere(
+        (key, value) => key == "inComingOrders" || key == "orders");
     profileDetails = dataTemp;
     notifyListeners();
   }
@@ -33,21 +44,20 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
 
+  void addNewIncomingOrder(order) {
+    inComingOrders.add(order);
 
+    inComingOrders.sort((a, b) {
+      return a['join'].compareTo(b['join']);
+    });
+    notifyListeners();
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  void removeIncomingOrderById(ordId) {
+    inComingOrders.removeWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    notifyListeners();
+  }
 
   localDetailsGet() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,10 +81,4 @@ class PartnerDetailsProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('partnerDetails', jsonEncode(partnerLocal));
   }
-
-
-
-
 }
-
-
