@@ -7,6 +7,7 @@ import 'package:spotmies_partner/chat/personal_chat_ui_methods.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -26,7 +27,36 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
-
+  List bottomMenuOptions = [
+    {
+      "name": "view order",
+      "icon": Icons.remove_red_eye,
+      "onPress": () {
+        print("view order");
+      }
+    },
+    {
+      "name": "Partner details",
+      "icon": Icons.account_circle,
+      "onPress": () {
+        print("Partner details");
+      }
+    },
+    {
+      "name": "Disable chat",
+      "icon": Icons.block,
+      "onPress": () {
+        print("Disable chat");
+      }
+    },
+    {
+      "name": "Delete chat",
+      "icon": Icons.delete_forever,
+      "onPress": () {
+        print("Delete chat");
+      }
+    },
+  ];
   // final recorder = SoundRecorder();
   @override
   void initState() {
@@ -280,13 +310,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           )),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.read_more,
-            color: Colors.grey[900],
-          ),
-        ),
-        IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MyCalling(
@@ -302,6 +325,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: Colors.grey[900],
           ),
         ),
+        IconButton(
+            padding: EdgeInsets.only(bottom: 0),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.grey[900],
+            ),
+            onPressed: () {
+              bottomOptionsMenu(context,
+                  options: bottomMenuOptions, menuTitle: "More options");
+            })
       ],
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {

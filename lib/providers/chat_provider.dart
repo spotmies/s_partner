@@ -29,6 +29,11 @@ class ChatProvider extends ChangeNotifier {
     confirmReceiveAllMessages();
     notifyListeners();
   }
+   void setChatList2(var list) {
+    print("loading chats ..........>>>>>>>>> $list");
+    chatList = list;
+    notifyListeners();
+  }
 
   getChatList2() => chatList;
 
