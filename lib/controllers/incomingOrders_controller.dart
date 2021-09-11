@@ -1,17 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class IncomingOrdersController extends ControllerMVC {
   var incomingscaffoldkey = GlobalKey<ScaffoldState>();
 
   TextEditingController moneyController = TextEditingController();
+  PartnerDetailsProvider partnerProvider;
 
   var updateFormKey = GlobalKey<FormState>();
 
@@ -45,23 +52,13 @@ class IncomingOrdersController extends ControllerMVC {
     'Events'
   ];
 
-  // void socketOrders() {
-  //   socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-  //     "transports": ["websocket", "polling", "flashsocket"],
-  //     "autoConnect": false,
-  //   });
-  //   socket.onConnect((data) {
-  //     print("Connected");
-  //     socket.on("message", (msg) {
-  //       print(msg);
-  //     });
-  //   });
-  //   socket.connect();
-  //   socket.emit('join-partner', FirebaseAuth.instance.currentUser.uid);
-  //   socket.on('inComingOrders', (socket) async {
-  //     socketIncomingOrders.add(socket);
-  //   });
-  // }
+  @override
+  void initState() {
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+
+    super.initState();
+  }
 
   addDataToSocket(neworders, ld) {
     if (neworders != null) {
@@ -99,4 +96,23 @@ class IncomingOrdersController extends ControllerMVC {
       });
     }
   }
+
+  final incomingOrdersQuery = {
+    'showOnly': 'inComingOrders',
+    'extractData': 'true',
+    'ordState': 'req'
+  };
+
+  Future incomingOrders() async {
+    var response =
+        await Server().getMethodParems(API.incomingorders, incomingOrdersQuery);
+    log('api called');
+    // log(response);
+    var orders = jsonDecode(response);
+    partnerProvider.setIncomingOrders(orders);
+    snackbar(context, "Incoming orders fetched successfully");
+  }
+
+
+  
 }

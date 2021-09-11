@@ -25,13 +25,17 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void sortListByTime() {
+    inComingOrders.sort((a, b) {
+      return a['join'].compareTo(b['join']);
+    });
+  }
+
   void setPartnerDetails(data) {
     var dataTemp = data;
     partnerDetailsFull = dataTemp;
     inComingOrders = dataTemp['inComingOrders'];
-    inComingOrders.sort((a, b) {
-      return a['join'].compareTo(b['join']);
-    });
+    sortListByTime();
     orders = dataTemp['orders'];
     dataTemp.removeWhere(
         (key, value) => key == "inComingOrders" || key == "orders");
@@ -42,14 +46,18 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map get getProfileDetails => profileDetails;
   Map get getPartnerDetailsFull => partnerDetailsFull;
   List get getIncomingOrder => inComingOrders;
+  void setIncomingOrders(ordersList) {
+    inComingOrders = ordersList;
+    sortListByTime();
+    notifyListeners();
+  }
+
   List get getOrders => orders;
 
   void addNewIncomingOrder(order) {
     inComingOrders.add(order);
 
-    inComingOrders.sort((a, b) {
-      return a['join'].compareTo(b['join']);
-    });
+    sortListByTime();
     notifyListeners();
   }
 
