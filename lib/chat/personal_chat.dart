@@ -116,8 +116,15 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         itemBuilder: (BuildContext context, int index) {
                           Map rawMsgData = jsonDecode(
                               messages[(messages.length - 1) - index]);
-                          Map rawMsgDataprev = jsonDecode(
-                              messages[(messages.length - 1) - (index + 1)]);
+                          // Map rawMsgDataprev = rawMsgData;
+
+                          Map rawMsgDataprev;
+                          if (index == messages.length - 1) {
+                            rawMsgDataprev = rawMsgData;
+                          } else {
+                            rawMsgDataprev = jsonDecode(
+                                messages[(messages.length - 1) - (index + 1)]);
+                          }
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
@@ -129,10 +136,50 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                 right: sender == "user" ? 0 : 10),
                             child: Column(
                               children: [
+                                Visibility(
+                                  visible: _chatController.dateCompare(
+                                              rawMsgData['time'],
+                                              rawMsgDataprev['time']) !=
+                                          "false" ||
+                                      index == messages.length - 1,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 7,
+                                              bottom: 7),
+                                          alignment: Alignment.center,
+                                          child: TextWid(
+                                            text: index == messages.length - 1
+                                                ? _chatController
+                                                    .getDate(rawMsgData['time'])
+                                                : _chatController.dateCompare(
+                                                    rawMsgData['time'],
+                                                    rawMsgDataprev['time']),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 Row(
                                   mainAxisAlignment: sender == "user"
                                       ? MainAxisAlignment.start
-                                      : MainAxisAlignment.end,
+                                      : sender == "partner"
+                                          ? MainAxisAlignment.end
+                                          : MainAxisAlignment.center,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
@@ -147,7 +194,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                           decoration: BoxDecoration(
                                               color: sender == "user"
                                                   ? Colors.white
-                                                  : Colors.blueGrey[50],
+                                                  : sender == "partner"
+                                                      ? Colors.blueGrey[50]
+                                                      : Colors.grey[900],
                                               border: Border.all(
                                                   color: Colors.blueGrey[500],
                                                   width: 0.3),
@@ -164,21 +213,25 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                           : 0))),
                                           child: Column(
                                             children: [
-                                              Container(
-                                                  padding: EdgeInsets.only(
-                                                    left: 10,
-                                                    top: 5,
-                                                  ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: TextWid(
-                                                    weight: FontWeight.w800,
-                                                    color: Colors.grey[600],
-                                                    text: sender != 'user'
-                                                        ? 'You'
-                                                        : _chatController
-                                                            .user['name'],
-                                                  )),
+                                              sender == "user" ||
+                                                      sender == "partner"
+                                                  ? Container(
+                                                      padding: EdgeInsets.only(
+                                                        left: 10,
+                                                        top: 5,
+                                                      ),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: TextWid(
+                                                        weight: FontWeight.w800,
+                                                        color: Colors.grey[600],
+                                                        text: sender ==
+                                                                'partner'
+                                                            ? 'You'
+                                                            : _chatController
+                                                                .user['name'],
+                                                      ))
+                                                  : Container(),
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     left: 10,
@@ -223,40 +276,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                       ],
                                     ),
                                   ],
-                                ),
-                                Visibility(
-                                  visible: _chatController.dateCompare(
-                                          rawMsgData['time'],
-                                          rawMsgDataprev['time']) !=
-                                      "false",
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[900],
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 7,
-                                              bottom: 7),
-                                          alignment: Alignment.center,
-                                          child: TextWid(
-                                            text: _chatController.dateCompare(
-                                                rawMsgData['time'],
-                                                rawMsgDataprev['time']),
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),

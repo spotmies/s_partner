@@ -117,6 +117,21 @@ class ChatController extends ControllerMVC {
         return 'text';
     }
   }
+  
+  getDate(stamp) {
+    int timeStamp = stamp.runtimeType == String ? int.parse(stamp) : stamp;
+    log(timeStamp.runtimeType.toString());
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast = DateFormat('EEE')
+        .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
+    if (daypast == daynow) {
+      return "Today";
+    } else {
+      return DateFormat('dd MMM yyyy')
+          .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
+    }
+  }
 
   dateCompare(msg1, msg2) {
     var time1 = msg1;
