@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/orders.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
@@ -11,8 +13,51 @@ import 'package:spotmies_partner/apiCalls/testController.dart';
 class PartnerDetailsProvider extends ChangeNotifier {
   final controller = TestController();
   var partnerLocal;
-  // var local;
+  Map partnerDetailsFull;
+  Map profileDetails;
+  List inComingOrders;
+  List orders;
+  bool inComingOrdersLoader = false;
 
+  bool get inComingLoader => inComingOrdersLoader;
+  void setInComingLoader(loaderState) {
+    inComingOrdersLoader = loaderState;
+    notifyListeners();
+  }
+
+  void setPartnerDetails(data) {
+    var dataTemp = data;
+    partnerDetailsFull = dataTemp;
+    inComingOrders = dataTemp['inComingOrders'];
+    inComingOrders.sort((a, b) {
+      return a['join'].compareTo(b['join']);
+    });
+    orders = dataTemp['orders'];
+    dataTemp.removeWhere(
+        (key, value) => key == "inComingOrders" || key == "orders");
+    profileDetails = dataTemp;
+    notifyListeners();
+  }
+
+  Map get getProfileDetails => profileDetails;
+  Map get getPartnerDetailsFull => partnerDetailsFull;
+  List get getIncomingOrder => inComingOrders;
+  List get getOrders => orders;
+
+  void addNewIncomingOrder(order) {
+    inComingOrders.add(order);
+
+    inComingOrders.sort((a, b) {
+      return a['join'].compareTo(b['join']);
+    });
+    notifyListeners();
+  }
+
+  void removeIncomingOrderById(ordId) {
+    inComingOrders.removeWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    notifyListeners();
+  }
 
   localDetailsGet() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,23 +81,4 @@ class PartnerDetailsProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('partnerDetails', jsonEncode(partnerLocal));
   }
-
-  // localData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String partnerData = prefs.getString('details');
-  //   Map<String, dynamic> details =
-  //       jsonDecode(partnerData) as Map<String, dynamic>;
-  //   local = details;
-
-  //   // print('print from provider');
-  //   // print(local);
-  // }
-
-  // updateLocal(value) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString(local['availability'], value);
-  // }
 }
-
-
-// local == null ? jsonEncode(partner) : jsonEncode(local)

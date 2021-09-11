@@ -111,7 +111,7 @@ class _MyCallingState extends State<MyCalling> {
     chatProvider.addListener(() {
       int callState = chatProvider.getCallStatus;
 
- if (callState == 3 && timerFlag) {
+      if (callState == 3 && timerFlag) {
         timerFlag = false;
         chatProvider.startCallDuration();
       }
@@ -132,17 +132,18 @@ class _MyCallingState extends State<MyCalling> {
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
-      if(data.callTimeout == 0)rejectCall();
+      if (data.callTimeout == 0) rejectCall();
       Map uDetails = data.getUdetailsByMsgId(widget.msgId);
+      log("details ${uDetails['pic']}");
+      log(uDetails.toString());
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
         onAccept: joinOnRoom,
         onReject: rejectCall,
-        name: uDetails['name'],
-        image: uDetails['pic'],
+        name: uDetails['name'] ?? "unknown",
+        image: uDetails['pic'] ?? "",
       );
     });
-   
   }
 }

@@ -45,23 +45,23 @@ class IncomingOrdersController extends ControllerMVC {
     'Events'
   ];
 
-  void socketOrders() {
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-      "transports": ["websocket", "polling", "flashsocket"],
-      "autoConnect": false,
-    });
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-      });
-    });
-    socket.connect();
-    socket.emit('join-partner', FirebaseAuth.instance.currentUser.uid);
-    socket.on('inComingOrders', (socket) async {
-      socketIncomingOrders.add(socket);
-    });
-  }
+  // void socketOrders() {
+  //   socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+  //     "transports": ["websocket", "polling", "flashsocket"],
+  //     "autoConnect": false,
+  //   });
+  //   socket.onConnect((data) {
+  //     print("Connected");
+  //     socket.on("message", (msg) {
+  //       print(msg);
+  //     });
+  //   });
+  //   socket.connect();
+  //   socket.emit('join-partner', FirebaseAuth.instance.currentUser.uid);
+  //   socket.on('inComingOrders', (socket) async {
+  //     socketIncomingOrders.add(socket);
+  //   });
+  // }
 
   addDataToSocket(neworders, ld) {
     if (neworders != null) {
