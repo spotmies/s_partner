@@ -47,6 +47,13 @@ class ChatProvider extends ChangeNotifier {
 
    }
 
+     disableChatByMsgId(msgId) {
+    chatList[chatList.indexWhere(
+            (element) => element['msgId'].toString() == msgId.toString())]
+        ['cBuild'] = 0;
+    notifyListeners();
+  }
+
   getChatList2() => chatList;
 
   getChatDetailsByMsgId(msgId) {

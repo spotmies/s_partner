@@ -76,6 +76,9 @@ class _NavBarState extends State<NavBar> {
       if (socket['type'] == "insert") {
         var newChat = await getChatByIdFromDB(socket['doc']['msgId']);
         chatProvider.addNewChat(newChat);
+      } else if (socket['type'] == "disable") {
+        log("disable chat $socket");
+        chatProvider.disableChatByMsgId(socket['msgId']);
       }
     });
   }
