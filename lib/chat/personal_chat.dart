@@ -95,19 +95,17 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return Scaffold(
         key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
-        body: Container(
-          child: Column(children: [
-            Expanded(
-              child: Container(
-                child: Consumer<ChatProvider>(
-                  builder: (context, data, child) {
-                    _chatController.chatList = data.getChatList2();
-                    _chatController.targetChat = _chatController.getTargetChat(
-                        _chatController.chatList, widget.msgId);
-                    _chatController.user =
-                        _chatController.targetChat['uDetails'];
-                    List messages = _chatController.targetChat['msgs'];
-                    return ListView.builder(
+        body: Consumer<ChatProvider>(builder: (context, data, child) {
+          _chatController.chatList = data.getChatList2();
+          _chatController.targetChat = _chatController.getTargetChat(
+              _chatController.chatList, widget.msgId);
+          _chatController.user = _chatController.targetChat['uDetails'];
+          List messages = _chatController.targetChat['msgs'];
+          return Container(
+            child: Column(children: [
+              Expanded(
+                child: Container(
+                    child: ListView.builder(
                         reverse: true,
                         controller: _chatController.scrollController,
                         itemCount: data.getMsgCount() < messages.length
@@ -280,15 +278,19 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                               ],
                             ),
                           );
-                        });
-                  },
-                ),
+                        })),
               ),
-            ),
-            chatInputField(_chatController.sendMessageHandler, context, _hight,
-                _width, _chatController, widget.msgId)
-          ]),
-        ),
+              _chatController.targetChat['cBuild'] == 1
+                  ? chatInputField(_chatController.sendMessageHandler, context,
+                      _hight, _width, _chatController, widget.msgId)
+                  : Container(
+                      child: TextWid(
+                          text:
+                              "You can't chat because user might be disabled or order completed"),
+                    )
+            ]),
+          );
+        }),
         floatingActionButton: Container(
           height: _hight * 0.2,
           padding: EdgeInsets.only(bottom: _hight * 0.1),

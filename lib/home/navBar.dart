@@ -72,6 +72,12 @@ class _NavBarState extends State<NavBar> {
       partnerProvider.addNewIncomingOrder(socket);
       log("incoming ord $socket");
     });
+    socket.on("chatStream", (socket) async {
+      if (socket['type'] == "insert") {
+        var newChat = await getChatByIdFromDB(socket['doc']['msgId']);
+        chatProvider.addNewChat(newChat);
+      }
+    });
   }
 
   //socket

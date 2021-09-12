@@ -35,6 +35,18 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void sortChatListByTime(){
+            chatList.sort((a, b) {
+      return b['lastModified'].compareTo(a['lastModified']);
+    });
+  }
+   void addNewChat(chatObject){
+     chatList.add(chatObject);
+     sortChatListByTime();
+     notifyListeners();
+
+   }
+
   getChatList2() => chatList;
 
   getChatDetailsByMsgId(msgId) {
@@ -81,10 +93,8 @@ class ChatProvider extends ChangeNotifier {
         if (msgId != currentMsgId) {
           allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
         }
-        allChats.sort((a, b) {
-          return b['lastModified'].compareTo(a['lastModified']);
-        });
         chatList = allChats;
+        sortChatListByTime();
         break;
       }
     }

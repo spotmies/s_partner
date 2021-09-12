@@ -22,3 +22,12 @@ getChatListFromDb() async {
   chat = jsonDecode(response);
   return chat;
 }
+
+getChatByIdFromDB(id) async {
+  print("getting new chat from db");
+  var query = {"cBuild": "1"};
+  var response =
+      await Server().getMethodParems(API.chatById + "/${id.toString()}", query);
+  chat = jsonDecode(response);
+  return chat;
+}
