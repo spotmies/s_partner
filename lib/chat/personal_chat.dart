@@ -7,6 +7,7 @@ import 'package:spotmies_partner/chat/personal_chat_ui_methods.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -26,7 +27,36 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
-
+  List bottomMenuOptions = [
+    {
+      "name": "view order",
+      "icon": Icons.remove_red_eye,
+      "onPress": () {
+        print("view order");
+      }
+    },
+    {
+      "name": "Partner details",
+      "icon": Icons.account_circle,
+      "onPress": () {
+        print("Partner details");
+      }
+    },
+    {
+      "name": "Disable chat",
+      "icon": Icons.block,
+      "onPress": () {
+        print("Disable chat");
+      }
+    },
+    {
+      "name": "Delete chat",
+      "icon": Icons.delete_forever,
+      "onPress": () {
+        print("Delete chat");
+      }
+    },
+  ];
   // final recorder = SoundRecorder();
   @override
   void initState() {
@@ -65,19 +95,17 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return Scaffold(
         key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
-        body: Container(
-          child: Column(children: [
-            Expanded(
-              child: Container(
-                child: Consumer<ChatProvider>(
-                  builder: (context, data, child) {
-                    _chatController.chatList = data.getChatList2();
-                    _chatController.targetChat = _chatController.getTargetChat(
-                        _chatController.chatList, widget.msgId);
-                    _chatController.user =
-                        _chatController.targetChat['uDetails'];
-                    List messages = _chatController.targetChat['msgs'];
-                    return ListView.builder(
+        body: Consumer<ChatProvider>(builder: (context, data, child) {
+          _chatController.chatList = data.getChatList2();
+          _chatController.targetChat = _chatController.getTargetChat(
+              _chatController.chatList, widget.msgId);
+          _chatController.user = _chatController.targetChat['uDetails'];
+          List messages = _chatController.targetChat['msgs'];
+          return Container(
+            child: Column(children: [
+              Expanded(
+                child: Container(
+                    child: ListView.builder(
                         reverse: true,
                         controller: _chatController.scrollController,
                         itemCount: data.getMsgCount() < messages.length
@@ -86,8 +114,15 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         itemBuilder: (BuildContext context, int index) {
                           Map rawMsgData = jsonDecode(
                               messages[(messages.length - 1) - index]);
-                          Map rawMsgDataprev = jsonDecode(
-                              messages[(messages.length - 1) - (index + 1)]);
+                          // Map rawMsgDataprev = rawMsgData;
+
+                          Map rawMsgDataprev;
+                          if (index == messages.length - 1) {
+                            rawMsgDataprev = rawMsgData;
+                          } else {
+                            rawMsgDataprev = jsonDecode(
+                                messages[(messages.length - 1) - (index + 1)]);
+                          }
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
@@ -99,10 +134,50 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                 right: sender == "user" ? 0 : 10),
                             child: Column(
                               children: [
+                                Visibility(
+                                  visible: _chatController.dateCompare(
+                                              rawMsgData['time'],
+                                              rawMsgDataprev['time']) !=
+                                          "false" ||
+                                      index == messages.length - 1,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 7,
+                                              bottom: 7),
+                                          alignment: Alignment.center,
+                                          child: TextWid(
+                                            text: index == messages.length - 1
+                                                ? _chatController
+                                                    .getDate(rawMsgData['time'])
+                                                : _chatController.dateCompare(
+                                                    rawMsgData['time'],
+                                                    rawMsgDataprev['time']),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 Row(
                                   mainAxisAlignment: sender == "user"
                                       ? MainAxisAlignment.start
-                                      : MainAxisAlignment.end,
+                                      : sender == "partner"
+                                          ? MainAxisAlignment.end
+                                          : MainAxisAlignment.center,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
@@ -117,7 +192,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                           decoration: BoxDecoration(
                                               color: sender == "user"
                                                   ? Colors.white
-                                                  : Colors.blueGrey[50],
+                                                  : sender == "partner"
+                                                      ? Colors.blueGrey[50]
+                                                      : Colors.grey[900],
                                               border: Border.all(
                                                   color: Colors.blueGrey[500],
                                                   width: 0.3),
@@ -134,21 +211,25 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                           : 0))),
                                           child: Column(
                                             children: [
-                                              Container(
-                                                  padding: EdgeInsets.only(
-                                                    left: 10,
-                                                    top: 5,
-                                                  ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: TextWid(
-                                                    weight: FontWeight.w800,
-                                                    color: Colors.grey[600],
-                                                    text: sender != 'user'
-                                                        ? 'You'
-                                                        : _chatController
-                                                            .user['name'],
-                                                  )),
+                                              sender == "user" ||
+                                                      sender == "partner"
+                                                  ? Container(
+                                                      padding: EdgeInsets.only(
+                                                        left: 10,
+                                                        top: 5,
+                                                      ),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: TextWid(
+                                                        weight: FontWeight.w800,
+                                                        color: Colors.grey[600],
+                                                        text: sender ==
+                                                                'partner'
+                                                            ? 'You'
+                                                            : _chatController
+                                                                .user['name'],
+                                                      ))
+                                                  : Container(),
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     left: 10,
@@ -194,52 +275,22 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                     ),
                                   ],
                                 ),
-                                Visibility(
-                                  visible: _chatController.dateCompare(
-                                          rawMsgData['time'],
-                                          rawMsgDataprev['time']) !=
-                                      "false",
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[900],
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 7,
-                                              bottom: 7),
-                                          alignment: Alignment.center,
-                                          child: TextWid(
-                                            text: _chatController.dateCompare(
-                                                rawMsgData['time'],
-                                                rawMsgDataprev['time']),
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           );
-                        });
-                  },
-                ),
+                        })),
               ),
-            ),
-            chatInputField(_chatController.sendMessageHandler, context, _hight,
-                _width, _chatController, widget.msgId)
-          ]),
-        ),
+              _chatController.targetChat['cBuild'] == 1
+                  ? chatInputField(_chatController.sendMessageHandler, context,
+                      _hight, _width, _chatController, widget.msgId)
+                  : Container(
+                      child: TextWid(
+                          text:
+                              "You can't chat because user might be disabled or order completed"),
+                    )
+            ]),
+          );
+        }),
         floatingActionButton: Container(
           height: _hight * 0.2,
           padding: EdgeInsets.only(bottom: _hight * 0.1),
@@ -280,13 +331,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           )),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.read_more,
-            color: Colors.grey[900],
-          ),
-        ),
-        IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MyCalling(
@@ -302,6 +346,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: Colors.grey[900],
           ),
         ),
+        IconButton(
+            padding: EdgeInsets.only(bottom: 0),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.grey[900],
+            ),
+            onPressed: () {
+              bottomOptionsMenu(context,
+                  options: bottomMenuOptions, menuTitle: "More options");
+            })
       ],
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {

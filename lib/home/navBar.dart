@@ -15,6 +15,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
 
@@ -70,6 +71,15 @@ class _NavBarState extends State<NavBar> {
     socket.on('inComingOrders', (socket) {
       partnerProvider.addNewIncomingOrder(socket);
       log("incoming ord $socket");
+    });
+    socket.on("chatStream", (socket) async {
+      if (socket['type'] == "insert") {
+        var newChat = await getChatByIdFromDB(socket['doc']['msgId']);
+        chatProvider.addNewChat(newChat);
+      } else if (socket['type'] == "disable") {
+        log("disable chat $socket");
+        chatProvider.disableChatByMsgId(socket['msgId']);
+      }
     });
   }
 
@@ -161,8 +171,8 @@ class _NavBarState extends State<NavBar> {
       child: Orders(),
     ),
     Center(
+      child: TutCategory(),
       // child: Profile(),
-      child: Profile(),
     ),
   ];
 

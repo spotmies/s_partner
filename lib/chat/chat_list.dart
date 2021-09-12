@@ -3,9 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
+import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
@@ -18,39 +20,11 @@ class ChatList extends StatefulWidget {
   _ChatListState createState() => _ChatListState();
 }
 
-class _ChatListState extends State<ChatList> {
-  @override
-  void initState() {
-    super.initState();
-    log("chatlist inti>>>>>>");
+class _ChatListState extends StateMVC<ChatList> {
+  ChatController _chatController;
+  _ChatListState() : super(ChatController()) {
+    this._chatController = controller;
   }
-
-  @override
-  Widget build(BuildContext context) {
-    // final _hight = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: TextWid(
-            text: 'My Conversations',
-            size: _width * 0.045,
-            weight: FontWeight.w600,
-          )),
-      body: Container(child: RecentChats()),
-    );
-  }
-}
-
-class RecentChats extends StatefulWidget {
-  @override
-  _RecentChatsState createState() => _RecentChatsState();
-}
-
-class _RecentChatsState extends State<RecentChats> {
   ChatProvider chatProvider;
   @override
   void initState() {
@@ -60,76 +34,78 @@ class _RecentChatsState extends State<RecentChats> {
     super.initState();
   }
 
-  cardOnClick(msgId, msgId2, readReceiptObj) {
-    log("$msgId $msgId2");
-
-    if (readReceiptObj != "" &&
-        chatProvider.getChatDetailsByMsgId(msgId)['pCount'] > 0) {
-      log("readdd////////////////////");
-      chatProvider.setReadReceipt(readReceiptObj);
-    }
-    chatProvider.setMsgCount(20);
-    chatProvider.resetMessageCount(msgId);
-    chatProvider.setMsgId(msgId2);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _width = MediaQuery.of(context).size.width;
     print('======render chatList screen =======');
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: ClipRRect(
-              child: Consumer<ChatProvider>(
-                builder: (context, data, child) {
-                  List chatList = data.getChatList2();
+    return Scaffold(
+      key: _chatController.scaffoldkey,
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: TextWid(
+            text: 'My Conversations',
+            size: _width * 0.045,
+            weight: FontWeight.w600,
+          )),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                child: Consumer<ChatProvider>(
+                  builder: (context, data, child) {
+                    List chatList = data.getChatList2();
 
-                  // log(chatList[0].toString());
-                  if (chatList.length < 1) {
-                    return Center(
-                        child: TextWid(
-                      text: "No Chats Available",
-                      size: 18,
-                    ));
-                  }
-                  return ListView.builder(
-                    itemCount: chatList?.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Map user = chatList[index]['uDetails'];
-                      List messages = chatList[index]['msgs'];
-                      int count = chatList[index]['pCount'];
+                    // log(chatList[0].toString());
+                    if (chatList.length < 1) {
+                      return Center(
+                          child: TextWid(
+                        text: "No Chats Available",
+                        size: 18,
+                      ));
+                    }
+                    return RefreshIndicator(
+                      onRefresh: _chatController.fetchNewChatList,
+                      child: ListView.builder(
+                        itemCount: chatList?.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Map user = chatList[index]['uDetails'];
+                          List messages = chatList[index]['msgs'];
+                          int count = chatList[index]['pCount'];
 
-                      // log("count $count");
+                          // log("count $count");
 
-                      var lastMessage = jsonDecode(messages.last);
-                      // log(lastMessage['type'].toString());
+                          var lastMessage = jsonDecode(messages.last);
+                          // log(lastMessage['type'].toString());
 
-                      return ChatListCard(
-                        user['pic'],
-                        user['name'],
-                        lastMessage['msg'].toString(),
-                        getTime(lastMessage['time']),
-                        chatList[index]['msgId'],
-                        count,
-                        lastMessage['type'],
-                        chatList[index]['uId'],
-                        chatList[index]['pId'],
-                        callBack: cardOnClick,
-                      );
-                    },
-                  );
-                },
+                          return ChatListCard(
+                            user['pic'],
+                            user['name'],
+                            lastMessage['msg'].toString(),
+                            getTime(lastMessage['time']),
+                            chatList[index]['msgId'],
+                            count,
+                            lastMessage['type'],
+                            chatList[index]['uId'],
+                            chatList[index]['pId'],
+                            callBack: _chatController.cardOnClick,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -232,7 +208,7 @@ class _ChatListCardState extends State<ChatListCard> {
               width: 3,
             ),
             Container(
-              width: _width*0.47,
+              width: _width * 0.47,
               child: TextWid(
                   text: toBeginningOfSentenceCase(
                     typeofLastMessage(widget.type, widget.lastMessage, 'text'),
@@ -240,12 +216,13 @@ class _ChatListCardState extends State<ChatListCard> {
                   size: _width * 0.035,
                   flow: TextOverflow.ellipsis,
                   weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-                  color:
-                      widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+                  color: widget.count > 0
+                      ? Colors.blueGrey[600]
+                      : Colors.grey[500]),
             ),
           ],
         ),
-        leading: ProfilePic( 
+        leading: ProfilePic(
           badge: true,
           profile: widget.profile,
           name: widget.name,

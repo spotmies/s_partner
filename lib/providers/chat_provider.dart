@@ -29,6 +29,30 @@ class ChatProvider extends ChangeNotifier {
     confirmReceiveAllMessages();
     notifyListeners();
   }
+   void setChatList2(var list) {
+    print("loading chats ..........>>>>>>>>> $list");
+    chatList = list;
+    notifyListeners();
+  }
+
+  void sortChatListByTime(){
+            chatList.sort((a, b) {
+      return b['lastModified'].compareTo(a['lastModified']);
+    });
+  }
+   void addNewChat(chatObject){
+     chatList.add(chatObject);
+     sortChatListByTime();
+     notifyListeners();
+
+   }
+
+     disableChatByMsgId(msgId) {
+    chatList[chatList.indexWhere(
+            (element) => element['msgId'].toString() == msgId.toString())]
+        ['cBuild'] = 0;
+    notifyListeners();
+  }
 
   getChatList2() => chatList;
 
@@ -76,10 +100,8 @@ class ChatProvider extends ChangeNotifier {
         if (msgId != currentMsgId) {
           allChats[i]['pCount'] = allChats[i]['pCount'] + 1;
         }
-        allChats.sort((a, b) {
-          return b['lastModified'].compareTo(a['lastModified']);
-        });
         chatList = allChats;
+        sortChatListByTime();
         break;
       }
     }
