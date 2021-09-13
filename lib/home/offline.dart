@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/lineGraphBig.dart';
 import 'package:spotmies_partner/home/offlinePage/singleBarGraph.dart';
-import 'package:spotmies_partner/localDB/localGet.dart';
 
 class Offline extends StatefulWidget {
   final pr;

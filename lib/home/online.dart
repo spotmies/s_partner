@@ -38,7 +38,7 @@ class _OnlineState extends StateMVC<Online> {
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
 
-    _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
+    // _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
 
     super.initState();
     _incomingOrdersController.pickedDate = DateTime.now();

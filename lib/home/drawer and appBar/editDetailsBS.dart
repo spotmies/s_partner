@@ -29,7 +29,7 @@ Future editDetails(
     DrawerandAppBarController drawerController) {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController mobileNoController = TextEditingController();
+  // TextEditingController mobileNoController = TextEditingController();
   var nameformkey = GlobalKey<FormState>();
   var emailformkey = GlobalKey<FormState>();
   var mobileformkey = GlobalKey<FormState>();

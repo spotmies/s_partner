@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Future audioRecoder(BuildContext context, double hight, double width,

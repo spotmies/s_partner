@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/orders.dart';
