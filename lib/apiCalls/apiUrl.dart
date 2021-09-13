@@ -16,6 +16,8 @@ class API {
   static var acceptOrder = '/api/order/orders/';
   static var updateOrder = '/api/response/newResponse/';
   static var partnerChat = '/api/chat/partner/$pid';
+  static var chatById = "/api/chat/chats";
+  static var partnerDetailsExtraData = '/api/chat/partner/$pid?extractData=true';
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"

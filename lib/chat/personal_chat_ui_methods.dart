@@ -32,8 +32,12 @@ typeofChat(type, message, sender, double hight, double width,
           text: toBeginningOfSentenceCase(message),
           maxlines: 200,
           lSpace: 1.5,
-          color: sender != "user" ? Colors.grey[800] : Colors.grey[900],
-          weight: sender != "user" ? FontWeight.w600 : FontWeight.w600,
+          color: sender == "partner"
+              ? Colors.grey[800]
+              : sender == "user"
+                  ? Colors.grey[900]
+                  : Colors.grey[50],
+          weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
         );
         break;
       case 'img':

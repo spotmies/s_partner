@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
@@ -12,7 +13,9 @@ import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
 
@@ -26,6 +29,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   ChatProvider chatProvider;
+  PartnerDetailsProvider partnerProvider;
 //socket
 
   StreamController _chatResponse;
@@ -48,7 +52,7 @@ class _NavBarState extends State<NavBar> {
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
-            var typeCheck = socket['target']['type'];
+      var typeCheck = socket['target']['type'];
       if (typeCheck == "call") {
         log("======== incoming call ===========");
         chatProvider.startCallTimeout();
@@ -67,20 +71,39 @@ class _NavBarState extends State<NavBar> {
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
+    socket.on('inComingOrders', (socket) {
+      partnerProvider.addNewIncomingOrder(socket);
+      log("incoming ord $socket");
+    });
+    socket.on("chatStream", (socket) async {
+      if (socket['type'] == "insert") {
+        var newChat = await getChatByIdFromDB(socket['doc']['msgId']);
+        chatProvider.addNewChat(newChat);
+      } else if (socket['type'] == "disable") {
+        log("disable chat $socket");
+        chatProvider.disableChatByMsgId(socket['msgId']);
+      }
+    });
   }
 
   //socket
-  getChatList() async {
+  hittingAllApis() async {
     var chatList = await getChatListFromDb();
-    print('chatlist $chatList ');
+    // print('chatlist $chatList ');
     chatProvider.setChatList(chatList);
+
+    var details = await partnerDetailsFull();
+    partnerProvider.setPartnerDetails(details);
+    // log("details $details");
   }
 
   @override
   initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    getChatList();
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    hittingAllApis();
 
     _chatResponse = StreamController();
 
@@ -151,8 +174,8 @@ class _NavBarState extends State<NavBar> {
       child: Orders(),
     ),
     Center(
+      child: TutCategory(),
       // child: Profile(),
-      child: Profile(),
     ),
   ];
 
@@ -233,7 +256,6 @@ class _NavBarState extends State<NavBar> {
                           List chatList = data.getChatList2();
                           int count =
                               chatList.isEmpty ? 0 : chatList[0]['pCount'];
-                       
 
                           return Positioned(
                               right: 0,

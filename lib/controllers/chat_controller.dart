@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:video_player/video_player.dart';
 
 class ChatController extends ControllerMVC {
@@ -33,6 +38,26 @@ class ChatController extends ControllerMVC {
   Map user = {};
   int msgCount = 20;
 
+  @override
+  void initState() {
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
+    super.initState();
+  }
+
+  
+  cardOnClick(msgId, msgId2, readReceiptObj) {
+    log("$msgId $msgId2");
+
+    if (readReceiptObj != "" &&
+        chatProvider.getChatDetailsByMsgId(msgId)['pCount'] > 0) {
+      log("readdd////////////////////");
+      chatProvider.setReadReceipt(readReceiptObj);
+    }
+    chatProvider.setMsgCount(20);
+    chatProvider.resetMessageCount(msgId);
+    chatProvider.setMsgId(msgId2);
+  }
 
 
   void scrollToBottom() {
@@ -90,6 +115,21 @@ class ChatController extends ControllerMVC {
         break;
       default:
         return 'text';
+    }
+  }
+  
+  getDate(stamp) {
+    int timeStamp = stamp.runtimeType == String ? int.parse(stamp) : stamp;
+    log(timeStamp.runtimeType.toString());
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast = DateFormat('EEE')
+        .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
+    if (daypast == daynow) {
+      return "Today";
+    } else {
+      return DateFormat('dd MMM yyyy')
+          .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
     }
   }
 
@@ -229,5 +269,10 @@ class ChatController extends ControllerMVC {
   }
 
 
-
+  Future fetchNewChatList() async {
+    var response = await Server().getMethod(API.partnerChat);
+    var chatList = jsonDecode(response);
+    chatProvider.setChatList2(chatList);
+    snackbar(context, "sync with new changes");
+  }
 }
