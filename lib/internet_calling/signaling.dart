@@ -97,6 +97,7 @@ class Signaling {
     roomRef.collection('calleeCandidates').snapshots().listen((snapshot) {
       snapshot.docChanges.forEach((change) {
         if (change.type == DocumentChangeType.added) {
+          // ignore: unnecessary_cast
           Map<String, dynamic> data = change.doc.data() as Map<String, dynamic>;
           log('Got new remote ICE candidate: ${jsonEncode(data)}');
           peerConnection.addCandidate(
@@ -172,6 +173,7 @@ class Signaling {
       // Listening for remote ICE candidates below
       roomRef.collection('callerCandidates').snapshots().listen((snapshot) {
         snapshot.docChanges.forEach((document) {
+          // ignore: unnecessary_cast
           var data = document.doc.data() as Map<String, dynamic>;
           // log(data);
           log('Got new remote ICE candidate: $data');

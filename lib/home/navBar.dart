@@ -17,6 +17,9 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 void main() => runApp(NavBar());
 
 class NavBar extends StatefulWidget {
+  final int data;
+  final String payload;
+  NavBar({this.data, this.payload});
   @override
   _NavBarState createState() => _NavBarState();
 }
@@ -153,6 +156,24 @@ class _NavBarState extends State<NavBar> {
     ),
   ];
 
+ static List <Widget> shortCut = [
+     Center(
+      child: Home(),
+    ),
+    Center(
+        // child: ChatList(IO.socket socket),
+        child: ChatList()
+        // child: ChatHome(),
+        ),
+    Center(
+      child: Orders(),
+    ),
+    Center(
+      // child: Profile(),
+      child: Profile(),
+    ),
+  ];
+
   setBottomBarIndex(index) {
     setState(() {
       _selectedIndex = index;
@@ -178,7 +199,7 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: Colors.white,
         body: Consumer<ChatProvider>(builder: (context, notifier, child) {
           return Container(
-            child: _widgetOptions.elementAt(_selectedIndex),
+            child:widget.data == null? _widgetOptions.elementAt(_selectedIndex):shortCut.elementAt(widget.data),
           );
         }),
         bottomNavigationBar: Container(

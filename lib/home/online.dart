@@ -34,6 +34,7 @@ class _OnlineState extends StateMVC<Online> {
   void initState() {
     _incomingOrdersController.incomingOrdersProvider =
         Provider.of<IncomingOrdersProvider>(context, listen: false);
+    _incomingOrdersController.incomingOrdersProvider.incomingOrders();
     _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
     _incomingOrdersController.socketIncomingOrders = StreamController();
     _incomingOrdersController.stream = _incomingOrdersController
