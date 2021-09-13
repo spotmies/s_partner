@@ -56,12 +56,15 @@ class _NavBarState extends State<NavBar> {
         var newTarget = socket['target'];
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MyCalling(
-                uId: newTarget['uId'],
-                pId: newTarget['pId'],
-                msgId: newTarget['msgId'],
-                ordId: newTarget['ordId'],
-                isIncoming: true,
-                roomId: newTarget['roomId'])));
+                  uId: newTarget['uId'],
+                  pId: newTarget['pId'],
+                  msgId: newTarget['msgId'],
+                  ordId: newTarget['ordId'],
+                  isIncoming: true,
+                  roomId: newTarget['roomId'],
+                  name: newTarget['incomingName'],
+                  profile: newTarget['incomingProfile'],
+                )));
       }
       _chatResponse.add(socket);
     });
