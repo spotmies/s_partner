@@ -100,6 +100,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           _chatController.targetChat = _chatController.getTargetChat(
               _chatController.chatList, widget.msgId);
           _chatController.user = _chatController.targetChat['uDetails'];
+          _chatController.partner = _chatController.targetChat['pDetails'];
           List messages = _chatController.targetChat['msgs'];
           return Container(
             child: Column(children: [
@@ -339,6 +340,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       uId: _chatController.user['uId'],
                       pId: FirebaseAuth.instance.currentUser.uid,
                       isIncoming: false,
+                      name: _chatController.user['name'],
+                      profile: _chatController.user['pic'],
+                      userName: _chatController.partner['name'],
+                      userProfile: _chatController.partner['partnerPic'],
                     )));
           },
           icon: Icon(

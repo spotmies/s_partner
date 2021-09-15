@@ -15,6 +15,10 @@ class MyCalling extends StatefulWidget {
   final dynamic pId;
   final bool isIncoming;
   final dynamic roomId;
+  final String name;
+  final String profile;
+  final String userName;
+  final String userProfile;
 
   MyCalling(
       {@required this.msgId,
@@ -22,7 +26,11 @@ class MyCalling extends StatefulWidget {
       @required this.uId,
       @required this.ordId,
       @required this.isIncoming,
-      this.roomId});
+      this.roomId,
+      this.name,
+      this.profile,
+      this.userName,
+      this.userProfile});
   @override
   _MyCallingState createState() => _MyCallingState();
 }
@@ -52,10 +60,12 @@ class _MyCallingState extends State<MyCalling> {
     Map<String, dynamic> target = {
       'uId': widget.uId,
       'pId': widget.pId,
-      'msgId': widget.msgId,
+      'msgId': widget?.msgId ?? "",
       'ordId': widget.ordId,
       'type': 'call',
-      'roomId': roomId.toString()
+      'roomId': roomId.toString(),
+      'incomingName': widget.userName,
+      'incomingProfile': widget.userProfile
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -133,16 +143,16 @@ class _MyCallingState extends State<MyCalling> {
     log("=========== Render calling ==============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
       if (data.callTimeout == 0) rejectCall();
-      Map uDetails = data.getUdetailsByMsgId(widget.msgId);
-      log("details ${uDetails['pic']}");
-      log(uDetails.toString());
+      // Map uDetails = data.getUdetailsByMsgId(widget.msgId);
+      // log("details ${uDetails['pic']}");
+      // log(uDetails.toString());
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
         onAccept: joinOnRoom,
         onReject: rejectCall,
-        name: uDetails['name'] ?? "unknown",
-        image: uDetails['pic'] ?? "",
+        name: widget?.name ?? "unknown",
+        image: widget?.profile ?? "",
       );
     });
   }
