@@ -31,3 +31,9 @@ partnerDetailsFull() async{
   var partnerDetails = jsonDecode(response);
   return partnerDetails;
 }
+
+partnerAllOrders() async{
+  var response   =await Server().getMethod(API.allOrder);
+  var responseDecode = jsonDecode(response);
+  return responseDecode;
+}

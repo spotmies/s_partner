@@ -14,11 +14,18 @@ class PartnerDetailsProvider extends ChangeNotifier {
   var partnerLocal;
   Map partnerDetailsFull;
   Map profileDetails;
-  List inComingOrders;
-  List orders;
+  List inComingOrders = [];
+  List orders = [];
+  bool ordsLoader = false;
   bool inComingOrdersLoader = false;
 
   bool get inComingLoader => inComingOrdersLoader;
+  bool get ordersLoader => ordsLoader;
+  void setOrdersLoader(loaderState) {
+    ordsLoader = loaderState;
+    notifyListeners();
+  }
+
   void setInComingLoader(loaderState) {
     inComingOrdersLoader = loaderState;
     notifyListeners();
@@ -66,6 +73,12 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setOrder(allOrders) {
+    orders = allOrders;
+    notifyListeners();
+  }
+
+//old methods
   localDetailsGet() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

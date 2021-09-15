@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/orders/completed.dart';
 import 'package:spotmies_partner/orders/ongoing.dart';
-
+import 'package:spotmies_partner/orders/posts.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class Orders extends StatefulWidget {
   @override
@@ -10,13 +11,9 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   var list = [
-    Center(
-      child: OnGoing(),
-    ),
-    Center(
-      child: Completed(),
-    ),
-  ]; 
+    Center(child: PostList(orderState: "onGoing")),
+    Center(child: PostList(orderState: "complete")),
+  ];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -28,17 +25,17 @@ class _OrdersState extends State<Orders> {
                 bottom: Radius.circular(0),
               ),
             ),
-            toolbarHeight: 48,
-            backgroundColor: Colors.blue[900],
-            elevation: 0,
+            toolbarHeight: 55,
+            backgroundColor: Colors.white,
+            elevation: 4,
             //title: Text('Tabs'),
             bottom: TabBar(
                 indicator: UnderlineTabIndicator(
                     borderSide: BorderSide(
-                      color: Colors.amber,
+                      color: Colors.grey[800],
                       width: 3.0,
                     ),
-                    insets: EdgeInsets.symmetric(horizontal: 45.0)),
+                    insets: EdgeInsets.symmetric(horizontal: 0.0)),
                 indicatorColor: Colors.white,
                 tabs: [
                   Tab(
@@ -49,11 +46,9 @@ class _OrdersState extends State<Orders> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          'Ongoing',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                        TextWid(
+                          text: 'OnGoing',
+                          weight: FontWeight.bold,
                         ),
                       ],
                     ),
@@ -65,9 +60,9 @@ class _OrdersState extends State<Orders> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          'Completed',
-                          style: TextStyle(color: Colors.white),
+                        TextWid(
+                          text: 'Completed',
+                          weight: FontWeight.bold,
                         ),
                       ],
                     ),

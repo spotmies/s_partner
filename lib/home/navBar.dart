@@ -97,6 +97,9 @@ class _NavBarState extends State<NavBar> {
 
     var details = await partnerDetailsFull();
     partnerProvider.setPartnerDetails(details);
+
+    var partnerOrders = await partnerAllOrders();
+    partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
 
