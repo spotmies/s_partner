@@ -215,13 +215,17 @@ class _OnlineState extends StateMVC<Online> {
                                         width: _width * 0.35,
                                         //  color: Colors.amber,
                                         alignment: Alignment.centerRight,
-                                        child: TextWid(
-                                          text: 'Rs:  ' +
-                                              o[index]['money'].toString() +
-                                              ' /-',
-                                          color: Colors.grey[900],
-                                          size: _width * 0.04,
-                                        ),
+                                        child: o[index]['money'] != null
+                                            ? TextWid(
+                                                text: 'Rs:  ' +
+                                                    o[index]['money']
+                                                        .toString() +
+                                                    ' /-',
+                                                color: Colors.grey[900],
+                                                size: _width * 0.04,
+                                              )
+                                            : TextWid(
+                                                text: "Rs: Not mentioned"),
                                       ),
                                     ],
                                   ),
