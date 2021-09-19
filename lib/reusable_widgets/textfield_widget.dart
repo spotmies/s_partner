@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class TextFieldWidget extends StatefulWidget {
@@ -28,6 +29,8 @@ class TextFieldWidget extends StatefulWidget {
   final int maxLength;
   final bool autofocus;
   final int maxLines;
+  final String label;
+  final List<TextInputFormatter> formatter;
 
   TextFieldWidget(
       {this.text,
@@ -55,7 +58,9 @@ class TextFieldWidget extends StatefulWidget {
       this.focusErrorRadius,
       this.prefixColor,
       this.autofocus,
-      this.prefix});
+      this.prefix,
+      this.label,
+      this.formatter});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -65,8 +70,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: widget.formatter,
       controller: widget.controller,
       decoration: InputDecoration(
+        counterText: '',
         border: new OutlineInputBorder(
             borderSide:
                 new BorderSide(color: widget.bordercolor ?? Colors.white),
@@ -101,8 +108,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             widget.hintWeight ?? FontWeight.w500,
             widget.hintColor ?? Colors.grey),
         hintText: widget.hint ?? '',
+        labelText: widget.label,
       ),
-      autofocus:widget.autofocus?? false,
+      autofocus: widget.autofocus ?? false,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
       validator: (value) {
@@ -118,3 +126,19 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     );
   }
 }
+
+
+
+
+
+
+
+
+        // if (widget.label == "Alternative Number") {
+        //   if (value.length == 10 && int.parse(value) < 5000000000) {
+        //     return 'Please Enter Valid Mobile Number';
+        //   } else if (value.length > 0 && value.length < 10) {
+        //     return 'Please Enter Valid Mobile Number';
+        //   }
+        //   return null;
+        // }

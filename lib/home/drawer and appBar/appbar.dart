@@ -38,7 +38,6 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
   void initState() {
     partnerDetailsProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    partnerDetailsProvider.localDetailsGet();
 
     super.initState();
   }
@@ -52,7 +51,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
 
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
       var pd =
-          data.partnerLocal ?? {'name': 'Fetching...', 'availability': false};
+          data.getProfileDetails ?? {'name': 'Fetching...', 'availability': false};
 
       if (pd == null || isLoading == true) {
         return circleProgress();
@@ -61,7 +60,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
       return Scaffold(
         key: _appBarController.drawerAppbarScoffoldKey,
         appBar: AppBar(
-          elevation: 0,
+          elevation: 2,
           backgroundColor: Colors.grey[100],
           leading: InkWell(
             onTap: () {
@@ -124,7 +123,6 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                       "availability": value.toString(),
                     };
                     await updatePartnerData(body);
-                    await partnerDetailsProvider.localDetailsGet();
                     setState(() {
                       isLoading = false;
                     });
@@ -133,8 +131,22 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
             ),
           ],
         ),
-        body: Container(
-          child: pd['availability'] == true ? Online(pd) : Offline(pd),
+        body: GestureDetector(
+          onPanUpdate: (details) {
+            // Swiping in right direction.
+            if (details.delta.dx > 0) {
+              // print("right");
+              widget.drawerController.open();
+            }
+
+            if (details.delta.dx < 0) {
+              // print("left");
+              widget.drawerController.close();
+            }
+          },
+          child: Container(
+            child: pd['availability'] == true ? Online(pd) : Offline(pd),
+          ),
         ),
       );
     });

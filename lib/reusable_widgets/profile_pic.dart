@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -7,22 +10,26 @@ class ProfilePic extends StatelessWidget {
       {Key key,
       @required this.profile,
       @required this.name,
+      this.onClick,
       this.bgColor,
       this.size,
       this.textSize,
       this.textColor,
       this.badge,
+      this.onClickLabel,
       this.status = true})
       : super(key: key);
 
-  final String profile;
+  final dynamic profile;
   final String name;
   final bool status;
   final Color bgColor;
   final double textSize;
   final Color textColor;
   final bool badge;
+  final Function onClick;
   final double size;
+  final String onClickLabel;
   Widget _activeIcon(double hight, double width) {
     if (status) {
       return ClipRRect(
@@ -45,50 +52,93 @@ class ProfilePic extends StatelessWidget {
     }
   }
 
+  void initState() {
+    log("type ${profile.runtimeType}");
+  }
+
   @override
   Widget build(BuildContext context) {
+    log("type ${profile.runtimeType} ");
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Container(
-      child: profile != null
-          ? Stack(
-              children: [
-                CircleAvatar(
-                  backgroundColor:
-                      bgColor ??  ([...Colors.primaries]..shuffle()).first,
-                  radius: size ?? _width * 0.07,
-                  backgroundImage: NetworkImage(profile ?? ""),
-                ),
-               Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child:badge == true?  _activeIcon(_hight, _width):Container(),
-                ),
-              ],
-            )
-          : Stack(
-              children: [
-                CircleAvatar(
-                  backgroundColor: bgColor ?? avatarColor(name[0].toLowerCase()),
-                  radius: size ?? _width * 0.07,
-                  child: Center(
-                    child: TextWid(
-                      text: toBeginningOfSentenceCase(name[0]),
-                      color:textColor?? Colors.white,
-                      size:textSize ?? _width * 0.06,
-                    ),
+    return InkWell(
+      onTap: () {
+        if (onClick != null) onClick();
+      },
+      child: Container(
+        child:
+            Uri.parse(profile.runtimeType == String ? profile : "s").isAbsolute
+                ? Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor:
+                            bgColor ?? ([...Colors.primaries]..shuffle()).first,
+                        radius: size ?? _width * 0.07,
+                        backgroundImage: NetworkImage(profile ?? ""),
+                      ),
+                      Visibility(
+                        visible: onClick != null,
+                        child: changeLable(_width),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: badge == true
+                            ? _activeIcon(_hight, _width)
+                            : Container(),
+                      ),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      profile.runtimeType == String
+                          ? CircleAvatar(
+                              backgroundColor:
+                                  bgColor ?? avatarColor(name[0].toLowerCase()),
+                              radius: size ?? _width * 0.07,
+                              child: Center(
+                                child: TextWid(
+                                  text: toBeginningOfSentenceCase(name[0]),
+                                  color: textColor ?? Colors.white,
+                                  size: textSize ?? _width * 0.06,
+                                ),
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundImage: FileImage(profile),
+                              radius: size ?? _width * 0.07,
+                            ),
+                      Visibility(
+                        visible: onClick != null,
+                        child: changeLable(_width),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: badge == true
+                            ? _activeIcon(_hight, _width)
+                            : Container(),
+                      ),
+                    ],
                   ),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: badge == true?  _activeIcon(_hight, _width):Container(),
-                ),
-              ],
-            ),
+      ),
     );
+  }
+
+  Positioned changeLable(double _width) {
+    return Positioned(
+        left: 35,
+        bottom: 10,
+        child: Container(
+          child: TextWid(
+            text: onClickLabel ?? "change",
+            color: Colors.grey[400],
+            size: _width * 0.04,
+            weight: FontWeight.bold,
+          ),
+        ));
   }
 }
 
@@ -133,7 +183,7 @@ avatarColor(String name) {
   if (name == 'p') return colors[16];
   if (name == 'q') return colors[17];
   if (name == 'r') return colors[18];
-  if (name == 's') return colors[19];
+  if (name == 's') return colors[0];
   if (name == 't') return colors[1];
   if (name == 'u') return colors[2];
   if (name == 'v') return colors[3];
@@ -141,5 +191,4 @@ avatarColor(String name) {
   if (name == 'x') return colors[5];
   if (name == 'y') return colors[6];
   if (name == 'z') return colors[7];
-  
 }

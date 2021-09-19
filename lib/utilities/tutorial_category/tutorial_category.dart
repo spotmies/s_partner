@@ -9,10 +9,20 @@ class TutCategory extends StatefulWidget {
 class _TutCategoryState extends State<TutCategory> {
   @override
   Widget build(BuildContext context) {
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          child: Align(alignment: Alignment.centerLeft, child: Text("Explore")),
+        elevation: 2,
+        backgroundColor: Colors.grey[100],
+        leading: Icon(
+          Icons.auto_stories,
+          color: Colors.grey[900],
+        ),
+        title: TextWid(
+          text: "Explore",
+          color: Colors.grey[900],
+          size: _width * 0.045,
+          weight: FontWeight.w600,
         ),
       ),
       body: BodyWidget(),
