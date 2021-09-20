@@ -1,11 +1,82 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
 class EditProfileController extends ControllerMVC {
+  PartnerDetailsProvider editProvider;
+
   DateTime pickedDate = DateTime.now();
+  int dropDownValue = 0;
+  List accountType = [
+    'Select AccountType',
+    'business',
+    'student',
+  ];
+
+  var profilePic;
+  var adharF;
+  var adharB;
+  List otherDocs = [];
+  Map partner;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController tempAddressControl = TextEditingController();
+  TextEditingController perAddressControl = TextEditingController();
+  TextEditingController businessNameControl = TextEditingController();
+  TextEditingController experienceControl = TextEditingController();
+
+  GlobalKey<FormState> editProfileForm = GlobalKey<FormState>();
+
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
+
+  void initState() {
+    editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
+    super.initState();
+  }
+
+  fillAllForms(partnerData) {
+    partner = partnerData;
+    setDate(partnerData['dob']);
+    profilePic = partner['partnerPic'];
+    adharF = partner['docs']['adharF'];
+    adharB = partner['docs']['adharB'];
+    otherDocs = partner['docs']['otherDocs'];
+    nameController.text =
+        partner['name'] != null ? partner['name'].toString() : "";
+    emailController.text =
+        partner['eMail'] != null ? partner['eMail'].toString() : "";
+    mobileController.text =
+        partner['altNum'] != null ? partner['altNum'].toString() : "";
+    tempAddressControl.text =
+        partner['tempAdd'] != null ? partner['tempAdd'].toString() : "";
+    perAddressControl.text =
+        partner['perAdd'] != null ? partner['perAdd'].toString() : "";
+    businessNameControl.text = partner['businessName'] != null
+        ? partner['businessName'].toString()
+        : "";
+    experienceControl.text =
+        partner['experience'] != null ? partner['experience'].toString() : "";
+    setAccountType(partner['accountType']);
+    refresh();
+  }
+
+  setAccountType(value) {
+    for (var i = 0; i < accountType.length; i++) {
+      if (accountType[i] == value.toString()) {
+        dropDownValue = i;
+        break;
+      }
+    }
+  }
+
   setDate(timestamp) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp));
     setState(() {
@@ -29,5 +100,88 @@ class EditProfileController extends ControllerMVC {
         print(pickedDate);
       });
     }
+  }
+
+  Future<void> saveChanges() async {
+    if (editProfileForm.currentState.validate()) {
+      log("valid");
+      editProfileForm.currentState.save();
+      if (dropDownValue == 0) {
+        snackbar(context, "Select account type Business or student");
+        return;
+      }
+
+      // log("$profilePic $adharF $adharB  ");
+      editProvider.setEditLoader(true, loaderName: "Uploading Images");
+      await uploadFile();
+      editProvider.setEditLoader(false);
+
+      log("loop completed");
+      var docs = {
+        "adharF": adharF.toString(),
+        "adharB": adharB.toString(),
+        "otherDocs": partner['docs']['otherDocs']
+      };
+      var body = {
+        "name": "${nameController.text}",
+        "altNum": "${mobileController.text}",
+        "eMail": "${emailController.text}",
+        // "job": "${accountType[dropDownValue]}",
+        "accountType": "${accountType[dropDownValue]}",
+        "dob": "${pickedDate.millisecondsSinceEpoch}",
+        "businessName": "${businessNameControl.text}",
+        "experience": "${experienceControl.text}",
+        "perAdd": "${perAddressControl.text}",
+        "tempAdd": "${tempAddressControl.text}",
+        "partnerPic": "$profilePic",
+        "docs": jsonEncode(docs),
+      };
+      log("body $body");
+      editProvider.setEditLoader(true, loaderName: "Applying Changes");
+      var response = await Server().editMethod(API.partnerDetails, body);
+      editProvider.setEditLoader(false);
+      if (response.statusCode == 200) {
+        log("change applyed");
+        var res = jsonDecode(response.body);
+        editProvider.setPartnerDetailsOnly(res);
+
+        log("response $res");
+        Navigator.pop(context);
+      } else {
+        log("something went wrong");
+      }
+
+      log("body is $body");
+    }
+  }
+
+  Future<void> uploadFile() async {
+    var listMedia = [];
+    listMedia.add(profilePic ?? " ");
+    listMedia.add(adharF ?? " ");
+    listMedia.add(adharB ?? " ");
+    for (int i = 0; i < listMedia.length; i++) {
+      var downloadedLink = await uploadFilesToCloud(listMedia[i]);
+      log("douwnload link $downloadedLink");
+      if (downloadedLink != null) {
+        switch (i) {
+          case 0:
+            profilePic = downloadedLink.toString();
+            break;
+          case 1:
+            adharF = downloadedLink.toString();
+            break;
+          case 2:
+            adharB = downloadedLink.toString();
+            break;
+          default:
+            print("out of case for updalod");
+            break;
+        }
+        refresh();
+      }
+    }
+
+    log("$profilePic $adharF $adharB  ");
   }
 }

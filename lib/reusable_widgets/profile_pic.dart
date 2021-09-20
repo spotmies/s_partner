@@ -17,7 +17,8 @@ class ProfilePic extends StatelessWidget {
       this.textColor,
       this.badge,
       this.onClickLabel,
-      this.status = true})
+      this.status = true,
+      this.isProfile = true})
       : super(key: key);
 
   final dynamic profile;
@@ -30,6 +31,7 @@ class ProfilePic extends StatelessWidget {
   final Function onClick;
   final double size;
   final String onClickLabel;
+  final bool isProfile;
   Widget _activeIcon(double hight, double width) {
     if (status) {
       return ClipRRect(
@@ -68,61 +70,88 @@ class ProfilePic extends StatelessWidget {
         if (onClick != null) onClick();
       },
       child: Container(
-        child:
-            Uri.parse(profile.runtimeType == String ? profile : "s").isAbsolute
-                ? Stack(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor:
-                            bgColor ?? ([...Colors.primaries]..shuffle()).first,
-                        radius: size ?? _width * 0.07,
-                        backgroundImage: NetworkImage(profile ?? ""),
-                      ),
-                      Visibility(
-                        visible: onClick != null,
-                        child: changeLable(_width),
-                      ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: badge == true
-                            ? _activeIcon(_hight, _width)
-                            : Container(),
-                      ),
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      profile.runtimeType == String
-                          ? CircleAvatar(
-                              backgroundColor:
-                                  bgColor ?? avatarColor(name[0].toLowerCase()),
-                              radius: size ?? _width * 0.07,
-                              child: Center(
-                                child: TextWid(
-                                  text: toBeginningOfSentenceCase(name[0]),
-                                  color: textColor ?? Colors.white,
-                                  size: textSize ?? _width * 0.06,
-                                ),
-                              ),
-                            )
-                          : CircleAvatar(
-                              backgroundImage: FileImage(profile),
-                              radius: size ?? _width * 0.07,
-                            ),
-                      Visibility(
-                        visible: onClick != null,
-                        child: changeLable(_width),
-                      ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: badge == true
-                            ? _activeIcon(_hight, _width)
-                            : Container(),
-                      ),
-                    ],
+        child: Uri.parse(profile.runtimeType == String ? profile : "s")
+                .isAbsolute
+            ? Stack(
+                // this is image from online
+                children: [
+                  isProfile
+                      ? CircleAvatar(
+                          backgroundColor: bgColor ??
+                              ([...Colors.primaries]..shuffle()).first,
+                          radius: size ?? _width * 0.07,
+                          backgroundImage: NetworkImage(profile ?? ""),
+                        )
+                      : Container(
+                          child: Image.network(profile),
+                        ),
+                  Visibility(
+                    visible: onClick != null,
+                    child: changeLable(_width),
                   ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: badge == true
+                        ? _activeIcon(_hight, _width)
+                        : Container(),
+                  ),
+                ],
+              )
+            : Stack(
+                // this is image from File or it shows circular avatar with name
+                children: [
+                  profile.runtimeType == String
+                      ? Container(
+                          child: isProfile
+                              ? CircleAvatar(
+                                  //  this is circular avatar with name
+                                  backgroundColor: bgColor ??
+                                      avatarColor(name[0].toLowerCase()),
+                                  radius: size ?? _width * 0.07,
+                                  child: Center(
+                                    child: TextWid(
+                                      text: toBeginningOfSentenceCase(name[0]),
+                                      color: textColor ?? Colors.white,
+                                      size: textSize ?? _width * 0.06,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: bgColor ?? Colors.grey[300],
+                                  child: Center(
+                                    child: TextWid(
+                                      text: toBeginningOfSentenceCase(name[0]),
+                                      color: textColor ?? Colors.white,
+                                      size: textSize ?? _width * 0.06,
+                                    ),
+                                  ),
+                                ),
+                        )
+                      : Container(
+                          child: isProfile
+                              ? CircleAvatar(
+                                  // this is file image
+                                  backgroundImage: FileImage(profile),
+                                  radius: size ?? _width * 0.07,
+                                )
+                              : Container(
+                                  child: Image.file(profile),
+                                ),
+                        ),
+                  Visibility(
+                    visible: onClick != null,
+                    child: changeLable(_width),
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: badge == true
+                        ? _activeIcon(_hight, _width)
+                        : Container(),
+                  ),
+                ],
+              ),
       ),
     );
   }

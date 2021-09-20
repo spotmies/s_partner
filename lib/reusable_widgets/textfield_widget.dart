@@ -31,6 +31,8 @@ class TextFieldWidget extends StatefulWidget {
   final int maxLines;
   final String label;
   final List<TextInputFormatter> formatter;
+  final bool isRequired;
+  final String type;
 
   TextFieldWidget(
       {this.text,
@@ -60,7 +62,9 @@ class TextFieldWidget extends StatefulWidget {
       this.autofocus,
       this.prefix,
       this.label,
-      this.formatter});
+      this.formatter,
+      this.isRequired = true,
+      this.type = "text"});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -114,16 +118,40 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
       validator: (value) {
-        if (value.isEmpty) {
-          return widget.validateMsg ?? '';
-        }
-        return null;
+        if (!widget.isRequired) return null;
+        return textFieldValidator(widget.type, value, widget.validateMsg);
       },
       onFieldSubmitted: (value) {
         if (widget.onSubmitField != null) widget.onSubmitField();
       },
       keyboardType: widget.keyBoardType,
     );
+  }
+}
+
+textFieldValidator(type, value, errorMessage) {
+  if (value.isEmpty) {
+    return errorMessage ?? 'should not be empty';
+  }
+  switch (type) {
+    case "phone":
+      if (value.length != 10 || int.parse(value) < 6000000000)
+        return errorMessage ?? "Enter valid number";
+      break;
+    case "email":
+      if (!RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          .hasMatch(value)) {
+        return errorMessage ?? "enter valid email";
+      }
+      break;
+    case "address":
+      if (!RegExp(r"^[A-Za-z0-9'\.\-\s\,]").hasMatch(value)) {
+        return errorMessage ?? "enter valid house address";
+      }
+      break;
+    default:
+      return null;
   }
 }
 

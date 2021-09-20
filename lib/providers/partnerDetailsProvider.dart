@@ -13,9 +13,19 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List orders = [];
   bool ordsLoader = false;
   bool inComingOrdersLoader = false;
+  bool editProfileLoader = false;
+  String editProfileLoaderName = "";
+
+
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
+  bool get editLoader => editProfileLoader;
+  void setEditLoader(value,{loaderName="Please wait..."}){
+    editProfileLoader = value;
+    editProfileLoaderName = loaderName;
+    notifyListeners();
+  }
   void setOrdersLoader(loaderState) {
     ordsLoader = loaderState;
     notifyListeners();
@@ -38,6 +48,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
     inComingOrders = dataTemp['inComingOrders'];
     sortListByTime();
     orders = dataTemp['orders'];
+    setPartnerDetailsOnly(dataTemp);
+    notifyListeners();
+  }
+  void setPartnerDetailsOnly(data){
+    var dataTemp = data;
     dataTemp.removeWhere(
         (key, value) => key == "inComingOrders" || key == "orders");
     profileDetails = dataTemp;
