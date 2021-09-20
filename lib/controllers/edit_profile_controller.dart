@@ -19,6 +19,7 @@ class EditProfileController extends ControllerMVC {
     'business',
     'student',
   ];
+  int job = 0;
 
   var profilePic;
   var adharF;
@@ -49,6 +50,9 @@ class EditProfileController extends ControllerMVC {
     adharF = partner['docs']['adharF'];
     adharB = partner['docs']['adharB'];
     otherDocs = partner['docs']['otherDocs'];
+    job = partner['job'].runtimeType == String
+        ? int.parse(partner['job'])
+        : partner['job'];
     nameController.text =
         partner['name'] != null ? partner['name'].toString() : "";
     emailController.text =
@@ -126,7 +130,7 @@ class EditProfileController extends ControllerMVC {
         "name": "${nameController.text}",
         "altNum": "${mobileController.text}",
         "eMail": "${emailController.text}",
-        // "job": "${accountType[dropDownValue]}",
+        "job": "$job",
         "accountType": "${accountType[dropDownValue]}",
         "dob": "${pickedDate.millisecondsSinceEpoch}",
         "businessName": "${businessNameControl.text}",

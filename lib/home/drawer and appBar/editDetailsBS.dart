@@ -16,6 +16,7 @@ import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
 
 List<Map<String, Object>> data = [
   {
@@ -266,6 +267,29 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   )),
                             ),
                           ),
+
+                          Container(
+                              width: width * 0.95,
+                              padding: EdgeInsets.only(
+                                  top: 50, bottom: 40, left: 15, right: 15),
+                              child: Row(children: [
+                                Expanded(
+                                    child: Container(
+                                  height: 3,
+                                  color: Colors.grey,
+                                )),
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: TextWid(
+                                        text: "Your Business Details",
+                                        weight: FontWeight.bold)),
+                                Expanded(
+                                    child: Container(
+                                  height: 3,
+                                  color: Colors.grey,
+                                )),
+                              ])),
                           Container(
                             width: width * 0.9,
                             padding: EdgeInsets.only(bottom: 15),
@@ -288,6 +312,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               postIconColor: Colors.indigo[900],
                             ),
                           ),
+
                           Container(
                             width: width * 0.9,
                             padding: EdgeInsets.only(bottom: 15),
@@ -343,12 +368,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                             child: TextWid(
                                               text: _editProfileController
                                                   .accountType
-                                                  .elementAt(
-                                                      // jobFromHome == null
-                                                      //     ?
-                                                      jobFromFAB
-                                                      // : jobFromHome,
-                                                      ),
+                                                  .elementAt(jobFromFAB),
                                               color: Colors.grey[900],
                                               size: width * 0.04,
                                               weight: FontWeight.w500,
@@ -366,6 +386,68 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             ),
                           ),
                           Container(
+                            width: width * 0.9,
+                            padding: EdgeInsets.only(bottom: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    child: TextWid(
+                                  text: "Select your Category",
+                                  size: width * 0.045,
+                                  weight: FontWeight.bold,
+                                )),
+                                Container(
+                                  child: DropdownButton(
+                                    underline: SizedBox(),
+                                    value: _editProfileController.job,
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_circle,
+                                      size: width * 0.06,
+                                      color: Colors.indigo[900],
+                                    ),
+                                    items: <int>[
+                                      0,
+                                      1,
+                                      2,
+                                      3,
+                                      4,
+                                      5,
+                                      6,
+                                      7,
+                                      8,
+                                      9,
+                                      10,
+                                      11,
+                                      12,
+                                      13,
+                                      14,
+                                      15
+                                    ].map<DropdownMenuItem<int>>(
+                                        (int jobFromFAB) {
+                                      return DropdownMenuItem<int>(
+                                          value: jobFromFAB,
+                                          child: TextWid(
+                                            text: Constants.jobCategories
+                                                .elementAt(jobFromFAB),
+                                            color: Colors.grey[900],
+                                            size: width * 0.04,
+                                            weight: FontWeight.w500,
+                                          ));
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      _editProfileController.job = newVal;
+
+                                      _editProfileController.refresh();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Container(
                             padding: EdgeInsets.only(top: 20),
                             constraints: boxConstraints,
                             child: ProfilePic(
@@ -379,6 +461,13 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             ),
                           ),
                           Container(
+                            padding: EdgeInsets.all(15),
+                            child: TextWid(
+                              text: "Adhar ID Front",
+                              size: width * 0.035,
+                            ),
+                          ),
+                          Container(
                             padding: EdgeInsets.only(top: 20),
                             constraints: boxConstraints,
                             child: ProfilePic(
@@ -389,6 +478,13 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               onClick: () {
                                 changeImages("adharB");
                               },
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(15),
+                            child: TextWid(
+                              text: "Adhar ID Back",
+                              size: width * 0.035,
                             ),
                           ),
                           // otherDocs != null
@@ -416,12 +512,14 @@ class _EditProfileState extends StateMVC<EditProfile> {
                           //       )
                           //     : Container(),
                           Container(
-                            padding: EdgeInsets.all(5),
+                            width: width * 0.4,
+                            padding: EdgeInsets.symmetric(vertical: 30),
                             child: ElevatedButtonWidget(
-                              bgColor: Colors.indigo[50],
+                              leadingIcon: Icon(Icons.save_rounded),
+                              bgColor: Colors.indigo[900],
                               minWidth: width,
                               // height: hight * 0.06,
-                              textColor: Colors.grey[900],
+                              textColor: Colors.grey[50],
                               buttonName: 'Save',
                               textSize: width * 0.05,
                               textStyle: FontWeight.w600,
