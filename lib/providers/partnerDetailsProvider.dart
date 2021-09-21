@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
@@ -15,17 +12,22 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool inComingOrdersLoader = false;
   bool editProfileLoader = false;
   String editProfileLoaderName = "";
-
-
+  bool offlineScreenLoader = false;
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
   bool get editLoader => editProfileLoader;
-  void setEditLoader(value,{loaderName="Please wait..."}){
+  Map get getProfileDetails => profileDetails;
+  Map get getPartnerDetailsFull => partnerDetailsFull;
+  List get getIncomingOrder => inComingOrders;
+  List get getOrders => orders;
+
+  void setEditLoader(value, {loaderName = "Please wait..."}) {
     editProfileLoader = value;
     editProfileLoaderName = loaderName;
     notifyListeners();
   }
+
   void setOrdersLoader(loaderState) {
     ordsLoader = loaderState;
     notifyListeners();
@@ -51,7 +53,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
     setPartnerDetailsOnly(dataTemp);
     notifyListeners();
   }
-  void setPartnerDetailsOnly(data){
+
+  void setPartnerDetailsOnly(data) {
     var dataTemp = data;
     dataTemp.removeWhere(
         (key, value) => key == "inComingOrders" || key == "orders");
@@ -59,16 +62,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map get getProfileDetails => profileDetails;
-  Map get getPartnerDetailsFull => partnerDetailsFull;
-  List get getIncomingOrder => inComingOrders;
   void setIncomingOrders(ordersList) {
     inComingOrders = ordersList;
     sortListByTime();
     notifyListeners();
   }
-
-  List get getOrders => orders;
 
   void addNewIncomingOrder(order) {
     inComingOrders.add(order);
@@ -83,10 +81,19 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAvailability(state) {
+    partnerDetailsFull['availability'] = state;
+    profileDetails['availability'] = state;
+    notifyListeners();
+  }
+
   void setOrder(allOrders) {
     orders = allOrders;
     notifyListeners();
   }
 
-
+  void setOffileLoader(state) {
+    offlineScreenLoader = state;
+    notifyListeners();
+  }
 }
