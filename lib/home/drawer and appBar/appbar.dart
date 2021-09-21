@@ -5,14 +5,12 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class AppBarScreen extends StatefulWidget {
@@ -30,15 +28,24 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
   _AppBarScreenState() : super(DrawerandAppBarController()) {
     this._appBarController = controller;
   }
-  bool isSwitched = false;
   PartnerDetailsProvider partnerDetailsProvider;
-  var isLoading = false;
+  var pd;
+
+  updatePartnerData(body) async {
+    var response = await Server().editMethod(API.partnerStatus, body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      partnerDetailsProvider.setPartnerDetailsOnly(data);
+    } else {
+      partnerDetailsProvider.setAvailability(!pd['availability']);
+    }
+    partnerDetailsProvider.setOffileLoader(false);
+  }
 
   @override
   void initState() {
     partnerDetailsProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    partnerDetailsProvider.localDetailsGet();
 
     super.initState();
   }
@@ -51,17 +58,12 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
     final _width = MediaQuery.of(context).size.width;
 
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      var pd =
-          data.partnerLocal ?? {'name': 'Fetching...', 'availability': false};
-
-      if (pd == null || isLoading == true) {
-        return circleProgress();
-      }
-
+      pd = data.getProfileDetails ??
+          {'name': 'Fetching...', 'availability': false};
       return Scaffold(
         key: _appBarController.drawerAppbarScoffoldKey,
         appBar: AppBar(
-          elevation: 0,
+          elevation: 2,
           backgroundColor: Colors.grey[100],
           leading: InkWell(
             onTap: () {
@@ -116,37 +118,42 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                   padding: 5.0,
                   showOnOff: true,
                   value: pd['availability'],
-                  onToggle: (value) async {
-                    setState(() {
-                      isLoading = true;
-                    });
+                  onToggle: (value) {
+                    if (data.offlineScreenLoader) return;
+                    data.setOffileLoader(true);
+                    data.setAvailability(value);
+
                     var body = {
                       "availability": value.toString(),
                     };
-                    await updatePartnerData(body);
-                    await partnerDetailsProvider.localDetailsGet();
-                    setState(() {
-                      isLoading = false;
-                    });
-                    //  log(data['availability'].toString());
+                    updatePartnerData(body);
                   }),
             ),
           ],
         ),
-        body: Container(
-          child: pd['availability'] == true ? Online(pd) : Offline(pd),
+        body: GestureDetector(
+          onPanUpdate: (details) {
+            // Swiping in right direction.
+            if (details.delta.dx > 0) {
+              // print("right");
+              widget.drawerController.open();
+            }
+
+            if (details.delta.dx < 0) {
+              // print("left");
+              widget.drawerController.close();
+            }
+          },
+          child: Container(
+            child: pd['availability'] == true ? Online(pd) : Offline(pd),
+          ),
         ),
       );
     });
   }
 }
 
-updatePartnerData(body) async {
-  var response = await Server().editMethod(API.partnerStatus, body);
-  var data = jsonDecode(response.body) as Map<String, dynamic>;
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('partnerDetails', jsonEncode(data));
-}
+
 
 
 

@@ -20,7 +20,6 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
-
 class DrawerScreen extends StatefulWidget {
   final drawerController;
   DrawerScreen(this.drawerController);
@@ -30,134 +29,143 @@ class DrawerScreen extends StatefulWidget {
 }
 
 class _DrawerScreenState extends StateMVC<DrawerScreen> {
-
   DrawerandAppBarController _drawerController;
   _DrawerScreenState() : super(DrawerandAppBarController()) {
     this._drawerController = controller;
   }
 
   PartnerDetailsProvider partnerDetailsProvider;
-   var isLoading = false;
+  var isLoading = false;
 
   @override
   void initState() {
     partnerDetailsProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    partnerDetailsProvider.localDetailsGet();
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Consumer<PartnerDetailsProvider>(
-        
-        builder: (context, data,child) {
-          var pd = data.partnerLocal;
-          if (pd == null) {
-            return Center(child: CircularProgressIndicator());
-          }
-          // log(pr.toString());
-          return Container(
-            color: primaryGreen,
-            padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+      var pd = data.getProfileDetails;
+      if (pd == null) {
+        return Center(child: CircularProgressIndicator());
+      }
+      // log(pr.toString());
+      return Container(
+        color: primaryGreen,
+        padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
+                ProfilePic(
+                  badge: false,
+                  profile: pd['partnerPic'],
+                  name: pd['name'],
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProfilePic(
-                      badge: false,
-                      profile: pd['partnerPic'],
-                      name: pd['name'],
+                    TextWid(
+                      text: toBeginningOfSentenceCase(
+                        pd['name'],
+                      ),
+                      size: _width * 0.045,
+                      weight: FontWeight.w600,
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
                         TextWid(
                           text: toBeginningOfSentenceCase(
-                            pd['name'],
+                            pd['availability'] == false
+                                ? 'Inactive Now'
+                                : 'Active Now',
                           ),
-                          size: _width * 0.045,
-                          weight: FontWeight.w600,
+                          size: _width * 0.03,
+                          weight: FontWeight.w500,
                         ),
-                        Row(
-                          children: [
-                            TextWid(
-                              text: toBeginningOfSentenceCase(
-                                pd['availability'] == false
-                                    ? 'Inactive Now'
-                                    : 'Active Now',
-                              ),
-                              size: _width * 0.03,
-                              weight: FontWeight.w500,
-                            ),
-                            Text('  |  '),
-                            TextWid(
-                              text: toBeginningOfSentenceCase(jobs[pd['job']]),
-                              size: _width * 0.03,
-                              weight: FontWeight.w500,
-                            )
-                          ],
-                        ),
+                        Text('  |  '),
+                        TextWid(
+                          text: toBeginningOfSentenceCase(jobs[pd['job']]),
+                          size: _width * 0.03,
+                          weight: FontWeight.w500,
+                        )
                       ],
-                    )
+                    ),
                   ],
-                ),
-                SizedBox(
-                  height: _hight * 0.05,
-                ),
-                Column(
-                  children: drawerItems
-                      .map((element) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                widget.drawerController.toggle();
-                                drawerItemsFunction(element['title'], context,
-                                    _hight, _width, pd,partnerDetailsProvider,_drawerController);
-                                log(element['title']);
-                              },
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      element['icon'],
-                                      color: Colors.grey[900],
-                                      size: _width * 0.05,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(element['title'],
-                                      style: GoogleFonts.josefinSans(
-                                        color: Colors.grey[900],
-                                        fontSize: _width * 0.045,
-                                        fontWeight: FontWeight.w600,
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
+                )
               ],
             ),
-          );
-        });
+            SizedBox(
+              height: _hight * 0.05,
+            ),
+            Column(
+              children: drawerItems
+                  .map((element) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            widget.drawerController.toggle();
+                            drawerItemsFunction(
+                                element['title'],
+                                context,
+                                _hight,
+                                _width,
+                                pd,
+                                partnerDetailsProvider,
+                                _drawerController);
+                            log(element['title']);
+                          },
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  element['icon'],
+                                  color: Colors.grey[900],
+                                  size: _width * 0.05,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(element['title'],
+                                  style: GoogleFonts.josefinSans(
+                                    color: Colors.grey[900],
+                                    fontSize: _width * 0.045,
+                                    fontWeight: FontWeight.w600,
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
 drawerItemsFunction(
-    element, BuildContext context, double hight, double width, pr, PartnerDetailsProvider partnerDetailsProvider, DrawerandAppBarController drawerController) {
+    element,
+    BuildContext context,
+    double hight,
+    double width,
+    pr,
+    PartnerDetailsProvider partnerDetailsProvider,
+    DrawerandAppBarController drawerController) {
   switch (element) {
     case 'Sign Out':
       return signOut(context, hight, width);
@@ -166,7 +174,9 @@ drawerItemsFunction(
       return settings(context, hight, width);
       break;
     case 'Edit Details':
-      return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
+      // return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
+      return Navigator.push(
+          context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
       break;
     case 'Service History':
       return history(context, hight, width);
@@ -179,7 +189,7 @@ drawerItemsFunction(
           context, MaterialPageRoute(builder: (_) => PrivacyPolicyWebView()));
       break;
     case 'Invite':
-      return invites(context, hight, width,pr);
+      return invites(context, hight, width, pr);
       break;
     default:
       return '';
