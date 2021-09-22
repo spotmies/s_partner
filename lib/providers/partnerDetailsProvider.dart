@@ -9,6 +9,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List inComingOrders = [];
   List orders = [];
   bool ordsLoader = false;
+  bool orderViewLoader = false;
   bool inComingOrdersLoader = false;
   bool editProfileLoader = false;
   String editProfileLoaderName = "";
@@ -21,7 +22,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map get getPartnerDetailsFull => partnerDetailsFull;
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
-
+  
+  void setOrderViewLoader(state){
+    orderViewLoader = state;
+    notifyListeners();
+  }
   void setEditLoader(value, {loaderName = "Please wait..."}) {
     editProfileLoader = value;
     editProfileLoaderName = loaderName;
