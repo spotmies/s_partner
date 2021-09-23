@@ -17,6 +17,7 @@ import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
+import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
   final int index;
@@ -31,6 +32,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     this._postOverViewController = controller;
   }
   int ordId;
+  int _index = 0;
   PartnerDetailsProvider ordersProvider;
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
@@ -172,11 +174,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     )),
               ],
             ),
-            body: Container(
-              height: _hight,
-              width: _width,
-              color: Colors.grey[100],
-              child: ListView(
+            body: SingleChildScrollView(
+              child: Column(
                 children: [
                   Divider(
                     color: Colors.white,
@@ -205,7 +204,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   Container(
-                    height: _hight * 0.45,
+                    // height: _hight * 0.45,
                     width: _width,
                     color: Colors.white,
                     child: Column(
@@ -271,7 +270,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   ),
                   (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
                       ? Container(
-                          height: _hight * 0.3,
+                          // height: _hight * 0.3,
                           color: Colors.white,
                           child: Column(
                             children: [
@@ -292,15 +291,26 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ),
                               ),
                               userDetails(_hight, _width, context,
-                                  _postOverViewController, d, chatWithPatner)
+                                  _postOverViewController, d, chatWithPatner),
                             ],
                           ))
                       : Container(),
+                  Container(
+                    height: 500,
+                    padding: EdgeInsets.only(left: 30, bottom: 50),
+                    // width: _width * 0.7,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(child: _Timeline2(context)),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
           ),
-          ProgressWaiter(contextt: context, loaderState: data.orderViewLoader)
+          ProgressWaiter(contextt: context, loaderState: data.orderViewLoader),
         ],
       );
     });
@@ -708,4 +718,145 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
       ],
     ),
   );
+}
+
+enum _TimelineStatus { request, accept, started, completed, feedback }
+
+const kTileHeight = 90.0;
+
+class _Timeline2 extends StatelessWidget {
+  final BuildContext contextt;
+  _Timeline2(this.contextt);
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    final data = _TimelineStatus.values;
+    return Flexible(
+      child: Timeline.tileBuilder(
+        theme: TimelineThemeData(
+          nodePosition: 0,
+          connectorTheme: ConnectorThemeData(
+            thickness: 3.0,
+            space: 20,
+            color: Color(0xffd3d3d3),
+          ),
+          indicatorTheme: IndicatorThemeData(
+            size: _width * 0.06,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        builder: TimelineTileBuilder.connected(
+          contentsBuilder: (_, index) {
+            return TimeLineTitle(index, contextt);
+          },
+          connectorBuilder: (_, index, connectorType) {
+            if (index == 0) {
+              return SolidLineConnector(
+                color: Colors.indigo[700],
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            } else {
+              return SolidLineConnector(
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            }
+          },
+          indicatorBuilder: (_, index) {
+            switch (data[index]) {
+              case _TimelineStatus.request:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.work_rounded,
+                    color: Colors.grey[300],
+                    size: _width * 0.035,
+                  ),
+                );
+              case _TimelineStatus.accept:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.how_to_reg_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.started:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.build,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.completed:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.feedback:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.reviews,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              default:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.white,
+                  ),
+                );
+            }
+          },
+          itemExtentBuilder: (_, __) => kTileHeight,
+          itemCount: data.length,
+        ),
+      ),
+    );
+  }
+}
+
+class TimeLineTitle extends StatelessWidget {
+  final int index;
+  final BuildContext contextt;
+  TimeLineTitle(this.index, this.contextt);
+  getStatus() {
+    switch (index) {
+      case 0:
+        return "Service Requested";
+      case 1:
+        return "Order Accepted";
+      case 2:
+        return "Service Started";
+      case 3:
+        return "Service Completed";
+      case 4:
+        return "Feedback";
+      default:
+        return "Something Went wrong";
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    return Container(
+        padding: EdgeInsets.only(left: _width * 0.03),
+        child: TextWid(
+            text: getStatus(), size: _width * 0.04, weight: FontWeight.w600));
+  }
 }
