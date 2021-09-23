@@ -297,11 +297,19 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       : Container(),
                   Container(
                     height: 500,
-                    padding: EdgeInsets.only(left: 30, bottom: 50),
+                    padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
                     // width: _width * 0.7,
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: TextWid(
+                            text: 'Service Status :',
+                            size: _width * 0.055,
+                            weight: FontWeight.w600,
+                          ),
+                        ),
                         Container(child: _Timeline2(context)),
                       ],
                     ),
