@@ -12,14 +12,19 @@ import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
+  var updateFormKey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
    ChatProvider chatProvider;
      PartnerDetailsProvider partnerProvider;
   String title;
   int dropDownValue = 0;
+  DateTime pickedDate;
+  TextEditingController moneyController = TextEditingController();
+    TimeOfDay pickedTime;
 
   @override
   void initState() {
@@ -49,13 +54,6 @@ class PostOverViewController extends ControllerMVC {
         if (field == 'Schedule') {
           print(field);
         }
-        // if (field == 'location') {
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => Maps(
-        //       ordId: ordId,
-        //     ),
-        //   ));
-        // }
       },
       child: CircleAvatar(
           radius: 20,
@@ -67,20 +65,6 @@ class PostOverViewController extends ControllerMVC {
     );
   }
 
-  List jobs = [
-    'AC Service',
-    'Computer',
-    'TV Repair',
-    'Development',
-    'Tutor',
-    'Beauty',
-    'Photography',
-    'Drivers',
-    'Events',
-    'Electrician',
-    'Carpentor',
-    'Plumber',
-  ];
 
   List options = [
     {
@@ -147,6 +131,28 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
+  pickedDateandTime() async {
+    DateTime date = await showDatePicker(
+        context: context,
+        initialDate: pickedDate,
+        firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
+            DateTime.now().day - 0),
+        lastDate: DateTime(DateTime.now().year + 1));
+    if (date != null) {
+      setState(() async {
+        TimeOfDay t = await showTimePicker(
+          context: context,
+          initialTime: pickedTime,
+        );
+        if (t != null) {
+          setState(() {
+            pickedTime = t;
+          });
+        }
+        pickedDate = date;
+      });
+    }
+  }
 
 
 

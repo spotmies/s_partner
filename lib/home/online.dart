@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -46,55 +47,55 @@ class _OnlineState extends StateMVC<Online> {
     _incomingOrdersController.pickedTime = TimeOfDay.now();
   }
 
-  respondToOrder(orderData, responseType) async {
-    //enable loader
-    if (partnerProvider.inComingLoader) return;
-    partnerProvider.setInComingLoader(true);
-    Map<String, dynamic> body = {
-      //
-      "responseType": responseType,
-      "pId": API.pid.toString(),
-      "orderDetails": orderData['_id'].toString(),
-    };
-    if (responseType == "accept" || responseType == "bid") {
-      body["uId"] = orderData['uId'].toString();
-      body["ordId"] = orderData['ordId'].toString();
-      body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
-      body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
-      body["loc.0"] = 17.236.toString();
-      body["loc.1"] = 83.697.toString();
-      body["uDetails"] = orderData['uDetails']['_id'].toString();
-      body["pDetails"] = partnerProfile['_id'].toString();
-    }
-    if (responseType == "accept") {
-      body["money"] = orderData['money'].toString();
-      body['schedule'] = orderData['schedule'].toString();
-    } else if (responseType == "bid") {
-      //below for bid order
-      body["money"] = _incomingOrdersController.moneyController.text.toString();
-      body['schedule'] = _incomingOrdersController
-          .pickedDate.millisecondsSinceEpoch
-          .toString();
+  // respondToOrder(orderData, responseType) async {
+  //   //enable loader
+  //   if (partnerProvider.inComingLoader) return;
+  //   partnerProvider.setInComingLoader(true);
+  //   Map<String, dynamic> body = {
+  //     //
+  //     "responseType": responseType,
+  //     "pId": API.pid.toString(),
+  //     "orderDetails": orderData['_id'].toString(),
+  //   };
+  //   if (responseType == "accept" || responseType == "bid") {
+  //     body["uId"] = orderData['uId'].toString();
+  //     body["ordId"] = orderData['ordId'].toString();
+  //     body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
+  //     body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
+  //     body["loc.0"] = 17.236.toString();
+  //     body["loc.1"] = 83.697.toString();
+  //     body["uDetails"] = orderData['uDetails']['_id'].toString();
+  //     body["pDetails"] = partnerProfile['_id'].toString();
+  //   }
+  //   if (responseType == "accept") {
+  //     body["money"] = orderData['money'].toString();
+  //     body['schedule'] = orderData['schedule'].toString();
+  //   } else if (responseType == "bid") {
+  //     //below for bid order
+  //     body["money"] = _incomingOrdersController.moneyController.text.toString();
+  //     body['schedule'] = _incomingOrdersController
+  //         .pickedDate.millisecondsSinceEpoch
+  //         .toString();
 
-      //disable bottom bar
-      Navigator.pop(context);
-    }
+  //     //disable bottom bar
+  //     Navigator.pop(context);
+  //   }
 
-    log("order $body");
-    var response = await Server().postMethod(API.updateOrder, body);
-    //disable loader here.
-    partnerProvider.setInComingLoader(false);
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      if (responseType == "reject")
-        snackbar(context, "Deleted successfully");
-      else
-        snackbar(context, "Request send successfully");
-      partnerProvider.removeIncomingOrderById(orderData['ordId']);
-      _incomingOrdersController.moneyController.clear();
-    } else {
-      snackbar(context, "Something went wrong please try again later");
-    }
-  }
+  //   log("order $body");
+  //   var response = await Server().postMethod(API.updateOrder, body);
+  //   //disable loader here.
+  //   partnerProvider.setInComingLoader(false);
+  //   if (response.statusCode == 200 || response.statusCode == 204) {
+  //     if (responseType == "reject")
+  //       snackbar(context, "Deleted successfully");
+  //     else
+  //       snackbar(context, "Request send successfully");
+  //     partnerProvider.removeIncomingOrderById(orderData['ordId']);
+  //     _incomingOrdersController.moneyController.clear();
+  //   } else {
+  //     snackbar(context, "Something went wrong please try again later");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +127,25 @@ class _OnlineState extends StateMVC<Online> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => PostOverView(
-                              orderId: o[index]['ordId'].toString(),
-                            ),
+                                onBottomSheet: () {
+                                  bidSendingBottomSheet(
+                                      _hight,
+                                      _width,
+                                      o[index]["uId"],
+                                      o[index],
+                                      o[index]["ordId"],
+                                      o[index]["pId"],
+                                      u['_id'],
+                                      partnerProfile['_id'],
+                                      from: "outside");
+                                },
+                                orderId: o[index]['ordId'].toString(),
+                                from: "incomingOrders",
+                                onclick: (orderData, pDetailsId, responseType) {
+                                  print("onclick>>>>>>>");
+                                  _incomingOrdersController.respondToOrder(
+                                      orderData, pDetailsId, responseType);
+                                }),
                           ));
                         },
                         child: Container(
@@ -333,8 +351,12 @@ class _OnlineState extends StateMVC<Online> {
                                                     borderSideColor:
                                                         Colors.grey[50],
                                                     onClick: () {
-                                                      respondToOrder(
-                                                          o[index], "reject");
+                                                      _incomingOrdersController
+                                                          .respondToOrder(
+                                                              o[index],
+                                                              partnerProfile[
+                                                                  '_id'],
+                                                              "reject");
                                                     },
                                                   ),
                                                   ElevatedButtonWidget(
@@ -353,8 +375,12 @@ class _OnlineState extends StateMVC<Online> {
                                                     borderSideColor:
                                                         Colors.grey[100],
                                                     onClick: () async {
-                                                      respondToOrder(
-                                                          o[index], "accept");
+                                                      _incomingOrdersController
+                                                          .respondToOrder(
+                                                              o[index],
+                                                              partnerProfile[
+                                                                  '_id'],
+                                                              "accept");
                                                     },
                                                   ),
                                                 ],
@@ -462,6 +488,7 @@ class _OnlineState extends StateMVC<Online> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
+
                         bidSendingBottomSheet(
                           hight,
                           width,
@@ -494,7 +521,8 @@ class _OnlineState extends StateMVC<Online> {
   }
 
   bidSendingBottomSheet(double hight, double width, uid, ordDetails, ordid, pid,
-      uDetails, pDetails) {
+      uDetails, pDetails,
+      {from = "inside"}) {
     return showModalBottomSheet(
         context: context,
         elevation: 22,
@@ -547,7 +575,11 @@ class _OnlineState extends StateMVC<Online> {
                     child: TextFieldWidget(
                       controller: _incomingOrdersController.moneyController,
                       hint: 'Money',
+                      type: "number",
                       enableBorderColor: Colors.grey,
+                      formatter: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
                       focusBorderColor: Colors.grey[900],
                       enableBorderRadius: 15,
                       focusBorderRadius: 15,
@@ -597,7 +629,12 @@ class _OnlineState extends StateMVC<Online> {
                             if (_incomingOrdersController
                                 .updateFormKey.currentState
                                 .validate()) {
-                              respondToOrder(ordDetails, "bid");
+                              Navigator.pop(context);
+                              _incomingOrdersController.respondToOrder(
+                                  ordDetails, partnerProfile['_id'], "bid");
+                              if (from == "outside") {
+                                Navigator.pop(context);
+                              }
                             }
                           },
                         ),

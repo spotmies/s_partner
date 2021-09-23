@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -16,12 +17,19 @@ import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
   final String orderId;
-  PostOverView({this.orderId});
+  final Function onclick;
+  final String from;
+  final Function onBottomSheet;
+
+  PostOverView(
+      {@required this.orderId, this.onclick, this.from, this.onBottomSheet});
   @override
   _PostOverViewState createState() => _PostOverViewState();
 }
@@ -32,6 +40,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     this._postOverViewController = controller;
   }
   int ordId;
+  dynamic d;
+  dynamic partnerProfile;
   PartnerDetailsProvider ordersProvider;
   void chatWithPatner(responseData) {
     _postOverViewController.chatWithpatner(responseData);
@@ -52,6 +62,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     final _width = MediaQuery.of(context).size.width;
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
       var d = data.getOrderById(widget.orderId);
+      dynamic partnerProfile = data.getProfileDetails;
       log("ord $d");
       if (data.ordersLoader) return Center(child: profileShimmer(context));
 
@@ -65,7 +76,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
-              toolbarHeight: _hight * 0.16,
+              toolbarHeight: widget.from == "incomingOrders"
+                  ? _hight * 0.16
+                  : _hight * 0.08,
               // elevation: 0,
               leading: IconButton(
                 onPressed: () {
@@ -80,10 +93,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWid(
-                    text: _postOverViewController.jobs
-                        .elementAt(d['job'])
-                        .toString()
-                        .toUpperCase(),
+                    text: Constants.jobCategories[d['job'].runtimeType == String
+                        ? int.parse(d['job'])
+                        : d['job']],
                     size: _width * 0.04,
                     color: Colors.grey[500],
                     lSpace: 1.5,
@@ -113,44 +125,81 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ],
               ),
               bottom: PreferredSize(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: _width * 0.01),
-                    height: _hight * 0.06,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButtonWidget(
-                          height: _hight * 0.05,
-                          minWidth: _width * 0.4,
-                          bgColor: Colors.white,
-                          borderSideColor: Colors.grey[200],
-                          borderRadius: 10.0,
-                          buttonName: 'Cancel',
-                          textSize: _width * 0.04,
-                          leadingIcon: Icon(
-                            Icons.cancel,
-                            color: Colors.grey[900],
-                            size: _width * 0.045,
-                          ),
-                        ),
-                        ElevatedButtonWidget(
-                          height: _hight * 0.05,
-                          minWidth: _width * 0.55,
-                          bgColor: Colors.indigo[900],
-                          borderSideColor: Colors.grey[200],
-                          borderRadius: 10.0,
-                          buttonName: 'Re-schedule',
-                          textColor: Colors.white,
-                          textSize: _width * 0.04,
-                          trailingIcon: Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                            size: _width * 0.045,
+                  child: widget.from == "incomingOrders"
+                      ? Container(
+                          margin: EdgeInsets.only(bottom: _width * 0.01),
+                          height: _hight * 0.06,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButtonWidget(
+                                  height: _hight * 0.05,
+                                  minWidth: _width * 0.25,
+                                  bgColor: Colors.red,
+                                  borderSideColor: Colors.grey[200],
+                                  borderRadius: 10.0,
+                                  buttonName: 'Reject',
+                                  textColor: Colors.white,
+                                  textSize: _width * 0.04,
+                                  leadingIcon: Icon(
+                                    Icons.cancel,
+                                    color: Colors.white,
+                                    size: _width * 0.045,
+                                  ),
+                                  onClick: () {
+                                    if (widget.from == "incomingOrders") {
+                                      widget.onclick(
+                                          d, partnerProfile['_id'], "reject");
+                                      Navigator.pop(context);
+                                    }
+                                  }),
+                              ElevatedButtonWidget(
+                                onClick: () {
+                                  widget.onclick(
+                                      d, partnerProfile['_id'], "accept");
+                                  Navigator.pop(context);
+                                },
+                                height: _hight * 0.05,
+                                minWidth: _width * 0.4,
+                                bgColor: Colors.green,
+                                borderSideColor: Colors.grey[200],
+                                borderRadius: 10.0,
+                                buttonName: 'Accept',
+                                textColor: Colors.white,
+                                textSize: _width * 0.04,
+                                trailingIcon: Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: _width * 0.045,
+                                ),
+                              ),
+                              ElevatedButtonWidget(
+                                onClick: () {
+                                  log("bid");
+                                  widget.onBottomSheet();
+                                  // bidSendingBottomSheet(
+                                  //   _hight,
+                                  //   _width,
+                                  // );
+                                },
+                                height: _hight * 0.05,
+                                minWidth: _width * 0.22,
+                                bgColor: Colors.grey[600],
+                                borderSideColor: Colors.grey[200],
+                                borderRadius: 10.0,
+                                buttonName: 'Bid',
+                                textColor: Colors.white,
+                                textSize: _width * 0.04,
+                                trailingIcon: Icon(
+                                  Icons.note_alt_rounded,
+                                  color: Colors.white,
+                                  size: _width * 0.045,
+                                ),
+                              ),
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  ),
+                      : Container(),
                   preferredSize: Size.fromHeight(4.0)),
               actions: [
                 IconButton(
@@ -291,25 +340,28 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ],
                           ))
                       : Container(),
-                  Container(
-                    height: 500,
-                    padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
-                    // width: _width * 0.7,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: TextWid(
-                            text: 'Service Status :',
-                            size: _width * 0.055,
-                            weight: FontWeight.w600,
+                  widget.from != "incomingOrders"
+                      ? Container(
+                          height: 500,
+                          padding:
+                              EdgeInsets.only(left: 30, bottom: 50, top: 30),
+                          // width: _width * 0.7,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: TextWid(
+                                  text: 'Service Status :',
+                                  size: _width * 0.055,
+                                  weight: FontWeight.w600,
+                                ),
+                              ),
+                              Container(child: _Timeline2(context)),
+                            ],
                           ),
-                        ),
-                        Container(child: _Timeline2(context)),
-                      ],
-                    ),
-                  )
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -585,7 +637,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                               // mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextWid(
-                                  text: controller.jobs.elementAt(4) + ' | ',
+                                  text: '123456789',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
                                   color: Colors.grey[700],
