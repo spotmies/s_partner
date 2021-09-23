@@ -81,7 +81,7 @@ class _PostListState extends StateMVC<PostList> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        PostOverView(index: index),
+                                        PostOverView(orderId: orderData['ordId'].toString(),),
                                   ));
                                 },
                                 child: Container(

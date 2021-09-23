@@ -20,8 +20,8 @@ import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
-  final int index;
-  PostOverView({this.index});
+  final String orderId;
+  PostOverView({this.orderId});
   @override
   _PostOverViewState createState() => _PostOverViewState();
 }
@@ -32,12 +32,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     this._postOverViewController = controller;
   }
   int ordId;
-  int _index = 0;
   PartnerDetailsProvider ordersProvider;
-  // _PostOverViewState(this.value);
-  // int _currentStep = 0;
   void chatWithPatner(responseData) {
-    //need display circular indicator with z index
     _postOverViewController.chatWithpatner(responseData);
   }
 
@@ -55,7 +51,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      var d = data.getOrders[widget.index];
+      var d = data.getOrderById(widget.orderId);
       log("ord $d");
       if (data.ordersLoader) return Center(child: profileShimmer(context));
 
@@ -264,7 +260,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  warrentyCard(_hight, _width),
+                  // warrentyCard(_hight, _width),
                   Divider(
                     color: Colors.white,
                   ),

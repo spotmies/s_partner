@@ -22,11 +22,25 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map get getPartnerDetailsFull => partnerDetailsFull;
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
-  
-  void setOrderViewLoader(state){
+
+  getOrderById(ordId) {
+    int index;
+    index = inComingOrders.indexWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    if (index < 0) {
+      index = orders.indexWhere(
+          (element) => element['ordId'].toString() == ordId.toString());
+      if (index < 0) return null;
+      return orders[index];
+    }
+    return inComingOrders[index];
+  }
+
+  void setOrderViewLoader(state) {
     orderViewLoader = state;
     notifyListeners();
   }
+
   void setEditLoader(value, {loaderName = "Please wait..."}) {
     editProfileLoader = value;
     editProfileLoaderName = loaderName;
