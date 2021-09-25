@@ -150,6 +150,11 @@ textFieldValidator(type, value, errorMessage) {
         return errorMessage ?? "enter valid house address";
       }
       break;
+    case "number":
+      if (!RegExp(r'[0-9]').hasMatch(value)) {
+        return errorMessage ?? "Enter valid Number";
+      }
+      break;
     default:
       return null;
   }

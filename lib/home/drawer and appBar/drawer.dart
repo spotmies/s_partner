@@ -19,6 +19,7 @@ import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
 
 class DrawerScreen extends StatefulWidget {
   final drawerController;
@@ -96,7 +97,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                         ),
                         Text('  |  '),
                         TextWid(
-                          text: toBeginningOfSentenceCase(jobs[pd['job']]),
+                          text: Constants.jobCategories[pd['job']],
                           size: _width * 0.03,
                           weight: FontWeight.w500,
                         )

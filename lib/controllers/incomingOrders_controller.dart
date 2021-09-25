@@ -113,6 +113,49 @@ class IncomingOrdersController extends ControllerMVC {
     snackbar(context, "Incoming orders fetched successfully");
   }
 
+  respondToOrder(orderData, pDetailsId, responseType) async {
+    //enable loader
+    if (partnerProvider.inComingLoader) return;
+    partnerProvider.setInComingLoader(true);
+    Map<String, dynamic> body = {
+      //
+      "responseType": responseType,
+      "pId": API.pid.toString(),
+      "orderDetails": orderData['_id'].toString(),
+    };
+    if (responseType == "accept" || responseType == "bid") {
+      body["uId"] = orderData['uId'].toString();
+      body["ordId"] = orderData['ordId'].toString();
+      body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
+      body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
+      body["loc.0"] = 17.236.toString();
+      body["loc.1"] = 83.697.toString();
+      body["uDetails"] = orderData['uDetails']['_id'].toString();
+      body["pDetails"] = pDetailsId.toString();
+    }
+    if (responseType == "accept") {
+      body["money"] = orderData['money'].toString();
+      body['schedule'] = orderData['schedule'].toString();
+    } else if (responseType == "bid") {
+      //below for bid order
+      body["money"] = moneyController.text.toString();
+      body['schedule'] = pickedDate.millisecondsSinceEpoch.toString();
+    }
 
-  
+    log("order $body");
+    
+    var response = await Server().postMethod(API.updateOrder, body);
+    //disable loader here.
+    partnerProvider.setInComingLoader(false);
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      if (responseType == "reject")
+        snackbar(context, "Deleted successfully");
+      else
+        snackbar(context, "Request send successfully");
+      partnerProvider.removeIncomingOrderById(orderData['ordId']);
+      moneyController.clear();
+    } else {
+      snackbar(context, "Something went wrong please try again later");
+    }
+  }
 }

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/components/body.dart';
 import 'package:spotmies_partner/internet_calling/signaling.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
 class MyCalling extends StatefulWidget {
   final String msgId;
@@ -17,11 +18,11 @@ class MyCalling extends StatefulWidget {
   final dynamic roomId;
   final String name;
   final String profile;
-  final String userName;
-  final String userProfile;
+  // final String userName;
+  // final String userProfile;
 
   MyCalling(
-      {@required this.msgId,
+      {this.msgId,
       @required this.pId,
       @required this.uId,
       @required this.ordId,
@@ -29,14 +30,16 @@ class MyCalling extends StatefulWidget {
       this.roomId,
       this.name,
       this.profile,
-      this.userName,
-      this.userProfile});
+      // this.userName,
+      // this.userProfile
+      });
   @override
   _MyCallingState createState() => _MyCallingState();
 }
 
 class _MyCallingState extends State<MyCalling> {
   ChatProvider chatProvider;
+  PartnerDetailsProvider partnerProvider;
   Signaling signaling = Signaling();
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
@@ -64,8 +67,8 @@ class _MyCallingState extends State<MyCalling> {
       'ordId': widget.ordId,
       'type': 'call',
       'roomId': roomId.toString(),
-      'incomingName': widget.userName,
-      'incomingProfile': widget.userProfile
+      'incomingName': partnerProvider.getProfileDetails['name'],
+      'incomingProfile': partnerProvider.getProfileDetails['partnerPic']
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -105,6 +108,8 @@ class _MyCallingState extends State<MyCalling> {
 
   @override
   void initState() {
+        partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     _localRenderer.initialize();
     _remoteRenderer.initialize();

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/orders_controller.dart';
+import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -77,7 +78,12 @@ class _PostListState extends StateMVC<PostList> {
 
                             return Container(
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        PostOverView(orderId: orderData['ordId'].toString(),),
+                                  ));
+                                },
                                 child: Container(
                                     height: _hight * 0.265,
                                     width: _width * 1,

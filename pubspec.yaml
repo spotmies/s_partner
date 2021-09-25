@@ -70,6 +70,7 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   rxdart:
   flutter_native_timezone: ^2.0.0
+  timelines: ^0.1.0
   
 
 

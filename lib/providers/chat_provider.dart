@@ -29,25 +29,29 @@ class ChatProvider extends ChangeNotifier {
     confirmReceiveAllMessages();
     notifyListeners();
   }
-   void setChatList2(var list) {
+
+  void setChatList2(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
     notifyListeners();
   }
 
-  void sortChatListByTime(){
-            chatList.sort((a, b) {
+  void sortChatListByTime() {
+    chatList.sort((a, b) {
       return b['lastModified'].compareTo(a['lastModified']);
     });
   }
-   void addNewChat(chatObject){
-     chatList.add(chatObject);
-     sortChatListByTime();
-     notifyListeners();
 
-   }
+  void addNewChat(chatObject) {
+    int index = chatList
+        .indexWhere((element) => element['msgId'] == chatObject['msgId']);
+    if (index < 0) chatList.add(chatObject);
 
-     disableChatByMsgId(msgId) {
+    sortChatListByTime();
+    notifyListeners();
+  }
+
+  disableChatByMsgId(msgId) {
     chatList[chatList.indexWhere(
             (element) => element['msgId'].toString() == msgId.toString())]
         ['cBuild'] = 0;
@@ -157,7 +161,7 @@ class ChatProvider extends ChangeNotifier {
   clearMessageQueue(msgId) {
     sendMessageQueue.clear();
     readyToSend = true;
-    readReceipt(msgId, 1);
+    if (msgId.toString().length > 5) readReceipt(msgId, 1);
 
     notifyListeners();
   }
@@ -214,11 +218,11 @@ class ChatProvider extends ChangeNotifier {
 
   void startCallDuration() {
     Timer.periodic(Duration(seconds: 1), (timer) {
-        callDuration++;
-        notifyListeners();
-      if (callStatus != 3){
+      callDuration++;
+      notifyListeners();
+      if (callStatus != 3) {
         // callDuration = 0;
- timer.cancel();
+        timer.cancel();
       }
     });
   }
@@ -258,12 +262,12 @@ class ChatProvider extends ChangeNotifier {
 
   int get callTimeout => callInitTimeOut;
 
-  void resetAllCallingVariables(){
-      acceptCalls = true;
-     callDuration = 0;
-     callInitTimeOut = 15;
-     stopTimer = false;
-     callStatus = 0;
-     notifyListeners();
+  void resetAllCallingVariables() {
+    acceptCalls = true;
+    callDuration = 0;
+    callInitTimeOut = 15;
+    stopTimer = false;
+    callStatus = 0;
+    notifyListeners();
   }
 }

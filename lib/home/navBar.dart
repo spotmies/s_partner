@@ -99,6 +99,7 @@ class _NavBarState extends State<NavBar> {
     partnerProvider.setPartnerDetails(details);
 
     var partnerOrders = await partnerAllOrders();
+    log("partner all oders ${partnerOrders[0]}");
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
@@ -149,8 +150,9 @@ class _NavBarState extends State<NavBar> {
             if (callback == 'success') {
               print('working Fine');
               if (i == newMessageObject.length - 1) {
-                log("clear msg queue");
+                
                 var msgId = item['target']['msgId'];
+                log("clear msg queue $msgId");
                 chatProvider.clearMessageQueue(msgId);
               }
               // chatProvider.addnewMessage(item);

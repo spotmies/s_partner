@@ -342,8 +342,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       isIncoming: false,
                       name: _chatController.user['name'],
                       profile: _chatController.user['pic'],
-                      userName: _chatController.partner['name'],
-                      userProfile: _chatController.partner['partnerPic'],
+                     
                     )));
           },
           icon: Icon(
