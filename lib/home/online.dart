@@ -2,12 +2,14 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/controllers/incomingOrders_controller.dart';
+import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
@@ -45,55 +47,55 @@ class _OnlineState extends StateMVC<Online> {
     _incomingOrdersController.pickedTime = TimeOfDay.now();
   }
 
-  respondToOrder(orderData, responseType) async {
-    //enable loader
-    if (partnerProvider.inComingLoader) return;
-    partnerProvider.setInComingLoader(true);
-    Map<String, dynamic> body = {
-      //
-      "responseType": responseType,
-      "pId": API.pid.toString(),
-      "orderDetails": orderData['_id'].toString(),
-    };
-    if (responseType == "accept" || responseType == "bid") {
-      body["uId"] = orderData['uId'].toString();
-      body["ordId"] = orderData['ordId'].toString();
-      body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
-      body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
-      body["loc.0"] = 17.236.toString();
-      body["loc.1"] = 83.697.toString();
-      body["uDetails"] = orderData['uDetails']['_id'].toString();
-      body["pDetails"] = partnerProfile['_id'].toString();
-    }
-    if (responseType == "accept") {
-      body["money"] = orderData['money'].toString();
-      body['schedule'] = orderData['schedule'].toString();
-    } else if (responseType == "bid") {
-      //below for bid order
-      body["money"] = _incomingOrdersController.moneyController.text.toString();
-      body['schedule'] = _incomingOrdersController
-          .pickedDate.millisecondsSinceEpoch
-          .toString();
+  // respondToOrder(orderData, responseType) async {
+  //   //enable loader
+  //   if (partnerProvider.inComingLoader) return;
+  //   partnerProvider.setInComingLoader(true);
+  //   Map<String, dynamic> body = {
+  //     //
+  //     "responseType": responseType,
+  //     "pId": API.pid.toString(),
+  //     "orderDetails": orderData['_id'].toString(),
+  //   };
+  //   if (responseType == "accept" || responseType == "bid") {
+  //     body["uId"] = orderData['uId'].toString();
+  //     body["ordId"] = orderData['ordId'].toString();
+  //     body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
+  //     body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
+  //     body["loc.0"] = 17.236.toString();
+  //     body["loc.1"] = 83.697.toString();
+  //     body["uDetails"] = orderData['uDetails']['_id'].toString();
+  //     body["pDetails"] = partnerProfile['_id'].toString();
+  //   }
+  //   if (responseType == "accept") {
+  //     body["money"] = orderData['money'].toString();
+  //     body['schedule'] = orderData['schedule'].toString();
+  //   } else if (responseType == "bid") {
+  //     //below for bid order
+  //     body["money"] = _incomingOrdersController.moneyController.text.toString();
+  //     body['schedule'] = _incomingOrdersController
+  //         .pickedDate.millisecondsSinceEpoch
+  //         .toString();
 
-      //disable bottom bar
-      Navigator.pop(context);
-    }
+  //     //disable bottom bar
+  //     Navigator.pop(context);
+  //   }
 
-    log("order $body");
-    var response = await Server().postMethod(API.updateOrder, body);
-    //disable loader here.
-    partnerProvider.setInComingLoader(false);
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      if (responseType == "reject")
-        snackbar(context, "Deleted successfully");
-      else
-        snackbar(context, "Request send successfully");
-      partnerProvider.removeIncomingOrderById(orderData['ordId']);
-      _incomingOrdersController.moneyController.clear();
-    } else {
-      snackbar(context, "Something went wrong please try again later");
-    }
-  }
+  //   log("order $body");
+  //   var response = await Server().postMethod(API.updateOrder, body);
+  //   //disable loader here.
+  //   partnerProvider.setInComingLoader(false);
+  //   if (response.statusCode == 200 || response.statusCode == 204) {
+  //     if (responseType == "reject")
+  //       snackbar(context, "Deleted successfully");
+  //     else
+  //       snackbar(context, "Request send successfully");
+  //     partnerProvider.removeIncomingOrderById(orderData['ordId']);
+  //     _incomingOrdersController.moneyController.clear();
+  //   } else {
+  //     snackbar(context, "Something went wrong please try again later");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -121,246 +123,283 @@ class _OnlineState extends StateMVC<Online> {
                       var u = o[index]['uDetails'];
                       List<String> images = List.from(o[index]['media']);
 
-                      return Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[300],
-                              blurRadius: 4,
-                              spreadRadius: 1,
-                            )
-                          ],
-                          //  boxShadow: kElevationToShadow[1],
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15)),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 15, right: 10),
-                              height: _hight * 0.11,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15)),
-                                  boxShadow: kElevationToShadow[0]),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextWid(
-                                        text: _incomingOrdersController.jobs
-                                            .elementAt(o[index]['job']),
-                                        size: _width * 0.04,
-                                        color: Colors.grey[900],
-                                        weight: FontWeight.w600,
-                                      ),
-                                      IconButton(
-                                          icon: Icon(
-                                            Icons.more_horiz,
-                                            color: Colors.grey[900],
-                                          ),
-                                          onPressed: () {
-                                            onlineOrdersButtomMenu(
-                                                o[index]['uId'],
-                                                o[index],
-                                                o[index]['ordId'],
-                                                o[index]['pId'],
-                                                u['_id'],
-                                                partnerProfile['_id'],
-                                                _hight,
-                                                _width);
-                                          })
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width: _width * 0.45,
-                                        // color: Colors.red,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.schedule,
-                                              color: Colors.grey[900],
-                                              size: _width * 0.045,
-                                            ),
-                                            SizedBox(
-                                              width: _width * 0.01,
-                                            ),
-                                            TextWid(
-                                              text:
-                                                  getDate(o[index]['schedule']),
-                                              color: Colors.grey[900],
-                                              size: _width * 0.04,
-                                            ),
-                                            TextWid(
-                                              text: '-' +
-                                                  getTime(o[index]['schedule']),
-                                              color: Colors.grey[900],
-                                              size: _width * 0.04,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: _width * 0.35,
-                                        //  color: Colors.amber,
-                                        alignment: Alignment.centerRight,
-                                        child: o[index]['money'] != null
-                                            ? TextWid(
-                                                text: 'Rs:  ' +
-                                                    o[index]['money']
-                                                        .toString() +
-                                                    ' /-',
-                                                color: Colors.grey[900],
-                                                size: _width * 0.04,
-                                              )
-                                            : TextWid(
-                                                text: "Rs: Not mentioned"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              // margin: EdgeInsets.only(bottom: 20),
-                              padding: EdgeInsets.all(10),
-                              height: _hight * 0.21,
-                              // width: _width * 0.88,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[50],
-
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15)),
-                                // boxShadow: kElevationToShadow[0]
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: _hight * 0.11,
-                                    decoration: BoxDecoration(
-                                        // color: Colors.grey[50],
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Row(
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PostOverView(
+                                onBottomSheet: () {
+                                  bidSendingBottomSheet(
+                                      _hight,
+                                      _width,
+                                      o[index]["uId"],
+                                      o[index],
+                                      o[index]["ordId"],
+                                      o[index]["pId"],
+                                      u['_id'],
+                                      partnerProfile['_id'],
+                                      from: "outside");
+                                },
+                                orderId: o[index]['ordId'].toString(),
+                                from: "incomingOrders",
+                                onclick: (orderData, pDetailsId, responseType) {
+                                  print("onclick>>>>>>>");
+                                  _incomingOrdersController.respondToOrder(
+                                      orderData, pDetailsId, responseType);
+                                }),
+                          ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey[300],
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              )
+                            ],
+                            //  boxShadow: kElevationToShadow[1],
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15)),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 15, right: 10),
+                                height: _hight * 0.11,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15)),
+                                    boxShadow: kElevationToShadow[0]),
+                                child: Column(
+                                  children: [
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        InkWell(
-                                          onTap: () {},
-                                          child: Container(
-                                              // height: _hight * 0.15,
-                                              width: _width * 0.13,
-                                              child: CircleAvatar(
-                                                backgroundColor: Colors.white,
-                                                child: images == null
-                                                    ? NetworkImage(images.first)
-                                                    : Icon(
-                                                        Icons
-                                                            .home_repair_service_outlined,
-                                                        color: Colors.grey[900],
-                                                      ),
-                                              )),
-                                        ),
-                                        Container(
-                                          // color: Colors.amber,
-                                          width: _width * 0.53,
-                                          child: TextWid(
-                                            text: toBeginningOfSentenceCase(
-                                              o[index]['problem'].toString(),
-                                            ),
-                                            align: TextAlign.center,
-                                            flow: TextOverflow.visible,
-                                            size: _width * 0.04,
-                                          ),
+                                        TextWid(
+                                          text: _incomingOrdersController.jobs
+                                              .elementAt(o[index]['job']),
+                                          size: _width * 0.04,
+                                          color: Colors.grey[900],
+                                          weight: FontWeight.w600,
                                         ),
                                         IconButton(
-                                            onPressed: () {},
                                             icon: Icon(
-                                              Icons.info,
-                                              color: Colors.grey[400],
-                                            ))
+                                              Icons.more_horiz,
+                                              color: Colors.grey[900],
+                                            ),
+                                            onPressed: () {
+                                              onlineOrdersButtomMenu(
+                                                  o[index]['uId'],
+                                                  o[index],
+                                                  o[index]['ordId'],
+                                                  o[index]['pId'],
+                                                  u['_id'],
+                                                  partnerProfile['_id'],
+                                                  _hight,
+                                                  _width);
+                                            })
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: _hight * 0.015,
-                                  ),
-                                  o[index]['ordState'] == 'req'
-                                      ? Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                ElevatedButtonWidget(
-                                                  buttonName: 'Reject',
-                                                  height: _hight * 0.05,
-                                                  minWidth: _width * 0.3,
-                                                  bgColor: Colors.grey[200],
-                                                  textColor: Colors.grey[900],
-                                                  textSize: _width * 0.04,
-                                                  leadingIcon: Icon(
-                                                    Icons.close,
-                                                    color: Colors.grey[900],
-                                                    size: _width * 0.04,
-                                                  ),
-                                                  borderRadius: 15.0,
-                                                  borderSideColor:
-                                                      Colors.grey[50],
-                                                  onClick: () {
-                                                    respondToOrder(
-                                                        o[index], "reject");
-                                                  },
-                                                ),
-                                                ElevatedButtonWidget(
-                                                  buttonName: 'Accept',
-                                                  height: _hight * 0.05,
-                                                  minWidth: _width * 0.55,
-                                                  bgColor: Colors.grey[900],
-                                                  textColor: Colors.white,
-                                                  textSize: _width * 0.04,
-                                                  trailingIcon: Icon(
-                                                    Icons.check,
-                                                    color: Colors.white,
-                                                    size: _width * 0.04,
-                                                  ),
-                                                  borderRadius: 15.0,
-                                                  borderSideColor:
-                                                      Colors.grey[100],
-                                                  onClick: () async {
-                                                    respondToOrder(
-                                                        o[index], "accept");
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      : TextWid(
-                                          text: 'Order Accepted',
-                                          size: _width * 0.05,
-                                          weight: FontWeight.w600,
-                                        )
-                                ],
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: _width * 0.45,
+                                          // color: Colors.red,
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.schedule,
+                                                color: Colors.grey[900],
+                                                size: _width * 0.045,
+                                              ),
+                                              SizedBox(
+                                                width: _width * 0.01,
+                                              ),
+                                              TextWid(
+                                                text: getDate(
+                                                    o[index]['schedule']),
+                                                color: Colors.grey[900],
+                                                size: _width * 0.04,
+                                              ),
+                                              TextWid(
+                                                text: '-' +
+                                                    getTime(
+                                                        o[index]['schedule']),
+                                                color: Colors.grey[900],
+                                                size: _width * 0.04,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          width: _width * 0.35,
+                                          //  color: Colors.amber,
+                                          alignment: Alignment.centerRight,
+                                          child: o[index]['money'] != null
+                                              ? TextWid(
+                                                  text: 'Rs:  ' +
+                                                      o[index]['money']
+                                                          .toString() +
+                                                      ' /-',
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.04,
+                                                )
+                                              : TextWid(
+                                                  text: "Rs: Not mentioned"),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: _hight * 0.01,
-                            )
-                          ],
+                              Container(
+                                // margin: EdgeInsets.only(bottom: 20),
+                                padding: EdgeInsets.all(10),
+                                height: _hight * 0.21,
+                                // width: _width * 0.88,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
+                                  // boxShadow: kElevationToShadow[0]
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: _hight * 0.11,
+                                      decoration: BoxDecoration(
+                                          // color: Colors.grey[50],
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                                // height: _hight * 0.15,
+                                                width: _width * 0.13,
+                                                child: CircleAvatar(
+                                                  backgroundColor: Colors.white,
+                                                  child: images == null
+                                                      ? NetworkImage(
+                                                          images.first)
+                                                      : Icon(
+                                                          Icons
+                                                              .home_repair_service_outlined,
+                                                          color:
+                                                              Colors.grey[900],
+                                                        ),
+                                                )),
+                                          ),
+                                          Container(
+                                            // color: Colors.amber,
+                                            width: _width * 0.53,
+                                            child: TextWid(
+                                              text: toBeginningOfSentenceCase(
+                                                o[index]['problem'].toString(),
+                                              ),
+                                              align: TextAlign.center,
+                                              flow: TextOverflow.visible,
+                                              size: _width * 0.04,
+                                            ),
+                                          ),
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.info,
+                                                color: Colors.grey[400],
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: _hight * 0.015,
+                                    ),
+                                    o[index]['ordState'] == 'req'
+                                        ? Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  ElevatedButtonWidget(
+                                                    buttonName: 'Reject',
+                                                    height: _hight * 0.05,
+                                                    minWidth: _width * 0.3,
+                                                    bgColor: Colors.grey[200],
+                                                    textColor: Colors.grey[900],
+                                                    textSize: _width * 0.04,
+                                                    leadingIcon: Icon(
+                                                      Icons.close,
+                                                      color: Colors.grey[900],
+                                                      size: _width * 0.04,
+                                                    ),
+                                                    borderRadius: 15.0,
+                                                    borderSideColor:
+                                                        Colors.grey[50],
+                                                    onClick: () {
+                                                      _incomingOrdersController
+                                                          .respondToOrder(
+                                                              o[index],
+                                                              partnerProfile[
+                                                                  '_id'],
+                                                              "reject");
+                                                    },
+                                                  ),
+                                                  ElevatedButtonWidget(
+                                                    buttonName: 'Accept',
+                                                    height: _hight * 0.05,
+                                                    minWidth: _width * 0.55,
+                                                    bgColor: Colors.grey[900],
+                                                    textColor: Colors.white,
+                                                    textSize: _width * 0.04,
+                                                    trailingIcon: Icon(
+                                                      Icons.check,
+                                                      color: Colors.white,
+                                                      size: _width * 0.04,
+                                                    ),
+                                                    borderRadius: 15.0,
+                                                    borderSideColor:
+                                                        Colors.grey[100],
+                                                    onClick: () async {
+                                                      _incomingOrdersController
+                                                          .respondToOrder(
+                                                              o[index],
+                                                              partnerProfile[
+                                                                  '_id'],
+                                                              "accept");
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : TextWid(
+                                            text: 'Order Accepted',
+                                            size: _width * 0.05,
+                                            weight: FontWeight.w600,
+                                          )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: _hight * 0.01,
+                              )
+                            ],
+                          ),
                         ),
                       );
                     }),
@@ -423,7 +462,11 @@ class _OnlineState extends StateMVC<Online> {
                   children: [
                     InkWell(
                       onTap: () {
-                        log('Post View');
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PostOverView(
+                            orderId: ordid.toString(),
+                          ),
+                        ));
                       },
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[300],
@@ -445,6 +488,7 @@ class _OnlineState extends StateMVC<Online> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
+
                         bidSendingBottomSheet(
                           hight,
                           width,
@@ -477,7 +521,8 @@ class _OnlineState extends StateMVC<Online> {
   }
 
   bidSendingBottomSheet(double hight, double width, uid, ordDetails, ordid, pid,
-      uDetails, pDetails) {
+      uDetails, pDetails,
+      {from = "inside"}) {
     return showModalBottomSheet(
         context: context,
         elevation: 22,
@@ -530,7 +575,11 @@ class _OnlineState extends StateMVC<Online> {
                     child: TextFieldWidget(
                       controller: _incomingOrdersController.moneyController,
                       hint: 'Money',
+                      type: "number",
                       enableBorderColor: Colors.grey,
+                      formatter: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
                       focusBorderColor: Colors.grey[900],
                       enableBorderRadius: 15,
                       focusBorderRadius: 15,
@@ -580,7 +629,12 @@ class _OnlineState extends StateMVC<Online> {
                             if (_incomingOrdersController
                                 .updateFormKey.currentState
                                 .validate()) {
-                              respondToOrder(ordDetails, "bid");
+                              Navigator.pop(context);
+                              _incomingOrdersController.respondToOrder(
+                                  ordDetails, partnerProfile['_id'], "bid");
+                              if (from == "outside") {
+                                Navigator.pop(context);
+                              }
                             }
                           },
                         ),

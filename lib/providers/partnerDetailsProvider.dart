@@ -1,26 +1,52 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotmies_partner/apiCalls/apiCalling.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/orders.dart';
-import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:flutter/material.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
 class PartnerDetailsProvider extends ChangeNotifier {
   final controller = TestController();
-  var partnerLocal;
   Map partnerDetailsFull;
   Map profileDetails;
   List inComingOrders = [];
   List orders = [];
   bool ordsLoader = false;
+  bool orderViewLoader = false;
   bool inComingOrdersLoader = false;
+  bool editProfileLoader = false;
+  String editProfileLoaderName = "";
+  bool offlineScreenLoader = false;
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
+  bool get editLoader => editProfileLoader;
+  Map get getProfileDetails => profileDetails;
+  Map get getPartnerDetailsFull => partnerDetailsFull;
+  List get getIncomingOrder => inComingOrders;
+  List get getOrders => orders;
+
+  getOrderById(ordId) {
+    int index;
+    index = inComingOrders.indexWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    if (index < 0) {
+      index = orders.indexWhere(
+          (element) => element['ordId'].toString() == ordId.toString());
+      if (index < 0) return null;
+      return orders[index];
+    }
+    return inComingOrders[index];
+  }
+
+  void setOrderViewLoader(state) {
+    orderViewLoader = state;
+    notifyListeners();
+  }
+
+  void setEditLoader(value, {loaderName = "Please wait..."}) {
+    editProfileLoader = value;
+    editProfileLoaderName = loaderName;
+    notifyListeners();
+  }
+
   void setOrdersLoader(loaderState) {
     ordsLoader = loaderState;
     notifyListeners();
@@ -43,22 +69,23 @@ class PartnerDetailsProvider extends ChangeNotifier {
     inComingOrders = dataTemp['inComingOrders'];
     sortListByTime();
     orders = dataTemp['orders'];
+    setPartnerDetailsOnly(dataTemp);
+    notifyListeners();
+  }
+
+  void setPartnerDetailsOnly(data) {
+    var dataTemp = data;
     dataTemp.removeWhere(
         (key, value) => key == "inComingOrders" || key == "orders");
     profileDetails = dataTemp;
     notifyListeners();
   }
 
-  Map get getProfileDetails => profileDetails;
-  Map get getPartnerDetailsFull => partnerDetailsFull;
-  List get getIncomingOrder => inComingOrders;
   void setIncomingOrders(ordersList) {
     inComingOrders = ordersList;
     sortListByTime();
     notifyListeners();
   }
-
-  List get getOrders => orders;
 
   void addNewIncomingOrder(order) {
     inComingOrders.add(order);
@@ -73,32 +100,19 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAvailability(state) {
+    partnerDetailsFull['availability'] = state;
+    profileDetails['availability'] = state;
+    notifyListeners();
+  }
+
   void setOrder(allOrders) {
     orders = allOrders;
     notifyListeners();
   }
 
-//old methods
-  localDetailsGet() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String pd = prefs.getString('partnerDetails');
-    if (pd == null) {
-      partnerDetails();
-    }
-    partnerLocal = jsonDecode(pd);
-  }
-
-  partnerDetails() async {
-    var response = await Server().getMethod(API.partnerDetails);
-    partnerLocal = jsonDecode(response);
-    controller.getData();
-    localPartnerDetailsStore(partnerLocal);
+  void setOffileLoader(state) {
+    offlineScreenLoader = state;
     notifyListeners();
-  }
-
-  localPartnerDetailsStore(partnerLocal) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('partnerDetails', jsonEncode(partnerLocal));
   }
 }
