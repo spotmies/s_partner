@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -14,9 +18,20 @@ import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/utils.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
+// recieve messages when app is in background
+Future<void> backGroundHandler(RemoteMessage message) async {
+  // print(message.data.toString());
+  // print(message.notification.title);
+  LocalNotificationService.display(message);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LocalNotificationService.initialize();
   await Firebase.initializeApp();
+  // FirebaseMessaging.onBackgroundMessage((message) => null);
+  FirebaseMessaging.onBackgroundMessage(backGroundHandler);
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MultiProvider(providers: [
@@ -41,8 +56,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // LocalNotidication.init();
-    // listenNotifications();
     quickActions.setShortcutItems([
       ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
       ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
@@ -64,13 +77,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  // void listenNotifications(){
-  //   LocalNotidication.onNotifications.stream.listen(onlickNotificaion);
-  // }
-
-  // void onlickNotificaion(String payload){
-  //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => Demo(payload:payload)));
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +99,14 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+
+
+
+
+
+
+//notifications
+
 class NotificationsDemo extends StatefulWidget {
   const NotificationsDemo({Key key}) : super(key: key);
 
@@ -102,6 +117,28 @@ class NotificationsDemo extends StatefulWidget {
 class _NotificationsDemoState extends State<NotificationsDemo> {
   @override
   void initState() {
+    // FirebaseMessaging.instance.getInitialMessage().then((message) {
+    //   final routefromMessage = message.data["route"];
+    //   log(routefromMessage);
+    //   Navigator.pushAndRemoveUntil(context,
+    //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+    // });
+    // //forground
+    // FirebaseMessaging.onMessage.listen((message) async {
+    //   if (message.notification != null) {
+    //     print(message.notification.title);
+    //     print(message.notification.body);
+    //     LocalNotificationService.display(message);
+    //   }
+    // });
+    // // when app background but in recent
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+    //   final routefromMessage = message.data["route"];
+    //   log(routefromMessage);
+    //   LocalNotificationService.display(message);
+    //   Navigator.pushAndRemoveUntil(context,
+    //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+    // });
     LocalNotidication.init(initSchedule: true);
     listenNotifications();
     super.initState();
