@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
@@ -8,12 +9,14 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.d
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/main.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
@@ -106,6 +109,31 @@ class _NavBarState extends State<NavBar> {
 
   @override
   initState() {
+    //notifications
+    LocalNotificationService.initialize(context);
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      final routefromMessage = message.data["route"];
+      log(routefromMessage);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+    });
+    //forground
+    FirebaseMessaging.onMessage.listen((message) async {
+      if (message.notification != null) {
+        print(message.notification.title);
+        print(message.notification.body);
+        LocalNotificationService.display(message);
+      }
+    });
+    // when app background but in recent
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      final routefromMessage = message.data["route"];
+      log(routefromMessage);
+      LocalNotificationService.display(message);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+    });
+
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     partnerProvider =
@@ -150,7 +178,6 @@ class _NavBarState extends State<NavBar> {
             if (callback == 'success') {
               print('working Fine');
               if (i == newMessageObject.length - 1) {
-                
                 var msgId = item['target']['msgId'];
                 log("clear msg queue $msgId");
                 chatProvider.clearMessageQueue(msgId);
@@ -187,8 +214,8 @@ class _NavBarState extends State<NavBar> {
     ),
   ];
 
- static List <Widget> shortCut = [
-     Center(
+  static List<Widget> shortCut = [
+    Center(
       child: Home(),
     ),
     Center(
@@ -230,7 +257,9 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: Colors.white,
         body: Consumer<ChatProvider>(builder: (context, notifier, child) {
           return Container(
-            child:widget.data == null? _widgetOptions.elementAt(_selectedIndex):shortCut.elementAt(widget.data),
+            child: widget.data == null
+                ? _widgetOptions.elementAt(_selectedIndex)
+                : shortCut.elementAt(widget.data),
           );
         }),
         bottomNavigationBar: Container(

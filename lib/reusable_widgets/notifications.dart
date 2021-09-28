@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
@@ -10,7 +11,8 @@ class LocalNotidication {
   static final onNotifications = BehaviorSubject<String>();
   static final sound = 'notification_sound.wav';
 
-  static Future notificationDetails({String bigImage, String largeIcon,bool show = false}) async {
+  static Future notificationDetails(
+      {String bigImage, String largeIcon, bool show = false}) async {
     final styleInformation = BigPictureStyleInformation(
         FilePathAndroidBitmap(bigImage),
         largeIcon: FilePathAndroidBitmap(largeIcon));
@@ -19,7 +21,26 @@ class LocalNotidication {
         android: AndroidNotificationDetails(
             'channel id 1', 'channel name', 'channel Description',
             sound: RawResourceAndroidNotificationSound(sound.split('.').first),
-            styleInformation: show? styleInformation:null, importance: Importance.max),
+            styleInformation: show ? styleInformation : null,
+            importance: Importance.max),
+        iOS: IOSNotificationDetails());
+  }
+
+  static Future firebasePushNotification(
+      {String bigImage, String largeIcon, bool show = false}) async {
+    final styleInformation = BigPictureStyleInformation(
+        FilePathAndroidBitmap(bigImage),
+        largeIcon: FilePathAndroidBitmap(largeIcon));
+
+    return NotificationDetails(
+        android: AndroidNotificationDetails(
+            'firebasePushNotifictions',
+            'channel firebasePushNotifictions',
+            'this is firebase push notifications',
+            priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound(sound.split('.').first),
+            styleInformation: show ? styleInformation : null,
+            importance: Importance.max),
         iOS: IOSNotificationDetails());
   }
 
@@ -30,7 +51,7 @@ class LocalNotidication {
 
     // when app is closed
     final details = await notifications.getNotificationAppLaunchDetails();
-    if(details != null && details.didNotificationLaunchApp){
+    if (details != null && details.didNotificationLaunchApp) {
       onNotifications.add(details.payload);
     }
 
@@ -46,6 +67,22 @@ class LocalNotidication {
     }
   }
 
+  static Future showFirebaseNotifications(
+      {int id = 0,
+      String title,
+      String body,
+      String payload,
+      String bigImage,
+      String largeIcon}) async {
+    notifications.show(
+        id,
+        title,
+        body,
+        await firebasePushNotification(
+            bigImage: bigImage, largeIcon: largeIcon, show: true),
+        payload: payload);
+  }
+
   static Future showNotifications(
       {int id = 0,
       String title,
@@ -53,8 +90,12 @@ class LocalNotidication {
       String payload,
       String bigImage,
       String largeIcon}) async {
-    notifications.show(id, title, body,
-        await notificationDetails(bigImage: bigImage, largeIcon: largeIcon,show: true),
+    notifications.show(
+        id,
+        title,
+        body,
+        await notificationDetails(
+            bigImage: bigImage, largeIcon: largeIcon, show: true),
         payload: payload);
   }
 
@@ -86,5 +127,50 @@ class LocalNotidication {
     return scheduleDate.isBefore(now)
         ? scheduleDate.add(Duration(seconds: 1))
         : scheduleDate;
+  }
+}
+
+//firebase messaging
+
+class LocalNotificationService {
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  static void initialize(BuildContext context) {
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: AndroidInitializationSettings("@mipmap/ic_launcher"));
+
+    _notificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String route) async {
+      if (route != null) {
+        Navigator.of(context).pushNamed(route);
+      }
+    });
+  }
+
+  static void display(RemoteMessage message) async {
+    try {
+      final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+      final NotificationDetails notificationDetails = NotificationDetails(
+          android: AndroidNotificationDetails(
+        "firebasePushNotifictions",
+        "firebasePushNotifictions channel",
+        "this is our channel",
+        importance: Importance.max,
+        priority: Priority.high,
+      ));
+
+      await _notificationsPlugin.show(
+        id,
+        message.notification.title,
+        message.notification.body,
+        notificationDetails,
+        payload: message.data["route"],
+      );
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 }
