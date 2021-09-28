@@ -136,7 +136,7 @@ class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  static void initialize() {
+  static void initialize(BuildContext context) {
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: AndroidInitializationSettings("@mipmap/ic_launcher"));
@@ -144,7 +144,7 @@ class LocalNotificationService {
     _notificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String route) async {
       if (route != null) {
-        // Navigator.of(context).pushNamed(route);
+        Navigator.of(context).pushNamed(route);
       }
     });
   }

@@ -9,6 +9,7 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.d
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/main.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -109,7 +110,8 @@ class _NavBarState extends State<NavBar> {
   @override
   initState() {
     //notifications
-     FirebaseMessaging.instance.getInitialMessage().then((message) {
+    LocalNotificationService.initialize(context);
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message.data["route"];
       log(routefromMessage);
       Navigator.pushAndRemoveUntil(context,
@@ -176,7 +178,6 @@ class _NavBarState extends State<NavBar> {
             if (callback == 'success') {
               print('working Fine');
               if (i == newMessageObject.length - 1) {
-                
                 var msgId = item['target']['msgId'];
                 log("clear msg queue $msgId");
                 chatProvider.clearMessageQueue(msgId);
@@ -213,8 +214,8 @@ class _NavBarState extends State<NavBar> {
     ),
   ];
 
- static List <Widget> shortCut = [
-     Center(
+  static List<Widget> shortCut = [
+    Center(
       child: Home(),
     ),
     Center(
@@ -256,7 +257,9 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: Colors.white,
         body: Consumer<ChatProvider>(builder: (context, notifier, child) {
           return Container(
-            child:widget.data == null? _widgetOptions.elementAt(_selectedIndex):shortCut.elementAt(widget.data),
+            child: widget.data == null
+                ? _widgetOptions.elementAt(_selectedIndex)
+                : shortCut.elementAt(widget.data),
           );
         }),
         bottomNavigationBar: Container(
