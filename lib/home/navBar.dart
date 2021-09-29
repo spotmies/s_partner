@@ -106,13 +106,16 @@ class _NavBarState extends State<NavBar> {
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
-
+connectNotifications() async {
+    log("devic id ${await FirebaseMessaging.instance.getToken()}");
+    await FirebaseMessaging.instance.subscribeToTopic("spotmiesPartner");
+}
   @override
   initState() {
     //notifications
     LocalNotificationService.initialize(context);
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      final routefromMessage = message.data["route"];
+      final routefromMessage = message?.data["route"];
       log(routefromMessage);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
@@ -139,6 +142,7 @@ class _NavBarState extends State<NavBar> {
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     hittingAllApis();
+    connectNotifications();
 
     _chatResponse = StreamController();
 
