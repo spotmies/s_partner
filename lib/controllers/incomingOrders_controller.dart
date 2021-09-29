@@ -74,7 +74,7 @@ class IncomingOrdersController extends ControllerMVC {
     }
   }
 
-  pickedDateandTime() async {
+  pickedDateandTime({setStatee}) async {
     DateTime date = await showDatePicker(
         context: context,
         initialDate: pickedDate,
@@ -82,18 +82,19 @@ class IncomingOrdersController extends ControllerMVC {
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      setState(() async {
-        TimeOfDay t = await showTimePicker(
-          context: context,
-          initialTime: pickedTime,
-        );
-        if (t != null) {
-          setState(() {
-            pickedTime = t;
-          });
-        }
-        pickedDate = date;
-      });
+      TimeOfDay t = await showTimePicker(
+        context: context,
+        initialTime: pickedTime,
+      );
+      if (t != null) {
+        pickedTime = t;
+      }
+      pickedDate = date;
+
+      if (setStatee != null)
+        setStatee(() {});
+      else
+        setState(() {});
     }
   }
 
@@ -143,7 +144,7 @@ class IncomingOrdersController extends ControllerMVC {
     }
 
     log("order $body");
-    
+
     var response = await Server().postMethod(API.updateOrder, body);
     //disable loader here.
     partnerProvider.setInComingLoader(false);

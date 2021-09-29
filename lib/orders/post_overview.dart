@@ -266,11 +266,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 size: _width * 0.055,
                                 weight: FontWeight.w600,
                               ),
-                              IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: Icon(Icons.edit))
+                              // IconButton(
+                              //     padding: EdgeInsets.zero,
+                              //     constraints: BoxConstraints(),
+                              //     onPressed: () {},
+                              //     icon: Icon(Icons.edit))
                             ],
                           ),
                         ),
@@ -300,12 +300,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  images.isNotEmpty
-                      ? mediaView(_hight, _width, images)
-                      : TextWid(
-                          text: 'No media files found',
-                          align: TextAlign.center,
-                        ),
+                  mediaView(_hight, _width, images),
+
                   Divider(
                     color: Colors.white,
                   ),
@@ -407,7 +403,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   mediaView(hight, width, images) {
     return Container(
-      height: hight * 0.22,
+      // height: hight * 0.22,
       color: Colors.white,
       padding: EdgeInsets.only(bottom: 15),
       child: Column(
@@ -427,41 +423,51 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               ],
             ),
           ),
-          Container(
-            height: hight * 0.11,
-            child: ListView.builder(
-                itemCount: images.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: width * 0.05,
-                      ),
-                      Container(
-                        child: images[index].contains('jpg')
-                            ? InkWell(
-                                onTap: () {
-                                  imageslider(images, hight, width);
-                                },
-                                child: Container(
-                                  width: width * 0.11,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image: NetworkImage(images[index]))),
-                                ),
-                              )
-                            : images[index].contains('mp4')
-                                ? TextWid(
-                                    text: 'Video',
-                                  )
-                                : TextWid(text: 'Audio'),
-                      ),
-                    ],
-                  );
-                }),
-          ),
+          images.length > 0
+              ? Container(
+                  height: hight * 0.11,
+                  child: ListView.builder(
+                      itemCount: images.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: width * 0.05,
+                            ),
+                            Container(
+                              child: images[index].contains('jpg')
+                                  ? InkWell(
+                                      onTap: () {
+                                        imageslider(images, hight, width);
+                                      },
+                                      child: Container(
+                                        width: width * 0.11,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    images[index]))),
+                                      ),
+                                    )
+                                  : images[index].contains('mp4')
+                                      ? TextWid(
+                                          text: 'Video',
+                                        )
+                                      : TextWid(text: 'Audio'),
+                            ),
+                          ],
+                        );
+                      }),
+                )
+              : Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: TextWid(
+                    text: 'No media files found',
+                    align: TextAlign.center,
+                  ),
+                ),
         ],
       ),
     );
