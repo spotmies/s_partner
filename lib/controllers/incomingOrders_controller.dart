@@ -133,14 +133,20 @@ class IncomingOrdersController extends ControllerMVC {
       body["loc.1"] = 83.697.toString();
       body["uDetails"] = orderData['uDetails']['_id'].toString();
       body["pDetails"] = pDetailsId.toString();
+      body['deviceToken'] = orderData['uDetails']['userDeviceToken'].toString();
+      body['notificationTitle'] = "New response";
     }
     if (responseType == "accept") {
       body["money"] = orderData['money'].toString();
       body['schedule'] = orderData['schedule'].toString();
+      body['notificationBody'] =
+          "Your request order accepted by ${partnerProvider.getProfileDetails['name']}";
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
       body['schedule'] = pickedDate.millisecondsSinceEpoch.toString();
+      body['notificationBody'] =
+          "Your request order bid by ${partnerProvider.getProfileDetails['name']}";
     }
 
     log("order $body");
