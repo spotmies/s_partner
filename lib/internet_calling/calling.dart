@@ -18,6 +18,7 @@ class MyCalling extends StatefulWidget {
   final dynamic roomId;
   final String name;
   final String profile;
+  final String userDeviceToken;
   // final String userName;
   // final String userProfile;
 
@@ -30,6 +31,7 @@ class MyCalling extends StatefulWidget {
       this.roomId,
       this.name,
       this.profile,
+      this.userDeviceToken
       // this.userName,
       // this.userProfile
       });
@@ -68,7 +70,8 @@ class _MyCallingState extends State<MyCalling> {
       'type': 'call',
       'roomId': roomId.toString(),
       'incomingName': partnerProvider.getProfileDetails['name'],
-      'incomingProfile': partnerProvider.getProfileDetails['partnerPic']
+      'incomingProfile': partnerProvider.getProfileDetails['partnerPic'],
+      'deviceToken': [widget.userDeviceToken]
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -108,7 +111,7 @@ class _MyCallingState extends State<MyCalling> {
 
   @override
   void initState() {
-        partnerProvider =
+    partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     _localRenderer.initialize();

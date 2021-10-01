@@ -536,114 +536,118 @@ class _OnlineState extends StateMVC<Online> {
           return Container(
             height: hight * 0.35,
             padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: Form(
-              key: _incomingOrdersController.updateFormKey,
-              child: ListView(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 15, top: 10),
-                    child: TextWid(
-                      text: 'Create Bid',
-                      size: width * 0.055,
-                      weight: FontWeight.w600,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _incomingOrdersController.pickedDateandTime();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(left: 16, right: 16, top: 10),
-                      alignment: Alignment.center,
-                      height: hight * 0.07,
-                      width: width * 0.8,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey)),
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setStatee) {
+              return Form(
+                key: _incomingOrdersController.updateFormKey,
+                child: ListView(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 15, top: 10),
                       child: TextWid(
-                        text: 'Schedule:  ' +
-                            ' ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}' +
-                            '@' +
-                            '${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
-                        size: width * 0.045,
+                        text: 'Create Bid',
+                        size: width * 0.055,
                         weight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    child: TextFieldWidget(
-                      controller: _incomingOrdersController.moneyController,
-                      hint: 'Money',
-                      type: "number",
-                      enableBorderColor: Colors.grey,
-                      formatter: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      ],
-                      focusBorderColor: Colors.grey[900],
-                      enableBorderRadius: 15,
-                      focusBorderRadius: 15,
-                      errorBorderRadius: 15,
-                      focusErrorRadius: 15,
-                      validateMsg: 'Enter Valid Money',
-                      maxLines: 1,
-                      postIcon: Icon(Icons.change_circle),
-                      postIconColor: Colors.grey[900],
-                    ),
-                  ),
-                  SizedBox(
-                    height: hight * 0.01,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 11, right: 11),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButtonWidget(
-                          bgColor: Colors.grey[300],
-                          minWidth: width * 0.3,
-                          height: hight * 0.06,
-                          borderRadius: 15.0,
-                          textColor: Colors.grey[900],
-                          textSize: width * 0.04,
-                          buttonName: 'Close',
-                          leadingIcon: Icon(
-                            Icons.close,
-                            color: Colors.grey[900],
-                          ),
-                          onClick: () {
-                            Navigator.pop(context);
-                          },
+                    InkWell(
+                      onTap: () {
+                        _incomingOrdersController.pickedDateandTime(
+                            setStatee: setStatee);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16, right: 16, top: 10),
+                        alignment: Alignment.center,
+                        height: hight * 0.07,
+                        width: width * 0.8,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: Colors.grey)),
+                        child: TextWid(
+                          text: 'Schedule:  ' +
+                              ' ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}' +
+                              '@' +
+                              '${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
+                          size: width * 0.045,
+                          weight: FontWeight.w600,
                         ),
-                        ElevatedButtonWidget(
-                          bgColor: Colors.grey[900],
-                          borderSideColor: Colors.white,
-                          minWidth: width * 0.55,
-                          height: hight * 0.06,
-                          borderRadius: 15.0,
-                          textSize: width * 0.04,
-                          textColor: Colors.white,
-                          buttonName: 'Change',
-                          trailingIcon: Icon(Icons.send),
-                          onClick: () {
-                            if (_incomingOrdersController
-                                .updateFormKey.currentState
-                                .validate()) {
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      child: TextFieldWidget(
+                        controller: _incomingOrdersController.moneyController,
+                        hint: 'Money',
+                        type: "number",
+                        enableBorderColor: Colors.grey,
+                        formatter: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        ],
+                        focusBorderColor: Colors.grey[900],
+                        enableBorderRadius: 15,
+                        focusBorderRadius: 15,
+                        errorBorderRadius: 15,
+                        focusErrorRadius: 15,
+                        validateMsg: 'Enter Valid Money',
+                        maxLines: 1,
+                        postIcon: Icon(Icons.change_circle),
+                        postIconColor: Colors.grey[900],
+                      ),
+                    ),
+                    SizedBox(
+                      height: hight * 0.01,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 11, right: 11),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButtonWidget(
+                            bgColor: Colors.grey[300],
+                            minWidth: width * 0.3,
+                            height: hight * 0.06,
+                            borderRadius: 15.0,
+                            textColor: Colors.grey[900],
+                            textSize: width * 0.04,
+                            buttonName: 'Close',
+                            leadingIcon: Icon(
+                              Icons.close,
+                              color: Colors.grey[900],
+                            ),
+                            onClick: () {
                               Navigator.pop(context);
-                              _incomingOrdersController.respondToOrder(
-                                  ordDetails, partnerProfile['_id'], "bid");
-                              if (from == "outside") {
+                            },
+                          ),
+                          ElevatedButtonWidget(
+                            bgColor: Colors.grey[900],
+                            borderSideColor: Colors.white,
+                            minWidth: width * 0.55,
+                            height: hight * 0.06,
+                            borderRadius: 15.0,
+                            textSize: width * 0.04,
+                            textColor: Colors.white,
+                            buttonName: 'Change',
+                            trailingIcon: Icon(Icons.send),
+                            onClick: () {
+                              if (_incomingOrdersController
+                                  .updateFormKey.currentState
+                                  .validate()) {
                                 Navigator.pop(context);
+                                _incomingOrdersController.respondToOrder(
+                                    ordDetails, partnerProfile['_id'], "bid");
+                                if (from == "outside") {
+                                  Navigator.pop(context);
+                                }
                               }
-                            }
-                          },
-                        ),
-                      ],
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                ),
+              );
+            }),
           );
         });
   }

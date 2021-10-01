@@ -342,6 +342,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       isIncoming: false,
                       name: _chatController.user['name'],
                       profile: _chatController.user['pic'],
+                      userDeviceToken:_chatController.user['userDeviceToken'].toString()
                      
                     )));
           },

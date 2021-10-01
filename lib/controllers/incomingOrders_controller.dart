@@ -74,7 +74,7 @@ class IncomingOrdersController extends ControllerMVC {
     }
   }
 
-  pickedDateandTime() async {
+  pickedDateandTime({setStatee}) async {
     DateTime date = await showDatePicker(
         context: context,
         initialDate: pickedDate,
@@ -82,18 +82,19 @@ class IncomingOrdersController extends ControllerMVC {
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      setState(() async {
-        TimeOfDay t = await showTimePicker(
-          context: context,
-          initialTime: pickedTime,
-        );
-        if (t != null) {
-          setState(() {
-            pickedTime = t;
-          });
-        }
-        pickedDate = date;
-      });
+      TimeOfDay t = await showTimePicker(
+        context: context,
+        initialTime: pickedTime,
+      );
+      if (t != null) {
+        pickedTime = t;
+      }
+      pickedDate = date;
+
+      if (setStatee != null)
+        setStatee(() {});
+      else
+        setState(() {});
     }
   }
 
@@ -132,18 +133,24 @@ class IncomingOrdersController extends ControllerMVC {
       body["loc.1"] = 83.697.toString();
       body["uDetails"] = orderData['uDetails']['_id'].toString();
       body["pDetails"] = pDetailsId.toString();
+      body['deviceToken'] = orderData['uDetails']['userDeviceToken'].toString();
+      body['notificationTitle'] = "New response";
     }
     if (responseType == "accept") {
       body["money"] = orderData['money'].toString();
       body['schedule'] = orderData['schedule'].toString();
+      body['notificationBody'] =
+          "Your request order accepted by ${partnerProvider.getProfileDetails['name']}";
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
       body['schedule'] = pickedDate.millisecondsSinceEpoch.toString();
+      body['notificationBody'] =
+          "Your request order bid by ${partnerProvider.getProfileDetails['name']}";
     }
 
     log("order $body");
-    
+
     var response = await Server().postMethod(API.updateOrder, body);
     //disable loader here.
     partnerProvider.setInComingLoader(false);
