@@ -106,34 +106,11 @@ class _NavBarState extends State<NavBar> {
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
+  // FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   initState() {
-    //notifications
-    LocalNotificationService.initialize(context);
-    FirebaseMessaging.instance.getInitialMessage().then((message) {
-      final routefromMessage = message.data["route"];
-      log(routefromMessage);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-    });
-    //forground
-    FirebaseMessaging.onMessage.listen((message) async {
-      if (message.notification != null) {
-        print(message.notification.title);
-        print(message.notification.body);
-        LocalNotificationService.display(message);
-      }
-    });
-    // when app background but in recent
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-      final routefromMessage = message.data["route"];
-      log(routefromMessage);
-      LocalNotificationService.display(message);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-    });
-
+   
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     partnerProvider =

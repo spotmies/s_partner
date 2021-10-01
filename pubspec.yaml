@@ -106,6 +106,7 @@ flutter:
     - assets/5.png
     - assets/7.png
     - assets/spotmies.png
+    - assets/accountType.svg
     - assets/icon.png
     - assets/like.svg
     - assets/edit.svg

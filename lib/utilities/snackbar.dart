@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-snackbar(BuildContext context, description, {color: Colors.black}) {
+snackbar(
+  BuildContext context,
+  description,
+) {
   final snackBar = SnackBar(
-    backgroundColor: color,
     content: Text(description),
     action: SnackBarAction(
       label: 'Close',

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:spotmies_partner/home/navBar.dart';
-import 'stepperpersonalinfo.dart';
+import 'stepper/stepperpersonalinfo.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
