@@ -30,7 +30,7 @@ class ChatController extends ControllerMVC {
   final picker = ImagePicker();
   VideoPlayerController videoPlayerController;
 
-   ChatProvider chatProvider;
+  ChatProvider chatProvider;
   ScrollController scrollController = ScrollController();
 
   List chatList = [];
@@ -46,7 +46,6 @@ class ChatController extends ControllerMVC {
     super.initState();
   }
 
-  
   cardOnClick(msgId, msgId2, readReceiptObj) {
     log("$msgId $msgId2");
 
@@ -60,15 +59,12 @@ class ChatController extends ControllerMVC {
     chatProvider.setMsgId(msgId2);
   }
 
-
   void scrollToBottom() {
     Timer(
         Duration(milliseconds: 200),
-        () => scrollController
-            .jumpTo(scrollController.position.minScrollExtent));
+        () =>
+            scrollController.jumpTo(scrollController.position.minScrollExtent));
   }
-
-
 
   getTargetChat(list, msgId) {
     List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
@@ -86,11 +82,12 @@ class ChatController extends ControllerMVC {
     };
     Map<String, dynamic> target = {
       'uId': user['uId'],
-      // 'uId': "FtaZm2dasvN7cL9UumTG98ksk6I3",
       'pId': FirebaseAuth.instance.currentUser.uid,
       'msgId': msgId,
       'ordId': targetChat['ordId'],
-      // 'ordId': "2"
+      'deviceToken': [targetChat['uDetails']['userDeviceToken']],
+      'incomingName': targetChat['pDetails']['name'],
+      'incomingProfile': targetChat['pDetails']['partnerPic'],
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -118,7 +115,7 @@ class ChatController extends ControllerMVC {
         return 'text';
     }
   }
-  
+
   getDate(stamp) {
     int timeStamp = stamp.runtimeType == String ? int.parse(stamp) : stamp;
     log(timeStamp.runtimeType.toString());
@@ -170,7 +167,7 @@ class ChatController extends ControllerMVC {
       chatimages.add(File(pickedFile?.path));
     });
     if (pickedFile.path == null) retrieveLostData();
-    await uploadimage(sendCallBack,msgId);
+    await uploadimage(sendCallBack, msgId);
   }
 
   pickVideo(sendCallBack, String msgId) async {
@@ -178,7 +175,7 @@ class ChatController extends ControllerMVC {
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     chatVideo.add(File(pickedFile.path));
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
-    uploadVideo(sendCallBack,msgId);
+    uploadVideo(sendCallBack, msgId);
   }
 
   Future<void> retrieveLostData() async {
@@ -211,7 +208,7 @@ class ChatController extends ControllerMVC {
       i++;
     }
     if (imageLink.isNotEmpty) {
-      sendCallBack(imageLink[0], 'img',msgId).runtimeType;
+      sendCallBack(imageLink[0], 'img', msgId).runtimeType;
     }
   }
 
@@ -231,12 +228,15 @@ class ChatController extends ControllerMVC {
       i++;
     }
     if (videoLink.isNotEmpty) {
-      sendCallBack(videoLink[0], 'video',msgId).runtimeType;
+      sendCallBack(videoLink[0], 'video', msgId).runtimeType;
     }
   }
 
   Future<void> audioUpload(
-      String filePath, Function sendCallBack, String msgId,) async {
+    String filePath,
+    Function sendCallBack,
+    String msgId,
+  ) async {
     // FirebaseStorage firebaseStorage = FirebaseStorage.instance;
     var chatAudio = FirebaseStorage.instance.ref().child('chatVideos');
 
@@ -251,10 +251,9 @@ class ChatController extends ControllerMVC {
           .getDownloadURL()
           .then((value) => audioLink.add(value.toString()));
       if (audioLink.isNotEmpty) {
-        sendCallBack(audioLink[0], 'audio',msgId).runtimeType;
+        sendCallBack(audioLink[0], 'audio', msgId).runtimeType;
       }
       audioLink.clear();
-      
     } catch (error) {
       print('Error occured while uplaoding to Firebase ${error.toString()}');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -268,7 +267,6 @@ class ChatController extends ControllerMVC {
       });
     }
   }
-
 
   Future fetchNewChatList() async {
     var response = await Server().getMethod(API.partnerChat);

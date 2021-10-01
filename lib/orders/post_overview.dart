@@ -723,6 +723,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                           isIncoming: false,
                           name: orderDetails['uDetails']['name'].toString(),
                           profile: orderDetails['uDetails']['pic'].toString(),
+                          userDeviceToken: orderDetails['uDetails']['userDeviceToken'].toString(),
                         )));
               },
               child: Row(

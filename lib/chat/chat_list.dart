@@ -79,8 +79,6 @@ class _ChatListState extends StateMVC<ChatList> {
                           List messages = chatList[index]['msgs'];
                           int count = chatList[index]['pCount'];
 
-                          // log("count $count");
-
                           var lastMessage = jsonDecode(messages.last);
                           // log(lastMessage['type'].toString());
 
