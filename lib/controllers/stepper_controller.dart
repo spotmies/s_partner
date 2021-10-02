@@ -29,6 +29,8 @@ class StepperController extends ControllerMVC {
   ScrollController scrollController = ScrollController();
 
   String value;
+  bool isProcess = false;
+  bool isFail = false;
   // _StepperPersonalInfoState(this.value);
   // var controller = TestController();
   String name;
@@ -49,11 +51,13 @@ class StepperController extends ControllerMVC {
   bool accept = false;
   String tca;
   File profilepics;
-  String picture = "";
+  String pictureLink = "";
   File adharfront;
-  String adharBackpage = "";
+  String adharBackpageLink = "";
+  String clgIdLink = "";
   File adharback;
-  String adharFrontpage = "";
+  File clgId;
+  String adharFrontpageLink = "";
 
   //langueges
 
@@ -107,40 +111,39 @@ class StepperController extends ControllerMVC {
     }
   }
 
-  step3(BuildContext context) {
+  step3(BuildContext context, String type, String phone) {
     if (adharfront != null &&
         adharback != null &&
         dropDownValue != null &&
         step3Formkey.currentState.validate()) {
-      step4(context);
+      step4(context, type, phone);
     } else {
       snackbar(context, 'Need to Upload Documents');
     }
   }
 
-  step4(BuildContext context) async {
-    //await imageUpload();
+  step4(BuildContext context, String type, String phone) async {
+    isProcess = true;
+    await imageUpload();
 
     var legalDocs = {
       "otherDocs": ["pan", "voter"],
-      "adharF": adharFrontpage,
-      "adharB": adharBackpage
+      "adharF": adharFrontpageLink,
+      "adharB": adharBackpageLink
     };
 
     Object docs = jsonEncode(legalDocs);
-    // String lang = [lan1, lan2].toString();
 
     var body = {
       "docs": docs,
-      "partnerPic": picture.toString(),
-      "lang": localLang,
+      "partnerPic": pictureLink.toString(),
       "name": nameTf.text.toString(),
-      "phNum": 8019933883.toString(),
+      "phNum": phone.toString(),
       "eMail": emailTf.text.toString(),
       "job": 4.toString(),
       "pId": FirebaseAuth.instance.currentUser.uid.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
-      "accountType": "student",
+      "accountType": type,
       "permission": 0.toString(),
       "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
       "dob": pickedDate.millisecondsSinceEpoch.toString(),
@@ -157,22 +160,22 @@ class StepperController extends ControllerMVC {
       }),
       "isTermsAccepted": accept.toString()
     };
-    // Server().postMethod(API.partnerRegister, body).then((response) {
-    //   if (response.statusCode == 200) {
-    //     Navigator.pushAndRemoveUntil(context,
-    //         MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-    //   } else {
-    //     snackbar(context, 'Need to Upload Profile picture');
-    //   }
-    // });
-    log(body.toString());
-    // if(resp != 200)return; //write the code if post request not work well
-    // controller.postData();
-    // .profilepic != null
-    //     ? Navigator.pushAndRemoveUntil(context,
-    //         MaterialPageRoute(builder: (_) => Home()), (route) => false)
-    //     : snackbar(context, 'Need to Upload Profile picture');
-    // currentStep += 1;
+    for (var i = 0; i < localLang.length; i++) {
+      body["lang.$i"] = localLang[i];
+    }
+    Server().postMethod(API.partnerRegister, body).then((response) {
+      log(body.toString());
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+        isProcess = false;
+      } else {
+        isFail = true;
+        snackbar(context, 'Something Went Wrong');
+      }
+    });
   }
 
   //utilities
@@ -192,20 +195,21 @@ class StepperController extends ControllerMVC {
     var adharFront = await (await adharF).ref.getDownloadURL();
     var adharBack = await (await adharB).ref.getDownloadURL();
 
-    adharFrontpage = adharFront.toString();
-    adharBackpage = adharBack.toString();
-    picture = profilepic.toString();
+    adharFrontpageLink = adharFront.toString();
+    adharBackpageLink = adharBack.toString();
+    pictureLink = profilepic.toString();
+    // clgIdLink = clgId.toString();
   }
 
   //image pick
   Future<void> profilePic() async {
-    var front = await ImagePicker().pickImage(
+    var profile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      profilepics = File(front.path);
+      profilepics = File(profile.path);
     });
   }
 
@@ -222,13 +226,24 @@ class StepperController extends ControllerMVC {
   }
 
   Future<void> adharBack() async {
-    var front = await ImagePicker().pickImage(
+    var back = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      adharback = File(front.path);
+      adharback = File(back.path);
+    });
+  }
+
+  Future<void> clgIdImage() async {
+    var id = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 10,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+    setState(() {
+      clgId = File(id.path);
     });
   }
 
@@ -246,6 +261,22 @@ class StepperController extends ControllerMVC {
       setState(() {
         pickedDate = date;
       });
+    }
+  }
+
+  pagename(step) {
+    switch (step) {
+      case 0:
+        return 'Terms & Conditions';
+
+        break;
+      case 1:
+        return 'Personal Details';
+      case 2:
+        return 'Business Details';
+
+      default:
+        return 'Create account';
     }
   }
 }

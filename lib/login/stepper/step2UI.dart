@@ -12,7 +12,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 
 Widget step2(BuildContext context, StepperController stepperController,
-    double hight, double width) {
+    double hight, double width, String type) {
   return Form(
     key: stepperController.step2Formkey,
     child: Column(

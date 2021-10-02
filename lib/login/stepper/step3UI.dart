@@ -5,7 +5,7 @@ import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Widget step3UI(BuildContext context, StepperController stepperController,
-    double _hight, double _width) {
+    double _hight, double _width, String type) {
   return Container(
     height: _hight * 0.75,
     child: Form(
@@ -91,7 +91,7 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               _hight,
               context,
               stepperController,
-              'Business Name',
+              type != 'student' ? 'Business Name' : 'College Name',
               'Enter Valid Business Name',
               stepperController.businessNameTf,
               Icons.business,
@@ -111,6 +111,8 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               stepperController.adharfront == null),
           uploadUI(_hight, _width, 'back', stepperController,
               stepperController.adharback == null),
+          uploadUI(_hight, _width, 'clgId', stepperController,
+              stepperController.clgId == null),
         ],
       ),
     ),
@@ -141,9 +143,10 @@ uploadUI(
                 children: [
                   InkWell(
                     onTap: () {
-                      imageType == 'front'
-                          ? stepperController.adharfrontpage()
-                          : stepperController.adharBack();
+                      if (imageType == 'front')
+                        stepperController.adharfrontpage();
+                      if (imageType == 'back') stepperController.adharBack();
+                      if (imageType == 'clgId') stepperController.clgIdImage();
                     },
                     child: Icon(
                       Icons.cloud_upload,
@@ -152,7 +155,11 @@ uploadUI(
                     ),
                   ),
                   TextWid(
-                    text: imageType == 'front' ? 'Aadhar Front' : 'Aadhar Back',
+                    text: imageType == 'front'
+                        ? 'Aadhar Front'
+                        : imageType == 'back'
+                            ? 'Aadhar Back'
+                            : 'College Identity',
                     size: width * 0.045,
                   )
                 ],
@@ -168,7 +175,9 @@ uploadUI(
                     fit: BoxFit.fill,
                     image: FileImage(imageType == 'front'
                         ? stepperController.adharfront
-                        : stepperController.adharback))),
+                        : imageType == 'back'
+                            ? stepperController.adharback
+                            : stepperController.clgId))),
           ),
   );
 }

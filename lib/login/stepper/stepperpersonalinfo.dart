@@ -9,10 +9,13 @@ import 'package:spotmies_partner/login/stepper/step3UI.dart';
 import 'package:spotmies_partner/login/stepper/step4UI.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/onFailure.dart';
+import 'package:spotmies_partner/utilities/onPending.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
-  final value;
-  StepperPersonalInfo({this.value, String type});
+ final String phone;
+ final String type;
+  StepperPersonalInfo({this.phone, this.type});
   @override
   _StepperPersonalInfoState createState() => _StepperPersonalInfoState();
 }
@@ -21,22 +24,6 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   StepperController _stepperController;
   _StepperPersonalInfoState() : super(StepperController()) {
     this._stepperController = controller;
-  }
-
-  pagename(step) {
-    switch (step) {
-      case 0:
-        return 'Terms & Conditions';
-
-        break;
-      case 1:
-        return 'Personal Details';
-      case 2:
-        return 'Business Details';
-
-      default:
-        return 'Create account';
-    }
   }
 
   void initState() {
@@ -53,11 +40,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
+    if (_stepperController.isProcess == true) return onPending(_hight, _width);
+    if (_stepperController.isFail == true)
+      return onFail(_hight, _width, context,_stepperController);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: TextWid(
-          text: pagename(_stepperController.currentStep),
+          text: _stepperController.pagename(_stepperController.currentStep),
           size: _width * 0.051,
           weight: FontWeight.w600,
           lSpace: 1.0,
@@ -113,7 +103,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       borderRadius: 10.0,
                       onClick: () {
                         _stepperController.currentStep == 2
-                            ? _stepperController.step4(context)
+                            ? _stepperController.step4(context, widget.type,widget.phone)
                             : onStepContinue();
                       },
                     ),
@@ -131,15 +121,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         })
                     : _stepperController.currentStep == 2
                         ? () => setState(() {
-                              _stepperController.step3(context);
+                              _stepperController.step3(context, widget.type,widget.phone);
                             })
-                        :
-                        // : _stepperController.currentStep == 3
-                        //     ? () => setState(() {
-                        //           _stepperController.step4(context);
-                        //         })
-                        //     :
-                        null,
+                        : null,
             onStepCancel: _stepperController.currentStep > 0
                 ? () => setState(() => _stepperController.currentStep -= 1)
                 : null,
@@ -160,7 +144,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         _width,
                         _hight,
                         _stepperController.scrollController,
-                        _stepperController)),
+                        _stepperController,
+                        widget.type)),
                 isActive: _stepperController.currentStep >= 0,
                 state: _stepperController.currentStep >= 0
                     ? StepState.complete
@@ -181,7 +166,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 content: Container(
                     child:
                         // step2UI(context, _stepperController, _hight, _width)
-                        step2(context, _stepperController, _hight, _width)),
+                        step2(context, _stepperController, _hight, _width,
+                            widget.type)),
                 isActive: _stepperController.currentStep >= 1,
                 state: _stepperController.currentStep >= 1
                     ? StepState.complete
@@ -199,7 +185,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   text: 'Business Details',
                   size: _width * 0.025,
                 ),
-                content: step3UI(context, _stepperController, _hight, _width),
+                content: step3UI(
+                    context, _stepperController, _hight, _width, widget.type),
                 isActive: _stepperController.currentStep >= 2,
                 state: _stepperController.currentStep >= 2
                     ? StepState.complete

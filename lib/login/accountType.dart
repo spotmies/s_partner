@@ -178,18 +178,35 @@ class _AccountTypeState extends State<AccountType> {
 
 userType(student, freelanace, BuildContext context) {
   if (student == true) {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'student')),
-        (route) => false);
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'student')),
+    );
   }
   if (freelanace == true) {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (_) => StepperPersonalInfo(type: 'Freelance')),
-        (route) => false);
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'Freelance')),
+    );
   } else {
     snackbar(context, 'Please select any one of above');
   }
 }
+
+// userType(student, freelanace, BuildContext context) {
+//   if (student == true) {
+//     Navigator.pushAndRemoveUntil(
+//         context,
+//         MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'student')),
+//         (route) => false);
+//   }
+//   if (freelanace == true) {
+//     Navigator.pushAndRemoveUntil(
+//         context,
+//         MaterialPageRoute(
+//             builder: (_) => StepperPersonalInfo(type: 'Freelance')),
+//         (route) => false);
+//   } else {
+//     snackbar(context, 'Please select any one of above');
+//   }
+// }
+
+

@@ -107,7 +107,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    StepperPersonalInfo(value: phone)),
+                                    StepperPersonalInfo(phone: phone)),
                             (route) => false);
                       }
                     });

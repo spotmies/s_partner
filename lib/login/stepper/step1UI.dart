@@ -15,7 +15,7 @@ List terms = [
 ];
 
 Widget step1UI(BuildContext context, double width, double hight,
-    ScrollController scrollController, StepperController stepperController) {
+    ScrollController scrollController, StepperController stepperController, String type) {
   return Column(
     children: [
       Container(

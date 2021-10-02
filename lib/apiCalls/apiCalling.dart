@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:spotmies_partner/apiCalls/apiExceptions.dart';
@@ -47,7 +48,8 @@ class Server {
     try {
       var response =
           await http.post(uri, body: body).timeout(Duration(seconds: 30));
-      print(processResponse(response));
+      log(processResponse(response));
+      log(response.statusCode.toString());
 
       //return processResponse(response);
       return response;
