@@ -30,7 +30,7 @@ class _ChatListState extends StateMVC<ChatList> {
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
-    chatProvider.setMsgId("");
+    // chatProvider.setMsgId("");
     super.initState();
   }
 
@@ -78,8 +78,6 @@ class _ChatListState extends StateMVC<ChatList> {
                           Map user = chatList[index]['uDetails'];
                           List messages = chatList[index]['msgs'];
                           int count = chatList[index]['pCount'];
-
-                          // log("count $count");
 
                           var lastMessage = jsonDecode(messages.last);
                           // log(lastMessage['type'].toString());
