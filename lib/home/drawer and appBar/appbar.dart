@@ -63,7 +63,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
       return Scaffold(
         key: _appBarController.drawerAppbarScoffoldKey,
         appBar: AppBar(
-          elevation: 2,
+          elevation: 0,
           backgroundColor: Colors.grey[100],
           leading: InkWell(
             onTap: () {
@@ -132,18 +132,18 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
           ],
         ),
         body: GestureDetector(
-          onPanUpdate: (details) {
-            // Swiping in right direction.
-            if (details.delta.dx > 0) {
-              // print("right");
-              widget.drawerController.open();
-            }
+          // onPanUpdate: (details) {
+          //   // Swiping in right direction.
+          //   // if (details.delta.dx > 0) {
+          //   //   // print("right");
+          //   //   widget.drawerController.open();
+          //   // }
 
-            if (details.delta.dx < 0) {
-              // print("left");
-              widget.drawerController.close();
-            }
-          },
+          //   if (details.delta.dx < 0) {
+          //     // print("left");
+          //     widget.drawerController.close();
+          //   }
+          // },
           child: Container(
             child: pd['availability'] == true ? Online(pd) : Offline(pd),
           ),

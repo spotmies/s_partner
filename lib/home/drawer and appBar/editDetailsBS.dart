@@ -28,6 +28,37 @@ List<Map<String, Object>> data = [
   },
 ];
 
+
+photoPicker() async {
+  final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 30,
+      preferredCameraDevice: CameraDevice.rear);
+  return pickedFile;
+}
+
+void changeImages(whichImage, controller) async {
+  print(" profile ${controller.profilePic}");
+  final pickedFile = await photoPicker();
+  switch (whichImage) {
+    case "profile":
+      controller.profilePic = File(pickedFile?.path);
+      break;
+    case "adharF":
+      controller.adharF = File(pickedFile?.path);
+      break;
+    case "adharB":
+      controller.adharB = File(pickedFile?.path);
+      break;
+
+    default:
+  }
+
+  log("pic ${controller.profilePic}");
+
+  // if (pickedFile.path == null) retrieveLostData();
+}
+
 class EditProfile extends StatefulWidget {
   final Map partner;
   EditProfile(this.partner);
@@ -52,36 +83,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
     super.initState();
   }
 
-  photoPicker() async {
-    final pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 30,
-        preferredCameraDevice: CameraDevice.rear);
-    return pickedFile;
-  }
-
-  void changeImages(whichImage) async {
-    print(" profile ${_editProfileController.profilePic}");
-    final pickedFile = await photoPicker();
-    switch (whichImage) {
-      case "profile":
-        _editProfileController.profilePic = File(pickedFile?.path);
-        break;
-      case "adharF":
-        _editProfileController.adharF = File(pickedFile?.path);
-        break;
-      case "adharB":
-        _editProfileController.adharB = File(pickedFile?.path);
-        break;
-
-      default:
-    }
-
-    log("pic ${_editProfileController.profilePic}");
-    setState(() {});
-
-    // if (pickedFile.path == null) retrieveLostData();
-  }
+  
 
   editDetails(
     BuildContext context,
@@ -109,7 +111,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                         profile: _editProfileController.profilePic,
                         size: width * 0.15,
                         onClick: () {
-                          changeImages("profile");
+                          changeImages("profile",_editProfileController);
                         },
                       ),
                     ),
@@ -456,7 +458,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               isProfile: false,
                               size: width * 0.15,
                               onClick: () {
-                                changeImages("adharF");
+                                changeImages("adharF",_editProfileController);
                               },
                             ),
                           ),
@@ -476,7 +478,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               isProfile: false,
                               size: width * 0.15,
                               onClick: () {
-                                changeImages("adharB");
+                                changeImages("adharB",_editProfileController);
                               },
                             ),
                           ),

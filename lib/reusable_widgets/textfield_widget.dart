@@ -33,6 +33,7 @@ class TextFieldWidget extends StatefulWidget {
   final List<TextInputFormatter> formatter;
   final bool isRequired;
   final String type;
+  final double contentPad;
 
   TextFieldWidget(
       {this.text,
@@ -40,6 +41,7 @@ class TextFieldWidget extends StatefulWidget {
       this.hint,
       this.keyBoardType,
       this.borderRadius,
+      this.contentPad,
       this.bordercolor,
       this.postIcon,
       this.postIconColor,
@@ -111,12 +113,18 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             widget.hintSize ?? 15.0,
             widget.hintWeight ?? FontWeight.w500,
             widget.hintColor ?? Colors.grey),
+
+        // contentPadding: EdgeInsets.only(top: 30),
+        // EdgeInsets.symmetric(
+        //     vertical: widget.contentPad ?? 3,
+        //     horizontal: widget.contentPad ?? 0),
         hintText: widget.hint ?? '',
         labelText: widget.label,
       ),
       autofocus: widget.autofocus ?? false,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
+      style: fonts(widget.hintSize, FontWeight.w500, Colors.grey[900]),
       validator: (value) {
         if (!widget.isRequired) return null;
         return textFieldValidator(widget.type, value, widget.validateMsg);
