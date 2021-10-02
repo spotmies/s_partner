@@ -111,6 +111,18 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void pushOrder(orderData) {
+    int index = orders.indexWhere((element) =>
+        element['ordId'].toString() == orderData['ordId'].toString());
+    if (index < 0) {
+      orders.add(orderData);
+      notifyListeners();
+    } else {
+      orders[index] = orderData;
+      notifyListeners();
+    }
+  }
+
   void setOffileLoader(state) {
     offlineScreenLoader = state;
     notifyListeners();

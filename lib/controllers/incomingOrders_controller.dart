@@ -157,8 +157,17 @@ class IncomingOrdersController extends ControllerMVC {
     if (response.statusCode == 200 || response.statusCode == 204) {
       if (responseType == "reject")
         snackbar(context, "Deleted successfully");
-      else
+      else {
         snackbar(context, "Request send successfully");
+        if (responseType == "accept") {
+          dynamic getThatOrder = await Server()
+              .getMethod(API.acceptOrder + orderData['ordId'].toString());
+
+          getThatOrder = jsonDecode(getThatOrder);
+          partnerProvider.pushOrder(getThatOrder);
+        }
+      }
+
       partnerProvider.removeIncomingOrderById(orderData['ordId']);
       moneyController.clear();
     } else {

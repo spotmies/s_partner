@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_options.dart';
@@ -67,7 +68,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       if (data.ordersLoader) return Center(child: profileShimmer(context));
 
       List<String> images = List.from(d['media']);
-      // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
+      dynamic fullAddress = jsonDecode(d['address']);
 
       return Stack(
         children: [
@@ -293,7 +294,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             _hight,
                             'Location',
                             Icons.location_on,
-                            '10-134, NH16, Pothinamallayya Palem, Visakhapatnam, Andhra Pradesh 530041'),
+                            fullAddress['addressLine'] ??
+                                "Unable to get service address"),
                       ],
                     ),
                   ),
@@ -723,7 +725,9 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                           isIncoming: false,
                           name: orderDetails['uDetails']['name'].toString(),
                           profile: orderDetails['uDetails']['pic'].toString(),
-                          userDeviceToken: orderDetails['uDetails']['userDeviceToken'].toString(),
+                          userDeviceToken: orderDetails['uDetails']
+                                  ['userDeviceToken']
+                              .toString(),
                         )));
               },
               child: Row(
