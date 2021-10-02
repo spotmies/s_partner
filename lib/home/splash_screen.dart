@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
+import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/login/onboard.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -16,27 +19,39 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 4), () async {
+    Timer(Duration(seconds: 1), () async {
       if (FirebaseAuth.instance.currentUser != null) {
-        var doc = FirebaseFirestore.instance
-            .collection('partner')
-            .doc(FirebaseAuth.instance.currentUser.uid);
-        doc.get().then((document) {
-          if (document.exists) {
-            print("doc exits");
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-          } else if (!document.exists) {
-            print("doc not exits");
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => OnboardingScreen()),
-                (route) => false);
-          }
-          print("doc is $document");
-        });
-        // Navigator.pushAndRemoveUntil(context,
-        //     MaterialPageRoute(builder: (_) => Home()), (route) => false);
+        String resp =
+            await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
+        if (resp == "true") {
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+        } else if (resp == "false") {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => OnboardingScreen()),
+              (route) => false);
+        } else
+          snackbar(context, "something went wrong");
+
+        // var doc = FirebaseFirestore.instance
+        //     .collection('partner')
+        //     .doc(FirebaseAuth.instance.currentUser.uid);
+        // doc.get().then((document) {
+        //   if (document.exists) {
+        //     print("doc exits");
+        //     Navigator.pushAndRemoveUntil(context,
+        //         MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+        //   } else if (!document.exists) {
+        //     print("doc not exits");
+        //     Navigator.pushAndRemoveUntil(
+        //         context,
+        //         MaterialPageRoute(builder: (_) => OnboardingScreen()),
+        //         (route) => false);
+        //   }
+        //   print("doc is $document");
+        // });
+
       } else {
         Navigator.pushAndRemoveUntil(
             context,
@@ -72,18 +87,17 @@ class _SplashScreenState extends State<SplashScreen> {
                   Text(
                     'Spotmies ',
                     style: TextStyle(
-                        fontSize: _width*0.09,
+                        fontSize: _width * 0.09,
                         color: Colors.blue[900],
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Partner',
                     style: TextStyle(
-                        fontSize: _width*0.09,
+                        fontSize: _width * 0.09,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold),
                   ),
-                  
                 ],
               ),
               Text('Experience the Exellence')

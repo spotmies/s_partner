@@ -49,10 +49,10 @@ Future signOut(BuildContext context, double hight, double width) {
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
                       await FirebaseAuth.instance.signOut().then((action) {
-                        Navigator.push(
+                              Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
+                            MaterialPageRoute(builder: (_) => LoginScreen()),
+                            (route) => false);
                       }).catchError((e) {
                         print(e);
                       });
