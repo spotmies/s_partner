@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/orders/completed.dart';
-import 'package:spotmies_partner/orders/ongoing.dart';
 import 'package:spotmies_partner/orders/posts.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 

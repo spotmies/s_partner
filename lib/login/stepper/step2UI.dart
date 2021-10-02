@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
-import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 

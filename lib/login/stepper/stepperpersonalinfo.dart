@@ -6,7 +6,6 @@ import 'package:spotmies_partner/controllers/stepper_controller.dart';
 import 'package:spotmies_partner/login/stepper/step1UI.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
 import 'package:spotmies_partner/login/stepper/step3UI.dart';
-import 'package:spotmies_partner/login/stepper/step4UI.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/onFailure.dart';

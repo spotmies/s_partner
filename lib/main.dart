@@ -6,8 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
-import 'package:spotmies_partner/login/accountType.dart';
-import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
+import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -83,7 +82,7 @@ class _MyAppState extends State<MyApp> {
             if (snapshot != null &&
                 snapshot.hasData &&
                 snapshot.data != ConnectivityResult.none) {
-              return AccountType();
+              return SplashScreen();
             } else {
               return NoInternet();
             }

@@ -9,7 +9,6 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.d
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
-import 'package:spotmies_partner/main.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
