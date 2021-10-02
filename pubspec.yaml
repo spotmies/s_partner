@@ -71,6 +71,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   timelines: ^0.1.0
   firebase_messaging: ^10.0.7
+  lottie: ^1.1.0
   
 
 
@@ -106,6 +107,7 @@ flutter:
     - assets/5.png
     - assets/7.png
     - assets/spotmies.png
+    - assets/accountType.svg
     - assets/icon.png
     - assets/like.svg
     - assets/edit.svg
@@ -116,6 +118,8 @@ flutter:
     - assets/share.svg
     - assets/images/
     - assets/icons/
+    - assets/registor.json
+    - assets/error.json
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -20,8 +17,6 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
-  // print(message.data.toString());
-  // print(message.notification.title);
   LocalNotificationService.display(message);
 }
 
@@ -76,8 +71,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -97,12 +90,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-
-
-
-
 
 //notifications
 

@@ -12,7 +12,6 @@ import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
