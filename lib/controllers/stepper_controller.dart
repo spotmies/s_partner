@@ -111,18 +111,18 @@ class StepperController extends ControllerMVC {
     }
   }
 
-  step3(BuildContext context, String type, String phone) {
+  step3(BuildContext context, String type, String phone, Map coordinates) {
     if (adharfront != null &&
         adharback != null &&
         dropDownValue != null &&
         step3Formkey.currentState.validate()) {
-      step4(context, type, phone);
+      step4(context, type, phone,coordinates);
     } else {
       snackbar(context, 'Need to Upload Documents');
     }
   }
 
-  step4(BuildContext context, String type, String phone) async {
+  step4(BuildContext context, String type, String phone, Map coordinates) async {
     isProcess = true;
     await imageUpload();
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -8,7 +9,8 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class AccountType extends StatefulWidget {
   final String phoneNumber;
-  const AccountType(this.phoneNumber);
+  final Map coordinates;
+  AccountType({this.phoneNumber, this.coordinates});
 
   @override
   _AccountTypeState createState() => _AccountTypeState();
@@ -22,7 +24,9 @@ class _AccountTypeState extends State<AccountType> {
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (_) => StepperPersonalInfo(
-                phone: widget.phoneNumber, type: 'student')),
+                phone: widget.phoneNumber,
+                type: 'student',
+                coordinates: widget.coordinates)),
       );
     }
     if (freelanace == true) {
@@ -73,7 +77,7 @@ class _AccountTypeState extends State<AccountType> {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: Colors.blueGrey[200])),
                   child: TextWid(
-                    text: "Are you student ?",
+                    text: "What is your role ?",
                     size: _width * 0.055,
                     weight: FontWeight.w600,
                   ),
@@ -114,7 +118,7 @@ class _AccountTypeState extends State<AccountType> {
                               });
                             }),
                         TextWid(
-                          text: "No",
+                          text: "Profissional technician",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: freelanace ? Colors.white : Colors.grey[700],
@@ -159,7 +163,7 @@ class _AccountTypeState extends State<AccountType> {
                               });
                             }),
                         TextWid(
-                          text: "Yes I'am",
+                          text: "Student",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: student ? Colors.white : Colors.grey[700],
