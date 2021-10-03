@@ -11,6 +11,7 @@ import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
+import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
@@ -22,7 +23,6 @@ class LoginPageController extends ControllerMVC {
   var formkey1 = GlobalKey<FormState>();
 
   TextEditingController loginnum = TextEditingController();
-
 
   String _verificationCode = "";
   @override
@@ -58,9 +58,8 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AccountType(
-                           timerProvider.phNumber
-                            )),
+                        builder: (context) =>
+                            OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
                     (route) => false);
               }
             });
@@ -117,9 +116,10 @@ class LoginPageController extends ControllerMVC {
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => AccountType(timerProvider.phNumber)),
+                MaterialPageRoute(
+                    builder: (context) => OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
                 (route) => false);
-          } else if(resp == "true") {
+          } else if (resp == "true") {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => NavBar()),
@@ -138,7 +138,6 @@ class LoginPageController extends ControllerMVC {
     }
   }
 }
-
 
 checkPartnerRegistered(pId) async {
   dynamic deviceToken = await FirebaseMessaging.instance.getToken();

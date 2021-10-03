@@ -12,9 +12,11 @@ import 'package:spotmies_partner/utilities/onFailure.dart';
 import 'package:spotmies_partner/utilities/onPending.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
- final String phone;
- final String type;
-  StepperPersonalInfo({@required this.phone, @required this.type});
+  final String phone;
+  final String type;
+  final Map coordinates;
+  StepperPersonalInfo(
+      {@required this.phone, @required this.type, this.coordinates});
   @override
   _StepperPersonalInfoState createState() => _StepperPersonalInfoState();
 }
@@ -29,7 +31,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     super.initState();
     _stepperController.pickedDate = DateTime.now();
     _stepperController.pickedTime = TimeOfDay.now();
-    print("76 ${FirebaseAuth.instance.currentUser.uid}");
+    // print("76 ${FirebaseAuth.instance.currentUser.uid}");
   }
 
   @override
@@ -41,7 +43,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     final _width = MediaQuery.of(context).size.width;
     if (_stepperController.isProcess == true) return onPending(_hight, _width);
     if (_stepperController.isFail == true)
-      return onFail(_hight, _width, context,_stepperController);
+      return onFail(_hight, _width, context, _stepperController);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -102,7 +104,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       borderRadius: 10.0,
                       onClick: () {
                         _stepperController.currentStep == 2
-                            ? _stepperController.step4(context, widget.type,widget.phone)
+                            ? _stepperController.step3(context, widget.type,
+                                widget.phone, widget.coordinates)
                             : onStepContinue();
                       },
                     ),
@@ -120,7 +123,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         })
                     : _stepperController.currentStep == 2
                         ? () => setState(() {
-                              _stepperController.step3(context, widget.type,widget.phone);
+                              _stepperController.step3(context, widget.type,
+                                  widget.phone, widget.coordinates);
                             })
                         : null,
             onStepCancel: _stepperController.currentStep > 0
