@@ -186,22 +186,27 @@ class _OnlineState extends StateMVC<Online> {
                                           color: Colors.grey[900],
                                           weight: FontWeight.w600,
                                         ),
-                                        IconButton(
-                                            icon: Icon(
-                                              Icons.more_horiz,
-                                              color: Colors.grey[900],
-                                            ),
-                                            onPressed: () {
-                                              onlineOrdersButtomMenu(
-                                                  o[index]['uId'],
-                                                  o[index],
-                                                  o[index]['ordId'],
-                                                  o[index]['pId'],
-                                                  u['_id'],
-                                                  partnerProfile['_id'],
-                                                  _hight,
-                                                  _width);
-                                            })
+                                        Row(
+                                          children: [
+                                            takeOverWid(_width),
+                                            IconButton(
+                                                icon: Icon(
+                                                  Icons.more_horiz,
+                                                  color: Colors.grey[900],
+                                                ),
+                                                onPressed: () {
+                                                  onlineOrdersButtomMenu(
+                                                      o[index]['uId'],
+                                                      o[index],
+                                                      o[index]['ordId'],
+                                                      o[index]['pId'],
+                                                      u['_id'],
+                                                      partnerProfile['_id'],
+                                                      _hight,
+                                                      _width);
+                                                }),
+                                          ],
+                                        )
                                       ],
                                     ),
                                     Row(
@@ -417,6 +422,32 @@ class _OnlineState extends StateMVC<Online> {
         }));
   }
 
+  Container takeOverWid(double _width) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5), color: Colors.indigo[200]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            color: Colors.grey[900],
+            size: _width * 0.04,
+          ),
+          SizedBox(
+            width: _width * 0.01,
+          ),
+          TextWid(
+              text: "Take over by Someone else",
+              color: Colors.grey[900],
+              weight: FontWeight.w600,
+              size: _width * 0.03)
+        ],
+      ),
+    );
+  }
+
   onlineOrdersButtomMenu(uid, ordDetails, ordid, pid, uDetails, pDetails,
       double hight, double width) {
     showModalBottomSheet(
@@ -462,8 +493,25 @@ class _OnlineState extends StateMVC<Online> {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PostOverView(
-                            orderId: ordid.toString(),
-                          ),
+                              onBottomSheet: () {
+                                bidSendingBottomSheet(
+                                    hight,
+                                    width,
+                                    uid,
+                                    ordDetails,
+                                    ordid,
+                                    pid,
+                                    ordDetails['uDetails']['_id'],
+                                    partnerProfile['_id'],
+                                    from: "outside");
+                              },
+                              orderId: ordid.toString(),
+                              from: "incomingOrders",
+                              onclick: (orderData, pDetailsId, responseType) {
+                                print("onclick>>>>>>>");
+                                _incomingOrdersController.respondToOrder(
+                                    orderData, pDetailsId, responseType);
+                              }),
                         ));
                       },
                       child: CircleAvatar(

@@ -116,6 +116,13 @@ class IncomingOrdersController extends ControllerMVC {
   respondToOrder(orderData, pDetailsId, responseType) async {
     //enable loader
     if (partnerProvider.inComingLoader) return;
+    if (orderData['ordState'] != "req") {
+      if (responseType != "reject") {
+        snackbar(
+            context, "This order takeover by someone else your May Reject it");
+        return;
+      }
+    }
     partnerProvider.setInComingLoader(true);
     Map<String, dynamic> body = {
       //
@@ -156,8 +163,17 @@ class IncomingOrdersController extends ControllerMVC {
     if (response.statusCode == 200 || response.statusCode == 204) {
       if (responseType == "reject")
         snackbar(context, "Deleted successfully");
-      else
+      else {
         snackbar(context, "Request send successfully");
+        if (responseType == "accept") {
+          dynamic getThatOrder = await Server()
+              .getMethod(API.acceptOrder + orderData['ordId'].toString());
+
+          getThatOrder = jsonDecode(getThatOrder);
+          partnerProvider.pushOrder(getThatOrder);
+        }
+      }
+
       partnerProvider.removeIncomingOrderById(orderData['ordId']);
       moneyController.clear();
     } else {

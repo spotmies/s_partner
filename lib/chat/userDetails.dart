@@ -48,7 +48,6 @@ class _UserDetailsState extends State<UserDetails> {
                       return Future<void>.value();
                     },
                     pinned: true,
-                   
                     snap: false,
                     floating: true,
                     expandedHeight: _hight * 0.4,
@@ -59,13 +58,13 @@ class _UserDetailsState extends State<UserDetails> {
                       ],
                       // titlePadding: EdgeInsets.only(left: _width*0.15,bottom: _width*0.04),
                       title: TextWid(
-                      text:
-                          toBeginningOfSentenceCase(widget.userDetails['name']),
-                      size: _width * 0.06,
-                      color: Colors.grey[900],
-                      weight: FontWeight.w600,
-                    ),
-                    centerTitle: false,
+                        text: toBeginningOfSentenceCase(
+                            widget.userDetails['name']),
+                        size: _width * 0.06,
+                        color: Colors.grey[900],
+                        weight: FontWeight.w600,
+                      ),
+                      centerTitle: false,
                       background: Container(
                         width: _width * 1,
                         color: Colors.white,
@@ -97,7 +96,7 @@ class _UserDetailsState extends State<UserDetails> {
                           color: Colors.white,
                         ),
                         Container(
-                          height: _hight * 0.27,
+                          // height: _hight * 0.27,
                           child: Column(
                             children: [
                               Container(
@@ -313,15 +312,14 @@ class _UserDetailsState extends State<UserDetails> {
                               SizedBox(
                                 width: _width * 0.07,
                               ),
-                                TextWid(
-                                text:  'Block ' +
+                              TextWid(
+                                text: 'Block ' +
                                     toBeginningOfSentenceCase(
                                         widget.userDetails['name']),
                                 size: _width * 0.05,
                                 color: Colors.redAccent,
                                 weight: FontWeight.w600,
                               )
-                             
                             ],
                           ),
                         ),
@@ -334,7 +332,6 @@ class _UserDetailsState extends State<UserDetails> {
                             left: _width * 0.07,
                           ),
                           height: _hight * 0.1,
-                         
                           child: Row(
                             children: [
                               Icon(
@@ -344,15 +341,14 @@ class _UserDetailsState extends State<UserDetails> {
                               SizedBox(
                                 width: _width * 0.07,
                               ),
-                               TextWid(
-                                text:  'Report on ' +
+                              TextWid(
+                                text: 'Report on ' +
                                     toBeginningOfSentenceCase(
                                         widget.userDetails['name']),
                                 size: _width * 0.05,
                                 color: Colors.redAccent,
                                 weight: FontWeight.w600,
                               ),
-                              
                             ],
                           ),
                         ),
@@ -360,11 +356,12 @@ class _UserDetailsState extends State<UserDetails> {
                           thickness: 10,
                           color: Colors.grey[200],
                         ),
-
-                        Container(height: 250.0,
-                        child:  Center(child: Container(
-                          height: _hight*0.15,
-                          child: SvgPicture.asset('assets/like.svg'))),
+                        Container(
+                          height: 250.0,
+                          child: Center(
+                              child: Container(
+                                  height: _hight * 0.15,
+                                  child: SvgPicture.asset('assets/like.svg'))),
                         ),
                       ],
                     ),

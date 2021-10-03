@@ -65,8 +65,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   void signOut() async {
     await FirebaseAuth.instance.signOut().then((action) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
     }).catchError((e) {
       print(e);
     });

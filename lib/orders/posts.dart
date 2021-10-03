@@ -80,8 +80,9 @@ class _PostListState extends StateMVC<PostList> {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        PostOverView(orderId: orderData['ordId'].toString(),),
+                                    builder: (context) => PostOverView(
+                                      orderId: orderData['ordId'].toString(),
+                                    ),
                                   ));
                                 },
                                 child: Container(

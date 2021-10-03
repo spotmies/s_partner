@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_options.dart';
@@ -41,6 +42,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   dynamic d;
   dynamic partnerProfile;
   PartnerDetailsProvider ordersProvider;
+  bool showOrderStatusQuestion = true;
   void chatWithPatner(responseData) {
     _postOverViewController.chatWithpatner(responseData);
   }
@@ -65,7 +67,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       if (data.ordersLoader) return Center(child: profileShimmer(context));
 
       List<String> images = List.from(d['media']);
-      // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
+      dynamic fullAddress = jsonDecode(d['address']);
 
       return Stack(
         children: [
@@ -291,7 +293,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             _hight,
                             'Location',
                             Icons.location_on,
-                            '10-134, NH16, Pothinamallayya Palem, Visakhapatnam, Andhra Pradesh 530041'),
+                            fullAddress['addressLine'] ??
+                                "Unable to get service address"),
                       ],
                     ),
                   ),
@@ -343,6 +346,67 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              showOrderStatusQuestion
+                                  ? Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: TextWid(
+                                            text: 'Is this order completed ?',
+                                            size: _width * 0.055,
+                                            weight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: 20, bottom: 40),
+                                          height: _hight * 0.06,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ElevatedButtonWidget(
+                                                height: _hight * 0.05,
+                                                minWidth: _width * 0.35,
+                                                onClick: () {
+                                                  showOrderStatusQuestion =
+                                                      false;
+                                                  refresh();
+                                                },
+                                                bgColor: Colors.white,
+                                                borderSideColor:
+                                                    Colors.grey[200],
+                                                borderRadius: 10.0,
+                                                buttonName: 'Not yet',
+                                                textSize: _width * 0.04,
+                                                leadingIcon: Icon(
+                                                  Icons.cancel,
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.045,
+                                                ),
+                                              ),
+                                              ElevatedButtonWidget(
+                                                height: _hight * 0.05,
+                                                minWidth: _width * 0.45,
+                                                bgColor: Colors.indigo[900],
+                                                borderSideColor:
+                                                    Colors.grey[200],
+                                                borderRadius: 10.0,
+                                                buttonName: 'Completed',
+                                                textColor: Colors.white,
+                                                textSize: _width * 0.04,
+                                                leadingIcon: Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.white,
+                                                  size: _width * 0.045,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
                               Container(
                                 alignment: Alignment.centerLeft,
                                 child: TextWid(
@@ -355,7 +419,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ],
                           ),
                         )
-                      : Container()
+                      : Container(),
                 ],
               ),
             ),
@@ -721,7 +785,9 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                           isIncoming: false,
                           name: orderDetails['uDetails']['name'].toString(),
                           profile: orderDetails['uDetails']['pic'].toString(),
-                          userDeviceToken: orderDetails['uDetails']['userDeviceToken'].toString(),
+                          userDeviceToken: orderDetails['uDetails']
+                                  ['userDeviceToken']
+                              .toString(),
                         )));
               },
               child: Row(
