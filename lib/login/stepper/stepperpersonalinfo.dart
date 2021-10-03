@@ -14,7 +14,7 @@ import 'package:spotmies_partner/utilities/onPending.dart';
 class StepperPersonalInfo extends StatefulWidget {
  final String phone;
  final String type;
-  StepperPersonalInfo({this.phone, this.type});
+  StepperPersonalInfo({@required this.phone, @required this.type});
   @override
   _StepperPersonalInfoState createState() => _StepperPersonalInfoState();
 }

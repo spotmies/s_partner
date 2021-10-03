@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
@@ -57,8 +58,8 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => StepperPersonalInfo(
-                            //value: '+91${widget.phone}'
+                        builder: (context) => AccountType(
+                           timerProvider.phNumber
                             )),
                     (route) => false);
               }
@@ -116,7 +117,7 @@ class LoginPageController extends ControllerMVC {
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
+                MaterialPageRoute(builder: (context) => AccountType(timerProvider.phNumber)),
                 (route) => false);
           } else if(resp == "true") {
             Navigator.pushAndRemoveUntil(
