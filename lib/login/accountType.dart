@@ -7,7 +7,8 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class AccountType extends StatefulWidget {
-  const AccountType({Key key}) : super(key: key);
+  final String phoneNumber;
+  const AccountType(this.phoneNumber);
 
   @override
   _AccountTypeState createState() => _AccountTypeState();
@@ -16,6 +17,25 @@ class AccountType extends StatefulWidget {
 class _AccountTypeState extends State<AccountType> {
   bool freelanace = false;
   bool student = false;
+  userType(student, freelanace, BuildContext context) {
+    if (student == true) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (_) => StepperPersonalInfo(
+                phone: widget.phoneNumber, type: 'student')),
+      );
+    }
+    if (freelanace == true) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (_) => StepperPersonalInfo(
+                phone: widget.phoneNumber, type: 'Freelance')),
+      );
+    } else {
+      snackbar(context, 'Please select any one of above');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -53,7 +73,7 @@ class _AccountTypeState extends State<AccountType> {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: Colors.blueGrey[200])),
                   child: TextWid(
-                    text: "What is your role ?",
+                    text: "Are you student ?",
                     size: _width * 0.055,
                     weight: FontWeight.w600,
                   ),
@@ -94,7 +114,7 @@ class _AccountTypeState extends State<AccountType> {
                               });
                             }),
                         TextWid(
-                          text: "I'm Freelancer",
+                          text: "No",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: freelanace ? Colors.white : Colors.grey[700],
@@ -139,7 +159,7 @@ class _AccountTypeState extends State<AccountType> {
                               });
                             }),
                         TextWid(
-                          text: "I'm Student",
+                          text: "Yes I'am",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: student ? Colors.white : Colors.grey[700],
@@ -176,20 +196,7 @@ class _AccountTypeState extends State<AccountType> {
   }
 }
 
-userType(student, freelanace, BuildContext context) {
-  if (student == true) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'student')),
-    );
-  }
-  if (freelanace == true) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => StepperPersonalInfo(type: 'Freelance')),
-    );
-  } else {
-    snackbar(context, 'Please select any one of above');
-  }
-}
+
 
 // userType(student, freelanace, BuildContext context) {
 //   if (student == true) {
