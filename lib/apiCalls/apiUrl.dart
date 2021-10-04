@@ -15,10 +15,12 @@ class API {
       "api/partner/partners/$pid"; //get with user id and parems
   static var acceptOrder = '/api/order/orders/';
   static var updateOrder = '/api/response/newResponse/';
+  static var updateResponse = "/api/response/responses/";
   static var partnerChat = '/api/chat/partner/$pid';
   static var chatById = "/api/chat/chats";
   static var allOrder = "api/order/partner/$pid";
-  static var partnerDetailsExtraData = '/api/chat/partner/$pid?extractData=true';
+  static var partnerDetailsExtraData =
+      '/api/chat/partner/$pid?extractData=true';
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var loginApi = '/api/partner/login/';
 }

@@ -52,12 +52,24 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     ordersProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     setState(() {
-      showOrderStatusQuestion =
-          ordersProvider.getOrderById(widget.orderId)['orderState'] < 9
-              ? true
-              : false;
+      if (ordersProvider.getOrderById(widget.orderId)['orderState'] < 9 &&
+          ordersProvider.getOrderById(widget.orderId)['acceptResponse']
+                  ['orderState'] <
+              9) {
+        showOrderStatusQuestion = true;
+      } else {
+        showOrderStatusQuestion = false;
+      }
     });
     super.initState();
+  }
+
+  isThisOrderCompleted({state = false, responseId = 123}) {
+    if (state) {
+      _postOverViewController.isOrderCompleted(responseId: responseId);
+    }
+    showOrderStatusQuestion = false;
+    refresh();
   }
 
   @override
@@ -81,7 +93,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.grey[50],
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor:
+                  d['orderState'] > 8 ? Colors.green : Colors.white,
               toolbarHeight: widget.from == "incomingOrders"
                   ? _hight * 0.16
                   : _hight * 0.08,
@@ -103,7 +116,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         ? int.parse(d['job'])
                         : d['job']],
                     size: _width * 0.04,
-                    color: Colors.grey[500],
+                    color:
+                        d['orderState'] > 8 ? Colors.white : Colors.grey[500],
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
@@ -121,11 +135,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       SizedBox(
                         width: _width * 0.01,
                       ),
-                      TextWid(
-                          text: orderStateString(ordState: d['orderState']),
-                          color: Colors.grey[700],
-                          weight: FontWeight.w700,
-                          size: _width * 0.04),
+                      Expanded(
+                        child: TextWid(
+                            text: orderStateString(ordState: d['orderState']),
+                            color: d['orderState'] > 8
+                                ? Colors.white
+                                : Colors.grey[700],
+                            weight: FontWeight.w700,
+                            size: _width * 0.04),
+                      ),
                     ],
                   )
                 ],
@@ -209,10 +227,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   preferredSize: Size.fromHeight(4.0)),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: null,
                     icon: Icon(
                       Icons.help,
-                      color: Colors.grey[700],
+                      color: Colors.grey[900],
                     )),
                 IconButton(
                     onPressed: () {
@@ -232,9 +250,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   TextWid(
-                    text: orderStateString(ordState: d['orderState']),
+                    text: d['acceptResponse']['orderState'] > 8
+                        ? '${orderStateString(ordState: d['acceptResponse']['orderState'])} ${d['orderState'] < 9 ? 'Waiting for user Confirmation' : '👍'}'
+                        : orderStateString(ordState: d['orderState']),
                     maxlines: 3,
-                    align: TextAlign.center,
                   ),
 
                   Divider(
@@ -356,9 +375,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 height: _hight * 0.05,
                                                 minWidth: _width * 0.35,
                                                 onClick: () {
-                                                  showOrderStatusQuestion =
-                                                      false;
-                                                  refresh();
+                                                  isThisOrderCompleted(
+                                                      state: false);
                                                 },
                                                 bgColor: Colors.white,
                                                 borderSideColor:
@@ -380,6 +398,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                     Colors.grey[200],
                                                 borderRadius: 10.0,
                                                 buttonName: 'Completed',
+                                                onClick: () {
+                                                  isThisOrderCompleted(
+                                                      state: true,
+                                                      responseId:
+                                                          d['acceptResponse']
+                                                              ['responseId']);
+                                                },
                                                 textColor: Colors.white,
                                                 textSize: _width * 0.04,
                                                 leadingIcon: Icon(

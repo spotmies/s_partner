@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
 class IncomingOrdersProvider extends ChangeNotifier {
@@ -15,7 +16,7 @@ class IncomingOrdersProvider extends ChangeNotifier {
     'showOnly': 'inComingOrders',
     'extractData': 'true',
     // 'ordState': 'req'
-    'orderState':"0"
+    'orderState': "0"
   };
 
   localOrdersGet() async {
@@ -29,7 +30,7 @@ class IncomingOrdersProvider extends ChangeNotifier {
   }
 
   incomingOrders() async {
-    var response =
+    dynamic response =
         await Server().getMethodParems(API.incomingorders, queryParameters);
     orders = jsonDecode(response);
     // controller.getData();
@@ -41,33 +42,4 @@ class IncomingOrdersProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('inComingOrders', jsonEncode(orders));
   }
-
-  // incomingordersinfo(status) async {
-  //   status == false ? print('null') : print('not null');
-  //   if (status == false) {
-  //     if (local == null) {
-  //       incomingOrders();
-  //       localStore();
-  //       localGet();
-  //     }
-  //     localGet();
-  //   }
-  //   if (status == true) {
-  //     await incomingOrders();
-  //     await localStore();
-  //     await localGet();
-  //   }
-  // }
-
-  // localStore() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('details', jsonEncode(orders));
-  // }
-
-  // localGet() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String partnerData = prefs.getString('details');
-  //   List<dynamic> details = local == null ? jsonDecode(partnerData) : local;
-  //   local = details;
-  // }
 }

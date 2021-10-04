@@ -12,26 +12,38 @@ import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var updateFormKey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
-   ChatProvider chatProvider;
-     PartnerDetailsProvider partnerProvider;
+  ChatProvider chatProvider;
+  PartnerDetailsProvider partnerProvider;
   String title;
   int dropDownValue = 0;
   DateTime pickedDate;
   TextEditingController moneyController = TextEditingController();
-    TimeOfDay pickedTime;
+  TimeOfDay pickedTime;
 
   @override
   void initState() {
-     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-       partnerProvider =
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     super.initState();
     // getAddressofLocation();
+  }
+
+  isOrderCompleted({responseId: 175642365745}) async {
+    Map<String, String> body = {"orderState": "9"};
+    dynamic response = await Server()
+        .editMethod(API.updateResponse + responseId.toString(), body);
+    if (response.statusCode == 200) {
+      snackbar(context, "Your order completed waiting for user confirmation");
+    } else {
+      snackbar(context, "Something went wrong");
+    }
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
@@ -63,7 +75,6 @@ class PostOverViewController extends ControllerMVC {
           )),
     );
   }
-
 
   List options = [
     {
@@ -152,14 +163,6 @@ class PostOverViewController extends ControllerMVC {
       });
     }
   }
-
-
-
-
-
-
-
-
 
   orderStateText(String orderState) {
     switch (orderState) {
