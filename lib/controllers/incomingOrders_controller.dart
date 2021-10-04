@@ -100,7 +100,8 @@ class IncomingOrdersController extends ControllerMVC {
   final incomingOrdersQuery = {
     'showOnly': 'inComingOrders',
     'extractData': 'true',
-    'ordState': 'req'
+    // 'ordState': 'req'
+     'orderState': "0"
   };
 
   Future incomingOrders() async {
@@ -116,7 +117,7 @@ class IncomingOrdersController extends ControllerMVC {
   respondToOrder(orderData, pDetailsId, responseType) async {
     //enable loader
     if (partnerProvider.inComingLoader) return;
-    if (orderData['ordState'] != "req") {
+    if (orderData['orderState'] > 6) {
       if (responseType != "reject") {
         snackbar(
             context, "This order takeover by someone else your May Reject it");

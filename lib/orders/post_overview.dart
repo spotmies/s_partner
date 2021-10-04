@@ -107,7 +107,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Row(
                     children: [
                       Icon(
-                        _postOverViewController.orderStateIcon(d['ordState']),
+                        // _postOverViewController.orderStateIcon(d['ordState']),
+                        orderStateIcon(ordState:d['orderState']),
                         color: Colors.indigo[900],
                         size: _width * 0.045,
                       ),
@@ -115,8 +116,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         width: _width * 0.01,
                       ),
                       TextWid(
-                          text: _postOverViewController
-                              .orderStateText(d['ordState']),
+                          text: orderStateString(ordState: d['orderState']),
                           color: Colors.grey[700],
                           weight: FontWeight.w700,
                           size: _width * 0.04),
@@ -225,26 +225,31 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  (d['ordState'] == 'onGoing')
-                      ? TextWid(
-                          text: 'Service was started on ' +
-                              getDate(d['schedule']) +
-                              "-" +
-                              getTime(d['schedule']),
-                          align: TextAlign.center,
-                        )
-                      : (d['ordState'] == 'completed')
-                          ? TextWid(
-                              text: 'Service was completed on ' +
-                                  getDate(d['schedule']) +
-                                  "-" +
-                                  getTime(d['schedule']),
-                              align: TextAlign.center,
-                            )
-                          : TextWid(
-                              text: 'Service will start soon',
-                              align: TextAlign.center,
-                            ),
+                  TextWid(
+                    text: orderStateString(ordState: d['orderState']),
+                    maxlines: 3,
+                    align: TextAlign.center,
+                  ),
+                  // (d['ordState'] == 'onGoing')
+                  //     ? TextWid(
+                  //         text: 'Service was started on ' +
+                  //             getDate(d['schedule']) +
+                  //             "-" +
+                  //             getTime(d['schedule']),
+                  //         align: TextAlign.center,
+                  //       )
+                  //     : (d['ordState'] == 'completed')
+                  //         ? TextWid(
+                  //             text: 'Service was completed on ' +
+                  //                 getDate(d['schedule']) +
+                  //                 "-" +
+                  //                 getTime(d['schedule']),
+                  //             align: TextAlign.center,
+                  //           )
+                  //         : TextWid(
+                  //             text: 'Service will start soon',
+                  //             align: TextAlign.center,
+                  //           ),
                   Divider(
                     color: Colors.white,
                   ),
@@ -310,7 +315,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
+                  // (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
+                  (d['orderState'] > 6)
                       ? Container(
                           // height: _hight * 0.3,
                           color: Colors.white,
