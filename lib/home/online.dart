@@ -330,7 +330,8 @@ class _OnlineState extends StateMVC<Online> {
                                     SizedBox(
                                       height: _hight * 0.015,
                                     ),
-                                    o[index]['ordState'] == 'req'
+                                    // o[index]['ordState'] == 'req'
+                                    o[index]['orderState'] < 7
                                         ? Column(
                                             children: [
                                               Row(

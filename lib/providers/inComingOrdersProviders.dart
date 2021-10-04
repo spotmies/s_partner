@@ -14,7 +14,8 @@ class IncomingOrdersProvider extends ChangeNotifier {
   final queryParameters = {
     'showOnly': 'inComingOrders',
     'extractData': 'true',
-    'ordState': 'req'
+    // 'ordState': 'req'
+    'orderState':"0"
   };
 
   localOrdersGet() async {

@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
             if (snapshot != null &&
                 snapshot.hasData &&
                 snapshot.data != ConnectivityResult.none) {
-              return OnlinePlaceSearch(phNumber:'');
+              return SplashScreen();
             } else {
               return NoInternet();
             }

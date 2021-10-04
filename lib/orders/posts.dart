@@ -9,6 +9,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
 class PostList extends StatefulWidget {
@@ -157,11 +158,11 @@ class _PostListState extends StateMVC<PostList> {
                                                                     .center,
                                                             children: [
                                                               Icon(
-                                                                _ordersController
-                                                                    .orderStateIcon(
-                                                                        o[index]
-                                                                            [
-                                                                            'ordState']),
+                                                                orderStateIcon(
+                                                                    ordState: o[
+                                                                            index]
+                                                                        [
+                                                                        'orderState']),
                                                                 color: Colors
                                                                         .indigo[
                                                                     900],
