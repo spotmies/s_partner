@@ -116,13 +116,14 @@ class StepperController extends ControllerMVC {
         adharback != null &&
         dropDownValue != null &&
         step3Formkey.currentState.validate()) {
-      step4(context, type, phone,coordinates);
+      step4(context, type, phone, coordinates);
     } else {
       snackbar(context, 'Need to Upload Documents');
     }
   }
 
-  step4(BuildContext context, String type, String phone, Map coordinates) async {
+  step4(
+      BuildContext context, String type, String phone, Map coordinates) async {
     isProcess = true;
     await imageUpload();
 
@@ -163,6 +164,8 @@ class StepperController extends ControllerMVC {
     for (var i = 0; i < localLang.length; i++) {
       body["lang.$i"] = localLang[i];
     }
+    log(body.toString());
+
     Server().postMethod(API.partnerRegister, body).then((response) {
       log(body.toString());
       log(response.statusCode.toString());
