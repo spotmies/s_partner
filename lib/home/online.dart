@@ -39,6 +39,11 @@ class _OnlineState extends StateMVC<Online> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     // _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
+    // partnerProvider.addListener(() {
+    //      if(partnerProvider.reloadIncomingOrders == true){
+    //   _incomingOrdersController.incomingOrders(notify: false);
+    // }
+    // });
 
     super.initState();
     _incomingOrdersController.pickedDate = DateTime.now();
@@ -58,8 +63,8 @@ class _OnlineState extends StateMVC<Online> {
           List<dynamic> ld = data.getIncomingOrder;
           List<dynamic> o = List.from(ld.reversed);
           partnerProfile = data.getProfileDetails;
-          if (data.reloadIncomingOrders == true)
-            _incomingOrdersController.incomingOrders(notify: false);
+          // if (data.reloadIncomingOrders == true)
+          //   _incomingOrdersController.incomingOrders(notify: false);
           return Stack(
             children: [
               Container(

@@ -51,16 +51,18 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   void initState() {
     ordersProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    setState(() {
-      if (ordersProvider.getOrderById(widget.orderId)['orderState'] < 9 &&
-          ordersProvider.getOrderById(widget.orderId)['acceptResponse']
-                  ['orderState'] <
-              9) {
-        showOrderStatusQuestion = true;
-      } else {
-        showOrderStatusQuestion = false;
-      }
-    });
+    try {
+      setState(() {
+        if (ordersProvider.getOrderById(widget.orderId)['orderState'] < 9 &&
+            ordersProvider.getOrderById(widget.orderId)['acceptResponse']
+                    ['orderState'] <
+                9) {
+          showOrderStatusQuestion = true;
+        } else {
+          showOrderStatusQuestion = false;
+        }
+      });
+    } catch (e) {}
     super.initState();
   }
 
@@ -70,6 +72,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     }
     showOrderStatusQuestion = false;
     refresh();
+  }
+
+  partnerOrderStatus(d) {
+    try {
+      return d['acceptResponse']['orderState'] > 8
+          ? '${orderStateString(ordState: d['acceptResponse']['orderState'])} ${d['orderState'] < 9 ? 'Waiting for user Confirmation' : '👍'}'
+          : orderStateString(ordState: d['orderState']);
+    } catch (e) {
+      return orderStateString(ordState: d['orderState']);
+    }
   }
 
   @override
@@ -250,9 +262,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   TextWid(
-                    text: d['acceptResponse']['orderState'] > 8
-                        ? '${orderStateString(ordState: d['acceptResponse']['orderState'])} ${d['orderState'] < 9 ? 'Waiting for user Confirmation' : '👍'}'
-                        : orderStateString(ordState: d['orderState']),
+                    // text: d['acceptResponse']['orderState'] > 8
+                    //     ? '${orderStateString(ordState: d['acceptResponse']['orderState'])} ${d['orderState'] < 9 ? 'Waiting for user Confirmation' : '👍'}'
+                    //     : orderStateString(ordState: d['orderState']),
+                    text: partnerOrderStatus(d),
                     maxlines: 3,
                   ),
 
