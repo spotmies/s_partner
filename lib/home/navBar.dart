@@ -77,7 +77,9 @@ class _NavBarState extends State<NavBar> {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
     socket.on('inComingOrders', (socket) {
-      partnerProvider.addNewIncomingOrder(socket);
+      socket['action'] == "new"
+          ? partnerProvider.addNewIncomingOrder(socket['payload'])
+          : partnerProvider.refressIncomingOrder(true);
       log("incoming ord $socket");
     });
     socket.on("chatStream", (socket) async {
@@ -101,14 +103,16 @@ class _NavBarState extends State<NavBar> {
     partnerProvider.setPartnerDetails(details);
 
     var partnerOrders = await partnerAllOrders();
-    log("partner all oders ${partnerOrders[0]}");
+
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
-connectNotifications() async {
+
+  connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesPartner");
-}
+  }
+
   @override
   initState() {
     //notifications
