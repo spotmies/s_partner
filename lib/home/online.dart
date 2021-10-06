@@ -145,7 +145,9 @@ class _OnlineState extends StateMVC<Online> {
                                         ),
                                         Row(
                                           children: [
-                                            takeOverWid(_width),
+                                            o[index]['orderState'] > 6
+                                                ? takeOverWid(_width)
+                                                : Container(),
                                             IconButton(
                                                 icon: Icon(
                                                   Icons.more_horiz,
@@ -287,72 +289,68 @@ class _OnlineState extends StateMVC<Online> {
                                     SizedBox(
                                       height: _hight * 0.015,
                                     ),
-                                    // o[index]['ordState'] == 'req'
-                                    o[index]['orderState'] < 7
-                                        ? Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  ElevatedButtonWidget(
-                                                    buttonName: 'Reject',
-                                                    height: _hight * 0.05,
-                                                    minWidth: _width * 0.3,
-                                                    bgColor: Colors.grey[200],
-                                                    textColor: Colors.grey[900],
-                                                    textSize: _width * 0.04,
-                                                    leadingIcon: Icon(
-                                                      Icons.close,
-                                                      color: Colors.grey[900],
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    borderRadius: 15.0,
-                                                    borderSideColor:
-                                                        Colors.grey[50],
-                                                    onClick: () {
-                                                      _incomingOrdersController
-                                                          .respondToOrder(
-                                                              o[index],
-                                                              partnerProfile[
-                                                                  '_id'],
-                                                              "reject");
-                                                    },
-                                                  ),
-                                                  ElevatedButtonWidget(
-                                                    buttonName: 'Accept',
-                                                    height: _hight * 0.05,
-                                                    minWidth: _width * 0.55,
-                                                    bgColor: Colors.grey[900],
-                                                    textColor: Colors.white,
-                                                    textSize: _width * 0.04,
-                                                    trailingIcon: Icon(
-                                                      Icons.check,
-                                                      color: Colors.white,
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    borderRadius: 15.0,
-                                                    borderSideColor:
-                                                        Colors.grey[100],
-                                                    onClick: () async {
-                                                      _incomingOrdersController
-                                                          .respondToOrder(
-                                                              o[index],
-                                                              partnerProfile[
-                                                                  '_id'],
-                                                              "accept");
-                                                    },
-                                                  ),
-                                                ],
+
+                                    // o[index]['orderState'] < 7
+                                    //     ?
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButtonWidget(
+                                              buttonName: 'Reject',
+                                              height: _hight * 0.05,
+                                              minWidth: _width * 0.3,
+                                              bgColor: Colors.grey[200],
+                                              textColor: Colors.grey[900],
+                                              textSize: _width * 0.04,
+                                              leadingIcon: Icon(
+                                                Icons.close,
+                                                color: Colors.grey[900],
+                                                size: _width * 0.04,
                                               ),
-                                            ],
-                                          )
-                                        : TextWid(
-                                            text: 'Order Accepted',
-                                            size: _width * 0.05,
-                                            weight: FontWeight.w600,
-                                          )
+                                              borderRadius: 15.0,
+                                              borderSideColor: Colors.grey[50],
+                                              onClick: () {
+                                                _incomingOrdersController
+                                                    .respondToOrder(
+                                                        o[index],
+                                                        partnerProfile['_id'],
+                                                        "reject");
+                                              },
+                                            ),
+                                            ElevatedButtonWidget(
+                                              buttonName: 'Accept',
+                                              height: _hight * 0.05,
+                                              minWidth: _width * 0.55,
+                                              bgColor: Colors.grey[900],
+                                              textColor: Colors.white,
+                                              textSize: _width * 0.04,
+                                              trailingIcon: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size: _width * 0.04,
+                                              ),
+                                              borderRadius: 15.0,
+                                              borderSideColor: Colors.grey[100],
+                                              onClick: () async {
+                                                _incomingOrdersController
+                                                    .respondToOrder(
+                                                        o[index],
+                                                        partnerProfile['_id'],
+                                                        "accept");
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                    // : TextWid(
+                                    //     text: 'Order Accepted',
+                                    //     size: _width * 0.05,
+                                    //     weight: FontWeight.w600,
+                                    //   )
                                   ],
                                 ),
                               ),

@@ -17,6 +17,6 @@ getDate(timeStamp) {
     return '';
   }
   return DateFormat('dd MMM yyyy').format(
-    DateTime.fromMillisecondsSinceEpoch(timeStamp),
+    DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp.toString())),
   );
 }

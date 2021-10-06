@@ -333,18 +333,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MyCalling(
-                      msgId: widget.msgId,
-                      ordId: _chatController.targetChat['ordId'],
-                      uId: _chatController.user['uId'],
-                      pId: FirebaseAuth.instance.currentUser.uid,
-                      isIncoming: false,
-                      name: _chatController.user['name'],
-                      profile: _chatController.user['pic'],
-                      userDeviceToken:_chatController.user['userDeviceToken'].toString()
-                     
-                    )));
+            calling(context);
           },
           icon: Icon(
             Icons.phone,
@@ -368,12 +357,22 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           _chatController.targetChat = _chatController.getTargetChat(
               _chatController.chatList, widget.msgId);
           _chatController.user = _chatController.targetChat['uDetails'];
+          _chatController.orderDetails =
+              _chatController.targetChat['orderDetails'];
           // log(user.toString());
           return InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      UserDetails(userDetails: _chatController.user)));
+                  builder: (context) => UserDetails(
+                      userDetails: _chatController.user,
+                      isProfileRevealed: _chatController
+                              .orderDetails['revealProfileTo']
+                              .contains(myPid)
+                          ? true
+                          : false,
+                      onTapPhone: () {
+                        calling(context);
+                      })));
             },
             child: Row(
               children: [
@@ -400,5 +399,19 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         },
       ),
     );
+  }
+
+  void calling(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MyCalling(
+            msgId: widget.msgId,
+            ordId: _chatController.targetChat['ordId'],
+            uId: _chatController.user['uId'],
+            pId: FirebaseAuth.instance.currentUser.uid,
+            isIncoming: false,
+            name: _chatController.user['name'],
+            profile: _chatController.user['pic'],
+            userDeviceToken:
+                _chatController.user['userDeviceToken'].toString())));
   }
 }

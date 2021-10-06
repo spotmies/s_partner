@@ -19,6 +19,7 @@ import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
@@ -43,7 +44,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   dynamic partnerProfile;
   PartnerDetailsProvider ordersProvider;
   bool showOrderStatusQuestion = false;
+
   void chatWithPatner(responseData) {
+    if (myPid != responseData['pId']) {
+      snackbar(context, "you can't make a chat");
+      return;
+    }
     _postOverViewController.chatWithpatner(responseData);
   }
 
@@ -328,34 +334,33 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  // (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
-                  (d['orderState'] > 6)
-                      ? Container(
-                          // height: _hight * 0.3,
-                          color: Colors.white,
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(
-                                    top: 15, left: 15, right: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextWid(
-                                      text: 'User Details :',
-                                      size: _width * 0.055,
-                                      weight: FontWeight.w600,
-                                    ),
-                                  ],
+                  // (d['orderState'] > 6)
+                  //     ?
+                  Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding:
+                                EdgeInsets.only(top: 15, left: 15, right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextWid(
+                                  text: 'User Details :',
+                                  size: _width * 0.055,
+                                  weight: FontWeight.w600,
                                 ),
-                              ),
-                              userDetails(_hight, _width, context,
-                                  _postOverViewController, d, chatWithPatner),
-                            ],
-                          ))
-                      : Container(),
+                              ],
+                            ),
+                          ),
+                          userDetails(_hight, _width, context,
+                              _postOverViewController, d, chatWithPatner),
+                        ],
+                      ))
+                  // : Container()
+                  ,
                   widget.from != "incomingOrders"
                       ? Container(
                           height: 600,
@@ -807,7 +812,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                     builder: (context) => MyCalling(
                           ordId: orderDetails['ordId'].toString(),
                           uId: orderDetails['uDetails']['uId'],
-                          pId: orderDetails['pDetails']['pId'],
+                          pId: myPid,
                           isIncoming: false,
                           name: orderDetails['uDetails']['name'].toString(),
                           profile: orderDetails['uDetails']['pic'].toString(),
