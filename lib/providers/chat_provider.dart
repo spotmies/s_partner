@@ -91,10 +91,13 @@ class ChatProvider extends ChangeNotifier {
             disableChatByMsgId(msgId, notify: false);
             break;
           case "enableProfile":
-            revealProfile(true, msgId, pid);
+            revealProfile(true, msgId, pid, notify: false);
             break;
           case "disableProfile":
-            revealProfile(false, msgId, pid);
+            revealProfile(false, msgId, pid, notify: false);
+            break;
+          case "acceptOrder": //need to work on later
+          case "rejectOrder": //need to work on later
             break;
           default:
             break;
@@ -280,7 +283,7 @@ class ChatProvider extends ChangeNotifier {
 
   int get callTimeout => callInitTimeOut;
 
-  void revealProfile(bool state, msgId, pId) {
+  void revealProfile(bool state, msgId, pId, {bool notify = true}) {
     int index = chatList.indexWhere(
         (element) => element['msgId'].toString() == msgId.toString());
     if (index < 0) return;
@@ -288,7 +291,7 @@ class ChatProvider extends ChangeNotifier {
       chatList[index]['orderDetails']['revealProfileTo'].add(pId.toString());
     else
       chatList[index]['orderDetails']['revealProfileTo'].remove(pId.toString());
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void resetAllCallingVariables() {

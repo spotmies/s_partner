@@ -4,10 +4,10 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 bottomOptionsMenu(context,
     {menuTitle = "Menu",
     options,
-    option1Click,
-    option2Click,
-    option3Click,
-    option4Click}) {
+    VoidCallback option1Click,
+    VoidCallback option2Click,
+    VoidCallback option3Click,
+    VoidCallback option4Click}) {
   final _width = MediaQuery.of(context).size.width;
   final _height = MediaQuery.of(context).size.height;
 
