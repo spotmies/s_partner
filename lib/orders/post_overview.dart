@@ -10,6 +10,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/post_overview_controller.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/maps/maps.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
@@ -318,7 +319,18 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             'Location',
                             Icons.location_on,
                             fullAddress['addressLine'] ??
-                                "Unable to get service address"),
+                                "Unable to get service address", onClick: () {
+                          Map<String, double> cords = {
+                            "latitude": double.parse(fullAddress['latitude']),
+                            "logitude": double.parse(fullAddress['logitude'])
+                          };
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Maps(
+                                    coordinates: cords,
+                                    isNavigate: true,
+                                  )));
+                        }),
                       ],
                     ),
                   ),
@@ -461,14 +473,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     });
   }
 
-  serviceDetailsListTile(
-    width,
-    hight,
-    title,
-    icon,
-    subtitle,
-  ) {
+  serviceDetailsListTile(width, hight, title, icon, subtitle,
+      {Function onClick}) {
     return ListTile(
+        onTap: () {
+          if (onClick != null) onClick();
+        },
         tileColor: Colors.redAccent,
         leading: Icon(
           icon,

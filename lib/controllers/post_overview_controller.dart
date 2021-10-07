@@ -85,10 +85,10 @@ class PostOverViewController extends ControllerMVC {
       "name": "Info",
       "icon": Icons.info,
     },
-    {
-      "name": "Re-schedule",
-      "icon": Icons.refresh,
-    },
+    // {
+    //   "name": "Re-schedule",
+    //   "icon": Icons.refresh,
+    // },
     {"name": "Help", "icon": Icons.help},
   ];
 
