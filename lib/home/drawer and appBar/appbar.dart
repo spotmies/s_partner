@@ -34,7 +34,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
   updatePartnerData(body) async {
     var response = await Server().editMethod(API.partnerStatus, body);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      Map<String, dynamic> data = jsonDecode(response.body) as Map<String, dynamic>;
       partnerDetailsProvider.setPartnerDetailsOnly(data);
     } else {
       partnerDetailsProvider.setAvailability(!pd['availability']);

@@ -39,7 +39,7 @@ class PostOverViewController extends ControllerMVC {
     Map<String, String> body = {"orderState": "9"};
     dynamic response = await Server()
         .editMethod(API.updateResponse + responseId.toString(), body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 204) {
       snackbar(context, "Your order completed waiting for user confirmation");
     } else {
       snackbar(context, "Something went wrong");
