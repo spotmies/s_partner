@@ -10,17 +10,22 @@ final controller = TestController();
 var chat;
 
 chattingList() async {
-  var response = await Server().getMethod(API.partnerChat);
-  chat = jsonDecode(response);
-  localChatListStore(chat);
-  log(chat.toString());
-  controller.getData();
+  dynamic response = await Server().getMethod(API.partnerChat);
+  if (response.statusCode == 200) {
+    chat = jsonDecode(response.body);
+    localChatListStore(chat);
+    log(chat.toString());
+    controller.getData();
+  }
 }
 
 getChatListFromDb() async {
   var response = await Server().getMethod(API.partnerChat);
-  chat = jsonDecode(response);
-  return chat;
+  if (response.statusCode == 200) {
+    chat = jsonDecode(response.body);
+    return chat;
+  }
+  return null;
 }
 
 getChatByIdFromDB(id) async {
@@ -28,6 +33,9 @@ getChatByIdFromDB(id) async {
   var query = {"cBuild": "1"};
   var response =
       await Server().getMethodParems(API.chatById + "/${id.toString()}", query);
-  chat = jsonDecode(response);
-  return chat;
+  if (response.statusCode == 200) {
+    chat = jsonDecode(response.body);
+    return chat;
+  }
+  return null;
 }

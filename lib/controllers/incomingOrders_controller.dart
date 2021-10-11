@@ -121,9 +121,12 @@ class IncomingOrdersController extends ControllerMVC {
         await Server().getMethodParems(API.incomingorders, incomingOrdersQuery);
     log('api called');
     // log(response);
-    var orders = jsonDecode(response);
+    if(response.statusCode == 200){
+    var orders = jsonDecode(response.body);
     partnerProvider.setIncomingOrders(orders);
     if (notify) snackbar(context, "Incoming orders fetched successfully");
+    }
+    else snackbar(context, 'something went wrong');
   }
 
   respondToOrder(orderData, pDetailsId, responseType) async {
@@ -181,9 +184,11 @@ class IncomingOrdersController extends ControllerMVC {
         if (responseType == "accept") {
           dynamic getThatOrder = await Server()
               .getMethod(API.acceptOrder + orderData['ordId'].toString());
-
-          getThatOrder = jsonDecode(getThatOrder);
+          if(response.statusCode == 200){
+          getThatOrder = jsonDecode(getThatOrder.body);
           partnerProvider.pushOrder(getThatOrder);
+          }
+          else snackbar(context, "something went wrong");
         }
       }
 

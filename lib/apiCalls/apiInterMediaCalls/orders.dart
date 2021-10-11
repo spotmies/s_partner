@@ -5,24 +5,24 @@ import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/localDB/localStore.dart';
 
-
 final controller = TestController();
-  var orders;
-  final queryParameters = {
-    'showOnly': 'inComingOrders',
-    'extractData': 'true',
-    // 'ordState': 'req'
-    'orderState':"0"
-  };
+var orders;
+final queryParameters = {
+  'showOnly': 'inComingOrders',
+  'extractData': 'true',
+  // 'ordState': 'req'
+  'orderState': "0"
+};
 
 incomingOrders() async {
-  
-    var response =
-        await Server().getMethodParems(API.incomingorders, queryParameters);
-    log('api called');
-    // log(response);
-    orders = jsonDecode(response);
+  var response =
+      await Server().getMethodParems(API.incomingorders, queryParameters);
+  log('api called');
+  // log(response);
+  if (response.statusCode == 200) {
+    orders = jsonDecode(response.body);
     log(orders.toString());
     controller.getData();
     localOrdersStore(orders);
   }
+}

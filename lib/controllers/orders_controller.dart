@@ -94,10 +94,12 @@ class OrdersController extends ControllerMVC {
 
   Future getOrderFromDB() async {
     var response = await Server().getMethod(API.allOrder);
-
-    var ordersList = jsonDecode(response);
+if(response.statusCode == 200){
+    var ordersList = jsonDecode(response.body);
     partnerProvider.setOrder(ordersList);
 
     snackbar(context, "sync with new changes");
+}
+else snackbar(context, "something went wrong");
   }
 }

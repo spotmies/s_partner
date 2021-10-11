@@ -32,10 +32,12 @@ class IncomingOrdersProvider extends ChangeNotifier {
   incomingOrders() async {
     dynamic response =
         await Server().getMethodParems(API.incomingorders, queryParameters);
-    orders = jsonDecode(response);
-    // controller.getData();
-    localOrdersStore(orders);
-    notifyListeners();
+    if (response.statusCode == 200) {
+      orders = jsonDecode(response.body);
+      // controller.getData();
+      localOrdersStore(orders);
+      notifyListeners();
+    }
   }
 
   localOrdersStore(orders) async {

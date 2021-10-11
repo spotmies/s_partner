@@ -271,8 +271,12 @@ class ChatController extends ControllerMVC {
 
   Future fetchNewChatList() async {
     var response = await Server().getMethod(API.partnerChat);
-    var chatList = jsonDecode(response);
+    if(response.statusCode == 200){
+    var chatList = jsonDecode(response.body);
     chatProvider.setChatList2(chatList);
     snackbar(context, "sync with new changes");
+    }
+    else snackbar(context, "something went wrong");
+
   }
 }
