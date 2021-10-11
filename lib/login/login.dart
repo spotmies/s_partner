@@ -68,14 +68,14 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         weight: FontWeight.w600,
                                         size: _width * 0.06,
                                         color: Colors.indigo[900],
-                                        lSpace: 2.0,
+                                        lSpace: 1.0,
                                       ),
                                       TextWid(
-                                          text: 'EXPERIENCE THE EXCELLENCE',
+                                          text: 'BECOME A BOSE TO YOUR WORLD',
                                           weight: FontWeight.w600,
                                           size: _width * 0.019,
                                           color: Colors.grey[900],
-                                          lSpace: 0.7),
+                                          lSpace: 4.0),
                                     ],
                                   )
                                 ],

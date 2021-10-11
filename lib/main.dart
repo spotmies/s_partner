@@ -14,20 +14,25 @@ import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/local_notifications_and_schedule_notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/utils.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
-  LocalNotificationService.display(message);
+  // LocalNotificationService.displayAwesomeNotification(message);
+  displayAwesomeNotificationBackground(message);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  awesomeInitilize();
   // FirebaseMessaging.onBackgroundMessage((message) => null);
+
   FirebaseMessaging.onBackgroundMessage(backGroundHandler);
+  // displayAwesomeNotification();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
@@ -105,14 +107,27 @@ class _NavBarState extends State<NavBar> {
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
   }
-connectNotifications() async {
+
+  connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesPartner");
-}
+  }
+
   @override
   initState() {
-    //notifications
-    LocalNotificationService.initialize(context);
+    // notifications();
+    awesomeInitilize();
+    // displayAwesomeNotification();
+    notificationPermmision(context);
+    // AwesomeNotifications().createdStream.listen((notification) {
+    //   snackbar(context, 'notification ${notification.channelKey}');
+    // });
+    // AwesomeNotifications().actionStream.listen((notification) {
+    //   if (notification.channelKey == 'firebasePushNotifictions') {
+    //     AwesomeNotifications().getGlobalBadgeCounter().then(
+    //         (value) => AwesomeNotifications().setGlobalBadgeCounter(value - 1));
+    //   }
+    // });
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
       log(routefromMessage);
@@ -122,16 +137,17 @@ connectNotifications() async {
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
       if (message.notification != null) {
-        print(message.notification.title);
-        print(message.notification.body);
-        LocalNotificationService.display(message);
+        log(message.notification.title);
+        log(message.notification.body);
+        await displayAwesomeNotification(message, context);
       }
     });
     // when app background but in recent
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      log('Recent');
       final routefromMessage = message.data["route"];
       log(routefromMessage);
-      LocalNotificationService.display(message);
+      await displayAwesomeNotification(message, context);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     });
@@ -195,6 +211,13 @@ connectNotifications() async {
       }
     });
     // chatProvider.confirmReceiveAllMessages();
+  }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
   }
 
   int _selectedIndex = 0;
