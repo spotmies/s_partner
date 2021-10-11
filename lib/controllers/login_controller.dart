@@ -58,8 +58,8 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
+                        builder: (context) => OnlinePlaceSearch(
+                            phNumber: timerProvider.phNumber)),
                     (route) => false);
               }
             });
@@ -117,7 +117,8 @@ class LoginPageController extends ControllerMVC {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
+                    builder: (context) =>
+                        OnlinePlaceSearch(phNumber: timerProvider.phNumber)),
                 (route) => false);
           } else if (resp == "true") {
             Navigator.pushAndRemoveUntil(
@@ -145,7 +146,7 @@ checkPartnerRegistered(pId) async {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "partnerDeviceToken": deviceToken?.toString() ?? "",
   };
-  // print("checkUserreg");
+  print("checkUserreg>>>>>>>>>>>>>>>>>>>>>> $pId");
   var response = await Server().postMethod(API.loginApi + pId.toString(), obj);
   // print("36 $response");
   if (response.statusCode == 200)

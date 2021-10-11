@@ -12,6 +12,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:video_player/video_player.dart';
@@ -270,7 +271,7 @@ class ChatController extends ControllerMVC {
   }
 
   Future fetchNewChatList() async {
-    var response = await Server().getMethod(API.partnerChat);
+    var response = await Server().getMethod(API.partnerChat + pId);
     if(response.statusCode == 200){
     var chatList = jsonDecode(response.body);
     chatProvider.setChatList2(chatList);

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/localDB/localStore.dart';
 
 final controller = TestController();
@@ -16,7 +17,7 @@ final queryParameters = {
 
 incomingOrders() async {
   var response =
-      await Server().getMethodParems(API.incomingorders, queryParameters);
+      await Server().getMethodParems(API.incomingorders + pId, queryParameters);
   log('api called');
   // log(response);
   if (response.statusCode == 200) {

@@ -20,7 +20,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
-
+String pId = FirebaseAuth.instance.currentUser.uid.toString(); //user id
 class NavBar extends StatefulWidget {
   final int data;
   final String payload;

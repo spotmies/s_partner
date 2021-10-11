@@ -13,6 +13,8 @@ import 'package:spotmies_partner/home/online.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
+import '../navBar.dart';
+
 class AppBarScreen extends StatefulWidget {
   final drawerController;
   AppBarScreen(
@@ -32,7 +34,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
   var pd;
 
   updatePartnerData(body) async {
-    var response = await Server().editMethod(API.partnerStatus, body);
+    var response = await Server().editMethod(API.partnerStatus + pId, body);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body) as Map<String, dynamic>;
       partnerDetailsProvider.setPartnerDetailsOnly(data);

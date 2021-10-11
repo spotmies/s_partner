@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class IncomingOrdersController extends ControllerMVC {
   var incoming;
   var partner;
   var localData;
+  String pid = FirebaseAuth.instance.currentUser.uid.toString(); //user id
   // var socketincomingorder;
   String pmoney;
   DateTime pickedDate;
@@ -118,7 +120,7 @@ class IncomingOrdersController extends ControllerMVC {
   Future incomingOrders({notify = true}) async {
     partnerProvider.refressIncomingOrder(false);
     var response =
-        await Server().getMethodParems(API.incomingorders, incomingOrdersQuery);
+        await Server().getMethodParems(API.incomingorders + pid, incomingOrdersQuery);
     log('api called');
     // log(response);
     if(response.statusCode == 200){

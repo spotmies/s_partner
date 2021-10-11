@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
@@ -11,6 +12,7 @@ class IncomingOrdersProvider extends ChangeNotifier {
   final controller = TestController();
   var orders;
   var local;
+  String pid = FirebaseAuth.instance.currentUser.uid.toString(); //user id
 
   final queryParameters = {
     'showOnly': 'inComingOrders',
@@ -31,7 +33,7 @@ class IncomingOrdersProvider extends ChangeNotifier {
 
   incomingOrders() async {
     dynamic response =
-        await Server().getMethodParems(API.incomingorders, queryParameters);
+        await Server().getMethodParems(API.incomingorders + pid, queryParameters);
     if (response.statusCode == 200) {
       orders = jsonDecode(response.body);
       // controller.getData();
