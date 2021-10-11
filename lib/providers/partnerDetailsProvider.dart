@@ -15,6 +15,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   String editProfileLoaderName = "";
   bool offlineScreenLoader = false;
   bool reloadIncomingOrders = false;
+  String currentPid = "123456";
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
@@ -24,6 +25,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
 
+
+  setCurrentPid(dynamic pid){
+currentPid = pid.toString();
+notifyListeners();
+  }  
   getOrderById(ordId) {
     int index;
     index = inComingOrders.indexWhere(

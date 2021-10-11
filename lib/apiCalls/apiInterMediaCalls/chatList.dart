@@ -20,8 +20,8 @@ chattingList() async {
   }
 }
 
-getChatListFromDb() async {
-  var response = await Server().getMethod(API.partnerChat + pId);
+getChatListFromDb(String currentPid) async {
+  var response = await Server().getMethod(API.partnerChat + currentPid);
   if (response.statusCode == 200) {
     chat = jsonDecode(response.body);
     return chat;

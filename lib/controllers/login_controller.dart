@@ -12,11 +12,13 @@ import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
 import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class LoginPageController extends ControllerMVC {
   TimeProvider timerProvider;
+    PartnerDetailsProvider partnerProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -28,6 +30,8 @@ class LoginPageController extends ControllerMVC {
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+     partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     super.initState();
   }
@@ -121,6 +125,7 @@ class LoginPageController extends ControllerMVC {
                         OnlinePlaceSearch(phNumber: timerProvider.phNumber)),
                 (route) => false);
           } else if (resp == "true") {
+            partnerProvider.setCurrentPid(value.user.uid);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => NavBar()),
