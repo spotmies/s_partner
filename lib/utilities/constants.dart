@@ -80,3 +80,24 @@ orderStateIcon({ordState = 0}) {
       return Icons.search;
   }
 }
+
+checkFileType(String target) {
+  List<String> imageFormats = ["jpg", "png", "jpeg"];
+  List<String> videoFormats = ["mp4", "mvc"];
+  List<String> audioFormats = ["aac", "mp3"];
+
+  List mediaArray = [imageFormats, videoFormats, audioFormats];
+  for (int i = 0; i < mediaArray.length; i++) {
+    for (int j = 0; j < mediaArray[i].length; j++) {
+      if (target.contains(mediaArray[i][j])) {
+        if (i == 0)
+          return "image";
+        else if (i == 1)
+          return "video";
+        else
+          return "audio";
+      }
+    }
+  }
+  return "undefined";
+}

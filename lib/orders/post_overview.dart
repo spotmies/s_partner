@@ -19,6 +19,7 @@ import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
+import 'package:spotmies_partner/utilities/media_player.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:timelines/timelines.dart';
@@ -538,28 +539,41 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             SizedBox(
                               width: width * 0.05,
                             ),
-                            Container(
-                              child: images[index].contains('jpg')
-                                  ? InkWell(
-                                      onTap: () {
-                                        imageslider(images, hight, width);
-                                      },
-                                      child: Container(
-                                        width: width * 0.11,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    images[index]))),
-                                      ),
-                                    )
-                                  : images[index].contains('mp4')
-                                      ? TextWid(
-                                          text: 'Video',
-                                        )
-                                      : TextWid(text: 'Audio'),
-                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MediaPlayer(
+                                          mediaList: [images[index]],
+                                        )));
+                              },
+                              child: Container(
+                                  height: width * 0.15,
+                                  width: width * 0.15,
+                                  child: mediaContent(images[index],
+                                      isOnline: true)),
+                            )
+                            // Container(
+                            //   child: images[index].contains('jpg')
+                            //       ? InkWell(
+                            //           onTap: () {
+                            //             imageslider(images, hight, width);
+                            //           },
+                            //           child: Container(
+                            //             width: width * 0.11,
+                            //             decoration: BoxDecoration(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(10),
+                            //                 image: DecorationImage(
+                            //                     image: NetworkImage(
+                            //                         images[index]))),
+                            //           ),
+                            //         )
+                            //       : images[index].contains('mp4')
+                            //           ? TextWid(
+                            //               text: 'Video',
+                            //             )
+                            //           : TextWid(text: 'Audio'),
+                            // ),
                           ],
                         );
                       }),
@@ -1079,5 +1093,50 @@ class TimeLineTitle extends StatelessWidget {
           weight: FontWeight.w600,
           color: isCompleted() ? Colors.grey[850] : Colors.grey[600],
         ));
+  }
+}
+
+Container mediaContent(file, {bool isOnline = false}) {
+  String target = file.toString();
+
+  switch (checkFileType(target)) {
+    case "image":
+      return Container(
+        decoration: BoxDecoration(
+            color: Colors.amber,
+            image: DecorationImage(
+                image: !isOnline ? FileImage(file) : NetworkImage(file),
+                fit: BoxFit.cover)),
+      );
+      break;
+    case "audio":
+      return Container(
+        color: Colors.grey[800],
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.mic,
+          size: 30,
+          color: Colors.grey[100],
+        ),
+      );
+      break;
+    case "video":
+      return Container(
+        color: Colors.grey[800],
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.slow_motion_video_rounded,
+          size: 30,
+          color: Colors.grey[100],
+        ),
+      );
+      break;
+    default:
+      return Container(
+        color: Colors.grey[400],
+        alignment: Alignment.center,
+        child: TextWid(text: "undefined"),
+      );
+      break;
   }
 }
