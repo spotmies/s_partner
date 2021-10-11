@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
-bottomOptionsMenu(context, {menuTitle = "Menu", options}) {
+bottomOptionsMenu(context,
+    {menuTitle = "Menu",
+    options,
+    VoidCallback option1Click,
+    VoidCallback option2Click,
+    VoidCallback option3Click,
+    VoidCallback option4Click}) {
   final _width = MediaQuery.of(context).size.width;
   final _height = MediaQuery.of(context).size.height;
 
@@ -32,12 +38,29 @@ bottomOptionsMenu(context, {menuTitle = "Menu", options}) {
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: 4,
+                    itemCount: options.length > 4 ? 4 : options.length,
                     // physics: ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          options[index]['onPress']();
+                          switch (index) {
+                            case 0:
+                              if (option1Click != null) option1Click();
+                              break;
+                            case 1:
+                              if (option2Click != null) option2Click();
+                              break;
+                            case 2:
+                              if (option3Click != null) option3Click();
+                              break;
+                            case 3:
+                              if (option4Click != null) option4Click();
+                              break;
+
+                            default:
+                              break;
+                          }
+                          Navigator.pop(context);
                         },
                         child: Container(
                           // padding: EdgeInsets.only(right: 20),

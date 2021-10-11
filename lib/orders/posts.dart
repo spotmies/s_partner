@@ -13,7 +13,7 @@ import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
 class PostList extends StatefulWidget {
-  final String orderState;
+  final List orderState;
   PostList({@required this.orderState});
   @override
   _PostListState createState() => _PostListState();
@@ -72,7 +72,9 @@ class _PostListState extends StateMVC<PostList> {
                           itemBuilder: (BuildContext ctxt, int index) {
                             List<String> images = List.from(o[index]['media']);
                             dynamic orderData = o[index];
-                            if (orderData['ordState'] != widget.orderState)
+
+                            if (!widget.orderState
+                                .contains(orderData['orderState']))
                               return Container();
 
                             print(o[index]['ordId']);

@@ -39,61 +39,16 @@ class _OnlineState extends StateMVC<Online> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     // _incomingOrdersController.incomingOrdersProvider.localOrdersGet();
+    // partnerProvider.addListener(() {
+    //      if(partnerProvider.reloadIncomingOrders == true){
+    //   _incomingOrdersController.incomingOrders(notify: false);
+    // }
+    // });
 
     super.initState();
     _incomingOrdersController.pickedDate = DateTime.now();
     _incomingOrdersController.pickedTime = TimeOfDay.now();
   }
-
-  // respondToOrder(orderData, responseType) async {
-  //   //enable loader
-  //   if (partnerProvider.inComingLoader) return;
-  //   partnerProvider.setInComingLoader(true);
-  //   Map<String, dynamic> body = {
-  //     //
-  //     "responseType": responseType,
-  //     "pId": API.pid.toString(),
-  //     "orderDetails": orderData['_id'].toString(),
-  //   };
-  //   if (responseType == "accept" || responseType == "bid") {
-  //     body["uId"] = orderData['uId'].toString();
-  //     body["ordId"] = orderData['ordId'].toString();
-  //     body["responseId"] = DateTime.now().millisecondsSinceEpoch.toString();
-  //     body["join"] = DateTime.now().millisecondsSinceEpoch.toString();
-  //     body["loc.0"] = 17.236.toString();
-  //     body["loc.1"] = 83.697.toString();
-  //     body["uDetails"] = orderData['uDetails']['_id'].toString();
-  //     body["pDetails"] = partnerProfile['_id'].toString();
-  //   }
-  //   if (responseType == "accept") {
-  //     body["money"] = orderData['money'].toString();
-  //     body['schedule'] = orderData['schedule'].toString();
-  //   } else if (responseType == "bid") {
-  //     //below for bid order
-  //     body["money"] = _incomingOrdersController.moneyController.text.toString();
-  //     body['schedule'] = _incomingOrdersController
-  //         .pickedDate.millisecondsSinceEpoch
-  //         .toString();
-
-  //     //disable bottom bar
-  //     Navigator.pop(context);
-  //   }
-
-  //   log("order $body");
-  //   var response = await Server().postMethod(API.updateOrder, body);
-  //   //disable loader here.
-  //   partnerProvider.setInComingLoader(false);
-  //   if (response.statusCode == 200 || response.statusCode == 204) {
-  //     if (responseType == "reject")
-  //       snackbar(context, "Deleted successfully");
-  //     else
-  //       snackbar(context, "Request send successfully");
-  //     partnerProvider.removeIncomingOrderById(orderData['ordId']);
-  //     _incomingOrdersController.moneyController.clear();
-  //   } else {
-  //     snackbar(context, "Something went wrong please try again later");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +63,8 @@ class _OnlineState extends StateMVC<Online> {
           List<dynamic> ld = data.getIncomingOrder;
           List<dynamic> o = List.from(ld.reversed);
           partnerProfile = data.getProfileDetails;
+          // if (data.reloadIncomingOrders == true)
+          //   _incomingOrdersController.incomingOrders(notify: false);
           return Stack(
             children: [
               Container(
@@ -188,7 +145,9 @@ class _OnlineState extends StateMVC<Online> {
                                         ),
                                         Row(
                                           children: [
-                                            takeOverWid(_width),
+                                            o[index]['orderState'] > 6
+                                                ? takeOverWid(_width)
+                                                : Container(),
                                             IconButton(
                                                 icon: Icon(
                                                   Icons.more_horiz,
@@ -330,72 +289,68 @@ class _OnlineState extends StateMVC<Online> {
                                     SizedBox(
                                       height: _hight * 0.015,
                                     ),
-                                    // o[index]['ordState'] == 'req'
-                                    o[index]['orderState'] < 7
-                                        ? Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  ElevatedButtonWidget(
-                                                    buttonName: 'Reject',
-                                                    height: _hight * 0.05,
-                                                    minWidth: _width * 0.3,
-                                                    bgColor: Colors.grey[200],
-                                                    textColor: Colors.grey[900],
-                                                    textSize: _width * 0.04,
-                                                    leadingIcon: Icon(
-                                                      Icons.close,
-                                                      color: Colors.grey[900],
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    borderRadius: 15.0,
-                                                    borderSideColor:
-                                                        Colors.grey[50],
-                                                    onClick: () {
-                                                      _incomingOrdersController
-                                                          .respondToOrder(
-                                                              o[index],
-                                                              partnerProfile[
-                                                                  '_id'],
-                                                              "reject");
-                                                    },
-                                                  ),
-                                                  ElevatedButtonWidget(
-                                                    buttonName: 'Accept',
-                                                    height: _hight * 0.05,
-                                                    minWidth: _width * 0.55,
-                                                    bgColor: Colors.grey[900],
-                                                    textColor: Colors.white,
-                                                    textSize: _width * 0.04,
-                                                    trailingIcon: Icon(
-                                                      Icons.check,
-                                                      color: Colors.white,
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    borderRadius: 15.0,
-                                                    borderSideColor:
-                                                        Colors.grey[100],
-                                                    onClick: () async {
-                                                      _incomingOrdersController
-                                                          .respondToOrder(
-                                                              o[index],
-                                                              partnerProfile[
-                                                                  '_id'],
-                                                              "accept");
-                                                    },
-                                                  ),
-                                                ],
+
+                                    // o[index]['orderState'] < 7
+                                    //     ?
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButtonWidget(
+                                              buttonName: 'Reject',
+                                              height: _hight * 0.05,
+                                              minWidth: _width * 0.3,
+                                              bgColor: Colors.grey[200],
+                                              textColor: Colors.grey[900],
+                                              textSize: _width * 0.04,
+                                              leadingIcon: Icon(
+                                                Icons.close,
+                                                color: Colors.grey[900],
+                                                size: _width * 0.04,
                                               ),
-                                            ],
-                                          )
-                                        : TextWid(
-                                            text: 'Order Accepted',
-                                            size: _width * 0.05,
-                                            weight: FontWeight.w600,
-                                          )
+                                              borderRadius: 15.0,
+                                              borderSideColor: Colors.grey[50],
+                                              onClick: () {
+                                                _incomingOrdersController
+                                                    .respondToOrder(
+                                                        o[index],
+                                                        partnerProfile['_id'],
+                                                        "reject");
+                                              },
+                                            ),
+                                            ElevatedButtonWidget(
+                                              buttonName: 'Accept',
+                                              height: _hight * 0.05,
+                                              minWidth: _width * 0.55,
+                                              bgColor: Colors.grey[900],
+                                              textColor: Colors.white,
+                                              textSize: _width * 0.04,
+                                              trailingIcon: Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size: _width * 0.04,
+                                              ),
+                                              borderRadius: 15.0,
+                                              borderSideColor: Colors.grey[100],
+                                              onClick: () async {
+                                                _incomingOrdersController
+                                                    .respondToOrder(
+                                                        o[index],
+                                                        partnerProfile['_id'],
+                                                        "accept");
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                    // : TextWid(
+                                    //     text: 'Order Accepted',
+                                    //     size: _width * 0.05,
+                                    //     weight: FontWeight.w600,
+                                    //   )
                                   ],
                                 ),
                               ),

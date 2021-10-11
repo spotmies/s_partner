@@ -21,7 +21,6 @@ class Constants {
   ];
 }
 
-
 orderStateString({ordState = 0}) {
   int orderState =
       ordState.runtimeType == String ? int.parse(ordState) : ordState;
@@ -45,7 +44,7 @@ orderStateString({ordState = 0}) {
     case 8:
       return "Service is Ongoing";
     case 9:
-      return "Service successfully completed";
+      return "Service completed successfully ";
     case 10:
       return "Service successfully completed and feedback given by User";
 
@@ -71,7 +70,8 @@ orderStateIcon({ordState = 0}) {
       return Icons.run_circle_rounded;
       break;
     case 9:
-      return Icons.done_all;
+    case 10:
+      return Icons.verified_rounded;
       break;
     case 3:
       return Icons.cancel;
@@ -81,7 +81,23 @@ orderStateIcon({ordState = 0}) {
   }
 }
 
+checkFileType(String target) {
+  List<String> imageFormats = ["jpg", "png", "jpeg"];
+  List<String> videoFormats = ["mp4", "mvc"];
+  List<String> audioFormats = ["aac", "mp3"];
 
-
-
-
+  List mediaArray = [imageFormats, videoFormats, audioFormats];
+  for (int i = 0; i < mediaArray.length; i++) {
+    for (int j = 0; j < mediaArray[i].length; j++) {
+      if (target.contains(mediaArray[i][j])) {
+        if (i == 0)
+          return "image";
+        else if (i == 1)
+          return "video";
+        else
+          return "audio";
+      }
+    }
+  }
+  return "undefined";
+}

@@ -2,13 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserDetails extends StatefulWidget {
   final Map userDetails;
-  UserDetails({this.userDetails});
+  final bool isProfileRevealed;
+  final Function onTapPhone;
+  UserDetails(
+      {@required this.userDetails,
+      this.isProfileRevealed = false,
+      this.onTapPhone});
   @override
   _UserDetailsState createState() => _UserDetailsState();
 }
@@ -68,23 +75,30 @@ class _UserDetailsState extends State<UserDetails> {
                       background: Container(
                         width: _width * 1,
                         color: Colors.white,
-                        child: widget.userDetails['pic'] == null
-                            ? Center(
-                                child: ProfilePic(
-                                  name: widget.userDetails['name'],
-                                  profile: widget.userDetails['pic'],
-                                  status: false,
-                                  bgColor: Colors.grey[100],
-                                  textColor: Colors.grey[900],
-                                  textSize: _width * 0.25,
-                                  size: _width * 0.25,
-                                  badge: false,
-                                ),
-                              )
-                            : Image.network(
-                                widget.userDetails['pic'],
-                                fit: BoxFit.cover,
-                              ),
+                        child:
+                            //  widget.userDetails['pic'] == null
+                            //     ?
+                            !Uri.parse(widget.userDetails['pic'].runtimeType ==
+                                            String
+                                        ? widget.userDetails['pic']
+                                        : "s")
+                                    .isAbsolute
+                                ? Center(
+                                    child: ProfilePic(
+                                      name: widget.userDetails['name'],
+                                      profile: widget.userDetails['pic'],
+                                      status: false,
+                                      bgColor: Colors.grey[100],
+                                      textColor: Colors.grey[900],
+                                      textSize: _width * 0.25,
+                                      size: _width * 0.25,
+                                      badge: false,
+                                    ),
+                                  )
+                                : Image.network(
+                                    widget.userDetails['pic'],
+                                    fit: BoxFit.cover,
+                                  ),
                       ),
                     ),
                   ),
@@ -129,12 +143,7 @@ class _UserDetailsState extends State<UserDetails> {
                                     top: _width * 0.01,
                                   ),
                                   child: TextWid(
-                                    text: DateFormat('dd MMM, yyyy (EEE)')
-                                        .format(
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                int.parse(widget
-                                                    .userDetails['join']
-                                                    .toString()))),
+                                    text: getDate(widget.userDetails['join']),
                                     size: _width * 0.035,
                                     color: Colors.grey[700],
                                     weight: FontWeight.w600,
@@ -180,8 +189,16 @@ class _UserDetailsState extends State<UserDetails> {
                                                     width: double.infinity,
                                                     child: TextWid(
                                                       text: widget
-                                                          .userDetails['phNum']
-                                                          .toString(),
+                                                              .isProfileRevealed
+                                                          ? widget.userDetails[
+                                                                  'phNum']
+                                                              .toString()
+                                                          : widget.userDetails[
+                                                                      'phNum']
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 5) +
+                                                              "*****",
                                                       size: _width * 0.04,
                                                       color: Colors.grey[800],
                                                       weight: FontWeight.w600,
@@ -209,7 +226,14 @@ class _UserDetailsState extends State<UserDetails> {
                                                       color: Colors.indigo[900],
                                                     ),
                                                     onPressed: () {
-                                                      launch("tel://$num");
+                                                      // launch("tel://$num");
+                                                      if (widget.onTapPhone !=
+                                                          null) {
+                                                        widget.onTapPhone();
+                                                      } else {
+                                                        snackbar(context,
+                                                            "something went wrong");
+                                                      }
                                                     }),
                                               ],
                                             ),

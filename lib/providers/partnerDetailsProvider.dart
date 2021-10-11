@@ -14,6 +14,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool editProfileLoader = false;
   String editProfileLoaderName = "";
   bool offlineScreenLoader = false;
+  bool reloadIncomingOrders = false;
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
@@ -91,6 +92,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
     inComingOrders.add(order);
 
     sortListByTime();
+    notifyListeners();
+  }
+
+  void refressIncomingOrder(state) {
+    reloadIncomingOrders = state;
     notifyListeners();
   }
 

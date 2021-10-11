@@ -36,6 +36,7 @@ class ChatController extends ControllerMVC {
   List chatList = [];
   Map targetChat = {};
   Map user = {};
+  Map orderDetails = {};
   Map partner = {};
   int msgCount = 20;
 

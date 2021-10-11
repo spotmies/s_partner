@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+String myPid = FirebaseAuth.instance.currentUser.uid.toString();
 
 class TextWid extends StatelessWidget {
   final String text;
@@ -28,11 +31,11 @@ class TextWid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        overflow:flow?? TextOverflow.ellipsis,
-        textAlign:align?? TextAlign.start,
+        overflow: flow ?? TextOverflow.ellipsis,
+        textAlign: align ?? TextAlign.start,
         maxLines: maxlines,
         style: GoogleFonts.josefinSans(
-          decoration: decoration?? TextDecoration.none,
+          decoration: decoration ?? TextDecoration.none,
           letterSpacing: lSpace ?? 0,
           fontSize: size ?? 14,
           color: color ?? Colors.black,
@@ -40,7 +43,6 @@ class TextWid extends StatelessWidget {
         ));
   }
 }
-
 
 // for text field stylish
 fonts(size, bold, color) {

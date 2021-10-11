@@ -51,11 +51,23 @@ class IncomingOrdersController extends ControllerMVC {
     'Events'
   ];
 
+  fetchIncomingOrderPeriodic() {
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      try {
+        if (partnerProvider.getProfileDetails['availability']) {
+          incomingOrders(notify: false);
+        } else {
+          log("partner availabligty off");
+        }
+      } catch (e) {}
+    });
+  }
+
   @override
   void initState() {
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-
+    //  fetchIncomingOrderPeriodic();
     super.initState();
   }
 
@@ -100,18 +112,18 @@ class IncomingOrdersController extends ControllerMVC {
   final incomingOrdersQuery = {
     'showOnly': 'inComingOrders',
     'extractData': 'true',
-    // 'ordState': 'req'
-     'orderState': "0"
+    'orderState': "0"
   };
 
-  Future incomingOrders() async {
+  Future incomingOrders({notify = true}) async {
+    partnerProvider.refressIncomingOrder(false);
     var response =
         await Server().getMethodParems(API.incomingorders, incomingOrdersQuery);
     log('api called');
     // log(response);
     var orders = jsonDecode(response);
     partnerProvider.setIncomingOrders(orders);
-    snackbar(context, "Incoming orders fetched successfully");
+    if (notify) snackbar(context, "Incoming orders fetched successfully");
   }
 
   respondToOrder(orderData, pDetailsId, responseType) async {

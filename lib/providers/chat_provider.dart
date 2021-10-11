@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+String pid = FirebaseAuth.instance.currentUser.uid;
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
@@ -51,11 +54,11 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  disableChatByMsgId(msgId) {
+  disableChatByMsgId(msgId, {notify = true}) {
     chatList[chatList.indexWhere(
             (element) => element['msgId'].toString() == msgId.toString())]
         ['cBuild'] = 0;
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   getChatList2() => chatList;
@@ -75,12 +78,30 @@ class ChatProvider extends ChangeNotifier {
 
   addnewMessage(value) {
     String msgId = value['target']['msgId'];
-    var sender = jsonDecode(value['object']);
-    sender = sender['sender'];
+    dynamic msgRawData = jsonDecode(value['object']);
+    String sender = msgRawData['sender'].toString();
     log("$msgId $currentMsgId $sender");
     List<dynamic> allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
+        switch (msgRawData['action']) {
+          case "blockChat":
+          case "disableChat":
+          case "deleteChat":
+            disableChatByMsgId(msgId, notify: false);
+            break;
+          case "enableProfile":
+            revealProfile(true, msgId, pid, notify: false);
+            break;
+          case "disableProfile":
+            revealProfile(false, msgId, pid, notify: false);
+            break;
+          case "acceptOrder": //need to work on later
+          case "rejectOrder": //need to work on later
+            break;
+          default:
+            break;
+        }
         allChats[i]['lastModified'] =
             int.parse(DateTime.now().millisecondsSinceEpoch.toString());
 
@@ -261,6 +282,17 @@ class ChatProvider extends ChangeNotifier {
   }
 
   int get callTimeout => callInitTimeOut;
+
+  void revealProfile(bool state, msgId, pId, {bool notify = true}) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    if (index < 0) return;
+    if (state)
+      chatList[index]['orderDetails']['revealProfileTo'].add(pId.toString());
+    else
+      chatList[index]['orderDetails']['revealProfileTo'].remove(pId.toString());
+    if (notify) notifyListeners();
+  }
 
   void resetAllCallingVariables() {
     acceptCalls = true;

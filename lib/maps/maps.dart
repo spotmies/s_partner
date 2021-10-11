@@ -17,7 +17,9 @@ class Maps extends StatefulWidget {
   final String ordId;
   final Map coordinates;
   final String phoneNumber;
-  Maps({this.ordId, this.coordinates, this.phoneNumber});
+  final bool isNavigate;
+  Maps(
+      {this.ordId, this.coordinates, this.phoneNumber, this.isNavigate = true});
   @override
   _MapsState createState() => _MapsState(ordId, coordinates);
 }
@@ -260,14 +262,16 @@ class _MapsState extends State<Maps> {
                         Navigator.pop(context);
                       },
                     ),
-                    coordinates == null
+                    widget.isNavigate
                         ? ElevatedButtonWidget(
                             minWidth: width * 0.5,
                             height: hight * 0.05,
                             bgColor: Colors.indigo[900],
                             onClick: () {
-                              launch(
-                                  'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                              try {
+                                launch(
+                                    'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                              } catch (e) {}
                             },
                             buttonName: 'Navigate',
                             textColor: Colors.white,
