@@ -22,7 +22,7 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
-String pId = FirebaseAuth.instance.currentUser.uid.toString(); //user id
+String pId = "123456"; //user id
 class NavBar extends StatefulWidget {
   final int data;
   final String payload;
@@ -118,6 +118,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   initState() {
+   pId = FirebaseAuth.instance.currentUser.uid.toString();
     // notifications();
     awesomeInitilize();
     // displayAwesomeNotification();
