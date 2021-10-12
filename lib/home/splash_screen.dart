@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/login/onboard.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,15 +17,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+   PartnerDetailsProvider partnerProvider;
   @override
   void initState() {
     super.initState();
-
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
     Timer(Duration(seconds: 1), () async {
       if (FirebaseAuth.instance.currentUser != null) {
         String resp =
             await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
         if (resp == "true") {
+          partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
         } else if (resp == "false") {

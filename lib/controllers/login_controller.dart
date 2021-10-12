@@ -12,11 +12,13 @@ import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
 import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class LoginPageController extends ControllerMVC {
   TimeProvider timerProvider;
+    PartnerDetailsProvider partnerProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -28,6 +30,8 @@ class LoginPageController extends ControllerMVC {
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+     partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     super.initState();
   }
@@ -58,8 +62,8 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
+                        builder: (context) => OnlinePlaceSearch(
+                            phNumber: timerProvider.phNumber)),
                     (route) => false);
               }
             });
@@ -117,9 +121,11 @@ class LoginPageController extends ControllerMVC {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => OnlinePlaceSearch(phNumber:timerProvider.phNumber)),
+                    builder: (context) =>
+                        OnlinePlaceSearch(phNumber: timerProvider.phNumber)),
                 (route) => false);
           } else if (resp == "true") {
+            partnerProvider.setCurrentPid(value.user.uid);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => NavBar()),
@@ -145,7 +151,7 @@ checkPartnerRegistered(pId) async {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "partnerDeviceToken": deviceToken?.toString() ?? "",
   };
-  // print("checkUserreg");
+  print("checkUserreg>>>>>>>>>>>>>>>>>>>>>> $pId");
   var response = await Server().postMethod(API.loginApi + pId.toString(), obj);
   // print("36 $response");
   if (response.statusCode == 200)

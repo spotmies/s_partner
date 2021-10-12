@@ -5,6 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
@@ -142,7 +143,8 @@ class EditProfileController extends ControllerMVC {
       };
       log("body $body");
       editProvider.setEditLoader(true, loaderName: "Applying Changes");
-      var response = await Server().editMethod(API.partnerDetails, body);
+      log("uid>> $pId");
+      var response = await Server().editMethod(API.partnerDetails + pId, body);
       editProvider.setEditLoader(false);
       if (response.statusCode == 200) {
         log("change applyed");

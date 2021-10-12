@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class IncomingOrdersController extends ControllerMVC {
   var incoming;
   var partner;
   var localData;
+  String pid = FirebaseAuth.instance.currentUser.uid.toString(); //user id
   // var socketincomingorder;
   String pmoney;
   DateTime pickedDate;
@@ -118,12 +120,15 @@ class IncomingOrdersController extends ControllerMVC {
   Future incomingOrders({notify = true}) async {
     partnerProvider.refressIncomingOrder(false);
     var response =
-        await Server().getMethodParems(API.incomingorders, incomingOrdersQuery);
+        await Server().getMethodParems(API.incomingorders + pid, incomingOrdersQuery);
     log('api called');
     // log(response);
-    var orders = jsonDecode(response);
+    if(response.statusCode == 200){
+    var orders = jsonDecode(response.body);
     partnerProvider.setIncomingOrders(orders);
     if (notify) snackbar(context, "Incoming orders fetched successfully");
+    }
+    else snackbar(context, 'something went wrong');
   }
 
   respondToOrder(orderData, pDetailsId, responseType) async {
@@ -181,9 +186,11 @@ class IncomingOrdersController extends ControllerMVC {
         if (responseType == "accept") {
           dynamic getThatOrder = await Server()
               .getMethod(API.acceptOrder + orderData['ordId'].toString());
-
-          getThatOrder = jsonDecode(getThatOrder);
+          if(response.statusCode == 200){
+          getThatOrder = jsonDecode(getThatOrder.body);
           partnerProvider.pushOrder(getThatOrder);
+          }
+          else snackbar(context, "something went wrong");
         }
       }
 

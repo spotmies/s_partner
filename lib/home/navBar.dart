@@ -22,7 +22,7 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
-
+String pId = FirebaseAuth.instance.currentUser.uid.toString(); //user id
 class NavBar extends StatefulWidget {
   final int data;
   final String payload;
@@ -96,15 +96,16 @@ class _NavBarState extends State<NavBar> {
   }
 
   //socket
-  hittingAllApis() async {
-    var chatList = await getChatListFromDb();
+  hittingAllApis(currentPid) async {
+    log("pid is >>>>>>>>> $pId");
+    var chatList = await getChatListFromDb(currentPid);
     // print('chatlist $chatList ');
     chatProvider.setChatList(chatList);
 
-    var details = await partnerDetailsFull();
+    var details = await partnerDetailsFull(currentPid);
     partnerProvider.setPartnerDetails(details);
 
-    var partnerOrders = await partnerAllOrders();
+    var partnerOrders = await partnerAllOrders(currentPid);
 
     partnerProvider.setOrder(partnerOrders);
     // log("details $details");
@@ -158,7 +159,8 @@ class _NavBarState extends State<NavBar> {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    hittingAllApis();
+    hittingAllApis(partnerProvider.currentPid.toString());
+    log("current pid ${partnerProvider.currentPid}");
     connectNotifications();
 
     _chatResponse = StreamController();
