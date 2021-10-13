@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
@@ -93,11 +94,13 @@ class OrdersController extends ControllerMVC {
   }
 
   Future getOrderFromDB() async {
-    var response = await Server().getMethod(API.allOrder);
-
-    var ordersList = jsonDecode(response);
+    var response = await Server().getMethod(API.allOrder + pId);
+if(response.statusCode == 200){
+    var ordersList = jsonDecode(response.body);
     partnerProvider.setOrder(ordersList);
 
     snackbar(context, "sync with new changes");
+}
+else snackbar(context, "something went wrong");
   }
 }

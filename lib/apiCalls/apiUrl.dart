@@ -9,18 +9,16 @@ class API {
   static var host = 'spotmiesserver.herokuapp.com'; //server path
   static var localHost = "http://localhost:4000";
   static var partnerRegister = '/api/partner/newPartner'; //post
-  static var partnerDetails = '/api/partner/partners/$pid'; //get with user id
-  static var partnerStatus = "/api/partner/partners/$pid"; //put with user id
+  static var partnerDetails = '/api/partner/partners/'; //get with user id
+  static var partnerStatus = "/api/partner/partners/"; //put with user id
   static var incomingorders =
-      "api/partner/partners/$pid"; //get with user id and parems
+      "api/partner/partners/"; //get with user id and parems
   static var acceptOrder = '/api/order/orders/';
   static var updateOrder = '/api/response/newResponse/';
   static var updateResponse = "/api/response/responses/";
-  static var partnerChat = '/api/chat/partner/$pid';
+  static var partnerChat = '/api/chat/partner/';
   static var chatById = "/api/chat/chats";
-  static var allOrder = "api/order/partner/$pid";
-  static var partnerDetailsExtraData =
-      '/api/chat/partner/$pid?extractData=true';
+  static var allOrder = "api/order/partner/";
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var loginApi = '/api/partner/login/';
 }

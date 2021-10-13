@@ -170,7 +170,7 @@ class StepperController extends ControllerMVC {
       log(body.toString());
       log(response.statusCode.toString());
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
         isProcess = false;
