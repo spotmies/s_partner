@@ -92,6 +92,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     }
   }
 
+  bool isExtended = true;
+
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -110,6 +112,53 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       return Stack(
         children: [
           Scaffold(
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: FloatingActionButton.extended(
+                  backgroundColor: Colors.indigo[50],
+                  onPressed: () {
+                    setState(() {
+                      isExtended = !isExtended;
+                    });
+                  },
+                  label: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 400),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) =>
+                            FadeTransition(
+                      opacity: animation,
+                      child: SizeTransition(
+                        child: child,
+                        sizeFactor: animation,
+                        axis: Axis.horizontal,
+                      ),
+                    ),
+                    child: isExtended
+                        ? Icon(Icons.post_add, color: Colors.indigo[900])
+                        : InkWell(
+                            onTap: () {
+                              if (!isExtended) widget.onBottomSheet();
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4.0),
+                                  child: Icon(
+                                    Icons.post_add,
+                                    color: Colors.indigo[900],
+                                  ),
+                                ),
+                                TextWid(
+                                    text: 'RISE BID',
+                                    size: _width * 0.045,
+                                    weight: FontWeight.w600,
+                                    color: Colors.indigo[900])
+                              ],
+                            ),
+                          ),
+                  )),
+            ),
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.grey[50],
             appBar: AppBar(
@@ -150,7 +199,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         // _postOverViewController.orderStateIcon(d['ordState']),
                         orderStateIcon(ordState: d['orderState']),
                         color: Colors.indigo[900],
-                        size: _width * 0.045,
+                        size: _width * 0.035,
                       ),
                       SizedBox(
                         width: _width * 0.01,
@@ -162,7 +211,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ? Colors.white
                                 : Colors.grey[700],
                             weight: FontWeight.w700,
-                            size: _width * 0.04),
+                            flow: TextOverflow.visible,
+                            size: _width * 0.03),
                       ),
                     ],
                   )
@@ -178,16 +228,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             children: [
                               ElevatedButtonWidget(
                                   height: _hight * 0.05,
-                                  minWidth: _width * 0.25,
-                                  bgColor: Colors.red,
+                                  minWidth: _width * 0.3,
+                                  bgColor: Colors.indigo[50],
                                   borderSideColor: Colors.grey[200],
                                   borderRadius: 10.0,
                                   buttonName: 'Reject',
-                                  textColor: Colors.white,
+                                  textColor: Colors.indigo[900],
                                   textSize: _width * 0.04,
                                   leadingIcon: Icon(
                                     Icons.cancel,
-                                    color: Colors.white,
+                                    color: Colors.indigo[900],
                                     size: _width * 0.045,
                                   ),
                                   onClick: () {
@@ -204,8 +254,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   Navigator.pop(context);
                                 },
                                 height: _hight * 0.05,
-                                minWidth: _width * 0.4,
-                                bgColor: Colors.green,
+                                minWidth: _width * 0.6,
+                                bgColor: Colors.indigo[900],
                                 borderSideColor: Colors.grey[200],
                                 borderRadius: 10.0,
                                 buttonName: 'Accept',
@@ -217,29 +267,29 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   size: _width * 0.045,
                                 ),
                               ),
-                              ElevatedButtonWidget(
-                                onClick: () {
-                                  log("bid");
-                                  widget.onBottomSheet();
-                                  // bidSendingBottomSheet(
-                                  //   _hight,
-                                  //   _width,
-                                  // );
-                                },
-                                height: _hight * 0.05,
-                                minWidth: _width * 0.22,
-                                bgColor: Colors.grey[600],
-                                borderSideColor: Colors.grey[200],
-                                borderRadius: 10.0,
-                                buttonName: 'Bid',
-                                textColor: Colors.white,
-                                textSize: _width * 0.04,
-                                trailingIcon: Icon(
-                                  Icons.note_alt_rounded,
-                                  color: Colors.white,
-                                  size: _width * 0.045,
-                                ),
-                              ),
+                              // ElevatedButtonWidget(
+                              //   onClick: () {
+                              //     log("bid");
+                              //     widget.onBottomSheet();
+                              //     // bidSendingBottomSheet(
+                              //     //   _hight,
+                              //     //   _width,
+                              //     // );
+                              //   },
+                              //   height: _hight * 0.05,
+                              //   minWidth: _width * 0.22,
+                              //   bgColor: Colors.grey[600],
+                              //   borderSideColor: Colors.grey[200],
+                              //   borderRadius: 10.0,
+                              //   buttonName: 'Bid',
+                              //   textColor: Colors.white,
+                              //   textSize: _width * 0.04,
+                              //   trailingIcon: Icon(
+                              //     Icons.note_alt_rounded,
+                              //     color: Colors.white,
+                              //     size: _width * 0.045,
+                              //   ),
+                              // ),
                             ],
                           ),
                         )

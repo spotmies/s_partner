@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
-import 'package:spotmies_partner/maps/maps.dart';
 import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';

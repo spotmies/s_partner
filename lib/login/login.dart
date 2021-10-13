@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
-import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 

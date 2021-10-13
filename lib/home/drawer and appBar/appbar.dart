@@ -11,7 +11,6 @@ import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class AppBarScreen extends StatefulWidget {
