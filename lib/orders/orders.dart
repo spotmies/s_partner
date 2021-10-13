@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/orders/ongoing.dart';
 import 'package:spotmies_partner/orders/posts.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -14,6 +15,10 @@ class _OrdersState extends State<Orders> {
   ];
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -23,9 +28,9 @@ class _OrdersState extends State<Orders> {
                 bottom: Radius.circular(0),
               ),
             ),
-            toolbarHeight: 55,
+            toolbarHeight: _hight * 0.02,
             backgroundColor: Colors.white,
-            elevation: 4,
+            elevation: 1,
             //title: Text('Tabs'),
             bottom: TabBar(
                 indicator: UnderlineTabIndicator(
@@ -45,7 +50,7 @@ class _OrdersState extends State<Orders> {
                           width: 15,
                         ),
                         TextWid(
-                          text: 'OnGoing',
+                          text: 'Continuing',
                           weight: FontWeight.bold,
                         ),
                       ],

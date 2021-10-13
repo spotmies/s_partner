@@ -6,7 +6,6 @@ import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UserDetails extends StatefulWidget {
   final Map userDetails;

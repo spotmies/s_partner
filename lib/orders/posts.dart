@@ -60,8 +60,8 @@ class _PostListState extends StateMVC<PostList> {
                     if (o.length < 1)
                       return Center(
                         child: TextWid(
-                          text: "No Orders",
-                          size: 30,
+                          text: "Not yet started",
+                          size: _width * 0.045,
                         ),
                       );
 

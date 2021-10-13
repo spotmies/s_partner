@@ -4,8 +4,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/home/navBar.dart';
-import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 //permisiion
