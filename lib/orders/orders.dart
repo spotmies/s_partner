@@ -28,7 +28,7 @@ class _OrdersState extends State<Orders> {
                 bottom: Radius.circular(0),
               ),
             ),
-            toolbarHeight: _hight * 0.02,
+            toolbarHeight: _hight * 0.07,
             backgroundColor: Colors.white,
             elevation: 1,
             //title: Text('Tabs'),
