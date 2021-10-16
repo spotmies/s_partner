@@ -172,33 +172,35 @@ class _OnlineState extends StateMVC<Online> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
-                                          width: _width * 0.45,
-                                          // color: Colors.red,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.schedule,
-                                                color: Colors.grey[900],
-                                                size: _width * 0.045,
-                                              ),
-                                              SizedBox(
-                                                width: _width * 0.01,
-                                              ),
-                                              TextWid(
-                                                text: getDate(
-                                                    o[index]['schedule']),
-                                                color: Colors.grey[900],
-                                                size: _width * 0.04,
-                                              ),
-                                              TextWid(
-                                                text: '-' +
-                                                    getTime(
-                                                        o[index]['schedule']),
-                                                color: Colors.grey[900],
-                                                size: _width * 0.04,
-                                              ),
-                                            ],
+                                        Expanded(
+                                          child: Container(
+                                            // width: _width * 0.45,
+                                            // color: Colors.red,
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.schedule,
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.045,
+                                                ),
+                                                SizedBox(
+                                                  width: _width * 0.01,
+                                                ),
+                                                TextWid(
+                                                  text: getDate(
+                                                      o[index]['schedule']),
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.04,
+                                                ),
+                                                TextWid(
+                                                  text: '-' +
+                                                      getTime(
+                                                          o[index]['schedule']),
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.04,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         Container(
