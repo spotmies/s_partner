@@ -13,7 +13,8 @@ Container chatInputField(
   BuildContext context,
   double hight,
   double width,
-  ChatController chatController, String msgId,
+  ChatController chatController,
+  String msgId,
 ) {
   // SoundRecorder recorder
   // bool isInput = false;
@@ -73,14 +74,8 @@ Container chatInputField(
                         child: inputController.text.isEmpty
                             ? IconButton(
                                 onPressed: () async {
-                                  await attachments(
-                                    context,
-                                    hight,
-                                    width,
-                                    chatController,
-                                    sendCallBack,
-                                    msgId
-                                  );
+                                  await attachments(context, hight, width,
+                                      chatController, sendCallBack, msgId);
                                 },
                                 icon: Icon(
                                   Icons.attach_file,
@@ -114,7 +109,7 @@ Container chatInputField(
             if (inputController.text == "") {
               snackbar(context, 'Enter Message');
             } else {
-              sendCallBack(inputController.text, 'text',msgId);
+              sendCallBack(inputController.text, 'text', msgId);
               inputController.clear();
             }
             log(inputController.text);
@@ -146,7 +141,7 @@ Future attachments(BuildContext context, double hight, double width,
       ),
       builder: (BuildContext context) {
         return Container(
-          height: hight * 0.1,
+          height: 80,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -155,7 +150,7 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () async {
-                        chatController.chooseImage(sendCallBack,msgId);
+                        chatController.chooseImage(sendCallBack, msgId);
                         Navigator.pop(context);
 
                         // imageGallery(context, chatController);
@@ -184,7 +179,7 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () {
-                        chatController.pickVideo(sendCallBack,msgId);
+                        chatController.pickVideo(sendCallBack, msgId);
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.video_camera_back),
@@ -199,9 +194,9 @@ Future attachments(BuildContext context, double hight, double width,
                   children: [
                     IconButton(
                       onPressed: () {
-                      Navigator.pop(context);
-                        audioRecoder(context, hight, width,chatController,sendCallBack,msgId);
-                        
+                        Navigator.pop(context);
+                        audioRecoder(context, hight, width, chatController,
+                            sendCallBack, msgId);
                       },
                       icon: Icon(Icons.mic),
                     ),

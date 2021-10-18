@@ -109,47 +109,49 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
             SizedBox(
               height: _hight * 0.05,
             ),
-            Column(
-              children: drawerItems
-                  .map((element) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            widget.drawerController.toggle();
-                            drawerItemsFunction(
-                                element['title'],
-                                context,
-                                _hight,
-                                _width,
-                                pd,
-                                partnerDetailsProvider,
-                                _drawerController);
-                            log(element['title']);
-                          },
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  element['icon'],
-                                  color: Colors.grey[900],
-                                  size: _width * 0.05,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(element['title'],
-                                  style: GoogleFonts.josefinSans(
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: drawerItems
+                    .map((element) => Container(
+                          child: InkWell(
+                            onTap: () {
+                              widget.drawerController.toggle();
+                              drawerItemsFunction(
+                                  element['title'],
+                                  context,
+                                  _hight,
+                                  _width,
+                                  pd,
+                                  partnerDetailsProvider,
+                                  _drawerController);
+                              log(element['title']);
+                            },
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    element['icon'],
                                     color: Colors.grey[900],
-                                    fontSize: _width * 0.045,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                            ],
+                                    size: _width * 0.05,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(element['title'],
+                                    style: GoogleFonts.josefinSans(
+                                      color: Colors.grey[900],
+                                      fontSize: _width * 0.045,
+                                      fontWeight: FontWeight.w600,
+                                    ))
+                              ],
+                            ),
                           ),
-                        ),
-                      ))
-                  .toList(),
+                        ))
+                    .toList(),
+              ),
             ),
           ],
         ),

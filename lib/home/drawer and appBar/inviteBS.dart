@@ -42,9 +42,21 @@ Future invites(BuildContext context, double hight, double width, pr) {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-
                           Text(
-                            pr['name'].toString().substring(0,4).toUpperCase()+getDate(int.parse(pr['dob'])).toString().substring(getDate(int.parse(pr['dob'])).toString().length-4,getDate(int.parse(pr['dob'])).toString().length),
+                            pr['name']
+                                    .toString()
+                                    .substring(0, 4)
+                                    .toUpperCase() +
+                                getDate(int.parse(pr['dob']))
+                                    .toString()
+                                    .substring(
+                                        getDate(int.parse(pr['dob']))
+                                                .toString()
+                                                .length -
+                                            4,
+                                        getDate(int.parse(pr['dob']))
+                                            .toString()
+                                            .length),
                             textAlign: TextAlign.center,
                             style: fonts(width * 0.06, FontWeight.w600,
                                 Colors.grey[900]),
@@ -73,7 +85,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                 ),
               ),
               Container(
-                height: hight * 0.15,
+                // height: hight * 0.15,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

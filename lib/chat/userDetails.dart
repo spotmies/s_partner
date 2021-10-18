@@ -157,7 +157,7 @@ class _UserDetailsState extends State<UserDetails> {
                                 color: Colors.grey[300],
                               ),
                               Container(
-                                height: _hight * 0.10,
+                                // height: _hight * 0.10,
                                 padding: EdgeInsets.only(left: _width * 0.03),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
