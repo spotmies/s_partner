@@ -83,7 +83,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                   stepperController.nameTf,
                   Icons.text_format,
                   "address",
-                  TextInputType.name,12),
+                  TextInputType.name,
+                  12),
               Container(
                 height: hight * 0.08,
                 margin: EdgeInsetsDirectional.only(bottom: hight * 0.01),
@@ -121,7 +122,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                   stepperController.emailTf,
                   Icons.email,
                   "email",
-                  TextInputType.emailAddress,30),
+                  TextInputType.emailAddress,
+                  30),
               registrationField(
                   hight,
                   context,
@@ -131,7 +133,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                   stepperController.altnumberTf,
                   Icons.phone_android,
                   "phone",
-                  TextInputType.phone,10),
+                  TextInputType.phone,
+                  10),
               registrationField(
                   hight,
                   context,
@@ -141,7 +144,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                   stepperController.tempadTf,
                   Icons.location_city,
                   "address",
-                  TextInputType.streetAddress,200),
+                  TextInputType.streetAddress,
+                  200),
               registrationField(
                   hight,
                   context,
@@ -151,7 +155,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                   stepperController.peradTf,
                   Icons.location_city,
                   "address",
-                  TextInputType.streetAddress,200),
+                  TextInputType.streetAddress,
+                  200),
               Container(
                 width: width * 0.9,
                 height: hight * 0.18,
@@ -288,12 +293,13 @@ registrationField(
     icon,
     validator,
     keyboardtype,
-    length
-    ) {
+    length) {
   return Container(
     height: hight * 0.08,
     margin: EdgeInsets.only(bottom: hight * 0.01),
     child: TextFieldWidget(
+      isRequired: true,
+
       type: validator,
       maxLength: length,
       // formatter: <TextInputFormatter>[

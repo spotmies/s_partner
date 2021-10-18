@@ -768,7 +768,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 userDetails(hight, width, BuildContext context, controller, orderDetails,
     chatWithPatner) {
   return Container(
-    height: hight * 0.24,
+    //height: hight * 0.24,
     child: Column(
       children: [
         Container(

@@ -16,7 +16,7 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class LoginPageController extends ControllerMVC {
   TimeProvider timerProvider;
-    PartnerDetailsProvider partnerProvider;
+  PartnerDetailsProvider partnerProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -28,7 +28,7 @@ class LoginPageController extends ControllerMVC {
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
-     partnerProvider =
+    partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     super.initState();
@@ -109,12 +109,14 @@ class LoginPageController extends ControllerMVC {
               smsCode: otpValue))
           .then((value) async {
         if (value.user != null) {
-          // log("${value.user}");
+          log("${value.user}");
           // log("$value");
+          log("114 ${timerProvider.phNumber}");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           // print("user already login");
           String resp = await checkPartnerRegistered(value.user.uid);
           timerProvider.setLoader(false);
+          partnerProvider.setCurrentPid(value.user.uid);
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -123,7 +125,6 @@ class LoginPageController extends ControllerMVC {
                         OnlinePlaceSearch(phNumber: timerProvider.phNumber)),
                 (route) => false);
           } else if (resp == "true") {
-            partnerProvider.setCurrentPid(value.user.uid);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => NavBar()),

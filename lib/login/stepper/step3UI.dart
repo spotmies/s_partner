@@ -113,8 +113,10 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               stepperController.adharfront == null),
           uploadUI(_hight, _width, 'back', stepperController,
               stepperController.adharback == null),
-          uploadUI(_hight, _width, 'clgId', stepperController,
-              stepperController.clgId == null),
+          type == "student"
+              ? uploadUI(_hight, _width, 'clgId', stepperController,
+                  stepperController.clgId == null)
+              : Container(),
         ],
       ),
     ),
@@ -128,6 +130,12 @@ uploadUI(
   StepperController stepperController,
   bool condition,
 ) {
+  void onTap() {
+    if (imageType == 'front') stepperController.adharfrontpage();
+    if (imageType == 'back') stepperController.adharBack();
+    if (imageType == 'clgId') stepperController.clgIdImage();
+  }
+
   return Container(
     padding: const EdgeInsets.all(8.0),
     decoration:
@@ -144,12 +152,7 @@ uploadUI(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () {
-                      if (imageType == 'front')
-                        stepperController.adharfrontpage();
-                      if (imageType == 'back') stepperController.adharBack();
-                      if (imageType == 'clgId') stepperController.clgIdImage();
-                    },
+                    onTap: onTap,
                     child: Icon(
                       Icons.cloud_upload,
                       size: width * 0.2,
@@ -167,19 +170,38 @@ uploadUI(
                 ],
               ),
             ))
-        : Container(
-            height: hight * 0.2,
-            width: width * 0.70,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                shape: BoxShape.rectangle,
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: FileImage(imageType == 'front'
-                        ? stepperController.adharfront
-                        : imageType == 'back'
-                            ? stepperController.adharback
-                            : stepperController.clgId))),
+        : Stack(
+            children: [
+              Container(
+                height: hight * 0.2,
+                width: width * 0.70,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: FileImage(imageType == 'front'
+                            ? stepperController.adharfront
+                            : imageType == 'back'
+                                ? stepperController.adharback
+                                : stepperController.clgId))),
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: width * 0.1,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[300],
+                    radius: width * 0.05,
+                    child: IconButton(
+                        padding: EdgeInsets.all(0.0),
+                        onPressed: onTap,
+                        icon: Icon(
+                          Icons.change_circle,
+                          color: Colors.grey[900],
+                          size: width * 0.055,
+                        )),
+                  ))
+            ],
           ),
   );
 }

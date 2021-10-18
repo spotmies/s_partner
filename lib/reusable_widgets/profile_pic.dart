@@ -86,7 +86,7 @@ class ProfilePic extends StatelessWidget {
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width),
+                    child: changeLable(_width, onClick, isProfile),
                   ),
                   Positioned(
                     right: 0,
@@ -140,7 +140,7 @@ class ProfilePic extends StatelessWidget {
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width),
+                    child: changeLable(_width, onClick, isProfile),
                   ),
                   Positioned(
                     right: 0,
@@ -155,17 +155,21 @@ class ProfilePic extends StatelessWidget {
     );
   }
 
-  Positioned changeLable(double _width) {
+  Positioned changeLable(double _width, Function onClick, bool isProfile) {
     return Positioned(
-        left: 35,
-        bottom: 10,
-        child: Container(
-          child: TextWid(
-            text: onClickLabel ?? "change",
-            color: Colors.grey[400],
-            size: _width * 0.04,
-            weight: FontWeight.bold,
-          ),
+        bottom: 0,
+        left: isProfile ? _width * 0.03 : 0,
+        child: CircleAvatar(
+          backgroundColor: Colors.grey[300],
+          radius: _width * 0.035,
+          child: IconButton(
+              padding: EdgeInsets.all(0.0),
+              onPressed: onClick,
+              icon: Icon(
+                Icons.change_circle,
+                color: Colors.grey[900],
+                size: _width * 0.05,
+              )),
         ));
   }
 }
