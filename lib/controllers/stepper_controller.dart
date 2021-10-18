@@ -9,12 +9,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
 class StepperController extends ControllerMVC {
+  PartnerDetailsProvider partnerProvider;
   var stepperCotroller = GlobalKey<ScaffoldState>();
   TextEditingController nameTf = TextEditingController();
   TextEditingController dobTf = TextEditingController();
@@ -37,6 +41,7 @@ class StepperController extends ControllerMVC {
   String dob;
   String email;
   String number;
+  String verifiedNumber;
   String perAd;
   String tempAd;
   String job;
@@ -89,6 +94,14 @@ class StepperController extends ControllerMVC {
 
   //functions
 
+  void initState() {
+    super.initState();
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+
+    // print("76 ${FirebaseAuth.instance.currentUser.uid}");
+  }
+
   step1(BuildContext context, StepperController stepperController) {
     if (accept == true) {
       currentStep += 1;
@@ -112,9 +125,10 @@ class StepperController extends ControllerMVC {
   }
 
   step3(BuildContext context, String type, String phone, Map coordinates) {
+    if (dropDownValue == null || dropDownValue == 0)
+      return snackbar(context, "please select business type");
     if (adharfront != null &&
         adharback != null &&
-        dropDownValue != null &&
         step3Formkey.currentState.validate()) {
       step4(context, type, phone, coordinates);
     } else {
@@ -124,7 +138,11 @@ class StepperController extends ControllerMVC {
 
   step4(
       BuildContext context, String type, String phone, Map coordinates) async {
-    isProcess = true;
+    partnerProvider.setRegistrationInProgress(true);
+    // setState(() {
+    //   isProcess = true;
+    // });
+
     await imageUpload();
 
     var legalDocs = {
@@ -134,25 +152,26 @@ class StepperController extends ControllerMVC {
     };
 
     Object docs = jsonEncode(legalDocs);
-
+    log("ph2 $verifiedNumber $phone");
     var body = {
       "docs": docs,
       "partnerPic": pictureLink.toString(),
+      "altNum": altnumberTf?.text?.toString(),
       "name": nameTf.text.toString(),
-      "phNum": phone.toString(),
+      "phNum": phone ?? verifiedNumber,
       "eMail": emailTf.text.toString(),
-      "job": 4.toString(),
+      "job": (dropDownValue - 1).toString(),
       "pId": FirebaseAuth.instance.currentUser.uid.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "accountType": type,
-      "permission": 0.toString(),
+      "permission": "0",
       "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
       "dob": pickedDate.millisecondsSinceEpoch.toString(),
       "businessName": businessNameTf.text.toString(),
       "experience": experienceTf.text.toString(),
-      "acceptance": 100.toString(),
-      "availability": false.toString(),
-      "rate": 100.toString(),
+      "acceptance": "100",
+      "availability": "false",
+      "rate": "100",
       "perAdd": peradTf.text.toString(),
       "tempAdd": tempadTf.text.toString(),
       "partnerDeviceToken":
@@ -167,15 +186,21 @@ class StepperController extends ControllerMVC {
     log(body.toString());
 
     Server().postMethod(API.partnerRegister, body).then((response) {
-      log(body.toString());
+      partnerProvider.setRegistrationInProgress(false);
       log(response.statusCode.toString());
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-        isProcess = false;
+        //  isProcess = false;
       } else {
-        isFail = true;
+        try {
+          snackbar(context, jsonDecode(response.body).toString());
+          log(jsonDecode(response.body).toString());
+        } catch (e) {
+          snackbar(context, response.body.toString());
+          log(response.body.toString());
+        }
         snackbar(context, 'Something Went Wrong');
       }
     });
@@ -184,23 +209,24 @@ class StepperController extends ControllerMVC {
   //utilities
 
   Future<void> imageUpload() async {
-    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
-    UploadTask pic = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(profilepics);
-    UploadTask adharF = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(adharfront);
-    UploadTask adharB = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(adharback);
-    var profilepic = await (await pic).ref.getDownloadURL();
-    var adharFront = await (await adharF).ref.getDownloadURL();
-    var adharBack = await (await adharB).ref.getDownloadURL();
+    // var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+    // UploadTask pic = postImageRef
+    //     .child(DateTime.now().toString() + ".jpg")
+    //     .putFile(profilepics);
+    // UploadTask adharF = postImageRef
+    //     .child(DateTime.now().toString() + ".jpg")
+    //     .putFile(adharfront);
+    // UploadTask adharB = postImageRef
+    //     .child(DateTime.now().toString() + ".jpg")
+    //     .putFile(adharback);
+    // var profilepic = await (await pic).ref.getDownloadURL();
+    // var adharFront = await (await adharF).ref.getDownloadURL();
+    // var adharBack = await (await adharB).ref.getDownloadURL();
 
-    adharFrontpageLink = adharFront.toString();
-    adharBackpageLink = adharBack.toString();
-    pictureLink = profilepic.toString();
+    adharFrontpageLink = await uploadFilesToCloud(adharfront);
+    adharBackpageLink = await uploadFilesToCloud(adharback);
+    pictureLink =
+        profilepics != null ? await uploadFilesToCloud(profilepics) : "";
     // clgIdLink = clgId.toString();
   }
 

@@ -4,6 +4,7 @@ import 'package:spotmies_partner/apiCalls/testController.dart';
 
 class PartnerDetailsProvider extends ChangeNotifier {
   final controller = TestController();
+  bool registrationInProgress=false;
   Map partnerDetailsFull;
   Map profileDetails;
   List inComingOrders = [];
@@ -25,6 +26,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
 
+
+void setRegistrationInProgress(bool state){
+  registrationInProgress = state ?? true;
+  notifyListeners();
+}
 
   setCurrentPid(dynamic pid){
 currentPid = pid.toString();
@@ -71,6 +77,7 @@ notifyListeners();
   }
 
   void setPartnerDetails(data) {
+
     var dataTemp = data;
     partnerDetailsFull = dataTemp;
     inComingOrders = dataTemp['inComingOrders'];

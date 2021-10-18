@@ -102,6 +102,7 @@ class _NavBarState extends State<NavBar> {
     chatProvider.setChatList(chatList);
 
     var details = await partnerDetailsFull(currentPid);
+    log("details $details");
     partnerProvider.setPartnerDetails(details);
 
     var partnerOrders = await partnerAllOrders(currentPid);

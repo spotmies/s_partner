@@ -90,7 +90,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Maps()));
+                                          builder: (context) => Maps(
+                                                isNavigate: false,
+                                                phoneNumber: widget.phNumber
+                                              )));
                                 },
                                 leading: CircleAvatar(
                                     backgroundColor: Colors.grey[200],
@@ -142,6 +145,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
             MaterialPageRoute(
                 builder: (context) => Maps(
                     coordinates: geo.coordinates,
+                    isNavigate: false,
                     phoneNumber: widget.phNumber)));
       },
       leading: CircleAvatar(
