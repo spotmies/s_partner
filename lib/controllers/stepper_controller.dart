@@ -63,6 +63,7 @@ class StepperController extends ControllerMVC {
   File adharback;
   File clgId;
   String adharFrontpageLink = "";
+  Map<String, double> workLocation;
 
   //langueges
 
@@ -178,7 +179,9 @@ class StepperController extends ControllerMVC {
           await FirebaseMessaging.instance.getToken().then((value) {
         return value.toString();
       }),
-      "isTermsAccepted": accept.toString()
+      "isTermsAccepted": accept.toString(),
+      "workLocation.0": workLocation['lat'].toString(),
+      "workLocation.1": workLocation['log'].toString(),
     };
     for (var i = 0; i < localLang.length; i++) {
       body["lang.$i"] = localLang[i];

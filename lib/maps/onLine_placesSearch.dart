@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/maps/maps.dart';
 import 'package:spotmies_partner/models/locationSearchModel.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
@@ -92,7 +93,20 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                       MaterialPageRoute(
                                           builder: (context) => Maps(
                                                 isNavigate: false,
-                                                phoneNumber: widget.phNumber
+                                                phoneNumber: widget.phNumber,
+                                                onComplete: (cords) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AccountType(
+                                                                coordinates:
+                                                                    cords,
+                                                                phoneNumber:
+                                                                    widget
+                                                                        .phNumber,
+                                                              )));
+                                                },
                                               )));
                                 },
                                 leading: CircleAvatar(

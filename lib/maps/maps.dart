@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Maps extends StatefulWidget {
@@ -15,8 +18,13 @@ class Maps extends StatefulWidget {
   final Map coordinates;
   final String phoneNumber;
   final bool isNavigate;
+  final Function onComplete;
   Maps(
-      {this.ordId, this.coordinates, this.phoneNumber, this.isNavigate = true});
+      {this.ordId,
+      this.coordinates,
+      this.phoneNumber,
+      this.isNavigate = true,
+      this.onComplete});
   @override
   _MapsState createState() => _MapsState(ordId, coordinates);
 }
@@ -25,9 +33,11 @@ class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
   String ordId;
   Map coordinates;
+  Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
+
   _MapsState(this.ordId, this.coordinates);
-  var formkey = GlobalKey<FormState>();
-  var scaffoldkey = GlobalKey<ScaffoldState>();
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   GoogleMapController googleMapController;
   Position position;
   double lat;
@@ -193,6 +203,9 @@ class _MapsState extends State<Maps> {
   bottomAddressSheet(double lat, double long) {
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    log("lat long $lat $long $generatedCoordinates");
+    generatedCoordinates['lat'] = lat;
+    generatedCoordinates['log'] = long;
     showModalBottomSheet(
         context: context,
         elevation: 22,
@@ -286,13 +299,17 @@ class _MapsState extends State<Maps> {
                             height: hight * 0.05,
                             bgColor: Colors.indigo[900],
                             onClick: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AccountType(
-                                            coordinates: coordinates,
-                                            phoneNumber: widget.phoneNumber,
-                                          )));
+                              if (widget.onComplete == null)
+                                return snackbar(
+                                    context, "something went wrong");
+                              widget.onComplete(generatedCoordinates);
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => AccountType(
+                              //               coordinates: generatedCoordinates,
+                              //               phoneNumber: widget.phoneNumber,
+                              //             )));
                             },
                             buttonName: 'Save',
                             textColor: Colors.white,

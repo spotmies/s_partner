@@ -18,25 +18,23 @@ class AccountType extends StatefulWidget {
 class _AccountTypeState extends State<AccountType> {
   bool freelanace = false;
   bool student = false;
+  String userAccountType = "";
+   @override
+  void initState() {
+    super.initState();
+    
+  }
   userType(student, freelanace, BuildContext context) {
-    if (student == true) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (_) => StepperPersonalInfo(
-                phone: widget.phoneNumber,
-                type: 'student',
-                coordinates: widget.coordinates)),
-      );
-    }
-    if (freelanace == true) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (_) => StepperPersonalInfo(
-                phone: widget.phoneNumber, type: 'Freelance')),
-      );
-    } else {
-      snackbar(context, 'Please select any one of above');
-    }
+    if (userAccountType == "")
+      return snackbar(context, 'Please select any one of above');
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (_) => StepperPersonalInfo(
+              phone: widget.phoneNumber,
+              type: userAccountType,
+              coordinates: widget.coordinates)),
+    );
   }
 
   @override
@@ -62,7 +60,7 @@ class _AccountTypeState extends State<AccountType> {
             height: _hight * 0.07,
           ),
           Container(
-            height: _hight * 0.6,
+            // height: _hight * 0.6,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,8 +85,9 @@ class _AccountTypeState extends State<AccountType> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      freelanace = !freelanace;
-                      student = false;
+                      // freelanace = !freelanace;
+                      // student = false;
+                      userAccountType = "business";
                     });
                   },
                   child: Container(
@@ -108,19 +107,23 @@ class _AccountTypeState extends State<AccountType> {
                         Checkbox(
                             activeColor: Colors.white,
                             checkColor: Colors.indigo[900],
-                            value: freelanace,
+                            value: userAccountType == "business",
                             shape: CircleBorder(),
                             onChanged: (bool value) {
                               setState(() {
-                                freelanace = value;
-                                student = false;
+                                // freelanace = value;
+                                // student = false;
+                                userAccountType = "business";
                               });
                             }),
-                        TextWid(
-                          text: "Profissional technician",
-                          size: _width * 0.055,
-                          weight: FontWeight.w600,
-                          color: freelanace ? Colors.white : Colors.grey[700],
+                        Container(
+                          child: TextWid(
+                            text: "Self Employee / Local Business",
+                            size: _width * 0.055,
+                            weight: FontWeight.w600,
+                            maxlines: 3,
+                            color: freelanace ? Colors.white : Colors.grey[700],
+                          ),
                         ),
                       ],
                     ),
@@ -132,8 +135,9 @@ class _AccountTypeState extends State<AccountType> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      student = !student;
-                      freelanace = false;
+                      // student = !student;
+                      // freelanace = false;
+                      userAccountType = "student";
                     });
                   },
                   child: Container(
@@ -153,16 +157,64 @@ class _AccountTypeState extends State<AccountType> {
                         Checkbox(
                             activeColor: Colors.white,
                             checkColor: Colors.indigo[900],
-                            value: student,
+                            value: userAccountType == "student",
                             shape: CircleBorder(),
                             onChanged: (bool value) {
                               setState(() {
-                                student = value;
-                                freelanace = false;
+                                // student = value;
+                                // freelanace = false;
+                                userAccountType = "student";
                               });
                             }),
                         TextWid(
                           text: "Student",
+                          size: _width * 0.055,
+                          weight: FontWeight.w600,
+                          color: student ? Colors.white : Colors.grey[700],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: _hight * 0.01,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      // student = !student;
+                      // freelanace = false;
+                      userAccountType = "freelancer";
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(left: _width * 0.05),
+                    height: _hight * 0.06,
+                    width: _width * 0.9,
+                    decoration: BoxDecoration(
+                        color: student ? Colors.indigo[900] : Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                            color: !student
+                                ? Colors.blueGrey[200]
+                                : Colors.white)),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: Colors.indigo[900],
+                            value: userAccountType == "freelancer",
+                            shape: CircleBorder(),
+                            onChanged: (bool value) {
+                              setState(() {
+                                // student = value;
+                                // freelanace = false;
+                                userAccountType = "freelancer";
+                              });
+                            }),
+                        TextWid(
+                          text: "freelancer",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: student ? Colors.white : Colors.grey[700],
