@@ -38,11 +38,12 @@ bottomOptionsMenu(context,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: options.length > 4 ? 4 : options.length,
+                    itemCount: options.length,
                     // physics: ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
+                          Navigator.pop(context);
                           switch (index) {
                             case 0:
                               if (option1Click != null) option1Click();
@@ -60,7 +61,6 @@ bottomOptionsMenu(context,
                             default:
                               break;
                           }
-                          Navigator.pop(context);
                         },
                         child: Container(
                           // padding: EdgeInsets.only(right: 20),

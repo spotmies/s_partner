@@ -2,12 +2,27 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 String chatInput;
 TextEditingController inputController = TextEditingController();
-
+List mediaOptions = [
+  {
+    "name": "Camera",
+    "icon": Icons.camera,
+  },
+  {"name": "Gallery", "icon": Icons.collections},
+  {
+    "name": "Video",
+    "icon": Icons.video_camera_back,
+  },
+  {
+    "name": "Audio",
+    "icon": Icons.mic,
+  },
+];
 Container chatInputField(
   sendCallBack,
   BuildContext context,
@@ -74,8 +89,17 @@ Container chatInputField(
                         child: inputController.text.isEmpty
                             ? IconButton(
                                 onPressed: () async {
-                                  await attachments(context, hight, width,
-                                      chatController, sendCallBack, msgId);
+                                  bottomOptionsMenu(context,
+                                      options: mediaOptions, option1Click: () {
+                                    chatController.chooseImage(
+                                        sendCallBack, msgId);
+                                  }, option3Click: () {
+                                    chatController.pickVideo(
+                                        sendCallBack, msgId);
+                                  }, option4Click: () {
+                                    audioRecoder(context, hight, width,
+                                        chatController, sendCallBack, msgId);
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.attach_file,
@@ -128,90 +152,6 @@ Container chatInputField(
   );
 }
 
-Future attachments(BuildContext context, double hight, double width,
-    ChatController chatController, sendCallBack, String msgId) {
-  return showModalBottomSheet(
-      context: context,
-      elevation: 22,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          height: 80,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        chatController.chooseImage(sendCallBack, msgId);
-                        Navigator.pop(context);
-
-                        // imageGallery(context, chatController);
-                      },
-                      icon: Icon(Icons.camera),
-                    ),
-                    TextWid(
-                      text: 'Camera',
-                      size: width * 0.03,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.collections),
-                    ),
-                    TextWid(
-                      text: 'Gallery',
-                      size: width * 0.03,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        chatController.pickVideo(sendCallBack, msgId);
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.video_camera_back),
-                    ),
-                    TextWid(
-                      text: 'Video',
-                      size: width * 0.03,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        audioRecoder(context, hight, width, chatController,
-                            sendCallBack, msgId);
-                      },
-                      icon: Icon(Icons.mic),
-                    ),
-                    TextWid(
-                      text: 'Audio',
-                      size: width * 0.03,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      });
-}
 
 //   //image upload function
 //   Future<void> uploadimage() async {

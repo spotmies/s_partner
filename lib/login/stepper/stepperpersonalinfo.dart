@@ -21,7 +21,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 class StepperPersonalInfo extends StatefulWidget {
   final String phone;
   final String type;
-  final Map coordinates;
+  final Map<String, double> coordinates;
   StepperPersonalInfo(
       {@required this.phone, @required this.type, this.coordinates});
   @override
@@ -43,6 +43,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     _stepperController.pickedTime = TimeOfDay.now();
     log("ph1 ${widget.phone}");
     log("cord ${widget.coordinates}");
+    _stepperController.workLocation = widget.coordinates;
     _stepperController.verifiedNumber = widget.phone.toString();
     // print("76 ${FirebaseAuth.instance.currentUser.uid}");
   }

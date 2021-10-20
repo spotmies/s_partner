@@ -35,9 +35,9 @@ class _NavBarState extends State<NavBar> {
   PartnerDetailsProvider partnerProvider;
 //socket
 
-  StreamController _chatResponse;
+ // StreamController _chatResponse;
 
-  Stream stream;
+  // Stream stream;
 
   IO.Socket socket;
 
@@ -72,7 +72,8 @@ class _NavBarState extends State<NavBar> {
                   profile: newTarget['incomingProfile'],
                 )));
       }
-      _chatResponse.add(socket);
+     // _chatResponse.add(socket);
+      chatProvider.addnewMessage(socket);
     });
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
@@ -164,14 +165,14 @@ class _NavBarState extends State<NavBar> {
     log("current pid ${partnerProvider.currentPid}");
     connectNotifications();
 
-    _chatResponse = StreamController();
+    // _chatResponse = StreamController();
 
-    stream = _chatResponse.stream.asBroadcastStream();
+    // stream = _chatResponse.stream.asBroadcastStream();
 
     socketResponse();
-    stream.listen((event) {
-      chatProvider.addnewMessage(event);
-    });
+    // stream.listen((event) {
+    //   chatProvider.addnewMessage(event);
+    // });
 
     chatProvider.addListener(() {
       log("event");
