@@ -14,28 +14,20 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Maps extends StatefulWidget {
-  final String ordId;
   final Map coordinates;
-  final String phoneNumber;
   final bool isNavigate;
   final Function onComplete;
-  Maps(
-      {this.ordId,
-      this.coordinates,
-      this.phoneNumber,
-      this.isNavigate = true,
-      this.onComplete});
+  Maps({this.coordinates, this.isNavigate = true, this.onComplete});
   @override
-  _MapsState createState() => _MapsState(ordId, coordinates);
+  _MapsState createState() => _MapsState(coordinates);
 }
 
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
-  String ordId;
   Map coordinates;
   Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
 
-  _MapsState(this.ordId, this.coordinates);
+  _MapsState(this.coordinates);
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   GoogleMapController googleMapController;

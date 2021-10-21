@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -55,13 +56,13 @@ class LoginPageController extends ControllerMVC {
                 .signInWithCredential(credential)
                 .then((value) async {
               if (value.user != null) {
-                // print("user already login");
+                print("user already login");
                 // checkUserRegistered(value.user.uid);
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => OnlinePlaceSearch(
-                            phNumber: timerProvider.phNumber)),
+                           )),
                     (route) => false);
               }
             });
@@ -121,8 +122,20 @@ class LoginPageController extends ControllerMVC {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        OnlinePlaceSearch(phNumber: timerProvider.phNumber)),
+                    builder: (context) => OnlinePlaceSearch(
+                       
+                        onSave: (cords, fullAddress) {
+                          log("onsave $cords $fullAddress");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountType(
+                                      coordinates: cords,
+                                      phoneNumber: timerProvider.phNumber,
+                                    )),
+                            // (route) => false
+                          );
+                        })),
                 (route) => false);
           } else if (resp == "true") {
             Navigator.pushAndRemoveUntil(
