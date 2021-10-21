@@ -2,29 +2,34 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
 import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/maps/maps.dart';
 import 'package:spotmies_partner/models/locationSearchModel.dart';
+import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
-  final String phNumber;
-  OnlinePlaceSearch({this.phNumber});
+  final Function onSave;
+  OnlinePlaceSearch({this.onSave});
 
   @override
   OnlinePlaceSearchState createState() => OnlinePlaceSearchState();
 }
 
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
-  List<Places> geoLocations = [];
+  // List<Places> geoLocations = [];
   String query = '';
   Timer debouncer;
+  UniversalProvider universalProvider;
 
   @override
   void initState() {
     super.initState();
+    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
     init();
   }
@@ -47,120 +52,147 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future init() async {
-    final geoLocations = await PlacesApi.getLoc(query);
-
-    setState(() => this.geoLocations = geoLocations);
+    if (universalProvider.geoLocations.length > 0) return;
+    // var geoLocationss = await PlacesApi.getLoc(query);
+    universalProvider.setLocationsLoader(true);
+    List geoLocationss = await PlacesApi.getAllLocations();
+    universalProvider.setLocationsLoader(false);
+    universalProvider.setGeoLocations(geoLocationss);
+    // setState(() => this.geoLocations = geoLocations);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              buildSearch(),
-              geoLocations.length == 0
-                  ? Container(
-                      // height: 600,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            color: Colors.indigo[900],
-                            backgroundColor: Colors.grey[100],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          TextWid(
-                            text: 'Please Wait Data is Fetching ....',
-                          )
-                        ],
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: geoLocations.length,
-                        itemBuilder: (context, index) {
-                          final book = geoLocations[index];
+        body: Consumer<UniversalProvider>(builder: (context, data, child) {
+          return SafeArea(
+            child: Column(
+              children: <Widget>[
+                buildSearch(),
+                data.locationsLoader
+                    ? Container(
+                        // height: 600,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: Colors.indigo[900],
+                              backgroundColor: Colors.grey[100],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            TextWid(
+                              text: 'Please Wait Data is Fetching ....',
+                            )
+                          ],
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: data.searchLocations.length,
+                          itemBuilder: (context, index) {
+                            final book = data.searchLocations[index];
 
-                          //return
-
-                          if (index == 0) {
-                            return ListTile(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Maps(
-                                                isNavigate: false,
-                                                phoneNumber: widget.phNumber,
-                                                onComplete: (cords) {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              AccountType(
-                                                                coordinates:
-                                                                    cords,
-                                                                phoneNumber:
-                                                                    widget
-                                                                        .phNumber,
-                                                              )));
-                                                },
-                                              )));
-                                },
-                                leading: CircleAvatar(
-                                    backgroundColor: Colors.grey[200],
-                                    child: Icon(Icons.gps_fixed)),
-                                title: TextWid(
-                                  text: 'Your Location',
-                                  size: 15,
-                                  weight: FontWeight.w700,
-                                ),
-                                trailing: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.directions),
-                                ));
-                          } else {
-                            return buildBook(book);
-                          }
-                        },
+                            if (index == 0) {
+                              return Column(
+                                children: [
+                                  ListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Maps(
+                                                      isNavigate: false,
+                                                      onComplete: (cords) {
+                                                        if (widget.onSave ==
+                                                            null)
+                                                          return snackbar(
+                                                              context,
+                                                              "something went wrong");
+                                                        widget.onSave(cords,
+                                                            "fullAddress");
+                                                    
+                                                      },
+                                                    )));
+                                      },
+                                      leading: CircleAvatar(
+                                          backgroundColor: Colors.grey[200],
+                                          child: Icon(Icons.gps_fixed)),
+                                      title: TextWid(
+                                        text: 'Pick my current Location',
+                                        size: 15,
+                                        weight: FontWeight.w700,
+                                      ),
+                                      trailing: IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.directions),
+                                      )),
+                                  buildBook(book),
+                                ],
+                              );
+                            } else {
+                              return buildBook(book);
+                            }
+                          },
+                        ),
                       ),
-                    ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       );
 
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Find Place',
         icon: Icons.location_searching,
-        onChanged: searchBook,
+        onChanged: searchLocations,
       );
+  searchLocations(String query) {
+    if (query.length > 3) {
+      dynamic searches = getArea(query, universalProvider.geoLocations);
+      universalProvider.setSearchLocations(searches);
+    } else if (query.length == 0) {
+      universalProvider.showAllLocation();
+    }
+  }
 
   Future searchBook(String query) async => debounce(() async {
         final geoLocations = await PlacesApi.getLoc(query);
 
         if (!mounted) return;
 
-        setState(() {
-          this.query = query;
-          this.geoLocations = geoLocations;
-        });
+        // setState(() {
+        //   this.query = query;
+        //   this.geoLocations = geoLocations;
+        // });
       });
 
-  Widget buildBook(Places geo) => ListTile(
+  Widget buildBook(dynamic geo) => ListTile(
       onTap: () {
-        log(geo.coordinates.toString());
-        // Navigator.pop(context, geo.coordinates);
+        log(geo['coordinates'].toString());
+        // Navigator.pop(context, geo['coordinates);
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => Maps(
-                    coordinates: geo.coordinates,
-                    isNavigate: false,
-                    phoneNumber: widget.phNumber)));
+                      coordinates: geo['coordinates'],
+                      isNavigate: false,
+                      onComplete: (cords) {
+                        log("completed $cords");
+                        if (widget.onSave == null)
+                          return snackbar(context, "something went wrong");
+
+                        widget.onSave(cords, "fullAddress");
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => AccountType(
+                        //               coordinates: cords,
+                        //               phoneNumber: widget.phNumber,
+                        //             )));
+                      },
+                    )));
       },
       leading: CircleAvatar(
         backgroundColor: Colors.grey[200],
@@ -170,12 +202,12 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
         ),
       ),
       title: TextWid(
-        text: geo.subLocality,
+        text: geo['subLocality'],
         size: 15,
         weight: FontWeight.w600,
       ),
       subtitle: TextWid(
-        text: geo.addressLine,
+        text: geo['addressLine'],
         size: 12,
       ),
       trailing: IconButton(
