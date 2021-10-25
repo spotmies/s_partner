@@ -36,7 +36,8 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
   updatePartnerData(body) async {
     var response = await Server().editMethod(API.partnerStatus + pId, body);
     if (response.statusCode == 200) {
-      Map<String, dynamic> data = jsonDecode(response.body) as Map<String, dynamic>;
+      Map<String, dynamic> data =
+          jsonDecode(response.body) as Map<String, dynamic>;
       partnerDetailsProvider.setPartnerDetailsOnly(data);
     } else {
       partnerDetailsProvider.setAvailability(!pd['availability']);
@@ -121,13 +122,13 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                   showOnOff: true,
                   value: pd['availability'],
                   onToggle: (value) {
-                  //  displayAwesomeNotification(context);
+                    //  displayAwesomeNotification(context);
 
                     if (data.offlineScreenLoader) return;
                     data.setOffileLoader(true);
                     data.setAvailability(value);
 
-                    var body = {
+                    Map<String, String> body = {
                       "availability": value.toString(),
                     };
                     updatePartnerData(body);
@@ -136,18 +137,16 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
           ],
         ),
         body: GestureDetector(
-          // onPanUpdate: (details) {
-          //   // Swiping in right direction.
-          //   // if (details.delta.dx > 0) {
-          //   //   // print("right");
-          //   //   widget.drawerController.open();
-          //   // }
-
-          //   if (details.delta.dx < 0) {
-          //     // print("left");
-          //     widget.drawerController.close();
-          //   }
-          // },
+          onPanUpdate: (details) {
+            //   Swiping in right direction.
+            if (details.delta.dx > 0) {
+              // print("right");
+              widget.drawerController.open();
+            } else if (details.delta.dx < 0) {
+              // print("left");
+              widget.drawerController.close();
+            }
+          },
           child: Container(
             child: pd['availability'] == true ? Online(pd) : Offline(pd),
           ),

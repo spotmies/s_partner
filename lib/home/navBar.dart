@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,10 +17,12 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
 String pId = "123456"; //user id
+
 class NavBar extends StatefulWidget {
   final int data;
   final String payload;
@@ -35,7 +36,7 @@ class _NavBarState extends State<NavBar> {
   PartnerDetailsProvider partnerProvider;
 //socket
 
- // StreamController _chatResponse;
+  // StreamController _chatResponse;
 
   // Stream stream;
 
@@ -72,7 +73,7 @@ class _NavBarState extends State<NavBar> {
                   profile: newTarget['incomingProfile'],
                 )));
       }
-     // _chatResponse.add(socket);
+      // _chatResponse.add(socket);
       chatProvider.addnewMessage(socket);
     });
     socket.on("recieveReadReciept", (data) {
@@ -95,21 +96,33 @@ class _NavBarState extends State<NavBar> {
     });
   }
 
+  retriveDataFromSF() async {
+    dynamic user = await getMyProfile();
+    dynamic chats = await getChats();
+    dynamic orders = await getOrders();
+    log("chat $chats");
+    log("user $user");
+    log("order $orders");
+    if (chats != null) chatProvider.setChatList(chats);
+    if (orders != null) partnerProvider.setOrder(orders);
+    if (user != null) partnerProvider.setPartnerDetails(user);
+  }
+
   //socket
   hittingAllApis(currentPid) async {
     log("pid is >>>>>>>>> $pId");
-    var chatList = await getChatListFromDb(currentPid);
-    // print('chatlist $chatList ');
+    dynamic chatList = await getChatListFromDb(currentPid);
+
     chatProvider.setChatList(chatList);
 
-    var details = await partnerDetailsFull(currentPid);
-    log("details $details");
+    dynamic details = await partnerDetailsFull(currentPid);
+
     partnerProvider.setPartnerDetails(details);
 
-    var partnerOrders = await partnerAllOrders(currentPid);
+    dynamic partnerOrders = await partnerAllOrders(currentPid);
 
     partnerProvider.setOrder(partnerOrders);
-    // log("details $details");
+    log("hitting all api completed");
   }
 
   connectNotifications() async {
@@ -119,7 +132,12 @@ class _NavBarState extends State<NavBar> {
 
   @override
   initState() {
-   pId = FirebaseAuth.instance.currentUser.uid.toString();
+    pId = FirebaseAuth.instance.currentUser.uid.toString();
+
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    retriveDataFromSF();
     // notifications();
     awesomeInitilize();
     // displayAwesomeNotification();
@@ -157,22 +175,11 @@ class _NavBarState extends State<NavBar> {
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     });
 
-    super.initState();
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
-    hittingAllApis(partnerProvider.currentPid.toString());
     log("current pid ${partnerProvider.currentPid}");
     connectNotifications();
 
-    // _chatResponse = StreamController();
-
-    // stream = _chatResponse.stream.asBroadcastStream();
-
     socketResponse();
-    // stream.listen((event) {
-    //   chatProvider.addnewMessage(event);
-    // });
+    hittingAllApis(partnerProvider.currentPid.toString());
 
     chatProvider.addListener(() {
       log("event");
@@ -216,6 +223,7 @@ class _NavBarState extends State<NavBar> {
         log("loop end");
       }
     });
+    super.initState();
     // chatProvider.confirmReceiveAllMessages();
   }
 

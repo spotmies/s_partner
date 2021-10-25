@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 
 String pid = FirebaseAuth.instance.currentUser.uid;
 
@@ -26,14 +27,15 @@ class ChatProvider extends ChangeNotifier {
   int callStatus = 0; // 0- connecting or new connection 1-calling 2- ringing
   //3- connected 4- rejected 5- not lifted 6- call failed or disconnected
 
-  setChatList(var list) {
+  setChatList(dynamic list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
     confirmReceiveAllMessages();
     notifyListeners();
+    saveChats(list);
   }
 
-  void setChatList2(var list) {
+  void setChatList2(dynamic list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
     notifyListeners();
