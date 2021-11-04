@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
 class PartnerDetailsProvider extends ChangeNotifier {
   final controller = TestController();
-  bool registrationInProgress=false;
+  bool registrationInProgress = false;
   Map partnerDetailsFull;
   Map profileDetails;
   List inComingOrders = [];
@@ -14,7 +15,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool inComingOrdersLoader = false;
   bool editProfileLoader = false;
   String editProfileLoaderName = "";
-  bool offlineScreenLoader = false;
+  bool offlineScreenLoader = true;
   bool reloadIncomingOrders = false;
   String currentPid = "123456";
 
@@ -26,16 +27,16 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
 
+  void setRegistrationInProgress(bool state) {
+    registrationInProgress = state ?? true;
+    notifyListeners();
+  }
 
-void setRegistrationInProgress(bool state){
-  registrationInProgress = state ?? true;
-  notifyListeners();
-}
+  setCurrentPid(dynamic pid) {
+    currentPid = pid.toString();
+    notifyListeners();
+  }
 
-  setCurrentPid(dynamic pid){
-currentPid = pid.toString();
-notifyListeners();
-  }  
   getOrderById(ordId) {
     int index;
     index = inComingOrders.indexWhere(
@@ -77,18 +78,21 @@ notifyListeners();
   }
 
   void setPartnerDetails(data) {
+    dynamic dataTemp = data;
 
-    var dataTemp = data;
+    profileDetails = dataTemp;
     partnerDetailsFull = dataTemp;
     inComingOrders = dataTemp['inComingOrders'];
+    offlineScreenLoader = false;
     sortListByTime();
     orders = dataTemp['orders'];
-    setPartnerDetailsOnly(dataTemp);
+    //setPartnerDetailsOnly(dataTemp);
     notifyListeners();
+    saveMyProfile(dataTemp);
   }
 
   void setPartnerDetailsOnly(data) {
-    var dataTemp = data;
+    dynamic dataTemp = data;
     dataTemp.removeWhere(
         (key, value) => key == "inComingOrders" || key == "orders");
     profileDetails = dataTemp;
@@ -128,6 +132,7 @@ notifyListeners();
   void setOrder(allOrders) {
     orders = allOrders;
     notifyListeners();
+    saveOrders(allOrders);
   }
 
   void pushOrder(orderData) {
