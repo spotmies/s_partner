@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
+import 'topics/topics_List.dart';
+
 class TutCategory extends StatefulWidget {
   @override
   _TutCategoryState createState() => _TutCategoryState();
@@ -195,6 +197,12 @@ class BodyWidget extends StatelessWidget {
         children: List.generate(catelog.length, (index) {
           return Center(
               child: CatCard(
+            onClick: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TopicsList()),
+              );
+            },
             width: _width,
             cardPrimaryCol: catelog[index]['primaryColor'],
             cardSecondayCol: catelog[index]['secondaryColor'],
@@ -222,6 +230,7 @@ class CatCard extends StatelessWidget {
       @required this.videos,
       @required this.docs,
       @required this.helperText,
+      @required this.onClick,
       @required this.id})
       : _width = width,
         super(key: key);
@@ -235,239 +244,243 @@ class CatCard extends StatelessWidget {
   final String docs;
   final String helperText;
   final String id;
+  final VoidCallback onClick;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width * 0.45,
-      height: _width * 0.45,
+    return InkWell(
+      onTap: onClick,
       child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30),
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-              color: cardPrimaryCol,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 10.0,
+        width: _width * 0.45,
+        height: _width * 0.45,
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
-              ]),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: Container(
-                    width: _width * 0.45,
-                    decoration: BoxDecoration(
-                      // color: cardPrimaryCol,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Container(
-                              child: Align(
-                                  alignment: Alignment(-0.4, -0.3),
-                                  child: TextWid(
-                                    text: helperText,
-                                    size: _width * 0.035,
-                                    color: Colors.white,
-                                  ))),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: cardSecondayCol,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: cardSecondayCol,
-                                  blurRadius: 3.0,
-                                ),
-                              ]),
-                          width: _width * 0.15,
-                          height: _width * 0.15,
-                          child: Icon(
-                            cardIcon,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  width: _width * 0.45,
+                color: cardPrimaryCol,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 10.0,
+                  ),
+                ]),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
                   child: Container(
-                      padding: EdgeInsets.only(left: _width * 0.04),
-                      child: TextWid(
-                        text: title,
-                        weight: FontWeight.bold,
-                        color: Colors.white,
-                        lSpace: 0.5,
-                        size: _width * 0.048,
+                      width: _width * 0.45,
+                      decoration: BoxDecoration(
+                        // color: cardPrimaryCol,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          topLeft: Radius.circular(20),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                                child: Align(
+                                    alignment: Alignment(-0.4, -0.3),
+                                    child: TextWid(
+                                      text: helperText,
+                                      size: _width * 0.035,
+                                      color: Colors.white,
+                                    ))),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: cardSecondayCol,
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: cardSecondayCol,
+                                    blurRadius: 3.0,
+                                  ),
+                                ]),
+                            width: _width * 0.15,
+                            height: _width * 0.15,
+                            child: Icon(
+                              cardIcon,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       )),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                    ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
                     width: _width * 0.45,
                     child: Container(
-                        // padding: EdgeInsets.only(right: 15),
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          // color: Colors.amber,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextWid(
-                                    text: "$docs+",
-                                    color: Colors.white70,
-                                    size: _width * 0.050,
-                                    weight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    Icons.text_snippet_outlined,
-                                    size: _width * 0.043,
-                                    color: Colors.white,
-                                  ),
-                                  TextWid(
-                                    text: " Docs",
-                                    color: Colors.white70,
-                                    size: _width * 0.030,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // color: Colors.pink,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextWid(
-                                    text: "$videos+",
-                                    color: Colors.white70,
-                                    size: _width * 0.050,
-                                    weight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    Icons.slow_motion_video_rounded,
-                                    size: _width * 0.043,
-                                    color: Colors.white,
-                                  ),
-                                  TextWid(
-                                    text: " Videos",
-                                    color: Colors.white70,
-                                    size: _width * 0.030,
-                                  ),
-                                ],
-                              ),
-
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.end,
-                              //   children: [
-                              //     Icon(
-                              //       Icons.text_snippet_outlined,
-                              //       size: _width * 0.037,
-                              //       color: Colors.white,
-                              //     ),
-                              //     TextWid(
-                              //       text: " Docs $docs",
-                              //       color: Colors.white70,
-                              //       size: _width * 0.030,
-                              //     ),
-                              //   ],
-                              // )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                        // Column(
-
-                        //   crossAxisAlignment: CrossAxisAlignment.end,
-                        //   children: [
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.end,
-                        //       children: [
-                        //         TextWid(
-                        //           text: "$videos",
-                        //           color: Colors.white70,
-                        //           size: _width * 0.050,
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.end,
-                        //       children: [
-                        //         Icon(
-                        //           Icons.slow_motion_video_rounded,
-                        //           size: _width * 0.043,
-                        //           color: Colors.white,
-                        //         ),
-                        //         TextWid(
-                        //           text: " Videos",
-                        //           color: Colors.white70,
-                        //           size: _width * 0.030,
-                        //         ),
-                        //       ],
-                        //     ),
-
-                        //     // Row(
-                        //     //   mainAxisAlignment: MainAxisAlignment.end,
-                        //     //   children: [
-                        //     //     Icon(
-                        //     //       Icons.text_snippet_outlined,
-                        //     //       size: _width * 0.037,
-                        //     //       color: Colors.white,
-                        //     //     ),
-                        //     //     TextWid(
-                        //     //       text: " Docs $docs",
-                        //     //       color: Colors.white70,
-                        //     //       size: _width * 0.030,
-                        //     //     ),
-                        //     //   ],
-                        //     // )
-                        //   ],
-                        // ),
+                        padding: EdgeInsets.only(left: _width * 0.04),
+                        child: TextWid(
+                          text: title,
+                          weight: FontWeight.bold,
+                          color: Colors.white,
+                          lSpace: 0.5,
+                          size: _width * 0.048,
                         )),
-              ),
-            ],
-          )),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                      ),
+                      width: _width * 0.45,
+                      child: Container(
+                          // padding: EdgeInsets.only(right: 15),
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            // color: Colors.amber,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWid(
+                                      text: "$docs+",
+                                      color: Colors.white70,
+                                      size: _width * 0.050,
+                                      weight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      Icons.text_snippet_outlined,
+                                      size: _width * 0.043,
+                                      color: Colors.white,
+                                    ),
+                                    TextWid(
+                                      text: " Docs",
+                                      color: Colors.white70,
+                                      size: _width * 0.030,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            // color: Colors.pink,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextWid(
+                                      text: "$videos+",
+                                      color: Colors.white70,
+                                      size: _width * 0.050,
+                                      weight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      Icons.slow_motion_video_rounded,
+                                      size: _width * 0.043,
+                                      color: Colors.white,
+                                    ),
+                                    TextWid(
+                                      text: " Videos",
+                                      color: Colors.white70,
+                                      size: _width * 0.030,
+                                    ),
+                                  ],
+                                ),
+
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.end,
+                                //   children: [
+                                //     Icon(
+                                //       Icons.text_snippet_outlined,
+                                //       size: _width * 0.037,
+                                //       color: Colors.white,
+                                //     ),
+                                //     TextWid(
+                                //       text: " Docs $docs",
+                                //       color: Colors.white70,
+                                //       size: _width * 0.030,
+                                //     ),
+                                //   ],
+                                // )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                          // Column(
+
+                          //   crossAxisAlignment: CrossAxisAlignment.end,
+                          //   children: [
+                          //     Row(
+                          //       mainAxisAlignment: MainAxisAlignment.end,
+                          //       children: [
+                          //         TextWid(
+                          //           text: "$videos",
+                          //           color: Colors.white70,
+                          //           size: _width * 0.050,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     Row(
+                          //       mainAxisAlignment: MainAxisAlignment.end,
+                          //       children: [
+                          //         Icon(
+                          //           Icons.slow_motion_video_rounded,
+                          //           size: _width * 0.043,
+                          //           color: Colors.white,
+                          //         ),
+                          //         TextWid(
+                          //           text: " Videos",
+                          //           color: Colors.white70,
+                          //           size: _width * 0.030,
+                          //         ),
+                          //       ],
+                          //     ),
+
+                          //     // Row(
+                          //     //   mainAxisAlignment: MainAxisAlignment.end,
+                          //     //   children: [
+                          //     //     Icon(
+                          //     //       Icons.text_snippet_outlined,
+                          //     //       size: _width * 0.037,
+                          //     //       color: Colors.white,
+                          //     //     ),
+                          //     //     TextWid(
+                          //     //       text: " Docs $docs",
+                          //     //       color: Colors.white70,
+                          //     //       size: _width * 0.030,
+                          //     //     ),
+                          //     //   ],
+                          //     // )
+                          //   ],
+                          // ),
+                          )),
+                ),
+              ],
+            )),
+      ),
     );
   }
 }
