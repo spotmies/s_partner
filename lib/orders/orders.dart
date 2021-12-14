@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/orders/ongoing.dart';
 import 'package:spotmies_partner/orders/posts.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -18,7 +17,7 @@ class _OrdersState extends State<Orders> {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final _width = MediaQuery.of(context).size.width;
     return DefaultTabController(
         length: 2,
         child: Scaffold(
