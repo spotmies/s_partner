@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:quick_actions/quick_actions.dart';
+// import 'package:quick_actions/quick_actions.dart';
 import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -53,17 +53,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final quickActions = QuickActions();
+  // final quickActions = QuickActions();
 
   @override
   void initState() {
-    quickActions.setShortcutItems([
-      ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
-      ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
-      ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
-      ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
-    ]);
-
+    // quickActions.setShortcutItems([
+    //   ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
+    //   ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
+    //   ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
+    //   ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
+    // ]);
+    
     // quickActions.initialize((type) {
     //   if(type == 'Home'){
     //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:1)));

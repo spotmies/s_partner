@@ -129,6 +129,12 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setCategoryItemState(state,index) {
+    partnerDetailsFull['catelogs'][index]['isActive'] = state;
+    notifyListeners();
+  }
+
+
   void setOrder(allOrders) {
     orders = allOrders;
     notifyListeners();
