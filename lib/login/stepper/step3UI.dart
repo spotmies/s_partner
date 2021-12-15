@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Widget step3UI(BuildContext context, StepperController stepperController,
-    double _hight, double _width, String type) {
+    double _hight, double _width, String type,
+    {PartnerDetailsProvider provider}) {
   return Container(
     height: _hight * 0.75,
     child: Form(
@@ -22,11 +26,14 @@ Widget step3UI(BuildContext context, StepperController stepperController,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWid(
-                  text: 'Business type:',
-                  color: Colors.grey[900],
-                  size: _width * 0.05,
-                  weight: FontWeight.w600,
+                InkWell(
+                  onTap: provider.getServiceListFromServer,
+                  child: TextWid(
+                    text: 'Business type:',
+                    color: Colors.grey[900],
+                    size: _width * 0.05,
+                    weight: FontWeight.w600,
+                  ),
                 ),
                 Flexible(
                   child: Container(
@@ -49,35 +56,42 @@ Widget step3UI(BuildContext context, StepperController stepperController,
                         size: _width * 0.06,
                         color: Colors.indigo[900],
                       ),
-                      items: <int>[
-                        0,
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        10,
-                        11,
-                      ].map<DropdownMenuItem<int>>((int jobFromFAB) {
-                        return DropdownMenuItem<int>(
-                            value: jobFromFAB,
-                            child: TextWid(
-                              text: stepperController.jobs.elementAt(
-                                  // jobFromHome == null
-                                  //     ?
-                                  jobFromFAB
-                                  // : jobFromHome,
-                                  ),
-                              color: Colors.grey[900],
-                              size: _width * 0.04,
-                              weight: FontWeight.w500,
-                            ));
+
+                      // items: <int>[
+                      //   0,
+                      //   1,
+                      //   2,
+                      //   3,
+                      //   4,
+
+                      // ].map<DropdownMenuItem<int>>((int jobFromFAB) {
+                      //   return DropdownMenuItem<int>(
+                      //       value: jobFromFAB,
+                      //       child: TextWid(
+                      //         text: provider.getServiceList.elementAt(
+                      //             // jobFromHome == null
+                      //             //     ?
+                      //             jobFromFAB
+                      //             // : jobFromHome,
+                      //             )['nameOfService'],
+                      //         color: Colors.grey[900],
+                      //         size: _width * 0.04,
+                      //         weight: FontWeight.w500,
+                      //       ));
+                      // }).toList(),
+                      items: provider.getServiceList.map((location) {
+                        return DropdownMenuItem(
+                          child: TextWid(
+                            text: location['nameOfService'],
+                            color: Colors.grey[900],
+                            size: _width * 0.04,
+                            weight: FontWeight.w500,
+                          ),
+                          value: location['serviceId'],
+                        );
                       }).toList(),
                       onChanged: (newVal) {
+                        log(newVal.toString());
                         stepperController.dropDownValue = newVal;
                         stepperController.refresh();
                       },

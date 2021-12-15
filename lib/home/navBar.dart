@@ -113,15 +113,21 @@ class _NavBarState extends State<NavBar> {
     log("pid is >>>>>>>>> $pId");
     dynamic chatList = await getChatListFromDb(currentPid);
 
-    chatProvider.setChatList(chatList);
+    if (chatList != null) chatProvider.setChatList(chatList);
 
     dynamic details = await partnerDetailsFull(currentPid);
 
-    partnerProvider.setPartnerDetails(details);
+    if (details != null) {
+      partnerProvider.setPartnerDetails(details);
+      if (details['appConfig'] == true) {
+        partnerProvider.getServiceListFromServer();
+        partnerProvider.getConstants(alwaysHit: true);
+      }
+    }
 
     dynamic partnerOrders = await partnerAllOrders(currentPid);
 
-    partnerProvider.setOrder(partnerOrders);
+    if (partnerOrders != null) partnerProvider.setOrder(partnerOrders);
     log("hitting all api completed");
   }
 

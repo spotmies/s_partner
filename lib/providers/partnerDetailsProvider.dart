@@ -1,5 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/apiCalls/testController.dart';
+import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
@@ -18,6 +24,57 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool offlineScreenLoader = true;
   bool reloadIncomingOrders = false;
   String currentPid = "123456";
+  List servicesList = [];
+
+/* ------------------------- constant variables here ------------------------ */
+
+  Map<dynamic, dynamic> allConstants = {};
+  String currentScreen = "";
+  dynamic currentConstants;
+
+  void setAllConstants(dynamic constants) {
+    allConstants = constants;
+  }
+
+  getAllConstants() {
+    return allConstants;
+  }
+
+  void setCurrentConstants(String screenName) {
+    currentScreen = screenName;
+    currentConstants = allConstants[currentScreen];
+  }
+
+  getText(String objId) {
+    if (currentConstants == null) return "loading..";
+    int index = currentConstants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+
+    if (index == -1) return "null";
+    return currentConstants[index]['label'];
+  }
+
+    getConstants({bool alwaysHit = false}) async {
+    if (alwaysHit == false) {
+      dynamic constantsFromSf =  await getAppConstants();
+      if (constantsFromSf != null) {
+       allConstants = constantsFromSf;
+
+        log("constants already in sf");
+        return;
+      }
+    }
+
+    dynamic appConstants = await constantsAPI();
+    if (appConstants != null) {
+      log("new constatns downloaded");
+      allConstants = appConstants;
+    }
+    return;
+  }
+
+
+  /* ---------------------------------- xxxxx --------------------------------- */
 
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
@@ -26,10 +83,50 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map get getPartnerDetailsFull => partnerDetailsFull;
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
+  List get getServiceList => servicesList;
 
   void setRegistrationInProgress(bool state) {
     registrationInProgress = state ?? true;
     notifyListeners();
+  }
+
+  getServiceListFromServer() async {
+    dynamic resp = await Server().getMethod(API.servicesList);
+    if (resp.statusCode == 200) {
+      dynamic list = jsonDecode(resp.body);
+      log(list.toString());
+      log("confirming all serviceslist are downloaded....");
+      servicesList = list;
+      sortServiceList();
+      setListOfServices(list);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  fetchServiceList({bool alwaysHit = false}) async {
+    if (!alwaysHit) {
+      dynamic servicesListFromSf = await getListOfServices();
+      if (servicesListFromSf != null) {
+        servicesList = servicesListFromSf;
+
+        log("service list already in sf");
+        return;
+      }
+    }
+
+    getServiceListFromServer();
+  }
+
+  void sortServiceList() {
+    servicesList.sort((a, b) {
+      return a['sort'].compareTo(b['sort']);
+    });
+  }
+
+  getServiceNameById(int id){
+   return servicesList.firstWhere((element) => element['serviceId'] == id);
   }
 
   setCurrentPid(dynamic pid) {
