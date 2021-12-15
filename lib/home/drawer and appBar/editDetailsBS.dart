@@ -405,37 +405,21 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       size: width * 0.06,
                                       color: Colors.indigo[900],
                                     ),
-                                    items: <int>[
-                                      0,
-                                      1,
-                                      2,
-                                      3,
-                                      4,
-                                      5,
-                                      6,
-                                      7,
-                                      8,
-                                      9,
-                                      10,
-                                      11,
-                                      12,
-                                      13,
-                                      14,
-                                      15
-                                    ].map<DropdownMenuItem<int>>(
-                                        (int jobFromFAB) {
-                                      return DropdownMenuItem<int>(
-                                          value: jobFromFAB,
-                                          child: TextWid(
-                                            text: Constants.jobCategories
-                                                .elementAt(jobFromFAB),
-                                            color: Colors.grey[900],
-                                            size: width * 0.04,
-                                            weight: FontWeight.w500,
-                                          ));
+                                    items: data.getServiceList.map((location) {
+                                      return DropdownMenuItem(
+                                        child: TextWid(
+                                          text: location['nameOfService'],
+                                          color: Colors.grey[900],
+                                          size: width * 0.04,
+                                          weight: FontWeight.w500,
+                                        ),
+                                        value: location['serviceId'],
+                                      );
                                     }).toList(),
+                                   
                                     onChanged: (newVal) {
                                       _editProfileController.job = newVal;
+
 
                                       _editProfileController.refresh();
                                     },

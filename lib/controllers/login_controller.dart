@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,17 +10,19 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/login/accountType.dart';
+import 'package:spotmies_partner/login/onboard.dart';
 import 'package:spotmies_partner/login/otp.dart';
 import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class LoginPageController extends ControllerMVC {
   TimeProvider timerProvider;
   PartnerDetailsProvider partnerProvider;
 
-  var scaffoldkey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
   var formkey1 = GlobalKey<FormState>();
 
@@ -61,8 +64,7 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => OnlinePlaceSearch(
-                           )),
+                        builder: (context) => OnlinePlaceSearch()),
                     (route) => false);
               }
             });
@@ -122,9 +124,8 @@ class LoginPageController extends ControllerMVC {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => OnlinePlaceSearch(
-                       
-                        onSave: (cords, fullAddress) {
+                    builder: (context) =>
+                        OnlinePlaceSearch(onSave: (cords, fullAddress) {
                           log("onsave $cords $fullAddress");
                           Navigator.push(
                             context,
@@ -155,6 +156,52 @@ class LoginPageController extends ControllerMVC {
       snackbar(context, "Invalid OTP");
     }
   }
+
+  splashScreenNavigation() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String resp =
+          await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
+      if (resp == "true") {
+        partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+      } else if (resp == "false") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => OnboardingScreen()),
+            (route) => false);
+      } else
+        snackbar(context, "something went wrong");
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => OnboardingScreen()),
+          (route) => false);
+    }
+  }
+
+  getConstants({bool alwaysHit = false}) async {
+    if (alwaysHit == false) {
+      dynamic constantsFromSf =  await getAppConstants();
+      if (constantsFromSf != null) {
+        partnerProvider.setAllConstants(constantsFromSf);
+
+        log("constants already in sf");
+        return;
+      }
+    }
+
+    dynamic appConstants = await constantsAPI();
+    if (appConstants != null) {
+      partnerProvider.setAllConstants(appConstants);
+      snackbar(context, "new settings imported");
+    }
+    return;
+  }
+
+  getServiceList({bool alwaysHit = false}) async {
+    partnerProvider.fetchServiceList(alwaysHit: alwaysHit);
+  }
 }
 
 checkPartnerRegistered(pId) async {
@@ -172,4 +219,26 @@ checkPartnerRegistered(pId) async {
     return "false";
   else
     return "server_error";
+}
+
+constantsAPI({String which = "constants"}) async {
+  dynamic response = await Server().getMethod(API.cloudConstants);
+  if (response.statusCode == 200) {
+    dynamic appConstants = jsonDecode(response?.body);
+    log(appConstants.toString());
+    setAppConstants(appConstants);
+    dynamic currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      log("confirming all costanst downloaded");
+
+      /* -------------- CONFIRM ALL CONSTANTS AND SETTINGS DOWNLOADED ------------- */
+      Map<String, String> body = {"appConfig": "false"};
+      Server()
+          .editMethod(API.partnerDetails + currentUser.uid.toString(), body);
+    }
+    return appConstants;
+  } else {
+    log("something went wrong status code ${response.statusCode}");
+    return null;
+  }
 }
