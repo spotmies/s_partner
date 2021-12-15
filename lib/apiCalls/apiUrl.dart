@@ -21,6 +21,8 @@ class API {
   static var allOrder = "api/order/partner/";
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var loginApi = '/api/partner/login/';
+  static var servicesList = "/api/services/all-service-list";
+  static var cloudConstants = "/api/constant/doc-id/partner_app_constants";
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"
