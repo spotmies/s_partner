@@ -1,68 +1,38 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 
 import 'package:spotmies_partner/controllers/login_controller.dart';
-import 'package:spotmies_partner/home/navBar.dart';
-import 'package:spotmies_partner/login/onboard.dart';
+
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:spotmies_partner/utilities/snackbar.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-   PartnerDetailsProvider partnerProvider;
+class _SplashScreenState extends StateMVC<SplashScreen> {
+  LoginPageController thisController;
+
+  _SplashScreenState() : super(LoginPageController()) {
+    this.thisController = controller;
+  }
+  PartnerDetailsProvider partnerProvider;
+
   @override
   void initState() {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    Timer(Duration(seconds: 1), () async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        String resp =
-            await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
-        if (resp == "true") {
-          partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-        } else if (resp == "false") {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => OnboardingScreen()),
-              (route) => false);
-        } else
-          snackbar(context, "something went wrong");
-
-        // var doc = FirebaseFirestore.instance
-        //     .collection('partner')
-        //     .doc(FirebaseAuth.instance.currentUser.uid);
-        // doc.get().then((document) {
-        //   if (document.exists) {
-        //     print("doc exits");
-        //     Navigator.pushAndRemoveUntil(context,
-        //         MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-        //   } else if (!document.exists) {
-        //     print("doc not exits");
-        //     Navigator.pushAndRemoveUntil(
-        //         context,
-        //         MaterialPageRoute(builder: (_) => OnboardingScreen()),
-        //         (route) => false);
-        //   }
-        //   print("doc is $document");
-        // });
-
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => OnboardingScreen()),
-            (route) => false);
-      }
+    Timer(Duration(seconds: 1), ()  {
+      partnerProvider.getConstants(alwaysHit: false);
+      partnerProvider.fetchServiceList(alwaysHit: false);
+     thisController.splashScreenNavigation();
     });
   }
 
@@ -73,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        key: thisController.scaffoldkey,
         backgroundColor: Colors.white,
         body: Center(
           child: Column(

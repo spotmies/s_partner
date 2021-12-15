@@ -24,6 +24,8 @@ class API {
   static var catelog = '/api/catelog/newCatelog/'; //catelogPost
   static var updateCatelog = '/api/catelog/catelogs/';
   
+  static var servicesList = "/api/services/all-service-list";
+  static var cloudConstants = "/api/constant/doc-id/partner_app_constants";
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"

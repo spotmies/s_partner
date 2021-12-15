@@ -39,11 +39,12 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     _stepperController.pickedDate = DateTime.now();
     _stepperController.pickedTime = TimeOfDay.now();
-    log("ph1 ${widget.phone}");
-    log("cord ${widget.coordinates}");
+
+
     _stepperController.workLocation = widget.coordinates;
     _stepperController.verifiedNumber = widget.phone.toString();
     // print("76 ${FirebaseAuth.instance.currentUser.uid}");
+    // partnerProvider.getServiceListFromServer();
   }
 
   @override
@@ -231,7 +232,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         size: _width * 0.025,
                       ),
                       content: step3UI(context, _stepperController, _hight,
-                          _width, widget.type),
+                          _width, widget.type,provider:partnerProvider),
                       isActive: _stepperController.currentStep >= 2,
                       state: _stepperController.currentStep >= 2
                           ? StepState.complete
