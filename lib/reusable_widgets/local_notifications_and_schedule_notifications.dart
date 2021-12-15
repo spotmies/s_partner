@@ -132,8 +132,8 @@ class LocalNotidication {
 //firebase messaging
 
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  // static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
 
   // static void initialize(BuildContext context) {
   //   final InitializationSettings initializationSettings =

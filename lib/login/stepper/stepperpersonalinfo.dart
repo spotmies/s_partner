@@ -12,8 +12,6 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
-import 'package:spotmies_partner/utilities/onFailure.dart';
-import 'package:spotmies_partner/utilities/onPending.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

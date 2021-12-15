@@ -4,9 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
-import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/maps/maps.dart';
-import 'package:spotmies_partner/models/locationSearchModel.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -158,7 +156,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future searchBook(String query) async => debounce(() async {
-        final geoLocations = await PlacesApi.getLoc(query);
+        // final geoLocations = await PlacesApi.getLoc(query);
 
         if (!mounted) return;
 

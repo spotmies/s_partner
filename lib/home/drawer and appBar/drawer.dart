@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
@@ -190,6 +191,10 @@ drawerItemsFunction(
     case 'Privacy Policies':
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => PrivacyPolicyWebView()));
+      break;
+    case 'Catelog':
+      return Navigator.push(
+          context, MaterialPageRoute(builder: (_) => Catalog()));
       break;
     case 'Invite':
       return invites(context, hight, width, pr);
