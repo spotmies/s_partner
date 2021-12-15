@@ -60,6 +60,28 @@ class Server {
     }
   }
 
+  Future<dynamic> post(
+    String api,
+    String body,
+  ) async {
+    var uri = Uri.https(API.host, api);
+    // var bodyData = json.encode(body);
+    try {
+      var response =
+          await http.post(uri, body: body).timeout(Duration(seconds: 30));
+      log(processResponse(response).toString());
+      log(response.statusCode.toString());
+
+      //return processResponse(response);
+      return response;
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
+
   Future<dynamic> editMethod(String api, Map<String, dynamic> body) async {
     var uri = Uri.https(API.host, api);
     // var bodyData = json.encode(body);

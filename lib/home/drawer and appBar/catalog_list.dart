@@ -65,7 +65,8 @@ class _CatalogState extends State<Catalog> {
           borderRadius: 15.0,
           borderSideColor: Colors.grey[900],
           onClick: () {
-            catelogPost(context,);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => CatelogPost()));
           },
         ),
         body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
@@ -110,30 +111,16 @@ catelogListCard(BuildContext context, cat, int index) {
               activeColor: Colors.indigo[900],
               value: cat['isActive'],
               onChanged: (val) {
-                // Map<String, String> body = {
-                //   "isActive": val.toString(),
-                // };
-                // updateCartListState(body);
+                Map<String, String> body = {
+                  "isActive": val.toString(),
+                };
+                catelogController.updateCatListState(body, cat['_id']);
                 partnerDetailsProvider.setCategoryItemState(val, index);
               }),
         ],
       ),
     ),
   );
-}
-
-updateCartListState(body) async {
-  var response = await Server().editMethod(API.partnerStatus + API.pid, body);
-  if (response.statusCode == 200) {
-    log(response.statusCode.toString());
-    // Map<String, dynamic> data =
-    //     jsonDecode(response.body) as Map<String, dynamic>;
-    // partnerDetailsProvider.setPartnerDetailsOnly(data);
-  } else {
-    log(response.statusCode.toString());
-    // partnerDetailsProvider.setAvailability(!pd['availability']);
-  }
-  partnerDetailsProvider.setOffileLoader(false);
 }
 
 addCatelog(BuildContext context) {

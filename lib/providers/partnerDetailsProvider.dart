@@ -134,6 +134,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setCategoryItem(body) {
+    partnerDetailsFull['catelogs'].add(body);
+    notifyListeners();
+  }
+
 
   void setOrder(allOrders) {
     orders = allOrders;
