@@ -137,8 +137,11 @@ class _OnlineState extends StateMVC<Online> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextWid(
-                                          text: _incomingOrdersController.jobs
-                                              .elementAt(o[index]['job']),
+                                          text: partnerProvider
+                                              .getServiceNameById(o[index]
+                                                  ['job'])['nameOfService'],
+                                          // text: _incomingOrdersController.jobs
+                                          //     .elementAt(o[index]['job']),
                                           size: _width * 0.04,
                                           color: Colors.grey[900],
                                           weight: FontWeight.w600,

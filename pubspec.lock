@@ -300,6 +300,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2"
+  flutter_incall:
+    dependency: "direct main"
+    description:
+      name: flutter_incall
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   flutter_local_notifications:
     dependency: "direct main"
     description:
