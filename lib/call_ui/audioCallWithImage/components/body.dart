@@ -19,11 +19,11 @@ class CallingUi extends StatefulWidget {
   final bool isInComingScreen;
   final String image;
   final String name;
-  final VoidCallback onAccept;
-  final VoidCallback onReject;
-  final VoidCallback onHangUp;
-  final VoidCallback onMic;
-  final VoidCallback onSpeaker;
+  final Function onAccept;
+  final Function onReject;
+  final Function onHangUp;
+  final Function onMic;
+  final Function onSpeaker;
 
   @override
   _CallingUiState createState() => _CallingUiState();
@@ -32,6 +32,8 @@ class CallingUi extends StatefulWidget {
 class _CallingUiState extends State<CallingUi> {
   ChatProvider chatProvider;
  String screenType = '';
+   bool clickMic = false;
+  bool clickSpeaker = false;
    callStatus(state) {
     switch (state) {
       case 0:
@@ -56,6 +58,20 @@ class _CallingUiState extends State<CallingUi> {
     });
   }
 
+  String formatedTime(int secTime) {
+    String getParsedTime(String time) {
+      if (time.length <= 1) return "0$time";
+      return time;
+    }
+
+    int min = secTime ~/ 60;
+    int sec = secTime % 60;
+
+    String parsedTime =
+        getParsedTime(min.toString()) + ":" + getParsedTime(sec.toString());
+
+    return parsedTime;
+  }
   
   @override
   initState() {
@@ -102,7 +118,7 @@ class _CallingUiState extends State<CallingUi> {
                     VerticalSpacing(of: 10),
                     Text(
                       screenType == "outgoing"
-                          ? "Duration ${data.duration}   ${callStatus(data.getCallStatus)}"
+                          ? "Duration ${formatedTime(data.duration)}   ${callStatus(data.getCallStatus)}"
                               .toUpperCase()
                           : "INCOMING CALL.....",
                       style: TextStyle(color: Colors.white60),
@@ -113,31 +129,70 @@ class _CallingUiState extends State<CallingUi> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          RoundedButton(
-                            press: () {
-                              widget.onMic();
-                            },
-                            color: Colors.white,
-                            iconColor: Colors.black,
-                            iconSrc: "assets/icons/Icon Mic.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: !clickMic
+                                    ? Colors.white
+                                    : Colors.indigoAccent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  clickMic = !clickMic;
+                                });
+                                widget.onMic(clickMic);
+                              },
+                              icon: Icon(
+                                Icons.mic,
+                                color:
+                                    !clickMic ? Colors.grey[900] : Colors.white,
+                              ),
+                            ),
                           ),
-                          RoundedButton(
-                            press: () {
-                              widget.onHangUp();
-                               Navigator.pop(context);
-                            },
-                            color: kRedColor,
-                            iconColor: Colors.white,
-                            iconSrc: "assets/icons/call_end.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                widget.onHangUp();
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.call_end,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          RoundedButton(
-                            press: () {
-                              widget.onSpeaker();
-                            },
-                            color: Colors.white,
-                            iconColor: Colors.black,
-                            iconSrc: "assets/icons/Icon Volume.svg",
+                     
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: !clickSpeaker
+                                    ? Colors.white
+                                    : Colors.indigoAccent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  clickSpeaker = !clickSpeaker;
+                                });
+                                widget.onSpeaker(clickSpeaker);
+                           
+                              },
+                              icon: Icon(
+                                Icons.volume_up,
+                                color: !clickSpeaker
+                                    ? Colors.grey[900]
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
+                          
                         ],
                       ),
                     ),

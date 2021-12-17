@@ -8,6 +8,7 @@ import 'package:spotmies_partner/call_ui/audioCallWithImage/components/body.dart
 import 'package:spotmies_partner/internet_calling/signaling.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:flutter_incall/flutter_incall.dart';
 
 class MyCalling extends StatefulWidget {
   final String msgId;
@@ -40,6 +41,7 @@ class MyCalling extends StatefulWidget {
 }
 
 class _MyCallingState extends State<MyCalling> {
+  IncallManager incallManager = new IncallManager();
   ChatProvider chatProvider;
   PartnerDetailsProvider partnerProvider;
   Signaling signaling = Signaling();
@@ -121,9 +123,17 @@ class _MyCallingState extends State<MyCalling> {
       _remoteRenderer.srcObject = stream;
       setState(() {});
     });
+    // incallManager.start(
+    //     media: MediaType.AUDIO, auto: false, ringback: '_DEFAULT_');
     signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     if (!widget.isIncoming) {
+      incallManager.enableProximitySensor(true);
+      incallManager.turnScreenOff();
       createRoomId();
+      incallManager.setMicrophoneMute(false);
+    } else {
+      incallManager.startRingtone(RingtoneUriType.DEFAULT, 'default', 10);
+      incallManager.setSpeakerphoneOn(true);
     }
 
     chatProvider.addListener(() {
@@ -143,6 +153,10 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+    incallManager.enableProximitySensor(false);
+    incallManager.turnScreenOn();
+    incallManager.setMicrophoneMute(true);
+    incallManager.stopRingtone();
     super.dispose();
   }
 
@@ -157,8 +171,29 @@ class _MyCallingState extends State<MyCalling> {
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
-        onAccept: joinOnRoom,
-        onReject: rejectCall,
+        onAccept: () {
+          incallManager.stopRingback();
+          incallManager.stopRingtone();
+          incallManager.enableProximitySensor(true);
+          incallManager.turnScreenOff();
+          incallManager.setMicrophoneMute(false);
+          joinOnRoom();
+        },
+        onMic: (bool state) {
+          log("mic is $state");
+          incallManager.setMicrophoneMute(state);
+          // log("enabling proxmity");
+          // incallManager.turnScreenOff();
+          // incallManager.enableProximitySensor(true);
+        },
+        onReject: () {
+          incallManager.enableProximitySensor(false);
+          rejectCall();
+        },
+        onSpeaker: (bool state) {
+          log("spelaer is $state");
+          incallManager.setSpeakerphoneOn(state);
+        },
         name: widget?.name ?? "unknown",
         image: widget?.profile ?? "",
       );

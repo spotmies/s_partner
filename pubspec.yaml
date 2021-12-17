@@ -73,6 +73,7 @@ dependencies:
   firebase_messaging: ^10.0.7
   lottie: ^1.1.0
   awesome_notifications: ^0.0.6+10
+  flutter_incall: ^1.0.0
   
 
 
