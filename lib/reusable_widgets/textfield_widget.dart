@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 class TextFieldWidget extends StatefulWidget {
   final String text;
@@ -20,7 +23,7 @@ class TextFieldWidget extends StatefulWidget {
   final Color hintColor;
   final double hintSize;
   final FontWeight hintWeight;
-  final Icon prefix;
+  final String prefix;
   final Color prefixColor;
   final TextEditingController controller;
   final Function onSubmitField;
@@ -79,48 +82,55 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       inputFormatters: widget.formatter,
       controller: widget.controller,
       decoration: InputDecoration(
-        counterText: '',
-        border: new OutlineInputBorder(
-            borderSide:
-                new BorderSide(color: widget.bordercolor ?? Colors.white),
-            borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
-        suffixIcon: IconButton(
-          onPressed: () {
-            widget.controller.clear();
-          },
-          icon: widget.postIcon ?? Icons.android,
-          color: widget.postIconColor ?? Colors.white,
-        ),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(widget.focusBorderRadius ?? 0)),
-            borderSide: BorderSide(
-                width: 1, color: widget.focusBorderColor ?? Colors.white)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(widget.enableBorderRadius ?? 0)),
-            borderSide: BorderSide(
-                width: 1, color: widget.enableBorderColor ?? Colors.white)),
-        errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(widget.errorBorderRadius ?? 0)),
-            borderSide: BorderSide(width: 1, color: Colors.red)),
-        focusedErrorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(widget.focusErrorRadius ?? 0)),
-            borderSide: BorderSide(width: 1, color: Colors.red)),
-        hintStyle: fonts(
-            widget.hintSize ?? 15.0,
-            widget.hintWeight ?? FontWeight.w500,
-            widget.hintColor ?? Colors.grey),
+          counterText: '',
+          border: new OutlineInputBorder(
+              borderSide:
+                  new BorderSide(color: widget.bordercolor ?? Colors.white),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
+          suffixIcon: IconButton(
+            onPressed: () {
+              widget.controller.clear();
+            },
+            icon: widget.postIcon ?? Icons.android,
+            color: widget.postIconColor ?? Colors.white,
+          ),
+          prefix: TextWid(
+            text: widget.prefix ?? '',
+            size: width(context) * 0.04,
+            weight: FontWeight.w600,
+            color: Colors.grey[900],
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(widget.focusBorderRadius ?? 0)),
+              borderSide: BorderSide(
+                  width: 1, color: widget.focusBorderColor ?? Colors.white)),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(widget.enableBorderRadius ?? 0)),
+              borderSide: BorderSide(
+                  width: 1, color: widget.enableBorderColor ?? Colors.white)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(widget.errorBorderRadius ?? 0)),
+              borderSide: BorderSide(width: 1, color: Colors.red)),
+          focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(widget.focusErrorRadius ?? 0)),
+              borderSide: BorderSide(width: 1, color: Colors.red)),
+          hintStyle: fonts(
+              widget.hintSize ?? 15.0,
+              widget.hintWeight ?? FontWeight.w500,
+              widget.hintColor ?? Colors.grey),
 
-        // contentPadding: EdgeInsets.only(top: 30),
-        // EdgeInsets.symmetric(
-        //     vertical: widget.contentPad ?? 3,
-        //     horizontal: widget.contentPad ?? 0),
-        hintText: widget.hint ?? '',
-        labelText: widget.label,
-      ),
+          // contentPadding: EdgeInsets.only(top: 30),
+          // EdgeInsets.symmetric(
+          //     vertical: widget.contentPad ?? 3,
+          //     horizontal: widget.contentPad ?? 0),
+          hintText: widget.hint ?? '',
+          labelText: widget.label,
+          labelStyle:
+              fonts(width(context) * 0.035, FontWeight.w400, Colors.grey[900])),
       autofocus: widget.autofocus ?? false,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,

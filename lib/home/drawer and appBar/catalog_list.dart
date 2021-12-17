@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -21,6 +22,7 @@ class Catalog extends StatefulWidget {
 }
 
 PartnerDetailsProvider partnerDetailsProvider;
+CatelogController catelogController = CatelogController();
 
 class _CatalogState extends State<Catalog> {
   @override
@@ -65,7 +67,8 @@ class _CatalogState extends State<Catalog> {
           borderRadius: 15.0,
           borderSideColor: Colors.grey[900],
           onClick: () {
-            catelogPost(context,);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => CatelogPost()));
           },
         ),
         body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
@@ -84,6 +87,7 @@ class _CatalogState extends State<Catalog> {
   }
 }
 
+
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
@@ -101,7 +105,7 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              bottomMenu(context);
+              bottomMenu(context, cat['_id'], index);
             },
             icon: Icon(Icons.more_horiz),
           ),
@@ -110,10 +114,10 @@ catelogListCard(BuildContext context, cat, int index) {
               activeColor: Colors.indigo[900],
               value: cat['isActive'],
               onChanged: (val) {
-                // Map<String, String> body = {
-                //   "isActive": val.toString(),
-                // };
-                // updateCartListState(body);
+                Map<String, String> body = {
+                  "isActive": val.toString(),
+                };
+                catelogController.updateCatListState(body, cat['_id']);
                 partnerDetailsProvider.setCategoryItemState(val, index);
               }),
         ],
@@ -122,64 +126,7 @@ catelogListCard(BuildContext context, cat, int index) {
   );
 }
 
-updateCartListState(body) async {
-  var response = await Server().editMethod(API.partnerStatus + API.pid, body);
-  if (response.statusCode == 200) {
-    log(response.statusCode.toString());
-    // Map<String, dynamic> data =
-    //     jsonDecode(response.body) as Map<String, dynamic>;
-    // partnerDetailsProvider.setPartnerDetailsOnly(data);
-  } else {
-    log(response.statusCode.toString());
-    // partnerDetailsProvider.setAvailability(!pd['availability']);
-  }
-  partnerDetailsProvider.setOffileLoader(false);
-}
-
-addCatelog(BuildContext context) {
-  return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    SizedBox(
-        height: height(context) * 0.3,
-        width: width(context),
-        child: SvgPicture.asset('assets/svgs/catelog.svg')),
-    SizedBox(
-      height: height(context) * 0.06,
-    ),
-    Padding(
-      padding: EdgeInsets.only(left: width(context) * 0.04),
-      child: TextWid(
-        text:
-            'the day i saw you in the college,i felt like taking a thousands of hugs and lacks kisses from you ,love you my dear ',
-        flow: TextOverflow.visible,
-        size: width(context) * 0.05,
-      ),
-    ),
-    SizedBox(
-      height: height(context) * 0.12,
-    ),
-    ElevatedButtonWidget(
-      buttonName: 'Add Service',
-      height: height(context) * 0.055,
-      minWidth: width(context) * 0.5,
-      bgColor: Colors.indigo[900],
-      textColor: Colors.grey[50],
-      textSize: width(context) * 0.04,
-      leadingIcon: Icon(
-        Icons.add_circle,
-        color: Colors.grey[50],
-        size: width(context) * 0.05,
-      ),
-      borderRadius: 15.0,
-      borderSideColor: Colors.grey[900],
-      onClick: () {
-        // _incomingOrdersController.respondToOrder(
-        //     o[index], partnerProfile['_id'], "reject");
-      },
-    ),
-  ]);
-}
-
-Future bottomMenu(BuildContext context) {
+Future bottomMenu(BuildContext context, id, int index) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -221,8 +168,12 @@ Future bottomMenu(BuildContext context) {
                   textStyle: FontWeight.w600,
                   borderRadius: 15.0,
                   borderSideColor: Colors.indigo[50],
-                  onClick: () {
+                  onClick: () async {
+                    await catelogController.deleteCatelog(id);
+                    // if (res == 200 || res == 204) {
+                    // partnerDetailsProvider.removeCategoryItem(index);
                     Navigator.pop(context);
+                    // }
                   },
                 ),
               ),
@@ -230,4 +181,44 @@ Future bottomMenu(BuildContext context) {
           ),
         );
       });
+}
+
+addCatelog(BuildContext context) {
+  return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    SizedBox(
+        height: height(context) * 0.3,
+        width: width(context),
+        child: SvgPicture.asset('assets/svgs/catelog.svg')),
+    SizedBox(
+      height: height(context) * 0.06,
+    ),
+    Padding(
+      padding: EdgeInsets.only(left: width(context) * 0.04),
+      child: TextWid(
+        text:
+            'the day i saw you in the college,i felt like taking a thousands of hugs and lacks kisses from you ,love you my dear ',
+        flow: TextOverflow.visible,
+        size: width(context) * 0.05,
+      ),
+    ),
+    SizedBox(
+      height: height(context) * 0.12,
+    ),
+    ElevatedButtonWidget(
+      buttonName: 'Add Service',
+      height: height(context) * 0.055,
+      minWidth: width(context) * 0.5,
+      bgColor: Colors.indigo[900],
+      textColor: Colors.grey[50],
+      textSize: width(context) * 0.04,
+      leadingIcon: Icon(
+        Icons.add_circle,
+        color: Colors.grey[50],
+        size: width(context) * 0.05,
+      ),
+      borderRadius: 15.0,
+      borderSideColor: Colors.grey[900],
+      onClick: () {},
+    ),
+  ]);
 }

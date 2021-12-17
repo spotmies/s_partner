@@ -54,11 +54,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
     return currentConstants[index]['label'];
   }
 
-    getConstants({bool alwaysHit = false}) async {
+  getConstants({bool alwaysHit = false}) async {
     if (alwaysHit == false) {
-      dynamic constantsFromSf =  await getAppConstants();
+      dynamic constantsFromSf = await getAppConstants();
       if (constantsFromSf != null) {
-       allConstants = constantsFromSf;
+        allConstants = constantsFromSf;
 
         log("constants already in sf");
         return;
@@ -72,7 +72,6 @@ class PartnerDetailsProvider extends ChangeNotifier {
     }
     return;
   }
-
 
   /* ---------------------------------- xxxxx --------------------------------- */
 
@@ -125,8 +124,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
     });
   }
 
-  getServiceNameById(int id){
-   return servicesList.firstWhere((element) => element['serviceId'] == id);
+  getServiceNameById(int id) {
+    return servicesList.firstWhere((element) => element['serviceId'] == id);
   }
 
   setCurrentPid(dynamic pid) {
@@ -226,11 +225,20 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCategoryItemState(state,index) {
+  void setCategoryItemState(state, index) {
     partnerDetailsFull['catelogs'][index]['isActive'] = state;
     notifyListeners();
   }
 
+  void setCategoryItem(body) {
+    partnerDetailsFull['catelogs'].add(body);
+    notifyListeners();
+  }
+
+  // void removeCategoryItem(index) {
+  //   partnerDetailsFull['catelogs'][index].remove();
+  //   notifyListeners();
+  // }
 
   void setOrder(allOrders) {
     orders = allOrders;

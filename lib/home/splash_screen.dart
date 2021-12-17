@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:ui';
 
-
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 
 import 'package:spotmies_partner/controllers/login_controller.dart';
 
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -29,10 +29,10 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    Timer(Duration(seconds: 1), ()  {
+    Timer(Duration(seconds: 1), () {
       partnerProvider.getConstants(alwaysHit: false);
       partnerProvider.fetchServiceList(alwaysHit: false);
-     thisController.splashScreenNavigation();
+      thisController.splashScreenNavigation();
     });
   }
 
@@ -49,34 +49,37 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                  child: Container(
-                      height: _hight * 0.35,
-                      width: _width * 0.30,
-                      child: Image.asset("assets/spotmies.png"))),
+              // SizedBox(
+              //   height: _hight * 0.1,
+              // ),
+              Container(
+                  height: _hight * 0.23,
+                  // width: 150,
+                  child: Lottie.asset('assets/spotmies_logo.json')),
               SizedBox(
-                height: 10,
+                height: _hight * 0.15,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
                 children: [
-                  Text(
-                    'Spotmies ',
-                    style: TextStyle(
-                        fontSize: _width * 0.09,
-                        color: Colors.blue[900],
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Partner',
-                    style: TextStyle(
-                        fontSize: _width * 0.09,
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  TextWid(
+                      text: 'SPOTMIES PARTNER',
+                      size: _width * 0.06,
+                      color: Colors.indigo[900],
+                      flow: TextOverflow.visible,
+                      lSpace: 3.0,
+                      weight: FontWeight.w600),
+                  TextWid(
+                      text: 'BECOME A BOSE TO YOUR WORLD',
+                      weight: FontWeight.w600,
+                      size: _width * 0.02,
+                      color: Colors.grey[900],
+                      lSpace: 5.0),
+                  // SizedBox(
+                  //   height: _hight * 0.15,
+                  // ),
+                  // CircularProgressIndicator()
                 ],
               ),
-              Text('Experience the Exellence')
             ],
           ),
         ));

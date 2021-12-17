@@ -21,6 +21,10 @@ class API {
   static var allOrder = "api/order/partner/";
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var loginApi = '/api/partner/login/';
+  static var catelog = '/api/catelog/newCatelog/'; //catelogPost
+  static var updateCatelog = '/api/catelog/catelogs/';
+  static var deleteCatlog = '/api/catelog/catelogs/';
+  
   static var servicesList = "/api/services/all-service-list";
   static var cloudConstants = "/api/constant/doc-id/partner_app_constants";
 }
