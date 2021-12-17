@@ -48,19 +48,18 @@ class CatelogController extends ControllerMVC {
     log(imageLink.toString());
   }
 
-  addCatlogList() async {
+  addCatlogList(itemCode, job) async {
     await uploadimage();
     var body = {
       "name": catNameControl.text,
-      "category": "1",
-      "itemCode": "321",
+      "category": "$job",
+      "itemCode": "$itemCode",
       "price": catPriceControl.text,
       "description": catDescControl.text,
       "pId": API.pid,
       "media.0.type": "image",
       "media.0.url": imageLink.toString().toString(),
     };
-    // log(body.toString());
 
     var response = await Server().postMethod(API.catelog + API.pid, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
@@ -76,13 +75,20 @@ class CatelogController extends ControllerMVC {
     var response = await Server().editMethod(API.updateCatelog + id, body);
     if (response.statusCode == 200) {
       log(response.statusCode.toString());
-      // Map<String, dynamic> data =
-      //     jsonDecode(response.body) as Map<String, dynamic>;
-      // partnerDetailsProvider.setPartnerDetailsOnly(data);
     } else {
       log(response.statusCode.toString());
-      // partnerDetailsProvider.setAvailability(!pd['availability']);
     }
     partnerDetailsProvider.setOffileLoader(false);
+  }
+
+  deleteCatelog(id) async {
+    var response = await Server().deleteMethod(API.deleteCatlog + id);
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      log(response.statusCode.toString());
+      return response.statusCode;
+    } else {
+      log(response.statusCode.toString());
+      return null;
+    }
   }
 }

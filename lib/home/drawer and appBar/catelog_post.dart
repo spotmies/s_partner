@@ -82,16 +82,12 @@ class _CatelogPostState extends State<CatelogPost> {
                 hint: 'Enter Service Name',
                 label: 'Service Name',
                 controller: catelogController.catNameControl,
-                type: "number",
                 enableBorderColor: Colors.grey,
-                // formatter: <TextInputFormatter>[
-                //   FilteringTextInputFormatter.allow(RegExp(
-                //       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")),
-                // ],
                 focusBorderColor: Colors.grey[900],
                 enableBorderRadius: 15,
                 focusBorderRadius: 15,
                 errorBorderRadius: 15,
+                isRequired: true,
                 focusErrorRadius: 15,
                 validateMsg: 'Enter Valid Money',
                 maxLines: 1,
@@ -107,14 +103,16 @@ class _CatelogPostState extends State<CatelogPost> {
                 label: 'Basic Price',
                 type: "number",
                 enableBorderColor: Colors.grey,
-                // formatter: <TextInputFormatter>[
-                //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                // ],
+                keyBoardType: TextInputType.number,
+                formatter: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
                 focusBorderColor: Colors.grey[900],
                 enableBorderRadius: 15,
                 focusBorderRadius: 15,
                 errorBorderRadius: 15,
                 focusErrorRadius: 15,
+                isRequired: true,
                 validateMsg: 'Enter Valid Money',
                 maxLines: 1,
                 prefix: '₹  ',
@@ -128,12 +126,9 @@ class _CatelogPostState extends State<CatelogPost> {
                 controller: catelogController.catDescControl,
                 hint: 'Description',
                 label: 'Add Description...',
-                type: "number",
                 enableBorderColor: Colors.grey,
-                // formatter: <TextInputFormatter>[
-                //   FilteringTextInputFormatter.allow(RegExp(
-                //       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")),
-                // ],
+                isRequired: true,
+
                 focusBorderColor: Colors.grey[900],
                 enableBorderRadius: 15,
                 focusBorderRadius: 15,
@@ -161,25 +156,26 @@ class _CatelogPostState extends State<CatelogPost> {
                 borderRadius: 10.0,
                 borderSideColor: Colors.grey[900],
                 onClick: () async {
-                  // if (catelogController.catformkey.currentState.validate()) {
-                  // log(catelogController.catDescControl.text.toString());
-                  // }
-
-                  setState(() {
-                    partnerDetailsProvider.offlineScreenLoader = true;
-                  });
-
-                  log(partnerDetailsProvider.offlineScreenLoader.toString());
-
-                  var res = await catelogController.addCatlogList();
-
-                  log(res.toString());
-                  if (res != null) {
-                    partnerDetailsProvider.setCategoryItem(res);
+                  if (catelogController.catformkey.currentState.validate()) {
                     setState(() {
-                      partnerDetailsProvider.offlineScreenLoader = false;
+                      partnerDetailsProvider.offlineScreenLoader = true;
                     });
-                    Navigator.pop(context);
+
+                    int itemCode = partnerDetailsProvider
+                        .partnerDetailsFull['catelogs'].length;
+                    int job = partnerDetailsProvider.partnerDetailsFull['job'];
+
+                    var res =
+                        await catelogController.addCatlogList(itemCode, job);
+
+                    log(res.toString());
+                    if (res != null) {
+                      partnerDetailsProvider.setCategoryItem(res);
+                      setState(() {
+                        partnerDetailsProvider.offlineScreenLoader = false;
+                      });
+                      Navigator.pop(context);
+                    }
                   }
                 },
               ),

@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
+import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -21,6 +22,7 @@ class Catalog extends StatefulWidget {
 }
 
 PartnerDetailsProvider partnerDetailsProvider;
+CatelogController catelogController = CatelogController();
 
 class _CatalogState extends State<Catalog> {
   @override
@@ -85,6 +87,7 @@ class _CatalogState extends State<Catalog> {
   }
 }
 
+
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
@@ -102,7 +105,7 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              bottomMenu(context);
+              bottomMenu(context, cat['_id'], index);
             },
             icon: Icon(Icons.more_horiz),
           ),
@@ -123,50 +126,7 @@ catelogListCard(BuildContext context, cat, int index) {
   );
 }
 
-addCatelog(BuildContext context) {
-  return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    SizedBox(
-        height: height(context) * 0.3,
-        width: width(context),
-        child: SvgPicture.asset('assets/svgs/catelog.svg')),
-    SizedBox(
-      height: height(context) * 0.06,
-    ),
-    Padding(
-      padding: EdgeInsets.only(left: width(context) * 0.04),
-      child: TextWid(
-        text:
-            'the day i saw you in the college,i felt like taking a thousands of hugs and lacks kisses from you ,love you my dear ',
-        flow: TextOverflow.visible,
-        size: width(context) * 0.05,
-      ),
-    ),
-    SizedBox(
-      height: height(context) * 0.12,
-    ),
-    ElevatedButtonWidget(
-      buttonName: 'Add Service',
-      height: height(context) * 0.055,
-      minWidth: width(context) * 0.5,
-      bgColor: Colors.indigo[900],
-      textColor: Colors.grey[50],
-      textSize: width(context) * 0.04,
-      leadingIcon: Icon(
-        Icons.add_circle,
-        color: Colors.grey[50],
-        size: width(context) * 0.05,
-      ),
-      borderRadius: 15.0,
-      borderSideColor: Colors.grey[900],
-      onClick: () {
-        // _incomingOrdersController.respondToOrder(
-        //     o[index], partnerProfile['_id'], "reject");
-      },
-    ),
-  ]);
-}
-
-Future bottomMenu(BuildContext context) {
+Future bottomMenu(BuildContext context, id, int index) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -208,8 +168,12 @@ Future bottomMenu(BuildContext context) {
                   textStyle: FontWeight.w600,
                   borderRadius: 15.0,
                   borderSideColor: Colors.indigo[50],
-                  onClick: () {
+                  onClick: () async {
+                    await catelogController.deleteCatelog(id);
+                    // if (res == 200 || res == 204) {
+                    // partnerDetailsProvider.removeCategoryItem(index);
                     Navigator.pop(context);
+                    // }
                   },
                 ),
               ),
@@ -217,4 +181,44 @@ Future bottomMenu(BuildContext context) {
           ),
         );
       });
+}
+
+addCatelog(BuildContext context) {
+  return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    SizedBox(
+        height: height(context) * 0.3,
+        width: width(context),
+        child: SvgPicture.asset('assets/svgs/catelog.svg')),
+    SizedBox(
+      height: height(context) * 0.06,
+    ),
+    Padding(
+      padding: EdgeInsets.only(left: width(context) * 0.04),
+      child: TextWid(
+        text:
+            'the day i saw you in the college,i felt like taking a thousands of hugs and lacks kisses from you ,love you my dear ',
+        flow: TextOverflow.visible,
+        size: width(context) * 0.05,
+      ),
+    ),
+    SizedBox(
+      height: height(context) * 0.12,
+    ),
+    ElevatedButtonWidget(
+      buttonName: 'Add Service',
+      height: height(context) * 0.055,
+      minWidth: width(context) * 0.5,
+      bgColor: Colors.indigo[900],
+      textColor: Colors.grey[50],
+      textSize: width(context) * 0.04,
+      leadingIcon: Icon(
+        Icons.add_circle,
+        color: Colors.grey[50],
+        size: width(context) * 0.05,
+      ),
+      borderRadius: 15.0,
+      borderSideColor: Colors.grey[900],
+      onClick: () {},
+    ),
+  ]);
 }
