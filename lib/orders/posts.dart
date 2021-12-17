@@ -130,12 +130,17 @@ class _PostListState extends StateMVC<PostList> {
                                                               .spaceBetween,
                                                       children: [
                                                         TextWid(
-                                                          text:
-                                                              _ordersController
-                                                                  .jobs
-                                                                  .elementAt(
-                                                            o[index]['job'],
-                                                          ),
+                                                          text: partnerProvider
+                                                                  .getServiceNameById(o[
+                                                                          index]
+                                                                      ['job'])[
+                                                              'nameOfService'],
+                                                          // text:
+                                                          //     _ordersController
+                                                          //         .jobs
+                                                          //         .elementAt(
+                                                          //   o[index]['job'],
+                                                          // ),
                                                           size: _width * 0.045,
                                                           weight:
                                                               FontWeight.w600,
