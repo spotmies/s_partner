@@ -40,11 +40,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     _stepperController.pickedDate = DateTime.now();
     _stepperController.pickedTime = TimeOfDay.now();
 
-
     _stepperController.workLocation = widget.coordinates;
     _stepperController.verifiedNumber = widget.phone.toString();
     // print("76 ${FirebaseAuth.instance.currentUser.uid}");
     // partnerProvider.getServiceListFromServer();
+    partnerProvider.setCurrentConstants("welcome");
   }
 
   @override
@@ -191,7 +191,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                               _hight,
                               _stepperController.scrollController,
                               _stepperController,
-                              widget.type)),
+                              widget.type,
+                              partnerProvider
+                                  .getValue("terms_and_conditions") ?? _stepperController.offlineTermsAndConditions)),
                       isActive: _stepperController.currentStep >= 0,
                       state: _stepperController.currentStep >= 0
                           ? StepState.complete
@@ -232,7 +234,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         size: _width * 0.025,
                       ),
                       content: step3UI(context, _stepperController, _hight,
-                          _width, widget.type,provider:partnerProvider),
+                          _width, widget.type,
+                          provider: partnerProvider),
                       isActive: _stepperController.currentStep >= 2,
                       state: _stepperController.currentStep >= 2
                           ? StepState.complete
