@@ -64,6 +64,17 @@ class StepperController extends ControllerMVC {
   String adharFrontpageLink = "";
   Map<String, double> workLocation;
 
+  List offlineTermsAndConditions = [
+  "Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
+  "Spotmies partners are not supposed to share customer details to others,it will be considered as an illegal activity",
+  "we do not Entertain any illegal activities.if perform severe actions will be taken",
+  "partners are responsible for the damages done during the services and they bare whole forfeit",
+  "we do not provide  any kind of training,equipment/material and  labor to perform any Service",
+  "We do not provide any shipping charges,travelling fares",
+  "partner should take good care of their appearance ,language ,behaviour while they perform service",
+  "partner should fellow all the covid regulations",
+];
+
   //langueges
 
   String lan1;
