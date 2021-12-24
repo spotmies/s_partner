@@ -100,6 +100,22 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
+  deleteChat() async {
+    Map<String, String> body = {"isDeletedForPartner": "true"};
+    snackbar(context, "Deleting chat...");
+    dynamic resp = await Server()
+        .editMethod(API.specificChat + targetChat['msgId'].toString(), body);
+    if (resp.statusCode == 200 || resp.statusCode == 204) {
+      snackbar(context, "Chat deleted successfully");
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Timer(Duration(seconds: 1), () {
+        chatProvider.deleteChatByMsgId(targetChat['msgId']);
+      });
+    } else
+      snackbar(context, "something went wrong");
+  }
+
   typeofData(type) {
     switch (type) {
       case 'text':
@@ -272,12 +288,11 @@ class ChatController extends ControllerMVC {
 
   Future fetchNewChatList() async {
     var response = await Server().getMethod(API.partnerChat + pId);
-    if(response.statusCode == 200){
-    var chatList = jsonDecode(response.body);
-    chatProvider.setChatList2(chatList);
-    snackbar(context, "sync with new changes");
-    }
-    else snackbar(context, "something went wrong");
-
+    if (response.statusCode == 200) {
+      var chatList = jsonDecode(response.body);
+      chatProvider.setChatList2(chatList);
+      snackbar(context, "sync with new changes");
+    } else
+      snackbar(context, "something went wrong");
   }
 }

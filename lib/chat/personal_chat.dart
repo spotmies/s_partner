@@ -364,6 +364,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => UserDetails(
+                      ccontroller : _chatController,
                       userDetails: _chatController.user,
                       isProfileRevealed: _chatController
                               .orderDetails['revealProfileTo']
