@@ -107,7 +107,9 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               stepperController,
               type != 'student' ? 'Business Name' : 'College Name',
               'Enter Valid Business Name',
-              stepperController.businessNameTf,
+              type == "student"
+                  ? stepperController.collegeNameTf
+                  : stepperController.businessNameTf,
               Icons.business,
               'text',
               TextInputType.name,
@@ -127,10 +129,10 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               stepperController.adharfront == null),
           uploadUI(_hight, _width, 'back', stepperController,
               stepperController.adharback == null),
-          type == "student"
-              ? uploadUI(_hight, _width, 'clgId', stepperController,
-                  stepperController.clgId == null)
-              : Container(),
+          // type == "student"
+          //     ? uploadUI(_hight, _width, 'clgId', stepperController,
+          //         stepperController.clgId == null)
+          //     : Container(),
         ],
       ),
     ),
