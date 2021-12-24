@@ -1,20 +1,27 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
+import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class UserDetails extends StatefulWidget {
   final Map userDetails;
   final bool isProfileRevealed;
   final Function onTapPhone;
+  final ChatController ccontroller;
   UserDetails(
       {@required this.userDetails,
       this.isProfileRevealed = false,
-      this.onTapPhone});
+      this.onTapPhone,
+      this.ccontroller});
   @override
   _UserDetailsState createState() => _UserDetailsState();
 }
@@ -246,139 +253,151 @@ class _UserDetailsState extends State<UserDetails> {
                             ],
                           ),
                         ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.grey[200],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: _width * 0.07,
-                          ),
-                          height: _hight * 0.1,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.visibility,
-                                    color: Colors.grey[900],
-                                  ),
-                                  SizedBox(
-                                    width: _width * 0.07,
-                                  ),
-                                  TextWid(
-                                    text: 'Reveal My Profile',
-                                    size: _width * 0.05,
-                                    color: Colors.grey[800],
-                                    weight: FontWeight.w600,
-                                  )
-                                ],
-                              ),
-                              Transform.scale(
-                                scale: 0.8,
-                                child: CupertinoSwitch(
-                                    trackColor: Colors.grey[300],
-                                    value: isSwitch,
-                                    activeColor: Colors.blue[900],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isSwitch = value;
-                                      });
-                                    }),
-                              )
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.grey[200],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: _width * 0.07,
-                          ),
-                          height: _hight * 0.1,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.call,
-                                color: Colors.grey[900],
-                              ),
-                              SizedBox(
-                                width: _width * 0.07,
-                              ),
-                              TextWid(
-                                text: 'Available to Recieve Calls',
-                                size: _width * 0.05,
-                                color: Colors.grey[800],
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.grey[200],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: _width * 0.07,
-                          ),
-                          height: _hight * 0.1,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.block,
-                                color: Colors.redAccent,
-                              ),
-                              SizedBox(
-                                width: _width * 0.07,
-                              ),
-                              TextWid(
-                                text: 'Block ' +
-                                    toBeginningOfSentenceCase(
-                                        widget.userDetails['name']),
-                                size: _width * 0.05,
-                                color: Colors.redAccent,
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.grey[200],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: _width * 0.07,
-                          ),
-                          height: _hight * 0.1,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.report_problem,
-                                color: Colors.redAccent,
-                              ),
-                              SizedBox(
-                                width: _width * 0.07,
-                              ),
-                              TextWid(
-                                text: 'Report on ' +
-                                    toBeginningOfSentenceCase(
-                                        widget.userDetails['name']),
-                                size: _width * 0.05,
-                                color: Colors.redAccent,
-                                weight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.grey[200],
-                        ),
+
+                        actionButton(
+                            width(context),
+                            height(context),
+                            "Delete Chat",
+                            Colors.redAccent,
+                            Icons.delete_sweep_rounded,
+                            onTap: widget.ccontroller.deleteChat),
+                        /* ------------------------- reveal my profile code ------------------------- */
+                        // Container(
+                        //   padding: EdgeInsets.only(
+                        //     left: _width * 0.07,
+                        //   ),
+                        //   height: _hight * 0.1,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Row(
+                        //         children: [
+                        //           Icon(
+                        //             Icons.visibility,
+                        //             color: Colors.grey[900],
+                        //           ),
+                        //           SizedBox(
+                        //             width: _width * 0.07,
+                        //           ),
+                        //           TextWid(
+                        //             text: 'Reveal My Profile',
+                        //             size: _width * 0.05,
+                        //             color: Colors.grey[800],
+                        //             weight: FontWeight.w600,
+                        //           )
+                        //         ],
+                        //       ),
+                        //       Transform.scale(
+                        //         scale: 0.8,
+                        //         child: CupertinoSwitch(
+                        //             trackColor: Colors.grey[300],
+                        //             value: isSwitch,
+                        //             activeColor: Colors.blue[900],
+                        //             onChanged: (value) {
+                        //               setState(() {
+                        //                 isSwitch = value;
+                        //               });
+                        //             }),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(
+                        //   thickness: 10,
+                        //   color: Colors.grey[200],
+                        // ),
+                        /* ------------------------ available to revece call ------------------------ */
+                        // Container(
+                        //   padding: EdgeInsets.only(
+                        //     left: _width * 0.07,
+                        //   ),
+                        //   height: _hight * 0.1,
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.call,
+                        //         color: Colors.grey[900],
+                        //       ),
+                        //       SizedBox(
+                        //         width: _width * 0.07,
+                        //       ),
+                        //       TextWid(
+                        //         text: 'Available to Recieve Calls',
+                        //         size: _width * 0.05,
+                        //         color: Colors.grey[800],
+                        //         weight: FontWeight.w600,
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(
+                        //   thickness: 10,
+                        //   color: Colors.grey[200],
+                        // ),
+
+/* ------------------------------- block user ------------------------------- */
+
+                        // Container(
+                        //   padding: EdgeInsets.only(
+                        //     left: _width * 0.07,
+                        //   ),
+                        //   height: _hight * 0.1,
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.block,
+                        //         color: Colors.redAccent,
+                        //       ),
+                        //       SizedBox(
+                        //         width: _width * 0.07,
+                        //       ),
+                        //       TextWid(
+                        //         text: 'Block ' +
+                        //             toBeginningOfSentenceCase(
+                        //                 widget.userDetails['name']),
+                        //         size: _width * 0.05,
+                        //         color: Colors.redAccent,
+                        //         weight: FontWeight.w600,
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(
+                        //   thickness: 10,
+                        //   color: Colors.grey[200],
+                        // ),
+
+                        /* ------------------------------- report user ------------------------------ */
+
+                        // Container(
+                        //   padding: EdgeInsets.only(
+                        //     left: _width * 0.07,
+                        //   ),
+                        //   height: _hight * 0.1,
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.report_problem,
+                        //         color: Colors.redAccent,
+                        //       ),
+                        //       SizedBox(
+                        //         width: _width * 0.07,
+                        //       ),
+                        //       TextWid(
+                        //         text: 'Report on ' +
+                        //             toBeginningOfSentenceCase(
+                        //                 widget.userDetails['name']),
+                        //         size: _width * 0.05,
+                        //         color: Colors.redAccent,
+                        //         weight: FontWeight.w600,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(
+                        //   thickness: 10,
+                        //   color: Colors.grey[200],
+                        // ),
                         Container(
                           height: 250.0,
                           child: Center(
@@ -392,6 +411,48 @@ class _UserDetailsState extends State<UserDetails> {
                 ],
               )
             : Center(child: Text('User not revealed deatils')));
+  }
+
+  Column actionButton(
+      double width, double height, String text, Color color, IconData icon,
+      {VoidCallback onTap}) {
+    Divider divider = Divider(
+      thickness: 10,
+      color: Colors.grey[200],
+    );
+    return Column(
+      children: [
+        divider,
+        Container(
+          padding: EdgeInsets.only(left: width * 0.07),
+          height: height * 0.1,
+          child: InkWell(
+            onTap: () {
+              if (onTap != null) onTap();
+            },
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: color,
+                ),
+                SizedBox(
+                  width: width * 0.07,
+                ),
+                TextWid(
+                  text: text,
+                  // text: 'Block ' +
+                  //     toBeginningOfSentenceCase(widget.profileDetails['name']),
+                  size: width * 0.05,
+                  color: color,
+                  weight: FontWeight.w600,
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

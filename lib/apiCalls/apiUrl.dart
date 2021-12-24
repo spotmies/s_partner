@@ -18,6 +18,7 @@ class API {
   static var updateResponse = "/api/response/responses/";
   static var partnerChat = '/api/chat/partner/';
   static var chatById = "/api/chat/chats";
+  static var specificChat = "/api/chat/chats/";
   static var allOrder = "api/order/partner/";
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var loginApi = '/api/partner/login/';

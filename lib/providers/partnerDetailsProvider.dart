@@ -134,7 +134,10 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   getServiceNameById(int id) {
-    return servicesList.firstWhere((element) => element['serviceId'] == id);
+    int index =
+        servicesList.indexWhere((element) => element['serviceId'] == id);
+    if (index < 0) return "null";
+    return servicesList[index]['nameOfService'];
   }
 
   setCurrentPid(dynamic pid) {

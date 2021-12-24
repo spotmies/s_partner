@@ -19,6 +19,7 @@ class EditProfileController extends ControllerMVC {
     'Select AccountType',
     'business',
     'student',
+    'freelancer'
   ];
   int job = 0;
 
@@ -33,6 +34,7 @@ class EditProfileController extends ControllerMVC {
   TextEditingController tempAddressControl = TextEditingController();
   TextEditingController perAddressControl = TextEditingController();
   TextEditingController businessNameControl = TextEditingController();
+  TextEditingController collgeNameControl = TextEditingController();
   TextEditingController experienceControl = TextEditingController();
 
   GlobalKey<FormState> editProfileForm = GlobalKey<FormState>();
@@ -67,6 +69,7 @@ class EditProfileController extends ControllerMVC {
     businessNameControl.text = partner['businessName'] != null
         ? partner['businessName'].toString()
         : "";
+    collgeNameControl.text = partner['collegeName'] ?? "";
     experienceControl.text =
         partner['experience'] != null ? partner['experience'].toString() : "";
     setAccountType(partner['accountType']);
@@ -135,6 +138,7 @@ class EditProfileController extends ControllerMVC {
         "accountType": "${accountType[dropDownValue]}",
         "dob": "${pickedDate.millisecondsSinceEpoch}",
         "businessName": "${businessNameControl.text}",
+        "collgeName": "${collgeNameControl.text}",
         "experience": "${experienceControl.text}",
         "perAdd": "${perAddressControl.text}",
         "tempAdd": "${tempAddressControl.text}",

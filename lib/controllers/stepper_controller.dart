@@ -28,6 +28,7 @@ class StepperController extends ControllerMVC {
   TextEditingController tempadTf = TextEditingController();
   TextEditingController experienceTf = TextEditingController();
   TextEditingController businessNameTf = TextEditingController();
+  TextEditingController collegeNameTf = TextEditingController(text: "");
   TextEditingController otherlan = TextEditingController();
   ScrollController scrollController = ScrollController();
 
@@ -65,15 +66,15 @@ class StepperController extends ControllerMVC {
   Map<String, double> workLocation;
 
   List offlineTermsAndConditions = [
-  "Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
-  "Spotmies partners are not supposed to share customer details to others,it will be considered as an illegal activity",
-  "we do not Entertain any illegal activities.if perform severe actions will be taken",
-  "partners are responsible for the damages done during the services and they bare whole forfeit",
-  "we do not provide  any kind of training,equipment/material and  labor to perform any Service",
-  "We do not provide any shipping charges,travelling fares",
-  "partner should take good care of their appearance ,language ,behaviour while they perform service",
-  "partner should fellow all the covid regulations",
-];
+    "Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
+    "Spotmies partners are not supposed to share customer details to others,it will be considered as an illegal activity",
+    "we do not Entertain any illegal activities.if perform severe actions will be taken",
+    "partners are responsible for the damages done during the services and they bare whole forfeit",
+    "we do not provide  any kind of training,equipment/material and  labor to perform any Service",
+    "We do not provide any shipping charges,travelling fares",
+    "partner should take good care of their appearance ,language ,behaviour while they perform service",
+    "partner should fellow all the covid regulations",
+  ];
 
   //langueges
 
@@ -84,7 +85,7 @@ class StepperController extends ControllerMVC {
   bool telugu = false;
   bool english = false;
   bool hindi = false;
-  int dropDownValue = 0;
+  int dropDownValue;
   DateTime now = DateTime.now();
 
   List jobs = [
@@ -136,7 +137,7 @@ class StepperController extends ControllerMVC {
   }
 
   step3(BuildContext context, String type, String phone, Map coordinates) {
-    if (dropDownValue == null || dropDownValue == 0)
+    if (dropDownValue == null || dropDownValue < 0)
       return snackbar(context, "please select business type");
     if (adharfront != null &&
         adharback != null &&
@@ -171,7 +172,7 @@ class StepperController extends ControllerMVC {
       "name": nameTf.text.toString(),
       "phNum": phone ?? verifiedNumber,
       "eMail": emailTf.text.toString(),
-      "job": (dropDownValue - 1).toString(),
+      "job": (dropDownValue).toString(),
       "pId": FirebaseAuth.instance.currentUser.uid.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "accountType": type,
@@ -179,6 +180,7 @@ class StepperController extends ControllerMVC {
       "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
       "dob": pickedDate.millisecondsSinceEpoch.toString(),
       "businessName": businessNameTf.text.toString(),
+      "collgeName": collegeNameTf.text.toString(),
       "experience": experienceTf.text.toString(),
       "acceptance": "100",
       "availability": "false",
