@@ -54,6 +54,15 @@ class PartnerDetailsProvider extends ChangeNotifier {
     return currentConstants[index]['label'];
   }
 
+  getValue(String objId) {
+    if (currentConstants == null) return null;
+    int index = currentConstants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+    if (index == -1) return null;
+    dynamic retrive = jsonDecode(currentConstants[index]['value']);
+    return retrive;
+  }
+
   getConstants({bool alwaysHit = false}) async {
     if (alwaysHit == false) {
       dynamic constantsFromSf = await getAppConstants();
@@ -125,7 +134,10 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   getServiceNameById(int id) {
-    return servicesList.firstWhere((element) => element['serviceId'] == id);
+    int index =
+        servicesList.indexWhere((element) => element['serviceId'] == id);
+    if (index < 0) return "null";
+    return servicesList[index]['nameOfService'];
   }
 
   setCurrentPid(dynamic pid) {

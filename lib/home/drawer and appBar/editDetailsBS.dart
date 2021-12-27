@@ -280,7 +280,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10),
                                     child: TextWid(
-                                        text: "Your Business Details",
+                                        text: "Your Professional Details",
                                         weight: FontWeight.bold)),
                                 Expanded(
                                     child: Container(
@@ -293,18 +293,28 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             padding: EdgeInsets.only(bottom: 15),
                             // padding: EdgeInsets.all(15),
                             child: TextFieldWidget(
-                              label: "Business Name",
+                              label: _editProfileController.dropDownValue == 2
+                                  ? "College Name"
+                                  : "Business Name",
                               maxLength: 60,
                               controller:
-                                  _editProfileController.businessNameControl,
-                              hint: 'ex : electronic shop , skml parlour',
+                                  _editProfileController.dropDownValue == 2
+                                      ? _editProfileController.collgeNameControl
+                                      : _editProfileController
+                                          .businessNameControl,
+                              hint: _editProfileController.dropDownValue == 2
+                                  ? 'ex : Interior service pvt'
+                                  : 'Enter your collge name here',
                               enableBorderColor: Colors.grey,
                               focusBorderColor: Colors.indigo[900],
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
                               focusErrorRadius: 15,
-                              validateMsg: 'Enter Valid Business Name',
+                              validateMsg:
+                                  _editProfileController.dropDownValue == 2
+                                      ? 'Enter Valid Business Name'
+                                      : 'Enter valid collge name',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
                               postIconColor: Colors.indigo[900],
@@ -358,21 +368,21 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                         size: width * 0.06,
                                         color: Colors.indigo[900],
                                       ),
-                                      items: <int>[0, 1, 2]
-                                          .map<DropdownMenuItem<int>>(
-                                              (int jobFromFAB) {
-                                        return DropdownMenuItem<int>(
-                                            value: jobFromFAB,
+                                      items: _editProfileController.accountType
+                                          .map((type) {
+                                        return DropdownMenuItem(
+                                            value: _editProfileController
+                                                .accountType
+                                                .indexOf(type),
                                             child: TextWid(
-                                              text: _editProfileController
-                                                  .accountType
-                                                  .elementAt(jobFromFAB),
+                                              text: type,
                                               color: Colors.grey[900],
                                               size: width * 0.04,
                                               weight: FontWeight.w500,
                                             ));
                                       }).toList(),
                                       onChanged: (newVal) {
+                                        if (newVal == 0) return;
                                         _editProfileController.dropDownValue =
                                             newVal;
                                         _editProfileController.refresh();
@@ -416,10 +426,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                         value: location['serviceId'],
                                       );
                                     }).toList(),
-                                   
                                     onChanged: (newVal) {
                                       _editProfileController.job = newVal;
-
 
                                       _editProfileController.refresh();
                                     },

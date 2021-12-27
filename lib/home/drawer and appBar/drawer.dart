@@ -97,7 +97,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                         Text('  |  '),
                         TextWid(
                           text: partnerDetailsProvider
-                              .getServiceNameById(pd['job'])['nameOfService'],
+                              .getServiceNameById(pd['job']),
                           size: _width * 0.03,
                           weight: FontWeight.w500,
                         )

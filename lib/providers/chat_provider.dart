@@ -296,6 +296,14 @@ class ChatProvider extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 
+  deleteChatByMsgId(msgId) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    if (index < 0) return;
+    chatList.removeAt(index);
+    notifyListeners();
+  }
+
   void resetAllCallingVariables() {
     acceptCalls = true;
     callDuration = 0;

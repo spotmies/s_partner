@@ -79,7 +79,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      inputFormatters: widget.formatter,
+      inputFormatters: inputFormatter(widget.type),
       controller: widget.controller,
       decoration: InputDecoration(
           counterText: '',
@@ -147,6 +147,48 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   }
 }
 
+inputFormatter(String type) {
+  switch (type) {
+    case "name":
+      return <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[a-zA-Z ]', caseSensitive: false)),
+      ];
+
+      break;
+    // case "email":
+    //   return <TextInputFormatter>[
+    //     FilteringTextInputFormatter.allow(RegExp(
+    //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    //         caseSensitive: false)),
+    //   ];
+    //   break;
+    case "phone":
+    case "number":
+      return <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[0-9]', caseSensitive: false)),
+      ];
+      break;
+
+    // case "address":
+    //   return <TextInputFormatter>[
+    //     FilteringTextInputFormatter.allow(
+    //         RegExp(r"^[A-Za-z0-9-, ]", caseSensitive: false)),
+    //   ];
+    //   break;
+    // case "text":
+    //   return <TextInputFormatter>[
+    //     FilteringTextInputFormatter.allow(
+    //         RegExp(r'[a-z]', caseSensitive: false)),
+    //   ];
+    //   break;
+
+    default:
+      return null;
+  }
+}
+
 textFieldValidator(type, value, errorMessage) {
   if (value.isEmpty) {
     return errorMessage ?? 'should not be empty';
@@ -171,6 +213,11 @@ textFieldValidator(type, value, errorMessage) {
     case "number":
       if (!RegExp(r'[0-9]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Number";
+      }
+      break;
+    case "name":
+      if (!RegExp(r'[a-z]').hasMatch(value)) {
+        return errorMessage ?? "Enter valid Name";
       }
       break;
     default:
