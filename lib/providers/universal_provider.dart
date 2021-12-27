@@ -5,7 +5,7 @@ class UniversalProvider extends ChangeNotifier {
   bool chatBadge = false;
   List geoLocations = [];
   List searchLocations = [];
-  bool locationsLoader = false;
+  bool locationsLoader = true;
 
   void setLocationsLoader(bool state) {
     locationsLoader = state;

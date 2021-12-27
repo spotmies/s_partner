@@ -52,7 +52,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   Future init() async {
     if (universalProvider.geoLocations.length > 0) return;
     // var geoLocationss = await PlacesApi.getLoc(query);
-    universalProvider.setLocationsLoader(true);
+  //  universalProvider.setLocationsLoader(true);
     List geoLocationss = await PlacesApi.getAllLocations();
     universalProvider.setLocationsLoader(false);
     universalProvider.setGeoLocations(geoLocationss);

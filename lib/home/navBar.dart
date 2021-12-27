@@ -119,10 +119,12 @@ class _NavBarState extends State<NavBar> {
         partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
         log("login succssfully");
       } else if (resp == "false") {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => OnboardingScreen()),
-            (route) => false);
+         FirebaseAuth.instance.signOut().then((value) => {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => OnboardingScreen()),
+                  (route) => false)
+            });
       } else
         snackbar(context, "something went wrong");
     } else {
