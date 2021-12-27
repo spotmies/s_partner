@@ -16,7 +16,6 @@ import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
-import 'package:spotmies_partner/utilities/constants.dart';
 
 List<Map<String, Object>> data = [
   {
@@ -145,6 +144,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               // isRequired: false,
                               label: "Alternative Number",
                               type: "phone",
+                              
                               maxLength: 10,
                               formatter: <TextInputFormatter>[
                                 FilteringTextInputFormatter.allow(

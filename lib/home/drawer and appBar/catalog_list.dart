@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/apiCalls/apiCalling.dart';
-import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -87,7 +85,6 @@ class _CatalogState extends State<Catalog> {
   }
 }
 
-
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
@@ -129,7 +126,8 @@ catelogListCard(BuildContext context, cat, int index) {
 Future bottomMenu(BuildContext context, id, int index) {
   return showModalBottomSheet(
       context: context,
-      elevation: 22,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

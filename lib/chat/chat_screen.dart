@@ -802,7 +802,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
   }
 
   Future<void> retrieveLostData() async {
-    final LostData response = await ImagePicker().getLostData();
+    final LostDataResponse response = await ImagePicker().retrieveLostData();
     if (response.isEmpty) {
       return;
     }

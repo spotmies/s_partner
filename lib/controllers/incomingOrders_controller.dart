@@ -34,7 +34,7 @@ class IncomingOrdersController extends ControllerMVC {
   DateTime pickedDate;
   TimeOfDay pickedTime;
 
-  StreamController socketIncomingOrders;
+  // StreamController socketIncomingOrders;
   IncomingOrdersProvider incomingOrdersProvider;
 
   Stream stream;

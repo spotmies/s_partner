@@ -198,6 +198,7 @@ checkPartnerRegistered(pId) async {
   var obj = {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "partnerDeviceToken": deviceToken?.toString() ?? "",
+    "isActive": true.toString()
   };
   print("checkUserreg>>>>>>>>>>>>>>>>>>>>>> $pId");
   var response = await Server().postMethod(API.loginApi + pId.toString(), obj);

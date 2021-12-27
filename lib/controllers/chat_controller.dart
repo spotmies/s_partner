@@ -189,7 +189,7 @@ class ChatController extends ControllerMVC {
   }
 
   pickVideo(sendCallBack, String msgId) async {
-    PickedFile pickedFile = await picker.getVideo(
+    XFile pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     chatVideo.add(File(pickedFile.path));
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
@@ -197,7 +197,7 @@ class ChatController extends ControllerMVC {
   }
 
   Future<void> retrieveLostData() async {
-    final LostData response = await ImagePicker().getLostData();
+    final LostDataResponse response = await ImagePicker().retrieveLostData();
     if (response.isEmpty) {
       return;
     }

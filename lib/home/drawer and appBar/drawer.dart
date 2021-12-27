@@ -19,7 +19,6 @@ import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
-import 'package:spotmies_partner/utilities/constants.dart';
 
 class DrawerScreen extends StatefulWidget {
   final drawerController;
