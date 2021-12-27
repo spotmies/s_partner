@@ -159,6 +159,7 @@ class LoginPageController extends ControllerMVC {
 
   splashScreenNavigation() async {
     if (FirebaseAuth.instance.currentUser != null) {
+     partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     } else {
