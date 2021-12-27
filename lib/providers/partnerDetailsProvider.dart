@@ -134,8 +134,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   getServiceNameById(int id) {
-    int index =
-        servicesList.indexWhere((element) => element['serviceId'] == id);
+    int index = servicesList.indexWhere(
+        (element) => element['serviceId'].toString() == id.toString());
     if (index < 0) return "null";
     return servicesList[index]['nameOfService'];
   }

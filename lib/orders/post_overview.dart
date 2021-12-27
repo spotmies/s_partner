@@ -23,6 +23,7 @@ import 'package:spotmies_partner/utilities/media_player.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:timelines/timelines.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
   final String orderId;
@@ -113,52 +114,55 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         children: [
           Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: FloatingActionButton.extended(
-                  backgroundColor: Colors.indigo[50],
-                  onPressed: () {
-                    setState(() {
-                      isExtended = !isExtended;
-                    });
-                  },
-                  label: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) =>
-                            FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                        child: child,
-                        sizeFactor: animation,
-                        axis: Axis.horizontal,
-                      ),
-                    ),
-                    child: isExtended
-                        ? Icon(Icons.post_add, color: Colors.indigo[900])
-                        : InkWell(
-                            onTap: () {
-                              if (!isExtended) widget.onBottomSheet();
-                            },
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: Icon(
-                                    Icons.post_add,
-                                    color: Colors.indigo[900],
-                                  ),
-                                ),
-                                TextWid(
-                                    text: 'RISE BID',
-                                    size: _width * 0.045,
-                                    weight: FontWeight.w600,
-                                    color: Colors.indigo[900])
-                              ],
+            floatingActionButton: d['orderState'] < 8
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: FloatingActionButton.extended(
+                        backgroundColor: Colors.indigo[50],
+                        onPressed: () {
+                          setState(() {
+                            isExtended = !isExtended;
+                          });
+                        },
+                        label: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) =>
+                                  FadeTransition(
+                            opacity: animation,
+                            child: SizeTransition(
+                              child: child,
+                              sizeFactor: animation,
+                              axis: Axis.horizontal,
                             ),
                           ),
-                  )),
-            ),
+                          child: isExtended
+                              ? Icon(Icons.post_add, color: Colors.indigo[900])
+                              : InkWell(
+                                  onTap: () {
+                                    if (!isExtended) widget.onBottomSheet();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
+                                        child: Icon(
+                                          Icons.post_add,
+                                          color: Colors.indigo[900],
+                                        ),
+                                      ),
+                                      TextWid(
+                                          text: 'RISE BID',
+                                          size: _width * 0.045,
+                                          weight: FontWeight.w600,
+                                          color: Colors.indigo[900])
+                                    ],
+                                  ),
+                                ),
+                        )),
+                  )
+                : Container(),
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.grey[50],
             appBar: AppBar(
@@ -181,9 +185,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWid(
-                    text: Constants.jobCategories[d['job'].runtimeType == String
-                        ? int.parse(d['job'])
-                        : d['job']],
+                    text: ordersProvider.getServiceNameById(d['job']),
                     size: _width * 0.04,
                     color:
                         d['orderState'] > 8 ? Colors.white : Colors.grey[500],
@@ -882,18 +884,29 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyCalling(
-                          ordId: orderDetails['ordId'].toString(),
-                          uId: orderDetails['uDetails']['uId'],
-                          pId: myPid,
-                          isIncoming: false,
-                          name: orderDetails['uDetails']['name'].toString(),
-                          profile: orderDetails['uDetails']['pic'].toString(),
-                          userDeviceToken: orderDetails['uDetails']
-                                  ['userDeviceToken']
-                              .toString(),
-                        )));
+                bottomOptionsMenu(context,
+                    options: Constants.bottomSheetOptionsForCalling,
+                    option1Click: () {
+                  if (!orderDetails['revealProfileTo'].contains(myPid)) {
+                    snackbar(context, "User not shared contact number to you");
+                    snackbar(context, "Use internent call instead");
+                    return;
+                  }
+                  launch("tel://${orderDetails['uDetails']['phNum']}");
+                }, option2Click: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MyCalling(
+                            ordId: orderDetails['ordId'].toString(),
+                            uId: orderDetails['uDetails']['uId'],
+                            pId: myPid,
+                            isIncoming: false,
+                            name: orderDetails['uDetails']['name'].toString(),
+                            profile: orderDetails['uDetails']['pic'].toString(),
+                            userDeviceToken: orderDetails['uDetails']
+                                    ['userDeviceToken']
+                                .toString(),
+                          )));
+                });
               },
               child: Row(
                 children: [
