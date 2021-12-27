@@ -114,52 +114,55 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         children: [
           Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: FloatingActionButton.extended(
-                  backgroundColor: Colors.indigo[50],
-                  onPressed: () {
-                    setState(() {
-                      isExtended = !isExtended;
-                    });
-                  },
-                  label: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) =>
-                            FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                        child: child,
-                        sizeFactor: animation,
-                        axis: Axis.horizontal,
-                      ),
-                    ),
-                    child: isExtended
-                        ? Icon(Icons.post_add, color: Colors.indigo[900])
-                        : InkWell(
-                            onTap: () {
-                              if (!isExtended) widget.onBottomSheet();
-                            },
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: Icon(
-                                    Icons.post_add,
-                                    color: Colors.indigo[900],
-                                  ),
-                                ),
-                                TextWid(
-                                    text: 'RISE BID',
-                                    size: _width * 0.045,
-                                    weight: FontWeight.w600,
-                                    color: Colors.indigo[900])
-                              ],
+            floatingActionButton: d['orderState'] < 8
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: FloatingActionButton.extended(
+                        backgroundColor: Colors.indigo[50],
+                        onPressed: () {
+                          setState(() {
+                            isExtended = !isExtended;
+                          });
+                        },
+                        label: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) =>
+                                  FadeTransition(
+                            opacity: animation,
+                            child: SizeTransition(
+                              child: child,
+                              sizeFactor: animation,
+                              axis: Axis.horizontal,
                             ),
                           ),
-                  )),
-            ),
+                          child: isExtended
+                              ? Icon(Icons.post_add, color: Colors.indigo[900])
+                              : InkWell(
+                                  onTap: () {
+                                    if (!isExtended) widget.onBottomSheet();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
+                                        child: Icon(
+                                          Icons.post_add,
+                                          color: Colors.indigo[900],
+                                        ),
+                                      ),
+                                      TextWid(
+                                          text: 'RISE BID',
+                                          size: _width * 0.045,
+                                          weight: FontWeight.w600,
+                                          color: Colors.indigo[900])
+                                    ],
+                                  ),
+                                ),
+                        )),
+                  )
+                : Container(),
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.grey[50],
             appBar: AppBar(
