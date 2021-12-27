@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -69,6 +68,7 @@ class _CatelogPostState extends State<CatelogPost> {
                       child: IconButton(
                           onPressed: () {
                             catelogController.catelogImage();
+                            setState(() {});
                           },
                           icon: Icon(
                             Icons.image,
