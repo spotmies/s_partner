@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';

@@ -3,7 +3,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
     {menuTitle = "Menu",
-    options,
+   List options,
     VoidCallback option1Click,
     VoidCallback option2Click,
     VoidCallback option3Click,
