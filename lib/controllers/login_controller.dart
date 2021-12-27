@@ -159,19 +159,8 @@ class LoginPageController extends ControllerMVC {
 
   splashScreenNavigation() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      String resp =
-          await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
-      if (resp == "true") {
-        partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-      } else if (resp == "false") {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => OnboardingScreen()),
-            (route) => false);
-      } else
-        snackbar(context, "something went wrong");
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     } else {
       Navigator.pushAndRemoveUntil(
           context,
@@ -182,7 +171,7 @@ class LoginPageController extends ControllerMVC {
 
   getConstants({bool alwaysHit = false}) async {
     if (alwaysHit == false) {
-      dynamic constantsFromSf =  await getAppConstants();
+      dynamic constantsFromSf = await getAppConstants();
       if (constantsFromSf != null) {
         partnerProvider.setAllConstants(constantsFromSf);
 

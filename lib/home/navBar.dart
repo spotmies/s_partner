@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
+import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/login/onboard.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
@@ -18,6 +20,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
@@ -108,12 +111,34 @@ class _NavBarState extends State<NavBar> {
     if (user != null) partnerProvider.setPartnerDetails(user);
   }
 
+  loginPartner() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String resp =
+          await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
+      if (resp == "true") {
+        partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
+        log("login succssfully");
+      } else if (resp == "false") {
+         FirebaseAuth.instance.signOut().then((value) => {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => OnboardingScreen()),
+                  (route) => false)
+            });
+      } else
+        snackbar(context, "something went wrong");
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => OnboardingScreen()),
+          (route) => false);
+    }
+  }
+
   //socket
   hittingAllApis(currentPid) async {
     log("pid is >>>>>>>>> $pId");
-    dynamic chatList = await getChatListFromDb(currentPid);
-
-    if (chatList != null) chatProvider.setChatList(chatList);
+    await loginPartner();
 
     dynamic details = await partnerDetailsFull(currentPid);
 
@@ -121,9 +146,12 @@ class _NavBarState extends State<NavBar> {
       partnerProvider.setPartnerDetails(details);
       if (details['appConfig'] == true) {
         partnerProvider.getServiceListFromServer();
-        partnerProvider.getConstants(alwaysHit: true);
+        partnerProvider.getConstants(alwaysHit: false);
       }
     }
+    dynamic chatList = await getChatListFromDb(currentPid);
+
+    if (chatList != null) chatProvider.setChatList(chatList);
 
     dynamic partnerOrders = await partnerAllOrders(currentPid);
 

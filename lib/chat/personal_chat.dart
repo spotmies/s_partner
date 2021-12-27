@@ -14,6 +14,9 @@ import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
@@ -364,7 +367,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => UserDetails(
-                      ccontroller : _chatController,
+                      ccontroller: _chatController,
                       userDetails: _chatController.user,
                       isProfileRevealed: _chatController
                               .orderDetails['revealProfileTo']
@@ -403,16 +406,26 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   void calling(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MyCalling(
-            msgId: widget.msgId,
-            ordId: _chatController.targetChat['ordId'],
-            uId: _chatController.user['uId'],
-            pId: FirebaseAuth.instance.currentUser.uid,
-            isIncoming: false,
-            name: _chatController.user['name'],
-            profile: _chatController.user['pic'],
-            userDeviceToken:
-                _chatController.user['userDeviceToken'].toString())));
+    bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
+        option1Click: () {
+      if (!_chatController.orderDetails['revealProfileTo'].contains(myPid)) {
+        snackbar(context, "User not shared contact number to you");
+        snackbar(context, "Use internent call instead");
+        return;
+      }
+      launch("tel://${_chatController.user['phNum']}");
+    }, option2Click: () {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MyCalling(
+              msgId: widget.msgId,
+              ordId: _chatController.targetChat['ordId'],
+              uId: _chatController.user['uId'],
+              pId: FirebaseAuth.instance.currentUser.uid,
+              isIncoming: false,
+              name: _chatController.user['name'],
+              profile: _chatController.user['pic'],
+              userDeviceToken:
+                  _chatController.user['userDeviceToken'].toString())));
+    });
   }
 }
