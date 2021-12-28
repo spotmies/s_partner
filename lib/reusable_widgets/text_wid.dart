@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 String myPid = FirebaseAuth.instance.currentUser.uid.toString();
 
@@ -11,6 +12,7 @@ class TextWid extends StatelessWidget {
   final Color color;
   final String family;
   final double lSpace;
+  final double lineSpace;
   final int maxlines;
   final TextOverflow flow;
   final TextDecoration decoration;
@@ -23,6 +25,7 @@ class TextWid extends StatelessWidget {
       this.weight,
       this.family,
       this.maxlines,
+      this.lineSpace,
       this.decoration,
       this.flow,
       this.align,
@@ -37,6 +40,7 @@ class TextWid extends StatelessWidget {
         style: GoogleFonts.josefinSans(
           decoration: decoration ?? TextDecoration.none,
           letterSpacing: lSpace ?? 0,
+          height: lineSpace,
           fontSize: size ?? 14,
           color: color ?? Colors.black,
           fontWeight: weight ?? FontWeight.normal,

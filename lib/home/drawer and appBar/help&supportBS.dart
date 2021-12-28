@@ -1,11 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 Future helpAndSupport(BuildContext context, double hight, double width) {
-  List names = ['FAQ', 'Chat', 'Contact'];
-  List icons = [Icons.question_answer, Icons.chat, Icons.support_agent];
+  List names = ['FAQ', 'Mail', 'Contact'];
+  List icons = [Icons.question_answer, Icons.mail, Icons.support_agent];
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -17,18 +21,35 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
       ),
       builder: (BuildContext context) {
         return Container(
-            height: hight * 0.65,
+            height: hight * 0.68,
+            padding: EdgeInsets.only(top: height(context) * 0.03),
             child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 30),
-                  height: hight * 0.22,
-                  child: SvgPicture.asset('assets/help.svg')),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: width * 0.25,
+                    child: TextWid(
+                      text: 'How do you want to reach us?',
+                      size: width * 0.075,
+                      lineSpace: height(context) * 0.0017,
+                      weight: FontWeight.w600,
+                      flow: TextOverflow.visible,
+                      align: TextAlign.start,
+                    ),
+                  ),
+                  Container(
+                      height: hight * 0.2,
+                      width: width * 0.55,
+                      child: SvgPicture.asset('assets/help.svg')),
+                ],
+              ),
               Container(
                 padding:
                     EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                 child: Text(
-                  'Need Some Help?',
-                  style: fonts(width * 0.06, FontWeight.w600, Colors.grey[900]),
+                  'If you need any help,you can reach us through below options',
+                  style: fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
                 ),
               ),
               Container(
@@ -41,13 +62,22 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              icons[0],
-                              size: width * 0.15,
-                              color: Colors.grey[400],
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) => FAQ()));
+                              },
+                              icon: Icon(
+                                icons[0],
+                                size: width * 0.06,
+                                color: Colors.grey[900],
+                              ),
                             ),
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.01,
                           ),
                           Text(
                             names[0],
@@ -61,13 +91,22 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              icons[1],
-                              size: width * 0.15,
-                              color: Colors.grey[400],
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              onPressed: () {
+                                // Navigator.pop(context);
+                                // newQuery(context, pDID)
+                              },
+                              icon: Icon(
+                                icons[1],
+                                size: width * 0.06,
+                                color: Colors.grey[900],
+                              ),
                             ),
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.01,
                           ),
                           Text(
                             names[1],
@@ -81,13 +120,19 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              icons[2],
-                              size: width * 0.15,
-                              color: Colors.grey[400],
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                icons[2],
+                                size: width * 0.06,
+                                color: Colors.grey[900],
+                              ),
                             ),
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.01,
                           ),
                           Text(
                             names[2],

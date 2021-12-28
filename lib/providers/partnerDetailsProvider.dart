@@ -25,6 +25,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool reloadIncomingOrders = false;
   String currentPid = "123456";
   List servicesList = [];
+  dynamic freqAskQue;
 
 /* ------------------------- constant variables here ------------------------ */
 
@@ -197,6 +198,12 @@ class PartnerDetailsProvider extends ChangeNotifier {
     //setPartnerDetailsOnly(dataTemp);
     notifyListeners();
     saveMyProfile(dataTemp);
+  }
+
+  void setFAQ(faq){
+    dynamic frequently = faq;
+    freqAskQue = frequently;
+    notifyListeners();
   }
 
   void setPartnerDetailsOnly(data) {
