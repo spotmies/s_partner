@@ -159,7 +159,7 @@ class LoginPageController extends ControllerMVC {
 
   splashScreenNavigation() async {
     if (FirebaseAuth.instance.currentUser != null) {
-     partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
+      partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     } else {
@@ -196,20 +196,25 @@ class LoginPageController extends ControllerMVC {
 
 checkPartnerRegistered(pId) async {
   dynamic deviceToken = await FirebaseMessaging.instance.getToken();
-  var obj = {
+  Map<String, String> obj = {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "partnerDeviceToken": deviceToken?.toString() ?? "",
-    "isActive": true.toString()
+    "isActive": true.toString(),
+    "pId": pId.toString()
   };
-  print("checkUserreg>>>>>>>>>>>>>>>>>>>>>> $pId");
-  var response = await Server().postMethod(API.loginApi + pId.toString(), obj);
-  // print("36 $response");
-  if (response.statusCode == 200)
+  dynamic response = await Server().postMethod(API.loginApi, obj);
+  if (response.statusCode == 200 || response.statusCode == 204)
     return "true";
   else if (response.statusCode == 404)
     return "false";
   else
     return "server_error";
+}
+
+logoutUser() async {
+  Map<String, String> body = {"pId": pId};
+  await Server().postMethod(API.logoutApi, body);
+  return;
 }
 
 constantsAPI({String which = "constants"}) async {
