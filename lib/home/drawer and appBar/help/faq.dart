@@ -3,13 +3,19 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
+import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class FAQ extends StatefulWidget {
   @override
@@ -41,7 +47,9 @@ class _FAQState extends State<FAQ> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: Icon(
               Icons.arrow_back,
               color: Colors.grey[900],
@@ -54,6 +62,7 @@ class _FAQState extends State<FAQ> {
       ),
       body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         log(data.freqAskQue.toString());
+
         var faq = data.freqAskQue;
         if (faq == null)
           return Center(
@@ -78,10 +87,10 @@ class _FAQState extends State<FAQ> {
                       child: ExpansionTile(
                         backgroundColor: Colors.white,
                         collapsedBackgroundColor: Colors.white,
-                        textColor: Colors.grey[900],
-                        iconColor: Colors.grey[900],
-                        collapsedIconColor: Colors.indigo[900],
-                        collapsedTextColor: Colors.indigo[900],
+                        textColor: Colors.indigo[900],
+                        iconColor: Colors.indigo[900],
+                        collapsedIconColor: Colors.grey[900],
+                        collapsedTextColor: Colors.grey[900],
                         title: TextWid(
                           text: faq[index]['title'],
                           size: width(context) * 0.05,
@@ -159,6 +168,136 @@ class _FAQState extends State<FAQ> {
               );
             });
       }),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(5),
+        child: ElevatedButtonWidget(
+          bgColor: Colors.indigo[900],
+          minWidth: width(context) * 0.6,
+          height: height(context) * 0.06,
+          textColor: Colors.white,
+          buttonName: 'Rise Query',
+          textSize: width(context) * 0.05,
+          textStyle: FontWeight.w600,
+          borderRadius: 5.0,
+          trailingIcon: Icon(Icons.question_answer),
+          borderSideColor: Colors.indigo[900],
+          onClick: () {
+            var pD = partnerDetailsProvider.partnerDetailsFull;
+            log(pD["_id"]);
+            newQuery(context, pD["_id"]);
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+}
+
+newQuery(BuildContext context, pDID) {
+  TextEditingController queryControl = TextEditingController();
+  var queryForm = GlobalKey<FormState>();
+  // bool loader = false;
+  return showModalBottomSheet(
+      context: context,
+      elevation: 22,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        // if (loader)
+        //   return Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        return Container(
+          height: height(context) * 0.47,
+          margin: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Form(
+            key: queryForm,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextWid(
+                    text: 'Rise a new query',
+                    size: width(context) * 0.06,
+                    weight: FontWeight.w600,
+                    flow: TextOverflow.visible,
+                    align: TextAlign.center),
+                TextFieldWidget(
+                  label: "Ask Question",
+                  hint: 'Ask Question',
+                  enableBorderColor: Colors.grey,
+                  focusBorderColor: Colors.indigo[900],
+                  enableBorderRadius: 15,
+                  controller: queryControl,
+                  isRequired: true,
+                  focusBorderRadius: 15,
+                  errorBorderRadius: 15,
+                  focusErrorRadius: 15,
+                  autofocus: true,
+                  maxLength: 500,
+                  validateMsg: 'Enter Valid Email address',
+                  maxLines: 9,
+                  // postIcon: Icon(Icons.change_circle),
+                  postIconColor: Colors.indigo[900],
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  child: ElevatedButtonWidget(
+                    bgColor: Colors.indigo[900],
+                    minWidth: width(context),
+                    height: height(context) * 0.06,
+                    textColor: Colors.white,
+                    buttonName: 'Submit',
+                    textSize: width(context) * 0.05,
+                    textStyle: FontWeight.w600,
+                    borderRadius: 10.0,
+                    borderSideColor: Colors.indigo[50],
+                    onClick: () async {
+                      if (queryForm.currentState.validate()) {
+                        // loader = true;
+                        var res = await submitQuery(queryControl.text, pDID);
+
+                        if (res.statusCode == 200 || res.statusCode == 204) {
+                          log(res.body.toString());
+                          snackbar(context, 'Done');
+                          Navigator.pop(context);
+                          // loader = false;
+                        } else if (res.statusCode == 404) {
+                          log(res.body.toString());
+                          snackbar(context, 'Something went wrong');
+                          // loader = false;
+                        } else {
+                          log(res.body.toString());
+                          snackbar(context, 'server error');
+                          // loader = false;
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+submitQuery(subject, pDID) async {
+  var body = {
+    "subject": subject.toString(),
+    "suggestionFor": "faq",
+    "suggestionFrom": "partnerApp",
+    "uId": API.pid.toString(),
+    "uDetails": pDID.toString(),
+  };
+  var response = await Server().postMethod(API.suggestions, body);
+  // print("36 $response");
+  return response;
 }

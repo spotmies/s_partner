@@ -87,13 +87,15 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               borderSide:
                   new BorderSide(color: widget.bordercolor ?? Colors.white),
               borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
-          suffixIcon: IconButton(
-            onPressed: () {
-              widget.controller.clear();
-            },
-            icon: widget.postIcon ?? Icons.android,
-            color: widget.postIconColor ?? Colors.white,
-          ),
+          suffixIcon: widget.postIcon != null
+              ? IconButton(
+                  onPressed: () {
+                    widget.controller.clear();
+                  },
+                  icon: widget.postIcon ?? Icons.android,
+                  color: widget.postIconColor ?? Colors.white,
+                )
+              : null,
           prefix: TextWid(
             text: widget.prefix ?? '',
             size: width(context) * 0.04,

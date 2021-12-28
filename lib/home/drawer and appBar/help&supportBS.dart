@@ -94,7 +94,10 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // Navigator.pop(context);
+                                // newQuery(context, pDID)
+                              },
                               icon: Icon(
                                 icons[1],
                                 size: width * 0.06,
