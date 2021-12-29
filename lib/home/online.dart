@@ -69,7 +69,7 @@ class _OnlineState extends StateMVC<Online> {
             children: [
               Container(
                   child: RefreshIndicator(
-                onRefresh: _incomingOrdersController.incomingOrders,
+                onRefresh: partnerProvider.getOnlyIncomingOrders,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: o.length,
@@ -138,10 +138,8 @@ class _OnlineState extends StateMVC<Online> {
                                       children: [
                                         TextWid(
                                           text: partnerProvider
-                                              .getServiceNameById(o[index]
-                                                  ['job'])['nameOfService'],
-                                          // text: _incomingOrdersController.jobs
-                                          //     .elementAt(o[index]['job']),
+                                              .getServiceNameById(
+                                                  o[index]['job']),
                                           size: _width * 0.04,
                                           color: Colors.grey[900],
                                           weight: FontWeight.w600,
