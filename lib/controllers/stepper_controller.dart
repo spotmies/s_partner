@@ -180,7 +180,7 @@ class StepperController extends ControllerMVC {
       "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
       "dob": pickedDate.millisecondsSinceEpoch.toString(),
       "businessName": businessNameTf.text.toString(),
-      "collgeName": collegeNameTf.text.toString(),
+      "collegeName": collegeNameTf.text.toString(),
       "experience": experienceTf.text.toString(),
       "acceptance": "100",
       "availability": "false",

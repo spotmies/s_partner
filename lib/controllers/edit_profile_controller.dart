@@ -138,7 +138,7 @@ class EditProfileController extends ControllerMVC {
         "accountType": "${accountType[dropDownValue]}",
         "dob": "${pickedDate.millisecondsSinceEpoch}",
         "businessName": "${businessNameControl.text}",
-        "collgeName": "${collgeNameControl.text}",
+        "collegeName": "${collgeNameControl.text}",
         "experience": "${experienceControl.text}",
         "perAdd": "${perAddressControl.text}",
         "tempAdd": "${tempAddressControl.text}",

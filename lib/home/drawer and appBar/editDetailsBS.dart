@@ -144,7 +144,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               // isRequired: false,
                               label: "Alternative Number",
                               type: "phone",
-                              
+
                               maxLength: 10,
                               formatter: <TextInputFormatter>[
                                 FilteringTextInputFormatter.allow(
@@ -303,8 +303,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       : _editProfileController
                                           .businessNameControl,
                               hint: _editProfileController.dropDownValue == 2
-                                  ? 'ex : Interior service pvt'
-                                  : 'Enter your collge name here',
+                                  ? 'Enter your collge name here'
+                                  : 'ex : Interior service pvt',
                               enableBorderColor: Colors.grey,
                               focusBorderColor: Colors.indigo[900],
                               enableBorderRadius: 15,
@@ -313,11 +313,12 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               focusErrorRadius: 15,
                               validateMsg:
                                   _editProfileController.dropDownValue == 2
-                                      ? 'Enter Valid Business Name'
-                                      : 'Enter valid collge name',
+                                      ? 'Enter Valid College Name'
+                                      : 'Enter valid Business name',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
                               postIconColor: Colors.indigo[900],
+                              isRequired: false,
                             ),
                           ),
 
