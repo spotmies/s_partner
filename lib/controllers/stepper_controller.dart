@@ -184,7 +184,7 @@ class StepperController extends ControllerMVC {
       "experience": experienceTf.text.toString(),
       "acceptance": "100",
       "availability": "false",
-      "rate": "100",
+      // "rate": "100",
       "perAdd": peradTf.text.toString(),
       "tempAdd": tempadTf.text.toString(),
       "partnerDeviceToken":

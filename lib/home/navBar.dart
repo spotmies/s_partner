@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
@@ -161,6 +162,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     dynamic partnerOrders = await partnerAllOrders(currentPid);
 
     if (partnerOrders != null) partnerProvider.setOrder(partnerOrders);
+
     log("hitting all api completed");
   }
 
