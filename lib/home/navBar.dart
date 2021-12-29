@@ -34,7 +34,7 @@ class NavBar extends StatefulWidget {
   _NavBarState createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> {
+class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   ChatProvider chatProvider;
   PartnerDetailsProvider partnerProvider;
 //socket
@@ -51,10 +51,17 @@ class _NavBarState extends State<NavBar> {
       "autoConnect": false,
     });
     socket.onConnect((data) {
+      setStringToSF(id: "isSocketConnected", value: true);
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
       });
+    });
+    socket.onDisconnect((data) {
+      log("disconnect $data");
+      log("socket disconnected >>>>>>>>>");
+      setStringToSF(id: "isSocketConnected", value: false);
+      logoutUser();
     });
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
@@ -119,7 +126,7 @@ class _NavBarState extends State<NavBar> {
         partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
         log("login succssfully");
       } else if (resp == "false") {
-         FirebaseAuth.instance.signOut().then((value) => {
+        FirebaseAuth.instance.signOut().then((value) => {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => OnboardingScreen()),
@@ -136,7 +143,7 @@ class _NavBarState extends State<NavBar> {
   }
 
   //socket
-  hittingAllApis(currentPid) async {
+  void hittingAllApis(currentPid) async {
     log("pid is >>>>>>>>> $pId");
     await loginPartner();
 
@@ -149,15 +156,20 @@ class _NavBarState extends State<NavBar> {
         partnerProvider.getConstants(alwaysHit: false);
       }
     }
-    dynamic chatList = await getChatListFromDb(currentPid);
-
-    if (chatList != null) chatProvider.setChatList(chatList);
+    getImportantAPIs(currentPid);
 
     dynamic partnerOrders = await partnerAllOrders(currentPid);
 
     if (partnerOrders != null) partnerProvider.setOrder(partnerOrders);
     log("hitting all api completed");
   }
+
+  void getImportantAPIs(String currentPid) async {
+    dynamic chatList = await getChatListFromDb(currentPid);
+
+    if (chatList != null) chatProvider.setChatList(chatList);
+  }
+
 
   connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
@@ -166,6 +178,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   initState() {
+    WidgetsBinding.instance.addObserver(this);
     pId = FirebaseAuth.instance.currentUser.uid.toString();
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -265,7 +278,53 @@ class _NavBarState extends State<NavBar> {
   void dispose() {
     AwesomeNotifications().actionSink.close();
     AwesomeNotifications().createdSink.close();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
+  }
+
+  checkSocketStatus() async {
+    bool socketStatus = await getStringValuesSF("isSocketConnected") ?? true;
+    if (!socketStatus) {
+      snackbar(context, "socket disconnected trying to connect again");
+      log("socket disconnected trying to connect again");
+      socket.disconnect();
+      socket.connect();
+      socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+
+      checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
+      getImportantAPIs(FirebaseAuth.instance.currentUser.uid);
+      partnerProvider.getOnlyIncomingOrders();
+    } else {
+      log("socket on connection");
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        log("APP is inactive");
+        break;
+      case AppLifecycleState.detached:
+        log("APP is detached");
+        logoutUser();
+
+        break;
+      case AppLifecycleState.paused:
+        log("APP is background");
+        break;
+      case AppLifecycleState.resumed:
+        log("APP is resumed");
+        checkSocketStatus();
+
+        break;
+
+      default:
+        break;
+    }
   }
 
   int _selectedIndex = 0;

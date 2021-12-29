@@ -199,6 +199,21 @@ class PartnerDetailsProvider extends ChangeNotifier {
     saveMyProfile(dataTemp);
   }
 
+  Future<void> getOnlyIncomingOrders() async {
+    final Map<String, String> incomingOrdersQuery = {
+      'showOnly': 'inComingOrders',
+      'extractData': 'true',
+      'orderState': "0"
+    };
+
+    dynamic response = await Server()
+        .getMethodParems(API.incomingorders + currentPid, incomingOrdersQuery);
+    if (response.statusCode == 200) {
+      dynamic orders = jsonDecode(response.body);
+      setIncomingOrders(orders);
+    }
+  }
+
   void setPartnerDetailsOnly(data) {
     dynamic dataTemp = data;
     dataTemp.removeWhere(
