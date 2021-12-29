@@ -11,6 +11,7 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/inviteBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/serviceHistoryBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/settingsBS.dart';
@@ -174,7 +175,9 @@ drawerItemsFunction(
       return signOut(context, hight, width);
       break;
     case 'Settings':
-      return settings(context, hight, width);
+      // return settings(context, hight, width);
+      return Navigator.push(
+          context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
       break;
     case 'Edit Details':
       // return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
@@ -182,10 +185,10 @@ drawerItemsFunction(
           context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
       break;
     case 'Service History':
-      return history(context, hight, width);
+      return history(context, hight, width,partnerDetailsProvider);
       break;
     case 'Help & Support':
-      return helpAndSupport(context, hight, width);
+      return helpAndSupport(context, hight, width, pr);
       break;
     case 'Privacy Policies':
       return Navigator.push(
@@ -197,6 +200,9 @@ drawerItemsFunction(
       break;
     case 'Invite':
       return invites(context, hight, width, pr);
+      break;
+    case 'FeedBack':
+      return newQuery(context, pr["_id"]);
       break;
     default:
       return '';

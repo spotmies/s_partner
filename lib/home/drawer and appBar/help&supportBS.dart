@@ -6,8 +6,9 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-Future helpAndSupport(BuildContext context, double hight, double width) {
+Future helpAndSupport(BuildContext context, double hight, double width, pd) {
   List names = ['FAQ', 'Mail', 'Contact'];
   List icons = [Icons.question_answer, Icons.mail, Icons.support_agent];
   return showModalBottomSheet(
@@ -50,8 +51,7 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                       EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                   child: Text(
                     'If you need any help,you can reach us through below options',
-                    style:
-                        fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
+                    style: fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
                   ),
                 ),
                 Container(
@@ -98,7 +98,7 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                               child: IconButton(
                                 onPressed: () {
                                   // Navigator.pop(context);
-                                  // newQuery(context, pDID)
+                                  newQuery(context, pd["_id"]);
                                 },
                                 icon: Icon(
                                   icons[1],
@@ -125,7 +125,9 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                             CircleAvatar(
                               backgroundColor: Colors.white,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  launch('tel:+918341980196');
+                                },
                                 icon: Icon(
                                   icons[2],
                                   size: width * 0.06,
@@ -152,8 +154,8 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                   child: Center(
                     child: Text(
                       'Tap to Select Any Option',
-                      style: fonts(
-                          width * 0.05, FontWeight.w400, Colors.grey[500]),
+                      style:
+                          fonts(width * 0.05, FontWeight.w400, Colors.grey[500]),
                     ),
                   ),
                 ),
@@ -177,4 +179,12 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
               ]),
             ));
       });
+}
+
+Future<void> makePhoneCall(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

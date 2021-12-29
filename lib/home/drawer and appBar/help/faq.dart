@@ -178,7 +178,7 @@ class _FAQState extends State<FAQ> {
           buttonName: 'Rise Query',
           textSize: width(context) * 0.05,
           textStyle: FontWeight.w600,
-          borderRadius: 5.0,
+          borderRadius: 10.0,
           trailingIcon: Icon(Icons.question_answer),
           borderSideColor: Colors.indigo[900],
           onClick: () {
