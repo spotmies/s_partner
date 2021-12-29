@@ -6,8 +6,9 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-Future helpAndSupport(BuildContext context, double hight, double width) {
+Future helpAndSupport(BuildContext context, double hight, double width, pd) {
   List names = ['FAQ', 'Mail', 'Contact'];
   List icons = [Icons.question_answer, Icons.mail, Icons.support_agent];
   return showModalBottomSheet(
@@ -96,7 +97,7 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                             child: IconButton(
                               onPressed: () {
                                 // Navigator.pop(context);
-                                // newQuery(context, pDID)
+                                newQuery(context, pd["_id"]);
                               },
                               icon: Icon(
                                 icons[1],
@@ -123,7 +124,9 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                launch('tel:+918341980196');
+                              },
                               icon: Icon(
                                 icons[2],
                                 size: width * 0.06,
@@ -174,4 +177,12 @@ Future helpAndSupport(BuildContext context, double hight, double width) {
               ),
             ]));
       });
+}
+
+Future<void> makePhoneCall(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }
