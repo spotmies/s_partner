@@ -69,7 +69,7 @@ class _OnlineState extends StateMVC<Online> {
             children: [
               Container(
                   child: RefreshIndicator(
-                onRefresh: _incomingOrdersController.incomingOrders,
+                onRefresh: partnerProvider.getOnlyIncomingOrders,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: o.length,
