@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/orders/post_overview.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
-Future history(BuildContext context, double hight, double width) {
+Future history(BuildContext context, double hight, double width,
+    PartnerDetailsProvider partnerDetailsProvider) {
   List<Map<String, Object>> data = [
     {
       "service": "teacher",
@@ -22,93 +29,114 @@ Future history(BuildContext context, double hight, double width) {
         ),
       ),
       builder: (BuildContext context) {
-        return Container(
-            height: hight * 0.95,
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-            child: ListView(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 30),
-                  height: hight * 0.22,
-                  child: SvgPicture.asset('assets/history.svg')),
-              Container(
-                padding:
-                    EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
-                child: Text(
-                  'Spotmies Journey',
-                  textAlign: TextAlign.center,
-                  style: fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
+        return Consumer<PartnerDetailsProvider>(
+            builder: (context, data, child) {
+          var o = data.getOrders;
+
+          return Container(
+              height: hight * 0.95,
+              padding:
+                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+              child: ListView(children: [
+                Container(
+                    padding: EdgeInsets.only(top: 30),
+                    height: hight * 0.22,
+                    child: SvgPicture.asset('assets/history.svg')),
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
+                  child: Text(
+                    'Spotmies Journey',
+                    textAlign: TextAlign.center,
+                    style:
+                        fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
+                  ),
                 ),
-              ),
-              Container(
-                height: hight * 0.63,
-                child: ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: hight * 0.15,
-                        width: width,
-                        margin: EdgeInsets.only(bottom: 10),
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: width * 0.08,
-                              child: Icon(
-                                data[0]['pic'],
-                                color: Colors.grey[500],
-                                size: width * 0.1,
+                Container(
+                  height: hight * 0.63,
+                  child: ListView.builder(
+                      itemCount: o.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        List<String> images = List.from(o[index]['media']);
+                        dynamic orderData = o[index];
+                        return Container(
+                          height: hight * 0.15,
+                          width: width,
+                          margin: EdgeInsets.only(bottom: 10),
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: width * 0.08,
+                                child: (images.length == 0)
+                                    ? Icon(
+                                        Icons.engineering,
+                                        color: Colors.grey[900],
+                                      )
+                                    : Image.network(images.first),
                               ),
-                            ),
-                            Container(
-                              width: width * 0.52,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data[0]['service'],
-                                    style: fonts(width * 0.04, FontWeight.w600,
-                                        Colors.grey[900]),
-                                  ),
-                                  SizedBox(
-                                    height: hight * 0.02,
-                                  ),
-                                  Text(
-                                    data[0]['problem'],
-                                    style: fonts(width * 0.04, FontWeight.w500,
-                                        Colors.grey[900]),
-                                  ),
-                                  SizedBox(
-                                    height: hight * 0.01,
-                                  ),
-                                  Text(
-                                    '${data[0]['date']}  ' +
-                                        '${data[0]['time']}',
-                                    style: fonts(width * 0.02, FontWeight.w500,
-                                        Colors.grey[900]),
-                                  ),
-                                ],
+                              Container(
+                                width: width * 0.52,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWid(
+                                      text: data
+                                          .getServiceNameById(o[index]['job']),
+                                      size: width * 0.04,
+                                      weight: FontWeight.w600,
+                                    ),
+                                    SizedBox(
+                                      height: hight * 0.02,
+                                    ),
+                                    TextWid(
+                                        text: toBeginningOfSentenceCase(
+                                            o[index]['problem']),
+                                        flow: TextOverflow.ellipsis,
+                                        size: width * 0.04),
+                                    SizedBox(
+                                      height: hight * 0.01,
+                                    ),
+                                    TextWid(
+                                      text: getDate(o[index]['schedule']) +
+                                          ' - ' +
+                                          getTime(o[index]['schedule']),
+                                      color: Colors.grey[600],
+                                      size: width * 0.02,
+                                      weight: FontWeight.w600,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'More',
-                                      style: fonts(width * 0.04,
-                                          FontWeight.w500, Colors.grey[500]),
-                                    )))
-                          ],
-                        ),
-                      );
-                    }),
-              )
-            ]));
+                              Container(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => PostOverView(
+                                            orderId:
+                                                orderData['ordId'].toString(),
+                                          ),
+                                        ));
+                                      },
+                                      child: Text(
+                                        'More',
+                                        style: fonts(width * 0.04,
+                                            FontWeight.w500, Colors.grey[500]),
+                                      )))
+                            ],
+                          ),
+                        );
+                      }),
+                )
+              ]));
+        });
       });
 }

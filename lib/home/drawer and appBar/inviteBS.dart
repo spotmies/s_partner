@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share/share.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -43,26 +44,13 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            pr['name']
-                                    .toString()
-                                    .substring(0, 4)
-                                    .toUpperCase() +
-                                getDate(int.parse(pr['dob']))
-                                    .toString()
-                                    .substring(
-                                        getDate(int.parse(pr['dob']))
-                                                .toString()
-                                                .length -
-                                            4,
-                                        getDate(int.parse(pr['dob']))
-                                            .toString()
-                                            .length),
+                            referalCode(pr),
                             textAlign: TextAlign.center,
                             style: fonts(width * 0.06, FontWeight.w600,
                                 Colors.grey[900]),
                           ),
                           Text(
-                            'Share Your Referal Code With New Spotmies Users and Get Exciting Benifits and Amazing Offers',
+                            'Share Your Referal Code With New Spotmies Users and Get Exciting Benifits',
                             textAlign: TextAlign.center,
                             style: fonts(width * 0.03, FontWeight.w500,
                                 Colors.grey[900]),
@@ -77,7 +65,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                 // color: Colors.amber,
                 child: Center(
                   child: Text(
-                    'Invite Your Friend and Get Benifits on Spotmies App',
+                    'Invite Your Friend and Get Benifits on Spotmies Partner App',
                     textAlign: TextAlign.center,
                     style:
                         fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
@@ -102,7 +90,12 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         borderRadius: 5.0,
                         borderSideColor: Colors.indigo[900],
                         // trailingIcon: Icon(Icons.share),
-                        onClick: () {},
+                        onClick: () async {
+                          String referal = await referalCode(pr);
+                          Share.share(
+                              "Install and explore the SPOTMIES PARTNER app to get unlimited freelancing service requests and earn organic money.\n\nreferal code = '$referal' \n\nhttps://play.google.com/store/apps/details?id=com.spotmiespartner",
+                              subject: 'Spotmies partner app');
+                        },
                       ),
                     ),
                     Container(
@@ -133,4 +126,12 @@ Future invites(BuildContext context, double hight, double width, pr) {
           ),
         );
       });
+}
+
+referalCode(pr) {
+  String code = pr['name'].toString().substring(0, 4).toUpperCase() +
+      getDate(int.parse(pr['dob'])).toString().substring(
+          getDate(int.parse(pr['dob'])).toString().length - 4,
+          getDate(int.parse(pr['dob'])).toString().length);
+  return code;
 }
