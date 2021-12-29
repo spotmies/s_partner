@@ -13,8 +13,9 @@ import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
 class PostList extends StatefulWidget {
-  final List orderState;
-  PostList({@required this.orderState});
+  final bool orderCompleted;
+
+  PostList({@required this.orderCompleted});
   @override
   _PostListState createState() => _PostListState();
 }
@@ -73,8 +74,8 @@ class _PostListState extends StateMVC<PostList> {
                             List<String> images = List.from(o[index]['media']);
                             dynamic orderData = o[index];
 
-                            if (!widget.orderState
-                                .contains(orderData['orderState']))
+                            if (widget.orderCompleted !=
+                                o[index]['isOrderCompletedByPartner'])
                               return Container();
 
                             print(o[index]['ordId']);
@@ -159,10 +160,13 @@ class _PostListState extends StateMVC<PostList> {
                                                             children: [
                                                               Icon(
                                                                 orderStateIcon(
-                                                                    ordState: o[
-                                                                            index]
-                                                                        [
-                                                                        'orderState']),
+                                                                    ordState: o[index]
+                                                                            [
+                                                                            'isOrderCompletedByPartner']
+                                                                        ? 9
+                                                                        : o[index]
+                                                                            [
+                                                                            'orderState']),
                                                                 color: Colors
                                                                         .indigo[
                                                                     900],
@@ -174,9 +178,12 @@ class _PostListState extends StateMVC<PostList> {
                                                                     0.01,
                                                               ),
                                                               TextWid(
-                                                                  text: _ordersController.orderStateText(
-                                                                      o[index][
-                                                                          'ordState']),
+                                                                  text: _ordersController.orderStateText(o[
+                                                                              index][
+                                                                          'isOrderCompletedByPartner']
+                                                                      ? 9
+                                                                      : o[index][
+                                                                          'orderState']),
                                                                   color: Colors
                                                                           .indigo[
                                                                       900],

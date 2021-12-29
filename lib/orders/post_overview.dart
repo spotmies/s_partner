@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/post_overview_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/maps/maps.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -62,10 +63,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     try {
       setState(() {
-        if (ordersProvider.getOrderById(widget.orderId)['orderState'] < 9 &&
-            ordersProvider.getOrderById(widget.orderId)['acceptResponse']
-                    ['orderState'] <
-                9) {
+        if (!ordersProvider
+            .getOrderById(widget.orderId)['isOrderCompletedByPartner']) {
           showOrderStatusQuestion = true;
         } else {
           showOrderStatusQuestion = false;
@@ -167,7 +166,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             backgroundColor: Colors.grey[50],
             appBar: AppBar(
               backgroundColor:
-                  d['orderState'] > 8 ? Colors.green : Colors.white,
+                  d['orderState'] > 8 || d['isOrderCompletedByPartner']
+                      ? Colors.green
+                      : Colors.white,
               toolbarHeight: widget.from == "incomingOrders"
                   ? _hight * 0.16
                   : _hight * 0.08,
@@ -178,7 +179,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 },
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.grey[900],
+                  color: d['isOrderCompletedByPartner']
+                      ? Colors.white
+                      : Colors.grey[900],
                 ),
               ),
               title: Column(
@@ -187,8 +190,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   TextWid(
                     text: ordersProvider.getServiceNameById(d['job']),
                     size: _width * 0.04,
-                    color:
-                        d['orderState'] > 8 ? Colors.white : Colors.grey[500],
+                    color: d['orderState'] > 8 || d['isOrderCompletedByPartner']
+                        ? Colors.white
+                        : Colors.grey[500],
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
@@ -199,7 +203,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     children: [
                       Icon(
                         // _postOverViewController.orderStateIcon(d['ordState']),
-                        orderStateIcon(ordState: d['orderState']),
+                        orderStateIcon(
+                            ordState: d['orderState'],
+                            isCompleted: d['isOrderCompletedByPartner']),
                         color: Colors.indigo[900],
                         size: _width * 0.035,
                       ),
@@ -208,8 +214,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       ),
                       Expanded(
                         child: TextWid(
-                            text: orderStateString(ordState: d['orderState']),
-                            color: d['orderState'] > 8
+                            text: orderStateString(
+                                ordState: d['orderState'],
+                                isCompleted: d['isOrderCompletedByPartner']),
+                            color: d['orderState'] > 8 ||
+                                    d['isOrderCompletedByPartner']
                                 ? Colors.white
                                 : Colors.grey[700],
                             weight: FontWeight.w700,
@@ -302,7 +311,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     onPressed: null,
                     icon: Icon(
                       Icons.help,
-                      color: Colors.grey[900],
+                      color: d['isOrderCompletedByPartner']
+                          ? Colors.white
+                          : Colors.grey[900],
                     )),
                 IconButton(
                     onPressed: () {
@@ -311,7 +322,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     },
                     icon: Icon(
                       Icons.more_vert,
-                      color: Colors.grey[900],
+                      color: d['isOrderCompletedByPartner']
+                          ? Colors.white
+                          : Colors.grey[900],
                     )),
               ],
             ),
@@ -482,11 +495,26 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 borderRadius: 10.0,
                                                 buttonName: 'Completed',
                                                 onClick: () {
-                                                  isThisOrderCompleted(
-                                                      state: true,
-                                                      responseId:
-                                                          d['acceptResponse']
-                                                              ['responseId']);
+                                                  // isThisOrderCompleted(
+                                                  //     state: true,
+                                                  //     responseId:
+                                                  //         d['acceptResponse']
+                                                  //             ['responseId']);
+                                                  newQuery(context,
+                                                      heading:
+                                                          "Enter money you charged from User",
+                                                      type: "number",
+                                                      hint:
+                                                          "Amount you charged",
+                                                      onSubmit: (money) {
+                                                    _postOverViewController
+                                                        .isServiceCompleted(
+                                                            money: money
+                                                                .toString(),
+                                                            ordId: d['ordId']
+                                                                .toString());
+                                                    log(money.toString());
+                                                  });
                                                 },
                                                 textColor: Colors.white,
                                                 textSize: _width * 0.04,

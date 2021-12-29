@@ -184,7 +184,9 @@ class _FAQState extends State<FAQ> {
           onClick: () {
             var pD = partnerDetailsProvider.partnerDetailsFull;
             log(pD["_id"]);
-            newQuery(context, pD["_id"]);
+            newQuery(context, onSubmit: (String output) {
+              submitQuery(output, pD["_id"], context);
+            });
           },
         ),
       ),
@@ -193,9 +195,13 @@ class _FAQState extends State<FAQ> {
   }
 }
 
-newQuery(BuildContext context, pDID) {
+newQuery(BuildContext context,
+    {Function onSubmit,
+    String type = "text",
+    String heading = "Rise a new query",
+    String hint = "Ask Question"}) {
   TextEditingController queryControl = TextEditingController();
-  var queryForm = GlobalKey<FormState>();
+  GlobalKey<FormState> queryForm = GlobalKey<FormState>();
   // bool loader = false;
   return showModalBottomSheet(
       context: context,
@@ -224,14 +230,14 @@ newQuery(BuildContext context, pDID) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextWid(
-                    text: 'Rise a new query',
+                    text: heading,
                     size: width(context) * 0.06,
                     weight: FontWeight.w600,
                     flow: TextOverflow.visible,
                     align: TextAlign.center),
                 TextFieldWidget(
-                  label: "Ask Question",
-                  hint: 'Ask Question',
+                  label: hint,
+                  hint: hint,
                   enableBorderColor: Colors.grey,
                   focusBorderColor: Colors.indigo[900],
                   enableBorderRadius: 15,
@@ -241,9 +247,10 @@ newQuery(BuildContext context, pDID) {
                   errorBorderRadius: 15,
                   focusErrorRadius: 15,
                   autofocus: true,
+                  type: type,
                   maxLength: 500,
-                  validateMsg: 'Enter Valid Email address',
-                  maxLines: 9,
+                  validateMsg: 'Please check above text',
+                  maxLines: type == "text" ? 9 : 1,
                   // postIcon: Icon(Icons.change_circle),
                   postIconColor: Colors.indigo[900],
                 ),
@@ -261,22 +268,9 @@ newQuery(BuildContext context, pDID) {
                     borderSideColor: Colors.indigo[50],
                     onClick: () async {
                       if (queryForm.currentState.validate()) {
-                        // loader = true;
-                        var res = await submitQuery(queryControl.text, pDID);
-
-                        if (res.statusCode == 200 || res.statusCode == 204) {
-                          log(res.body.toString());
-                          snackbar(context, 'Done');
+                        if (onSubmit != null) {
+                          onSubmit(queryControl.text);
                           Navigator.pop(context);
-                          // loader = false;
-                        } else if (res.statusCode == 404) {
-                          log(res.body.toString());
-                          snackbar(context, 'Something went wrong');
-                          // loader = false;
-                        } else {
-                          log(res.body.toString());
-                          snackbar(context, 'server error');
-                          // loader = false;
                         }
                       }
                     },
@@ -289,15 +283,27 @@ newQuery(BuildContext context, pDID) {
       });
 }
 
-submitQuery(subject, pDID) async {
-  var body = {
+submitQuery(subject, pDID, BuildContext context) async {
+  Map<String, String> body = {
     "subject": subject.toString(),
     "suggestionFor": "faq",
     "suggestionFrom": "partnerApp",
     "uId": API.pid.toString(),
     "uDetails": pDID.toString(),
   };
-  var response = await Server().postMethod(API.suggestions, body);
+  dynamic response = await Server().postMethod(API.suggestions, body);
   // print("36 $response");
-  return response;
+  if (response.statusCode == 200 || response.statusCode == 204) {
+    log(response.body.toString());
+    snackbar(context, 'Done');
+    // loader = false;
+  } else if (response.statusCode == 404) {
+    log(response.body.toString());
+    snackbar(context, 'Something went wrong');
+    // loader = false;
+  } else {
+    log(response.body.toString());
+    snackbar(context, 'server error');
+    // loader = false;
+  }
 }

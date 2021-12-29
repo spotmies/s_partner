@@ -45,13 +45,17 @@ class PostOverViewController extends ControllerMVC {
       snackbar(context, "Something went wrong");
     }
   }
-  isServiceCompleted({String ordId,String money}) async {
-    Map<String, String> body ={
-      "isOrderCompletedByPartner":"true",
-      "moneyTakenByPartner":money
+
+  isServiceCompleted({String ordId, String money}) async {
+    Map<String, String> body = {
+      "isOrderCompletedByPartner": "true",
+      "moneyTakenByPartner": money
     };
-    dynamic response = await Server().editMethod(API.acceptOrder+ordId, body);
-    if(response.statusCode == 200){
+
+    partnerProvider.setOrderViewLoader(true);
+    dynamic response = await Server().editMethod(API.acceptOrder + ordId, body);
+    partnerProvider.setOrderViewLoader(false);
+    if (response.statusCode == 200) {
       return snackbar(context, "Order completed successfully");
     }
     snackbar(context, "Something went wrong");

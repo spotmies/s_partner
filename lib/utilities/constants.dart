@@ -26,7 +26,8 @@ class Constants {
   ];
 }
 
-orderStateString({ordState = 0}) {
+orderStateString({ordState = 0, bool isCompleted = false}) {
+  if (isCompleted) return "Service completed";
   int orderState =
       ordState.runtimeType == String ? int.parse(ordState) : ordState;
   switch (orderState) {
@@ -58,9 +59,10 @@ orderStateString({ordState = 0}) {
   }
 }
 
-orderStateIcon({ordState = 0}) {
+orderStateIcon({ordState = 0, bool isCompleted = false}) {
   int orderState =
       ordState.runtimeType == String ? int.parse(ordState) : ordState;
+  if (isCompleted) return Icons.verified_rounded;
   switch (orderState) {
     case 0:
       return Icons.pending_actions;
