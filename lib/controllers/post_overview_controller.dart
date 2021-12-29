@@ -45,6 +45,17 @@ class PostOverViewController extends ControllerMVC {
       snackbar(context, "Something went wrong");
     }
   }
+  isServiceCompleted({String ordId,String money}) async {
+    Map<String, String> body ={
+      "isOrderCompletedByPartner":"true",
+      "moneyTakenByPartner":money
+    };
+    dynamic response = await Server().editMethod(API.acceptOrder+ordId, body);
+    if(response.statusCode == 200){
+      return snackbar(context, "Order completed successfully");
+    }
+    snackbar(context, "Something went wrong");
+  }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
       Coordinates coordinates) {
