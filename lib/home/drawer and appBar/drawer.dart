@@ -185,7 +185,7 @@ drawerItemsFunction(
           context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
       break;
     case 'Service History':
-      return history(context, hight, width,partnerDetailsProvider);
+      return history(context, hight, width, partnerDetailsProvider);
       break;
     case 'Help & Support':
       return helpAndSupport(context, hight, width, pr);
@@ -202,7 +202,9 @@ drawerItemsFunction(
       return invites(context, hight, width, pr);
       break;
     case 'FeedBack':
-      return newQuery(context, pr["_id"]);
+      return newQuery(context, onSubmit: (String output) {
+        submitQuery(output, pr["_id"], context);
+      });
       break;
     default:
       return '';

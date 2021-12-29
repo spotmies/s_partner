@@ -9,8 +9,8 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   var list = [
-    Center(child: PostList(orderState: [0, 1, 2, 3, 4, 5, 6, 7, 8])),
-    Center(child: PostList(orderState: [9, 10, 11, 12])),
+    Center(child: PostList(orderCompleted: false)),
+    Center(child: PostList(orderCompleted: true)),
   ];
   @override
   Widget build(BuildContext context) {

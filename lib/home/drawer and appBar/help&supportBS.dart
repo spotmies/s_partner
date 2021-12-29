@@ -51,7 +51,8 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                       EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                   child: Text(
                     'If you need any help,you can reach us through below options',
-                    style: fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
+                    style:
+                        fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
                   ),
                 ),
                 Container(
@@ -98,7 +99,9 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                               child: IconButton(
                                 onPressed: () {
                                   // Navigator.pop(context);
-                                  newQuery(context, pd["_id"]);
+                                  newQuery(context, onSubmit: (String output) {
+                                    submitQuery(output, pd["_id"], context);
+                                  });
                                 },
                                 icon: Icon(
                                   icons[1],
@@ -154,8 +157,8 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   child: Center(
                     child: Text(
                       'Tap to Select Any Option',
-                      style:
-                          fonts(width * 0.05, FontWeight.w400, Colors.grey[500]),
+                      style: fonts(
+                          width * 0.05, FontWeight.w400, Colors.grey[500]),
                     ),
                   ),
                 ),

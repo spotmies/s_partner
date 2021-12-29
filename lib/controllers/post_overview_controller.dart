@@ -46,6 +46,21 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
+  isServiceCompleted({String ordId, String money}) async {
+    Map<String, String> body = {
+      "isOrderCompletedByPartner": "true",
+      "moneyTakenByPartner": money
+    };
+
+    partnerProvider.setOrderViewLoader(true);
+    dynamic response = await Server().editMethod(API.acceptOrder + ordId, body);
+    partnerProvider.setOrderViewLoader(false);
+    if (response.statusCode == 200) {
+      return snackbar(context, "Order completed successfully");
+    }
+    snackbar(context, "Something went wrong");
+  }
+
   Widget editAttributes(String field, String ordId, job, money, schedule,
       Coordinates coordinates) {
     return InkWell(
