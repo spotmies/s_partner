@@ -9,7 +9,9 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/home.dart';
+import 'package:spotmies_partner/home/verification_inprogress.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/login/onboard.dart';
 import 'package:spotmies_partner/orders/orders.dart';
@@ -171,7 +173,6 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
 
     if (chatList != null) chatProvider.setChatList(chatList);
   }
-
 
   connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
@@ -388,74 +389,80 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     final width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Consumer<ChatProvider>(builder: (context, notifier, child) {
-          return Container(
-            child: widget.data == null
-                ? _widgetOptions.elementAt(_selectedIndex)
-                : shortCut.elementAt(widget.data),
-          );
-        }),
-        bottomNavigationBar: Container(
-          height: width * 0.163,
-          child: AnimatedBottomNavigationBar.builder(
-            elevation: 0,
-            itemCount: icons.length,
-            tabBuilder: (int index, bool isActive) {
-              final color = isActive ? Colors.grey[800] : Colors.grey;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Icon(
-                            icons[index],
-                            size: 24,
-                            color: color,
-                          ),
-                          TextWid(
-                            text: text[index],
-                            color: color,
-                          )
-                        ],
-                      ),
-                      if (index == 1)
-                        Consumer<ChatProvider>(builder: (context, data, child) {
-                          List chatList = data.getChatList2();
-                          int count =
-                              chatList.isEmpty ? 0 : chatList[0]['pCount'];
+      home: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+        var pd = data.getProfileDetails;
+        if (pd['isDocumentsVerified'] != false)
+          return VerifictionInProgress(pd);
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Consumer<ChatProvider>(builder: (context, notifier, child) {
+            return Container(
+              child: widget.data == null
+                  ? _widgetOptions.elementAt(_selectedIndex)
+                  : shortCut.elementAt(widget.data),
+            );
+          }),
+          bottomNavigationBar: Container(
+            height: width * 0.163,
+            child: AnimatedBottomNavigationBar.builder(
+              elevation: 0,
+              itemCount: icons.length,
+              tabBuilder: (int index, bool isActive) {
+                final color = isActive ? Colors.grey[800] : Colors.grey;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Icon(
+                              icons[index],
+                              size: 24,
+                              color: color,
+                            ),
+                            TextWid(
+                              text: text[index],
+                              color: color,
+                            )
+                          ],
+                        ),
+                        if (index == 1)
+                          Consumer<ChatProvider>(
+                              builder: (context, data, child) {
+                            List chatList = data.getChatList2();
+                            int count =
+                                chatList.isEmpty ? 0 : chatList[0]['pCount'];
 
-                          return Positioned(
-                              right: 0,
-                              top: 0,
-                              child: CircleAvatar(
-                                radius: 4,
-                                backgroundColor: count == 0
-                                    ? Colors.transparent
-                                    : Colors.greenAccent,
-                              ));
-                        })
-                    ],
-                  ),
-                ],
-              );
-            },
-            backgroundColor: Colors.white,
-            activeIndex: _selectedIndex,
-            splashColor: Colors.grey[200],
-            splashSpeedInMilliseconds: 300,
-            notchSmoothness: NotchSmoothness.verySmoothEdge,
-            gapLocation: GapLocation.none,
-            leftCornerRadius: 32,
-            rightCornerRadius: 32,
-            onTap: (index) => setState(() => _selectedIndex = index),
+                            return Positioned(
+                                right: 0,
+                                top: 0,
+                                child: CircleAvatar(
+                                  radius: 4,
+                                  backgroundColor: count == 0
+                                      ? Colors.transparent
+                                      : Colors.greenAccent,
+                                ));
+                          })
+                      ],
+                    ),
+                  ],
+                );
+              },
+              backgroundColor: Colors.white,
+              activeIndex: _selectedIndex,
+              splashColor: Colors.grey[200],
+              splashSpeedInMilliseconds: 300,
+              notchSmoothness: NotchSmoothness.verySmoothEdge,
+              gapLocation: GapLocation.none,
+              leftCornerRadius: 32,
+              rightCornerRadius: 32,
+              onTap: (index) => setState(() => _selectedIndex = index),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

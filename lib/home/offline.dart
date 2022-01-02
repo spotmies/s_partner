@@ -1,19 +1,39 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/lineGraphBig.dart';
 import 'package:spotmies_partner/home/offlinePage/singleBarGraph.dart';
+import 'package:spotmies_partner/home/rating_screen.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
+import 'package:spotmies_partner/reusable_widgets/update_alert.dart';
 
 class Offline extends StatefulWidget {
-  final pr;
-  Offline(this.pr);
+  // final pr;
+  // Offline(this.pr);
 
   @override
   _OfflineState createState() => _OfflineState();
 }
 
+PartnerDetailsProvider partnerDetailsProvider;
+
 class _OfflineState extends State<Offline> {
+  @override
+  void initState() {
+    partnerDetailsProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+
+    super.initState();
+  }
+
+  var update = true;
+
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -21,174 +41,195 @@ class _OfflineState extends State<Offline> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
 
+    // updateAlert(context);
     return Scaffold(
         body: Center(
             child: Container(
       height: _hight,
       width: _width,
       decoration: BoxDecoration(color: Colors.grey[200]),
-      child: ListView(children: [
-        Container(
-          padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-          child: Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  circularIndicator(_hight * 0.35, _width * 0.44,
-                      Colors.blue[900], 'Rating', Icons.reviews, 100),
-                  SizedBox(
-                    height: _hight * 0.02,
-                  ),
-                  graphIndicator(
-                    _hight * 0.45,
-                    _width * 0.44,
-                    Colors.red[400],
-                    'References',
-                    Icons.link,
-                  )
-                ],
-              ),
-              SizedBox(
-                width: _width * 0.035,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  graphIndicator(
-                    _hight * 0.45,
-                    _width * 0.44,
-                    Colors.amber,
-                    'Orders',
-                    Icons.all_inbox,
-                  ),
-                  SizedBox(
-                    height: _hight * 0.02,
-                  ),
-                  circularIndicator(
-                      _hight * 0.35,
-                      _width * 0.44,
-                      Colors.lightBlue[700],
-                      'Acceptance',
-                      Icons.done_rounded,
-                      76),
-                ],
-              )
-            ],
-          ),
-        ),
-        SizedBox(
-          height: _width * 0.05,
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 15.0, right: 10),
-          margin: EdgeInsets.only(bottom: 15, right: 10, left: 10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey[300], blurRadius: 5, spreadRadius: 2)
-              ]),
-          child: Column(
-            children: [
-              Text(
-                'Active Time',
-                style: GoogleFonts.josefinSans(
-                  color: Colors.grey[900],
-                  fontSize: _width * 0.05,
-                  fontWeight: FontWeight.w600,
+      child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+        var pd = data.getProfileDetails;
+        if (pd == null) return circleProgress();
+        var cat = pd['catelogs'];
+        log(pd.toString());
+
+        return ListView(children: [
+          Container(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    circularIndicator(
+                        _hight * 0.35,
+                        _width * 0.44,
+                        Colors.blue[900],
+                        'Rating',
+                        Icons.star_rate,
+                        avg(pd['rate'], 'rate')),
+                    SizedBox(
+                      height: _hight * 0.02,
+                    ),
+                    graphIndicator(
+                        _hight * 0.45,
+                        _width * 0.44,
+                        Colors.red[400],
+                        'Earnings',
+                        Icons.account_balance_wallet,
+                        pd['orders'])
+                  ],
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: 20.0),
-                child: Text(
-                  '(Last Seven Days)',
+                SizedBox(
+                  width: _width * 0.035,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    graphIndicator(_hight * 0.45, _width * 0.44, Colors.amber,
+                        'Orders', Icons.work, pd['orders']),
+                    SizedBox(
+                      height: _hight * 0.02,
+                    ),
+                    circularIndicator(
+                        _hight * 0.35,
+                        _width * 0.44,
+                        Colors.lightBlue[700],
+                        'Acceptance',
+                        Icons.done_rounded,
+                        avg(pd['acceptance'], 'acce')),
+                  ],
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: _width * 0.05,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 15.0, right: 10),
+            margin: EdgeInsets.only(bottom: 15, right: 10, left: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[300], blurRadius: 5, spreadRadius: 2)
+                ]),
+            child: Column(
+              children: [
+                Text(
+                  'Active Time',
                   style: GoogleFonts.josefinSans(
                     color: Colors.grey[900],
-                    fontSize: _width * 0.03,
-                    fontWeight: FontWeight.w500,
+                    fontSize: _width * 0.05,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
-              ),
-              Container(
-                height: _hight * 0.3,
-                width: _width,
-                padding: EdgeInsets.only(left: 0, right: _width * 0.02),
-                child: singleBarChart(_hight, _width),
-              ),
-              SizedBox(
-                height: _width * 0.03,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 15.0, right: 10),
-          margin: EdgeInsets.only(bottom: 15, right: 10, left: 10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey[300], blurRadius: 5, spreadRadius: 2)
-              ]),
-          child: Column(
-            children: [
-              Text(
-                'Orders Progress',
-                style: GoogleFonts.josefinSans(
-                  color: Colors.grey[900],
-                  fontSize: _width * 0.05,
-                  fontWeight: FontWeight.w600,
+                Container(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    '(Last Seven Days)',
+                    style: GoogleFonts.josefinSans(
+                      color: Colors.grey[900],
+                      fontSize: _width * 0.03,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: 20.0),
-                child: Text(
-                  '(Last Seven Days)',
+                Container(
+                  height: _hight * 0.3,
+                  width: _width,
+                  padding: EdgeInsets.only(left: 0, right: _width * 0.02),
+                  child: singleBarChart(_hight, _width),
+                ),
+                SizedBox(
+                  height: _width * 0.03,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 15.0, right: 10),
+            margin: EdgeInsets.only(bottom: 15, right: 10, left: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[300], blurRadius: 5, spreadRadius: 2)
+                ]),
+            child: Column(
+              children: [
+                Text(
+                  'Orders Progress',
                   style: GoogleFonts.josefinSans(
                     color: Colors.grey[900],
-                    fontSize: _width * 0.03,
-                    fontWeight: FontWeight.w500,
+                    fontSize: _width * 0.05,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
-              ),
-              indicator(_width),
-              Container(
-                height: _hight * 0.3,
-                width: _width,
-                padding: EdgeInsets.only(left: 0, right: _width * 0.04),
-                child: lineGraphBig(_hight, _width),
-              ),
-              SizedBox(
-                height: _width * 0.03,
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: Text(
+                    '(Last Seven Days)',
+                    style: GoogleFonts.josefinSans(
+                      color: Colors.grey[900],
+                      fontSize: _width * 0.03,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                indicator(_width),
+                Container(
+                  height: _hight * 0.3,
+                  width: _width,
+                  padding: EdgeInsets.only(left: 0, right: _width * 0.04),
+                  child: lineGraphBig(_hight, _width),
+                ),
+                SizedBox(
+                  height: _width * 0.03,
+                ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(
-          height: _width * 0.25,
-        ),
-      ]),
+          SizedBox(
+            height: _width * 0.05,
+          ),
+          catelogCard(context, cat),
+          SizedBox(
+            height: _width * 0.05,
+          ),
+          reviewMsgs(
+            context,
+            pd['rate'],
+          ),
+          SizedBox(
+            height: _width * 0.25,
+          ),
+        ]);
+      }),
     )));
   }
 }
 
-avg(List<dynamic> args) {
-  var sum = 0;
-  var avg = args;
+avg(List<dynamic> args, String type) {
+  int sum = 0;
+  List avg = args;
 
   for (var i = 0; i < avg.length; i++) {
-    sum += avg[i];
+    sum += type == 'rate' ? avg[i]['rating'] : avg[i];
   }
-  // log((sum/100).toString());
+  // log((sum / avg.length).toString());
 
-  return sum;
+  int rate = (sum / avg.length).round();
+
+  return rate;
 }
 
 indicator(_width) {
