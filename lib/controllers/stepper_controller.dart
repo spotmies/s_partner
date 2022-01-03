@@ -184,7 +184,6 @@ class StepperController extends ControllerMVC {
       "experience": experienceTf.text.toString(),
       "acceptance": "100",
       "availability": "false",
-      // "rate": "100",
       "perAdd": peradTf.text.toString(),
       "tempAdd": tempadTf.text.toString(),
       "partnerDeviceToken":
@@ -192,8 +191,8 @@ class StepperController extends ControllerMVC {
         return value.toString();
       }),
       "isTermsAccepted": accept.toString(),
-      "workLocation.0": workLocation['lat'].toString(),
-      "workLocation.1": workLocation['log'].toString(),
+      "workLocation.coordinates.0": workLocation['lat'].toString(),
+      "workLocation.coordinates.1": workLocation['log'].toString(),
     };
     for (var i = 0; i < localLang.length; i++) {
       body["lang.$i"] = localLang[i];
