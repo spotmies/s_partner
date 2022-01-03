@@ -5,23 +5,22 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/home/verification_inprogress.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/login/onboard.dart';
 import 'package:spotmies_partner/orders/orders.dart';
-import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
@@ -350,23 +349,23 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     ),
   ];
 
-  static List<Widget> shortCut = [
-    Center(
-      child: Home(),
-    ),
-    Center(
-        // child: ChatList(IO.socket socket),
-        child: ChatList()
-        // child: ChatHome(),
-        ),
-    Center(
-      child: Orders(),
-    ),
-    Center(
-      // child: Profile(),
-      child: Profile(),
-    ),
-  ];
+  // static List<Widget> shortCut = [
+  //   Center(
+  //     child: Home(),
+  //   ),
+  //   Center(
+  //       // child: ChatList(IO.socket socket),
+  //       child: ChatList()
+  //       // child: ChatHome(),
+  //       ),
+  //   Center(
+  //     child: Orders(),
+  //   ),
+  //   Center(
+  //     // child: Profile(),
+  //     child: Profile(),
+  //   ),
+  // ];
 
   setBottomBarIndex(index) {
     setState(() {
@@ -386,24 +385,27 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     log("rendering >>>>>>>>");
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         var pd = data.getProfileDetails;
+        if (pd == null) return circleProgress();
         if (pd['isDocumentsVerified'] != false)
           return VerifictionInProgress(pd);
         return Scaffold(
           backgroundColor: Colors.white,
           body: Consumer<ChatProvider>(builder: (context, notifier, child) {
             return Container(
-              child: widget.data == null
-                  ? _widgetOptions.elementAt(_selectedIndex)
-                  : shortCut.elementAt(widget.data),
-            );
+                child:
+                    // widget.data == null
+                    //     ?
+                    _widgetOptions.elementAt(_selectedIndex)
+                // : shortCut.elementAt(widget.data),
+                );
           }),
           bottomNavigationBar: Container(
-            height: width * 0.163,
+            height: width(context) * 0.163,
             child: AnimatedBottomNavigationBar.builder(
               elevation: 0,
               itemCount: icons.length,
@@ -419,12 +421,16 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                           children: [
                             Icon(
                               icons[index],
-                              size: 24,
+                              size: width(context) * 0.05,
                               color: color,
+                            ),
+                            SizedBox(
+                              height: height(context) * 0.006,
                             ),
                             TextWid(
                               text: text[index],
                               color: color,
+                              size: width(context) * 0.03,
                             )
                           ],
                         ),
@@ -439,7 +445,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                                 right: 0,
                                 top: 0,
                                 child: CircleAvatar(
-                                  radius: 4,
+                                  radius: width(context) * 0.008,
                                   backgroundColor: count == 0
                                       ? Colors.transparent
                                       : Colors.greenAccent,

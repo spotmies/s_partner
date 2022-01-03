@@ -50,7 +50,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   padding:
                       EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                   child: Text(
-                    'If you need any help,you can reach us through below options',
+                    'If you need any help, you can reach us through below options.',
                     style:
                         fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
                   ),

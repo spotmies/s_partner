@@ -25,7 +25,7 @@ class VerifictionInProgress extends StatelessWidget {
               left: width(context) * 0.04, right: width(context) * 0.03),
           child: TextWid(
             text:
-                'You are successfully sumbitted your business profile to spotmies,your account has been under security verification process.it might take upto 24 to 48 hours,till then please keep checking your app every 6 hours',
+                'Your business profile successfully sumbitted to spotmies, your account is under verification. It might take upto 24 to 48 hours, till then please keep checking your app every 6 hours.',
             flow: TextOverflow.visible,
             size: width(context) * 0.05,
             align: TextAlign.center,

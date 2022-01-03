@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     //   ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
     //   ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
     // ]);
-    
+
     // quickActions.initialize((type) {
     //   if(type == 'Home'){
     //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:1)));
@@ -203,4 +203,3 @@ class Demo extends StatelessWidget {
     );
   }
 }
-

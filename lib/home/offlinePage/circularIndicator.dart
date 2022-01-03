@@ -16,15 +16,11 @@ circularIndicator(double hight, double width, Color color, String title,
           children: [
             Container(
               padding: EdgeInsets.only(left: 15, top: 15),
-              child: Text(
-                '$title',
-                style: GoogleFonts.josefinSans(
-                  fontSize: width * 0.11,
-                  fontWeight:  FontWeight.w500,
-                  color: Colors.white
-                )
-                
-              ),
+              child: Text('$title',
+                  style: GoogleFonts.josefinSans(
+                      fontSize: width * 0.11,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white)),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15, top: 15),
@@ -47,7 +43,7 @@ circularIndicator(double hight, double width, Color color, String title,
               percent: value / 100,
               backgroundColor: color,
               center: Text(
-                '$value',
+                title == 'Rating' ? '${value / 20}' : '$value',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,

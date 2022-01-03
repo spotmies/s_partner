@@ -228,17 +228,7 @@ catelogCard(BuildContext context, cat) {
   return Column(
     children: [
       Container(
-        decoration: BoxDecoration(color: Colors.grey[100]),
-        child: TextWid(
-          text: 'Recent catelog',
-          size: width(context) * 0.06,
-          weight: FontWeight.w600,
-          // align: TextAlign.left,
-          flow: TextOverflow.ellipsis,
-        ),
-      ),
-      Container(
-        height: height(context) * 0.16,
+        height: height(context) * 0.22,
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(boxShadow: [
@@ -247,18 +237,31 @@ catelogCard(BuildContext context, cat) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            SizedBox(
+              height: height(context) * 0.01,
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.grey[100]),
+              child: TextWid(
+                text: 'Recent catelog',
+                size: width(context) * 0.06,
+                weight: FontWeight.w600,
+                // align: TextAlign.left,
+                flow: TextOverflow.ellipsis,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  width: width(context) * 0.82,
+                  width: width(context) * 0.85,
                   padding: EdgeInsets.only(bottom: 10, top: 10),
                   child: Column(
                     children: [
                       TextWid(
                         text: cat.last['name'],
                         size: width(context) * 0.06,
-                        weight: FontWeight.w600,
+                        weight: FontWeight.w500,
                         align: TextAlign.center,
                         flow: TextOverflow.ellipsis,
                       ),

@@ -54,7 +54,7 @@ class _TutCategoryState extends State<TutCategory> {
                 left: width(context) * 0.04, right: width(context) * 0.03),
             child: TextWid(
               text:
-                  'For making our spotmies partners to the best technicians in the world,we are providing profissional courses to our people and now we are working to give you the best experience ,it might come with next update until then please stay tuned ',
+                  'To make our spotmies partners the best technicians in the world, we are providing professional courses for all of you and we are working to give you the best experience, it might come in next update. Till then please stay tuned. ',
               flow: TextOverflow.visible,
               size: width(context) * 0.05,
               align: TextAlign.center,
