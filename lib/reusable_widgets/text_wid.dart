@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotmies_partner/utilities/app_config.dart';
 
 String myPid = FirebaseAuth.instance.currentUser.uid.toString();
 

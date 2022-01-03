@@ -6,19 +6,18 @@ import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
-import 'package:spotmies_partner/utilities/app_config.dart';
 
 Future history(BuildContext context, double hight, double width,
     PartnerDetailsProvider partnerDetailsProvider) {
-  List<Map<String, Object>> data = [
-    {
-      "service": "teacher",
-      "problem": "Need Maths Teacher",
-      "pic": Icons.home_repair_service,
-      "date": '24th Aug,2021',
-      "time": '04:30 PM',
-    },
-  ];
+  // List<Map<String, Object>> data = [
+  //   {
+  //     "service": "teacher",
+  //     "problem": "Need Maths Teacher",
+  //     "pic": Icons.home_repair_service,
+  //     "date": '24th Aug,2021',
+  //     "time": '04:30 PM',
+  //   },
+  // ];
   return showModalBottomSheet(
       context: context,
       elevation: 22,

@@ -216,7 +216,108 @@ addCatelog(BuildContext context) {
       ),
       borderRadius: 15.0,
       borderSideColor: Colors.grey[900],
-      onClick: () {},
+      onClick: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => CatelogPost()));
+      },
     ),
   ]);
+}
+
+catelogCard(BuildContext context, cat) {
+  return Column(
+    children: [
+      Container(
+        height: height(context) * 0.22,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300])
+        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(15.0)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: height(context) * 0.01,
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.grey[100]),
+              child: TextWid(
+                text: 'Recent catelog',
+                size: width(context) * 0.06,
+                weight: FontWeight.w600,
+                // align: TextAlign.left,
+                flow: TextOverflow.ellipsis,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: width(context) * 0.85,
+                  padding: EdgeInsets.only(bottom: 10, top: 10),
+                  child: Column(
+                    children: [
+                      TextWid(
+                        text: cat.last['name'],
+                        size: width(context) * 0.06,
+                        weight: FontWeight.w500,
+                        align: TextAlign.center,
+                        flow: TextOverflow.ellipsis,
+                      ),
+                      TextWid(
+                        text: cat.last['description'],
+                        size: width(context) * 0.04,
+                        weight: FontWeight.w400,
+                        align: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+                // Container(
+                //   height: height(context) * 0.055,
+                //   width: width(context) * 0.005,
+                //   color: Colors.grey[500],
+                // ),
+                // Container(
+                //   width: width(context) * 0.23,
+                //   padding: EdgeInsets.only(bottom: 10, top: 10),
+                //   child: Column(
+                //     children: [
+                //       TextWid(
+                //         text: '${cat.length}',
+                //         size: width(context) * 0.06,
+                //         weight: FontWeight.w600,
+                //         align: TextAlign.center,
+                //       ),
+                //       TextWid(
+                //         text: 'Catelogs',
+                //         size: width(context) * 0.04,
+                //         weight: FontWeight.w400,
+                //         align: TextAlign.center,
+                //       )
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
+            ElevatedButtonWidget(
+              buttonName: 'View all',
+              height: height(context) * 0.055,
+              minWidth: width(context) * 0.9,
+              bgColor: Colors.transparent,
+              textColor: Colors.grey[900],
+              textSize: width(context) * 0.04,
+              borderRadius: 15.0,
+              borderSideColor: Colors.transparent,
+              onClick: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => Catalog()));
+              },
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }

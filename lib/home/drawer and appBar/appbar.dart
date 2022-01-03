@@ -148,7 +148,7 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
             }
           },
           child: Container(
-            child: pd['availability'] == true ? Online(pd) : Offline(pd),
+            child: pd['availability'] == true ? Online(pd) : Offline(),
           ),
         ),
       );

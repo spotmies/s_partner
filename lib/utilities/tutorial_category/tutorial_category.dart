@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 import 'topics/topics_List.dart';
 
@@ -13,22 +17,55 @@ class _TutCategoryState extends State<TutCategory> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        backgroundColor: Colors.grey[100],
-        leading: Icon(
-          Icons.auto_stories,
-          color: Colors.grey[900],
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: TextWid(
+            text: "Learning",
+            color: Colors.grey[900],
+            size: _width * 0.05,
+            weight: FontWeight.w600,
+          ),
         ),
-        title: TextWid(
-          text: "Explore",
-          color: Colors.grey[900],
-          size: _width * 0.045,
-          weight: FontWeight.w600,
-        ),
-      ),
-      body: BodyWidget(),
-    );
+        body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SizedBox(
+              height: height(context) * 0.3,
+              width: width(context),
+              child: SvgPicture.asset('assets/svgs/introBook.svg')),
+          SizedBox(
+            height: height(context) * 0.06,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: width(context) * 0.04, right: width(context) * 0.03),
+            child: TextWid(
+              text: 'Coming soon',
+              flow: TextOverflow.visible,
+              size: width(context) * 0.07,
+              align: TextAlign.center,
+              weight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(
+            height: height(context) * 0.02,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: width(context) * 0.04, right: width(context) * 0.03),
+            child: TextWid(
+              text:
+                  'To make our spotmies partners the best technicians in the world, we are providing professional courses for all of you and we are working to give you the best experience, it might come in next update. Till then please stay tuned. ',
+              flow: TextOverflow.visible,
+              size: width(context) * 0.05,
+              align: TextAlign.center,
+            ),
+          ),
+          // SizedBox(
+          //   height: height(context) * 0.12,
+          // ),
+        ])
+        // body: BodyWidget(),
+        );
   }
 }
 

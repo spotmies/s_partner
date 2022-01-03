@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/home/offlinePage/lineGraph.dart';
-import 'package:spotmies_partner/home/offlinePage/multibarGraph.dart';
 
 graphIndicator(
-    double hight, double width, Color color, String title, IconData icon) {
+    double hight, double width, Color color, String title, IconData icon, pdo) {
   return Container(
     height: hight,
     width: width,
@@ -34,12 +33,12 @@ graphIndicator(
         ),
         Column(
           children: [
-            Text('24',
+            Text(title == 'Orders' ? pdo.length.toString() : pdo.toString(),
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.25,
                     fontWeight: FontWeight.w600,
                     color: Colors.white)),
-            Text('Completed',
+            Text(title == 'Orders' ? 'Completed' : 'Rupees',
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.065,
                     fontWeight: FontWeight.w600,
@@ -56,66 +55,12 @@ graphIndicator(
                   padding: EdgeInsets.all(7),
                   height: hight * 0.4,
                   width: width,
-                  child: title == 'Orders' ? multiBarGraph() : lineGraph()),
-              if (title == 'Orders')
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: width * 0.03,
-                          backgroundColor: Colors.white,
-                        ),
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                        Text('Recieved',
-                            style: GoogleFonts.josefinSans(
-                                fontSize: width * 0.05,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: width * 0.03,
-                          backgroundColor: Colors.green,
-                        ),
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                        Text('Completed',
-                            style: GoogleFonts.josefinSans(
-                                fontSize: width * 0.05,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: width * 0.03,
-                          backgroundColor: Colors.red[400],
-                        ),
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                        Text('Cancelled',
-                            style: GoogleFonts.josefinSans(
-                                fontSize: width * 0.05,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white)),
-                      ],
-                    )
-                  ],
-                ),
+                  // child: title == 'Orders' ? multiBarGraph() : lineGraph()),
+                  child: lineGraph()),
               Container(
                 padding: EdgeInsets.only(top: 5),
                 child: Text(
-                    title == 'Orders' ? 'Last Five Months' : 'Total References',
+                    title == 'Orders' ? 'Total Orders' : 'Total Earnings',
                     style: GoogleFonts.josefinSans(
                         fontSize: width * 0.11,
                         fontWeight: FontWeight.w500,
@@ -128,3 +73,61 @@ graphIndicator(
     ),
   );
 }
+
+
+
+// if (title == 'Orders')
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Row(
+//                       children: [
+//                         CircleAvatar(
+//                           radius: width * 0.03,
+//                           backgroundColor: Colors.white,
+//                         ),
+//                         SizedBox(
+//                           width: width * 0.01,
+//                         ),
+//                         Text('Recieved',
+//                             style: GoogleFonts.josefinSans(
+//                                 fontSize: width * 0.05,
+//                                 fontWeight: FontWeight.w600,
+//                                 color: Colors.white)),
+//                       ],
+//                     ),
+//                     Row(
+//                       children: [
+//                         CircleAvatar(
+//                           radius: width * 0.03,
+//                           backgroundColor: Colors.green,
+//                         ),
+//                         SizedBox(
+//                           width: width * 0.01,
+//                         ),
+//                         Text('Completed',
+//                             style: GoogleFonts.josefinSans(
+//                                 fontSize: width * 0.05,
+//                                 fontWeight: FontWeight.w600,
+//                                 color: Colors.white)),
+//                       ],
+//                     ),
+//                     Row(
+//                       children: [
+//                         CircleAvatar(
+//                           radius: width * 0.03,
+//                           backgroundColor: Colors.red[400],
+//                         ),
+//                         SizedBox(
+//                           width: width * 0.01,
+//                         ),
+//                         Text('Cancelled',
+//                             style: GoogleFonts.josefinSans(
+//                                 fontSize: width * 0.05,
+//                                 fontWeight: FontWeight.w600,
+//                                 color: Colors.white)),
+//                       ],
+//                     )
+//                   ],
+//                 ),

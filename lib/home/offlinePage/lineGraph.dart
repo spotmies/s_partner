@@ -20,7 +20,7 @@ lineGraph() {
             FlSpot(0, 1),
             FlSpot(1, 2),
             FlSpot(2, 1.5),
-            FlSpot(4, 4),
+            FlSpot(3, 4),
             FlSpot(4, 5),
             FlSpot(5, 4)
           ],

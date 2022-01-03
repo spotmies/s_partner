@@ -45,15 +45,37 @@ class _CatelogPostState extends State<CatelogPost> {
                 height: height(context) * 0.07,
               ),
               catelogController.catelogPic != null
-                  ? Container(
-                      height: height(context) * 0.2,
-                      width: width(context),
-                      decoration: BoxDecoration(
-                          // shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(catelogController.catelogPic))),
+                  ? Stack(
+                      children: [
+                        Container(
+                          height: height(context) * 0.2,
+                          width: width(context),
+                          decoration: BoxDecoration(
+                              // shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image:
+                                      FileImage(catelogController.catelogPic))),
+                        ),
+                        Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: CircleAvatar(
+                              radius: width(context) * 0.05,
+                              backgroundColor: Colors.grey[200],
+                              child: IconButton(
+                                  onPressed: () async {
+                                    await catelogController.catelogImage();
+                                    setState(() {});
+                                  },
+                                  icon: Icon(
+                                    Icons.sync,
+                                    size: width(context) * 0.05,
+                                    color: Colors.grey[900],
+                                  )),
+                            ))
+                      ],
                     )
                   : Container(
                       height: height(context) * 0.2,
@@ -66,8 +88,8 @@ class _CatelogPostState extends State<CatelogPost> {
                         // border: Border.all()
                       ),
                       child: IconButton(
-                          onPressed: () {
-                            catelogController.catelogImage();
+                          onPressed: () async {
+                            await catelogController.catelogImage();
                             setState(() {});
                           },
                           icon: Icon(
@@ -173,7 +195,12 @@ class _CatelogPostState extends State<CatelogPost> {
                       partnerDetailsProvider.setCategoryItem(res);
                       setState(() {
                         partnerDetailsProvider.offlineScreenLoader = false;
+                        catelogController.catDescControl.clear();
+                        catelogController.catNameControl.clear();
+                        catelogController.catPriceControl.clear();
+                        catelogController.catelogPic = null;
                       });
+
                       Navigator.pop(context);
                     }
                   }

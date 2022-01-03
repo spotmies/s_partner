@@ -14,7 +14,6 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart'
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/inviteBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/serviceHistoryBS.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/settingsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/signoutBS.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
