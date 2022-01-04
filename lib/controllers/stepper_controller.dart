@@ -193,6 +193,10 @@ class StepperController extends ControllerMVC {
       "isTermsAccepted": accept.toString(),
       "workLocation.coordinates.0": workLocation['lat'].toString(),
       "workLocation.coordinates.1": workLocation['log'].toString(),
+      "homeLocation.coordinates.0": workLocation['lat'].toString(),
+      "homeLocation.coordinates.1": workLocation['log'].toString(),
+      "currentLocation.coordinates.0": workLocation['lat'].toString(),
+      "currentLocation.coordinates.1": workLocation['log'].toString(),
     };
     for (var i = 0; i < localLang.length; i++) {
       body["lang.$i"] = localLang[i];
