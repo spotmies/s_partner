@@ -214,7 +214,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
       setIncomingOrders(orders);
     }
   }
-  void setFAQ(faq){
+
+  void setFAQ(faq) {
     dynamic frequently = faq;
     freqAskQue = frequently;
     notifyListeners();
@@ -268,10 +269,20 @@ class PartnerDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void removeCategoryItem(index) {
-  //   partnerDetailsFull['catelogs'][index].remove();
-  //   notifyListeners();
-  // }
+  void updateCategoryItem(body, index) {
+    partnerDetailsFull['catelogs'][index]['name'] = body['name'];
+    partnerDetailsFull['catelogs'][index]['description'] = body['description'];
+    partnerDetailsFull['catelogs'][index]['price'] = body['price'];
+    partnerDetailsFull['catelogs'][index]['media'][0]['url'] =
+        body['media'][0]['url'];
+    notifyListeners();
+  }
+
+  void removeCategoryItem(cat) {
+    partnerDetailsFull['catelogs']
+        .removeWhere((element) => element['_id'].toString() == cat.toString());
+    notifyListeners();
+  }
 
   void setOrder(allOrders) {
     orders = allOrders;

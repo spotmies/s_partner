@@ -102,7 +102,7 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              bottomMenu(context, cat['_id'], index);
+              bottomMenu(context, cat, index);
             },
             icon: Icon(Icons.more_horiz),
           ),
@@ -123,7 +123,7 @@ catelogListCard(BuildContext context, cat, int index) {
   );
 }
 
-Future bottomMenu(BuildContext context, id, int index) {
+Future bottomMenu(BuildContext context, cat, int index) {
   return showModalBottomSheet(
       context: context,
       elevation: 0,
@@ -138,6 +138,7 @@ Future bottomMenu(BuildContext context, id, int index) {
         return Container(
           height: height(context) * 0.1,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 padding: EdgeInsets.all(5),
@@ -152,7 +153,13 @@ Future bottomMenu(BuildContext context, id, int index) {
                     borderRadius: 15.0,
                     borderSideColor: Colors.indigo[900],
                     // trailingIcon: Icon(Icons.share),
-                    onClick: () async {}),
+                    onClick: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  CatelogPost(index: index, cat: cat)));
+                    }),
               ),
               Container(
                 padding: EdgeInsets.all(5),
@@ -167,11 +174,11 @@ Future bottomMenu(BuildContext context, id, int index) {
                   borderRadius: 15.0,
                   borderSideColor: Colors.indigo[50],
                   onClick: () async {
-                    await catelogController.deleteCatelog(id);
-                    // if (res == 200 || res == 204) {
-                    // partnerDetailsProvider.removeCategoryItem(index);
-                    Navigator.pop(context);
-                    // }
+                    var res = await catelogController.deleteCatelog(cat['_id']);
+                    if (res == 200 || res == 204) {
+                      partnerDetailsProvider.removeCategoryItem(cat['_id']);
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ),

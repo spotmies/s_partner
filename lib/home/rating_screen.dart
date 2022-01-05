@@ -141,6 +141,10 @@ class _RatingScreenState extends State<RatingScreen> {
 reviewMsgs(BuildContext context, rating) {
   var len = rating.length > 3 ? 3 : rating.length;
 
+  // if (rating[0]['feedBackDetails'] == null) {
+  //   return Container();
+  // }
+
   return Container(
     height: (len * (height(context) * 0.19)) + height(context) * 0.1,
     width: width(context),

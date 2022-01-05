@@ -40,7 +40,8 @@ circularIndicator(double hight, double width, Color color, String title,
               animation: true,
               animationDuration: 500,
               progressColor: Colors.white,
-              percent: value / 100,
+              percent:
+                  (value.isNaN || value.isFinite) ? (100 / 100) : (value / 100),
               backgroundColor: color,
               center: Text(
                 title == 'Rating' ? '${value / 20}' : '$value',

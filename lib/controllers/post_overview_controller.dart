@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/model.dart';
+// import 'package:geocoder/geocoder.dart';
+// import 'package:geocoder/model.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
@@ -13,6 +13,7 @@ import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();

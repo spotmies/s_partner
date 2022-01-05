@@ -40,7 +40,7 @@ dependencies:
   date_format: ^1.0.9
   geolocator:
   location:
-  geocoder:
+  # geocoder:
   shared_preferences: ^2.0.6
   simple_animations: ^ 2.2.2
   carousel_slider: ^3.0.0

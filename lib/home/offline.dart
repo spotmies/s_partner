@@ -7,6 +7,7 @@ import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 
 class Offline extends StatefulWidget {
   @override
@@ -40,12 +41,11 @@ class _OfflineState extends State<Offline> {
       width: _width,
       decoration: BoxDecoration(color: Colors.grey[200]),
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-        // if (data == null) return circleProgress();
         var pd = data.getPartnerDetailsFull;
         var dash = data.orders;
+        log(pd.toString());
 
         var cat = pd['catelogs'];
-        log(dash.toString());
 
         return ListView(children: [
           Container(
@@ -61,7 +61,7 @@ class _OfflineState extends State<Offline> {
                         Colors.blue[900],
                         'Rating',
                         Icons.star_rate,
-                        avg(dash, 'rate')),
+                        dash.isEmpty ? 100 : avg(dash, 'rate')),
                     SizedBox(
                       height: _hight * 0.02,
                     ),
@@ -100,14 +100,16 @@ class _OfflineState extends State<Offline> {
           SizedBox(
             height: _width * 0.05,
           ),
-          catelogCard(context, cat),
+          cat.isEmpty ? Container() : catelogCard(context, cat),
           SizedBox(
             height: _width * 0.02,
           ),
-          reviewMsgs(
-            context,
-            dash,
-          ),
+          dash.isEmpty
+              ? Container()
+              : reviewMsgs(
+                  context,
+                  dash,
+                ),
           SizedBox(
             height: _width * 0.25,
           ),
@@ -122,8 +124,9 @@ avg(List<dynamic> args, String type) {
   List avg = args;
 
   for (var i = 0; i < avg.length; i++) {
-    sum += type == 'rate' ? avg[i]['feedBackDetails']['rating'] : avg[i];
+    sum += type == 'rate' ? avg[i]['feedBackDetails'] ?? 100 : avg[i] ?? 100;
   }
+
   // log((sum / avg.length).toString());
 
   int rate = (sum / avg.length).round();
@@ -140,7 +143,7 @@ earnSum(
   // log(args[0]['moneyTakenByPartner'].toString());
 
   for (var i = 0; i < avg.length; i++) {
-    sum += avg[i]['moneyTakenByPartner'];
+    sum += avg[i]['moneyTakenByPartner'] ?? 0;
   }
 
   return sum;
