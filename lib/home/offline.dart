@@ -7,7 +7,6 @@ import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 
 class Offline extends StatefulWidget {
   @override
@@ -43,7 +42,7 @@ class _OfflineState extends State<Offline> {
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         var pd = data.getPartnerDetailsFull;
         var dash = data.orders;
-        log(pd.toString());
+        log(dash.toString());
 
         var cat = pd['catelogs'];
 
@@ -124,10 +123,10 @@ avg(List<dynamic> args, String type) {
   List avg = args;
 
   for (var i = 0; i < avg.length; i++) {
-    sum += type == 'rate' ? avg[i]['feedBackDetails'] ?? 100 : avg[i] ?? 100;
+    sum += (type == 'rate')
+        ? (avg[i]['feedBackDetails']['rating'] ?? 100)
+        : (avg[i] ?? 100);
   }
-
-  // log((sum / avg.length).toString());
 
   int rate = (sum / avg.length).round();
 

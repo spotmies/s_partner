@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -41,10 +40,10 @@ class EditProfileController extends ControllerMVC {
 
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
 
-  void initState() {
-    editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
-    super.initState();
-  }
+  // void initState() {
+  //   editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
+  //   super.initState();
+  // }
 
   fillAllForms(partnerData) {
     partner = partnerData;
@@ -110,7 +109,7 @@ class EditProfileController extends ControllerMVC {
     }
   }
 
-  Future<void> saveChanges() async {
+  saveChanges(BuildContext context) async {
     if (editProfileForm.currentState.validate()) {
       log("valid");
       editProfileForm.currentState.save();

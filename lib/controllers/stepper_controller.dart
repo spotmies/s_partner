@@ -8,7 +8,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -106,13 +105,13 @@ class StepperController extends ControllerMVC {
 
   //functions
 
-  void initState() {
-    super.initState();
-    partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
+  // void initState() {
+  //   super.initState();
+  //   partnerProvider =
+  //       Provider.of<PartnerDetailsProvider>(context, listen: false);
 
-    // print("76 ${FirebaseAuth.instance.currentUser.uid}");
-  }
+  //   // print("76 ${FirebaseAuth.instance.currentUser.uid}");
+  // }
 
   step1(BuildContext context, StepperController stepperController) {
     if (accept == true) {

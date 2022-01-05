@@ -99,7 +99,10 @@ class _OnlineState extends StateMVC<Online> {
                                 onclick: (orderData, pDetailsId, responseType) {
                                   print("onclick>>>>>>>");
                                   _incomingOrdersController.respondToOrder(
-                                      orderData, pDetailsId, responseType);
+                                      orderData,
+                                      pDetailsId,
+                                      responseType,
+                                      context);
                                 }),
                           ));
                         },
@@ -320,7 +323,8 @@ class _OnlineState extends StateMVC<Online> {
                                                     .respondToOrder(
                                                         o[index],
                                                         partnerProfile['_id'],
-                                                        "reject");
+                                                        "reject",
+                                                        context);
                                               },
                                             ),
                                             ElevatedButtonWidget(
@@ -342,7 +346,8 @@ class _OnlineState extends StateMVC<Online> {
                                                     .respondToOrder(
                                                         o[index],
                                                         partnerProfile['_id'],
-                                                        "accept");
+                                                        "accept",
+                                                        context);
                                               },
                                             ),
                                           ],
@@ -469,7 +474,10 @@ class _OnlineState extends StateMVC<Online> {
                               onclick: (orderData, pDetailsId, responseType) {
                                 print("onclick>>>>>>>");
                                 _incomingOrdersController.respondToOrder(
-                                    orderData, pDetailsId, responseType);
+                                    orderData,
+                                    pDetailsId,
+                                    responseType,
+                                    context);
                               }),
                         ));
                       },
@@ -542,7 +550,8 @@ class _OnlineState extends StateMVC<Online> {
             height: hight * 0.35,
             padding: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setStatee) {
+                // builder: (BuildContext context, StateSetter setStatee) {
+                builder: (BuildContext context, setStatee) {
               return Form(
                 key: _incomingOrdersController.updateFormKey,
                 child: ListView(
@@ -557,7 +566,7 @@ class _OnlineState extends StateMVC<Online> {
                     ),
                     InkWell(
                       onTap: () {
-                        _incomingOrdersController.pickedDateandTime(
+                        _incomingOrdersController.pickedDateandTime(context,
                             setStatee: setStatee);
                       },
                       child: Container(
@@ -639,7 +648,10 @@ class _OnlineState extends StateMVC<Online> {
                                   .validate()) {
                                 Navigator.pop(context);
                                 _incomingOrdersController.respondToOrder(
-                                    ordDetails, partnerProfile['_id'], "bid");
+                                    ordDetails,
+                                    partnerProfile['_id'],
+                                    "bid",
+                                    context);
                                 if (from == "outside") {
                                   Navigator.pop(context);
                                 }
@@ -679,7 +691,7 @@ class _OnlineState extends StateMVC<Online> {
                                     InkWell(
                                       onTap: () {
                                         _incomingOrdersController
-                                            .pickedDateandTime();
+                                            .pickedDateandTime(context);
                                       },
                                       child: Container(
                                         //padding: EdgeInsets.all(10),

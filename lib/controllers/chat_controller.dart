@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -31,7 +30,7 @@ class ChatController extends ControllerMVC {
   final picker = ImagePicker();
   VideoPlayerController videoPlayerController;
 
-  ChatProvider chatProvider;
+  // ChatProvider chatProvider;
   ScrollController scrollController = ScrollController();
 
   List chatList = [];
@@ -41,14 +40,14 @@ class ChatController extends ControllerMVC {
   Map partner = {};
   int msgCount = 20;
 
-  @override
-  void initState() {
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+  // @override
+  // void initState() {
+  //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  cardOnClick(msgId, msgId2, readReceiptObj) {
+  cardOnClick(msgId, msgId2, readReceiptObj, ChatProvider chatProvider) {
     log("$msgId $msgId2");
 
     if (readReceiptObj != "" &&
@@ -74,7 +73,7 @@ class ChatController extends ControllerMVC {
     return currentChatData[0];
   }
 
-  sendMessageHandler(value, String type, msgId) {
+  sendMessageHandler(value, String type, msgId, ChatProvider chatProvider) {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
       'msg': value.toString(),
@@ -100,7 +99,7 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
-  deleteChat() async {
+  deleteChat(BuildContext context, ChatProvider chatProvider) async {
     Map<String, String> body = {"isDeletedForPartner": "true"};
     snackbar(context, "Deleting chat...");
     dynamic resp = await Server()
@@ -254,6 +253,7 @@ class ChatController extends ControllerMVC {
     String filePath,
     Function sendCallBack,
     String msgId,
+    BuildContext context,
   ) async {
     // FirebaseStorage firebaseStorage = FirebaseStorage.instance;
     var chatAudio = FirebaseStorage.instance.ref().child('chatVideos');
@@ -286,7 +286,7 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  Future fetchNewChatList() async {
+  fetchNewChatList(BuildContext context, ChatProvider chatProvider) async {
     var response = await Server().getMethod(API.partnerChat + pId);
     if (response.statusCode == 200) {
       var chatList = jsonDecode(response.body);

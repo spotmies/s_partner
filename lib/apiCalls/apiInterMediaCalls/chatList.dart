@@ -4,11 +4,10 @@ import 'dart:developer';
 
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/localDB/localStore.dart';
 
-final controller = TestController();
+// final controller = TestController();
 var chat;
 chattingList() async {
   dynamic response = await Server().getMethod(API.partnerChat + pId);
@@ -16,7 +15,7 @@ chattingList() async {
     chat = jsonDecode(response.body);
     localChatListStore(chat);
     log(chat.toString());
-    controller.getData();
+    // controller.getData();
   }
 }
 

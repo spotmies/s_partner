@@ -4,13 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 // import 'package:spotmies_partner/localDB/localStore.dart';
 
 class PartnerDetailsProvider extends ChangeNotifier {
-  final controller = TestController();
+  // final controller = TestController();
   bool registrationInProgress = false;
   Map partnerDetailsFull;
   Map profileDetails;

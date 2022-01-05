@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
+// import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/reusable_widgets/flutter_audio_recorder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Future audioRecoder(BuildContext context, double hight, double width,
@@ -29,7 +30,8 @@ Future audioRecoder(BuildContext context, double hight, double width,
                     flex: 2,
                     child: FeatureButtonsView(
                         chatController: chatController,
-                        sendCallBack: sendCallBack,msgId :msgId),
+                        sendCallBack: sendCallBack,
+                        msgId: msgId),
                   ),
                 ],
               )
@@ -50,7 +52,8 @@ class FeatureButtonsView extends StatefulWidget {
     this.onUploadComplete,
     this.chatController,
     this.sendCallBack,
-    this.message, this.msgId,
+    this.message,
+    this.msgId,
   }) : super(key: key);
   @override
   _FeatureButtonsViewState createState() => _FeatureButtonsViewState();
@@ -122,8 +125,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                       IconButton(
                         icon: Icon(Icons.done),
                         onPressed: () {
-                          widget.chatController
-                              .audioUpload(_filePath, widget.sendCallBack,widget.msgId);
+                          widget.chatController.audioUpload(_filePath,
+                              widget.sendCallBack, widget.msgId, context);
                           setState(() {});
                         },
                       ),

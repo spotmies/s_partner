@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/localDB/localStore.dart';
 
-final controller = TestController();
+// final controller = TestController();
 var partner;
 // var local;
 
@@ -19,7 +18,7 @@ partnerDetail() async {
     // log(response.statusCode.toString());
     localPartnerDetailsStore(partner);
 
-    controller.getData();
+    // controller.getData();
     return partner;
   }
   return null;

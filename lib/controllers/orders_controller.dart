@@ -2,17 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class OrdersController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
-  final controller = TestController();
+  // final controller = TestController();
   PartnerDetailsProvider partnerProvider;
   List jobs = [
     'AC Service',
@@ -25,14 +23,14 @@ class OrdersController extends ControllerMVC {
     'Drivers',
     'Events'
   ];
-  List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
-  @override
-  void initState() {
-    partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
+  // List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  // @override
+  // void initState() {
+  //   partnerProvider =
+  //       Provider.of<PartnerDetailsProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   orderStateText(int orderState) {
     switch (orderState) {
@@ -97,7 +95,7 @@ class OrdersController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  Future getOrderFromDB() async {
+  getOrderFromDB(BuildContext context) async {
     var response = await Server().getMethod(API.allOrder + pId);
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);

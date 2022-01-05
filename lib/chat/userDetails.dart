@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -25,6 +27,13 @@ class UserDetails extends StatefulWidget {
 
 class _UserDetailsState extends State<UserDetails> {
   bool isSwitch = false;
+  ChatProvider chatProvider;
+  @override
+  void initState() {
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -256,8 +265,9 @@ class _UserDetailsState extends State<UserDetails> {
                             height(context),
                             "Delete Chat",
                             Colors.redAccent,
-                            Icons.delete_sweep_rounded,
-                            onTap: widget.ccontroller.deleteChat),
+                            Icons.delete_sweep_rounded, onTap: () {
+                          widget.ccontroller.deleteChat(context, chatProvider);
+                        }),
                         /* ------------------------- reveal my profile code ------------------------- */
                         // Container(
                         //   padding: EdgeInsets.only(

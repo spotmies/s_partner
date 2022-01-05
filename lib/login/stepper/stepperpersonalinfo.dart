@@ -35,7 +35,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   void initState() {
     super.initState();
     partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
+        Provider.of<PartnerDetailsProvider>(context, listen: false); 
     _stepperController.pickedDate = DateTime.now();
     _stepperController.pickedTime = TimeOfDay.now();
 

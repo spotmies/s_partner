@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
-import 'package:spotmies_partner/apiCalls/testController.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/localDB/localStore.dart';
 
-final controller = TestController();
+// final controller = TestController();
 var orders;
 final queryParameters = {
   'showOnly': 'inComingOrders',
@@ -23,7 +22,7 @@ incomingOrders() async {
   if (response.statusCode == 200) {
     orders = jsonDecode(response.body);
     log(orders.toString());
-    controller.getData();
+    // controller.getData();
     localOrdersStore(orders);
   }
 }

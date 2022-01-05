@@ -9,9 +9,11 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/post_overview_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/maps/maps.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
@@ -46,7 +48,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   int ordId;
   dynamic d;
   dynamic partnerProfile;
-  PartnerDetailsProvider ordersProvider;
+  PartnerDetailsProvider partnerProvider;
+  ChatProvider chatProvider;
   bool showOrderStatusQuestion = false;
 
   void chatWithPatner(responseData) {
@@ -54,16 +57,20 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       snackbar(context, "you can't make a chat");
       return;
     }
-    _postOverViewController.chatWithpatner(responseData);
+    _postOverViewController.chatWithpatner(
+        responseData, context, chatProvider, partnerProvider);
   }
 
   @override
   void initState() {
-    ordersProvider =
+    partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    // partnerProvider =
+    //     Provider.of<PartnerDetailsProvider>(context, listen: false);
     try {
       setState(() {
-        if (!ordersProvider
+        if (!partnerProvider
             .getOrderById(widget.orderId)['isOrderCompletedByPartner']) {
           showOrderStatusQuestion = true;
         } else {
@@ -76,7 +83,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   isThisOrderCompleted({state = false, responseId = 123}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(responseId: responseId);
+      _postOverViewController.isOrderCompleted(context, responseId: responseId);
     }
     showOrderStatusQuestion = false;
     refresh();
@@ -188,7 +195,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWid(
-                    text: ordersProvider.getServiceNameById(d['job']),
+                    text: partnerProvider.getServiceNameById(d['job']),
                     size: _width * 0.04,
                     color: d['orderState'] > 8 || d['isOrderCompletedByPartner']
                         ? Colors.white
@@ -308,24 +315,33 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   preferredSize: Size.fromHeight(4.0)),
               actions: [
                 IconButton(
-                    onPressed: null,
+                    onPressed: () {
+                      helpAndSupport(context, _hight, _width,
+                          partnerProvider.partnerDetailsFull);
+                    },
                     icon: Icon(
                       Icons.help,
                       color: d['isOrderCompletedByPartner']
                           ? Colors.white
                           : Colors.grey[900],
                     )),
-                IconButton(
-                    onPressed: () {
-                      bottomOptionsMenu(context,
-                          options: _postOverViewController.options);
-                    },
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: d['isOrderCompletedByPartner']
-                          ? Colors.white
-                          : Colors.grey[900],
-                    )),
+                // IconButton(
+                //     onPressed: () {
+                //       bottomOptionsMenu(context,
+                //           options: _postOverViewController.options,
+                //           option1Click: () {
+                //         Navigator.pop(context);
+                //       }, option2Click: () {
+                //         helpAndSupport(context, _hight, _width,
+                //             partnerProvider.partnerDetailsFull);
+                //       });
+                //     },
+                //     icon: Icon(
+                //       Icons.more_vert,
+                //       color: d['isOrderCompletedByPartner']
+                //           ? Colors.white
+                //           : Colors.grey[900],
+                //     )),
               ],
             ),
             body: SingleChildScrollView(
@@ -509,6 +525,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                       onSubmit: (money) {
                                                     _postOverViewController
                                                         .isServiceCompleted(
+                                                            context,
+                                                            partnerProvider,
                                                             money: money
                                                                 .toString(),
                                                             ordId: d['ordId']

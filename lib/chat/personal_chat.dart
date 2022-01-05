@@ -30,6 +30,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
+  ChatProvider chatProvider;
   List bottomMenuOptions = [
     {
       "name": "view order",
@@ -64,23 +65,20 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   @override
   void initState() {
     super.initState();
-    _chatController.chatProvider =
-        Provider.of<ChatProvider>(context, listen: false);
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
     _chatController.scrollController.addListener(() {
       if (_chatController.scrollController.position.pixels ==
           _chatController.scrollController.position.maxScrollExtent) {
         // log("at top >>>");
-        _chatController.chatProvider
-            .setMsgCount(_chatController.chatProvider.getMsgCount() + 20);
+        chatProvider.setMsgCount(chatProvider.getMsgCount() + 20);
       }
       if (_chatController.scrollController.position.pixels < 40) {
         // log('disable float >>>>>>>>>>>>');
-        if (_chatController.chatProvider.getFloat())
-          _chatController.chatProvider.setFloat(false);
+        if (chatProvider.getFloat()) chatProvider.setFloat(false);
       } else if (_chatController.scrollController.position.pixels > 40) {
-        if (!_chatController.chatProvider.getFloat()) {
-          _chatController.chatProvider.setFloat(true);
+        if (!chatProvider.getFloat()) {
+          chatProvider.setFloat(true);
           // log('en float >>>>>>>>>>>>');
         }
       }
@@ -285,8 +283,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         })),
               ),
               _chatController.targetChat['cBuild'] == 1
-                  ? chatInputField(_chatController.sendMessageHandler, context,
-                      _hight, _width, _chatController, widget.msgId)
+                  ? chatInputField(
+                      _chatController.sendMessageHandler,
+                      context,
+                      _hight,
+                      _width,
+                      _chatController,
+                      widget.msgId,
+                      chatProvider)
                   : Container(
                       child: TextWid(
                           text:

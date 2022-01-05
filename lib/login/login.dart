@@ -214,34 +214,9 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                             onPressed: () {
                               // _loginPageController.dataToOTP();
                               if (data.loader) return;
-                              _loginPageController.dataToOTP();
-                            })
-
-                        // child: ElevatedButton(
-                        //   style: ButtonStyle(
-                        //       backgroundColor:
-                        //           MaterialStateProperty.all(Colors.blue[900])),
-                        //   onPressed: () {
-                        //     _loginPageController.dataToOTP();
-                        //   },
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       Text(
-                        //         'Verify',
-                        //         style: TextStyle(color: Colors.white, fontSize: 18),
-                        //       ),
-                        //       SizedBox(
-                        //         width: 10,
-                        //       ),
-                        //       Icon(
-                        //         Icons.verified_user,
-                        //         color: Colors.lightGreen,
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
-                        ),
+                              _loginPageController.dataToOTP(
+                                  context, timerProvider);
+                            })),
                   ],
                 ),
               ),

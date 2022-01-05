@@ -61,6 +61,7 @@ class CatelogController extends ControllerMVC {
   addCatlogList(
     itemCode,
     job,
+    BuildContext context
   ) async {
     await uploadimage();
     var body = {
@@ -85,7 +86,7 @@ class CatelogController extends ControllerMVC {
     }
   }
 
-  updateCat(catid) async {
+  updateCat(catid,BuildContext context) async {
     if (imageLink != null) await uploadimage();
     var body = {
       "name": catNameControl.text,

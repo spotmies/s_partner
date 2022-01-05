@@ -17,8 +17,6 @@ import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 
-
-
 photoPicker() async {
   final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -508,7 +506,9 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               textStyle: FontWeight.w600,
                               borderRadius: 5.0,
                               borderSideColor: Colors.indigo[50],
-                              onClick: _editProfileController.saveChanges,
+                              onClick: () {
+                                _editProfileController.saveChanges(context);
+                              },
                             ),
                           ),
                         ],

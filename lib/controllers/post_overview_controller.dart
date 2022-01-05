@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 // import 'package:geocoder/geocoder.dart';
 // import 'package:geocoder/model.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
@@ -19,24 +18,24 @@ class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var updateFormKey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
-  ChatProvider chatProvider;
-  PartnerDetailsProvider partnerProvider;
+  // ChatProvider chatProvider;
+  // PartnerDetailsProvider partnerProvider;
   String title;
   int dropDownValue = 0;
   DateTime pickedDate;
   TextEditingController moneyController = TextEditingController();
   TimeOfDay pickedTime;
 
-  @override
-  void initState() {
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
-    super.initState();
-    // getAddressofLocation();
-  }
+  // @override
+  // void initState() {
+  //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
+  //   partnerProvider =
+  //       Provider.of<PartnerDetailsProvider>(context, listen: false);
+  //   super.initState();
+  //   // getAddressofLocation();
+  // }
 
-  isOrderCompleted({responseId: 175642365745}) async {
+  isOrderCompleted(BuildContext context, {responseId: 175642365745}) async {
     Map<String, String> body = {"orderState": "9"};
     dynamic response = await Server()
         .editMethod(API.updateResponse + responseId.toString(), body);
@@ -47,7 +46,9 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  isServiceCompleted({String ordId, String money}) async {
+  isServiceCompleted(
+      BuildContext context, PartnerDetailsProvider partnerProvider,
+      {String ordId, String money}) async {
     Map<String, String> body = {
       "isOrderCompletedByPartner": "true",
       "moneyTakenByPartner": money
@@ -63,20 +64,14 @@ class PostOverViewController extends ControllerMVC {
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
-      Coordinates coordinates) {
+      Coordinates coordinates, BuildContext context) {
     return InkWell(
       onTap: () {
         if (field == 'problem') {
-          editDialogue(
-            'problem',
-            ordId,
-          );
+          editDialogue('problem', ordId, context);
         }
         if (field == 'amount') {
-          editDialogue(
-            'amount',
-            ordId,
-          );
+          editDialogue('amount', ordId, context);
         }
         if (field == 'Schedule') {
           print(field);
@@ -97,18 +92,15 @@ class PostOverViewController extends ControllerMVC {
       "name": "Close",
       "icon": Icons.cancel,
     },
-    {
-      "name": "Info",
-      "icon": Icons.info,
-    },
     // {
-    //   "name": "Re-schedule",
-    //   "icon": Icons.refresh,
+    //   "name": "Info",
+    //   "icon": Icons.info,
     // },
     {"name": "Help", "icon": Icons.help},
   ];
 
-  Future chatWithpatner(responseData) async {
+  Future chatWithpatner(responseData, BuildContext context,
+      ChatProvider chatProvider, partnerProvider) async {
     // if (responseProvider.getLoader) return;
 
     String ordId = responseData['ordId'].toString();
@@ -157,7 +149,7 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  pickedDateandTime() async {
+  pickedDateandTime(BuildContext context) async {
     DateTime date = await showDatePicker(
         context: context,
         initialDate: pickedDate,
@@ -230,10 +222,7 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  editDialogue(
-    edit,
-    String ordId,
-  ) {
+  editDialogue(edit, String ordId, BuildContext context) {
     final hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -358,7 +347,7 @@ class PostOverViewController extends ControllerMVC {
   //   }
   // }
 
-  List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  // List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
   List icons = [
     Icons.pending_actions,
     Icons.run_circle_rounded,

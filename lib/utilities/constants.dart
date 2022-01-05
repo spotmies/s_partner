@@ -52,7 +52,7 @@ orderStateString({ordState = 0, bool isCompleted = false}) {
     case 9:
       return "Service completed successfully ";
     case 10:
-      return "Service successfully completed and feedback given by User";
+      return "Service successfully completed";
 
     default:
       return "Something went wrong";

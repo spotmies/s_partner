@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -30,6 +31,7 @@ Container chatInputField(
   double width,
   ChatController chatController,
   String msgId,
+  ChatProvider chatProvider,
 ) {
   // SoundRecorder recorder
   // bool isInput = false;
@@ -72,9 +74,9 @@ Container chatInputField(
                           prefixIcon: IconButton(
                             onPressed: () {},
                             icon: Icon(
-                              Icons.mic,
+                              Icons.text_format,
                               color: Colors.grey[500],
-                              size: width * 0.07,
+                              size: width * 0.06,
                             ),
                           ),
                           border: InputBorder.none,
@@ -133,7 +135,7 @@ Container chatInputField(
             if (inputController.text == "") {
               snackbar(context, 'Enter Message');
             } else {
-              sendCallBack(inputController.text, 'text', msgId);
+              sendCallBack(inputController.text, 'text', msgId, chatProvider);
               inputController.clear();
             }
             log(inputController.text);

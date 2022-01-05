@@ -71,7 +71,10 @@ class _ChatListState extends StateMVC<ChatList> {
                       ));
                     }
                     return RefreshIndicator(
-                      onRefresh: _chatController.fetchNewChatList,
+                      onRefresh: () async {
+                        await _chatController.fetchNewChatList(
+                            context, chatProvider);
+                      },
                       child: ListView.builder(
                         itemCount: chatList?.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -166,6 +169,13 @@ class ChatListCard extends StatefulWidget {
 }
 
 class _ChatListCardState extends State<ChatListCard> {
+  ChatProvider chatProvider;
+  @override
+  void initState() {
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final _hight = MediaQuery.of(context).size.height -
@@ -181,14 +191,15 @@ class _ChatListCardState extends State<ChatListCard> {
             "sender": "partner",
             "status": 3
           };
-          widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
+          widget.callBack(
+              widget.msgId, widget.msgId, readReceiptobject, chatProvider);
           //navigate strore msg count value
 
           final count = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
           log("fback $count");
 
-          widget.callBack(widget.msgId, "", "");
+          widget.callBack(widget.msgId, "", "", chatProvider);
         },
         title: TextWid(
             text: toBeginningOfSentenceCase(widget.name),

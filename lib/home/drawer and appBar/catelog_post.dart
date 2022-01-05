@@ -41,8 +41,8 @@ class _CatelogPostState extends State<CatelogPost> {
       return circleProgress();
     return Scaffold(
       body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-        var pD = data.getPartnerDetailsFull;
-        var cat = pD['catelogs'];
+        // var pD = data.getPartnerDetailsFull;
+        // var cat = pD['catelogs'];
         return Container(
           padding: EdgeInsets.only(
               left: width(context) * 0.05, right: width(context) * 0.05),
@@ -238,10 +238,10 @@ class _CatelogPostState extends State<CatelogPost> {
                       var resp;
                       if (widget.cat == null) {
                         res = await catelogController.addCatlogList(
-                            itemCode, job);
+                            itemCode, job,context);
                       } else {
                         resp = await catelogController
-                            .updateCat(widget.cat["_id"]);
+                            .updateCat(widget.cat["_id"],context);
                       }
 
                       log(res.toString());

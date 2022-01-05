@@ -11,12 +11,15 @@ import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/home/verification_inprogress.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/onboard.dart';
+import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/orders/orders.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -128,12 +131,23 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
         partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
         log("login succssfully");
       } else if (resp == "false") {
-        FirebaseAuth.instance.signOut().then((value) => {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => OnboardingScreen()),
-                  (route) => false)
-            });
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OnlinePlaceSearch(onSave: (cords, fullAddress) {
+                      log("onsave $cords $fullAddress");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AccountType(
+                                  coordinates: cords,
+                                  phoneNumber: timerProvider.phNumber,
+                                )),
+                        // (route) => false
+                      );
+                    })),
+            (route) => false);
       } else
         snackbar(context, "something went wrong");
     } else {
@@ -178,10 +192,14 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesPartner");
   }
 
+  TimeProvider timerProvider;
+
   @override
   initState() {
     WidgetsBinding.instance.addObserver(this);
     pId = FirebaseAuth.instance.currentUser.uid.toString();
+
+    timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     partnerProvider =

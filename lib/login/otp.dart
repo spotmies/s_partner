@@ -7,6 +7,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
@@ -27,6 +28,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   }
 
   TimeProvider timerProvider;
+  PartnerDetailsProvider partnerProvider;
   Timer _timer;
   int pinlength;
 
@@ -50,6 +52,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   void initState() {
     _timer?.cancel();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
 
     super.initState();
     startTimer();
@@ -65,7 +69,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     timerProvider.resetTimer();
     // _verifyPhone();
 
-    _loginPageController.verifyPhone(navigate: false);
+    _loginPageController.verifyPhone(context, timerProvider, navigate: false);
     startTimer();
   }
 
@@ -212,7 +216,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 data.setOtp(pin.toString());
                               },
                               onSubmit: (pin) {
-                                _loginPageController.loginUserWithOtp(pin);
+                                _loginPageController.loginUserWithOtp(pin,
+                                    context, partnerProvider, timerProvider);
                                 setState(() {
                                   pinlength = pin.length;
                                 });
@@ -257,11 +262,6 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 borderSideColor: Colors.transparent,
                                 textSize: _width * 0.037,
                                 textColor: Colors.indigo[900],
-                                // trailingIcon: Icon(
-                                //   Icons.sync,
-                                //   size: 18,
-                                //   color: Colors.indigo[900],
-                                // ),
                               ),
                             ),
                     if (pinlength == 6)
@@ -270,7 +270,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                             top: data.countDown > 2 ? 0 : _hight * 0.25),
                         child: ElevatedButtonWidget(
                           onClick: () {
-                            _loginPageController.loginUserWithOtp(data.getOtp);
+                            _loginPageController.loginUserWithOtp(data.getOtp,
+                                context, partnerProvider, timerProvider);
                           },
                           height: _hight * 0.07,
                           textStyle: FontWeight.w600,

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -19,35 +18,36 @@ import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class LoginPageController extends ControllerMVC {
-  TimeProvider timerProvider;
-  PartnerDetailsProvider partnerProvider;
+  // TimeProvider timerProvider;
+  // PartnerDetailsProvider partnerProvider;
 
-  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
+  GlobalKey scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
   var formkey1 = GlobalKey<FormState>();
 
   TextEditingController loginnum = TextEditingController();
 
   String _verificationCode = "";
-  @override
-  void initState() {
-    timerProvider = Provider.of<TimeProvider>(context, listen: false);
-    partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false);
+  // @override
+  // void initState() {
+  //   timerProvider = Provider.of<TimeProvider>(context, listen: false);
+  //   partnerProvider =
+  //       Provider.of<PartnerDetailsProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  dataToOTP() {
+  dataToOTP(BuildContext context, TimeProvider timerProvider) {
     if (formkey.currentState.validate()) {
       formkey.currentState.save();
       timerProvider.setPhNumber(loginnum.text.toString());
 
-      verifyPhone();
+      verifyPhone(context, timerProvider);
     }
   }
 
-  verifyPhone({navigate = true}) async {
+  verifyPhone(BuildContext context, TimeProvider timerProvider,
+      {navigate = true}) async {
     timerProvider.resetTimer();
     timerProvider.setLoader(true, loadingValue: "Sending OTP .....");
     log("phnum ${timerProvider.phNumber}");
@@ -101,7 +101,11 @@ class LoginPageController extends ControllerMVC {
     }
   }
 
-  loginUserWithOtp(otpValue) async {
+  loginUserWithOtp(
+      otpValue,
+      BuildContext context,
+      PartnerDetailsProvider partnerProvider,
+      TimeProvider timerProvider) async {
     log("verfication code ${timerProvider.verificationCode}");
     log(otpValue.toString());
     timerProvider.setLoader(true);
@@ -157,7 +161,8 @@ class LoginPageController extends ControllerMVC {
     }
   }
 
-  splashScreenNavigation() async {
+  splashScreenNavigation(
+      BuildContext context, PartnerDetailsProvider partnerProvider) async {
     if (FirebaseAuth.instance.currentUser != null) {
       partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
       Navigator.pushAndRemoveUntil(context,
@@ -170,28 +175,28 @@ class LoginPageController extends ControllerMVC {
     }
   }
 
-  getConstants({bool alwaysHit = false}) async {
-    if (alwaysHit == false) {
-      dynamic constantsFromSf = await getAppConstants();
-      if (constantsFromSf != null) {
-        partnerProvider.setAllConstants(constantsFromSf);
+  // getConstants(BuildContext context,{bool alwaysHit = false}) async {
+  //   if (alwaysHit == false) {
+  //     dynamic constantsFromSf = await getAppConstants();
+  //     if (constantsFromSf != null) {
+  //       partnerProvider.setAllConstants(constantsFromSf);
 
-        log("constants already in sf");
-        return;
-      }
-    }
+  //       log("constants already in sf");
+  //       return;
+  //     }
+  //   }
 
-    dynamic appConstants = await constantsAPI();
-    if (appConstants != null) {
-      partnerProvider.setAllConstants(appConstants);
-      snackbar(context, "new settings imported");
-    }
-    return;
-  }
+  //   dynamic appConstants = await constantsAPI();
+  //   if (appConstants != null) {
+  //     partnerProvider.setAllConstants(appConstants);
+  //     snackbar(context, "new settings imported");
+  //   }
+  //   return;
+  // }
 
-  getServiceList({bool alwaysHit = false}) async {
-    partnerProvider.fetchServiceList(alwaysHit: alwaysHit);
-  }
+  // getServiceList({bool alwaysHit = false}) async {
+  //   partnerProvider.fetchServiceList(alwaysHit: alwaysHit);
+  // }
 }
 
 checkPartnerRegistered(pId) async {

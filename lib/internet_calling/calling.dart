@@ -8,7 +8,8 @@ import 'package:spotmies_partner/call_ui/audioCallWithImage/components/body.dart
 import 'package:spotmies_partner/internet_calling/signaling.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
-import 'package:flutter_incall/flutter_incall.dart';
+import 'package:spotmies_partner/reusable_widgets/incall.dart';
+// import 'package:flutter_incall/flutter_incall.dart';
 
 class MyCalling extends StatefulWidget {
   final String msgId;

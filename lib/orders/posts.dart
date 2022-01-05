@@ -67,7 +67,9 @@ class _PostListState extends StateMVC<PostList> {
                       );
 
                     return RefreshIndicator(
-                      onRefresh: _ordersController.getOrderFromDB,
+                      onRefresh: () async {
+                        await _ordersController.getOrderFromDB(context);
+                      },
                       child: ListView.builder(
                           itemCount: o.length,
                           itemBuilder: (BuildContext ctxt, int index) {
