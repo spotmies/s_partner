@@ -16,6 +16,7 @@ class CatelogController extends ControllerMVC {
   File catelogPic;
   var imageLink;
   var catformkey = GlobalKey<FormState>();
+  var netcatelogPic;
   bool loader = false;
   TextEditingController catNameControl = TextEditingController();
   TextEditingController catPriceControl = TextEditingController();
@@ -48,7 +49,19 @@ class CatelogController extends ControllerMVC {
     log(imageLink.toString());
   }
 
-  addCatlogList(itemCode, job) async {
+  fillAllForms(cat) {
+    netcatelogPic = cat != null ? cat['media'][0]['url'] : "";
+    catNameControl.text = cat['name'] != null ? cat['name'].toString() : "";
+    catPriceControl.text = cat['price'] != null ? cat['price'].toString() : "";
+    catDescControl.text =
+        cat['description'] != null ? cat['description'].toString() : "";
+    refresh();
+  }
+
+  addCatlogList(
+    itemCode,
+    job,
+  ) async {
     await uploadimage();
     var body = {
       "name": catNameControl.text,
@@ -62,6 +75,27 @@ class CatelogController extends ControllerMVC {
     };
 
     var response = await Server().postMethod(API.catelog + API.pid, body);
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      log(response.statusCode.toString());
+      return jsonDecode(response.body);
+    } else {
+      snackbar(context, 'Something went wrong');
+      return null;
+    }
+  }
+
+  updateCat(catid) async {
+    if (imageLink != null) await uploadimage();
+    var body = {
+      "name": catNameControl.text,
+      "price": catPriceControl.text,
+      "description": catDescControl.text,
+      if (imageLink != null) "media.0.type": "image",
+      if (imageLink != null) "media.0.url": imageLink.toString().toString(),
+    };
+
+    var response = await Server().editMethod(API.updateCatelog + catid, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
       log(response.statusCode.toString());
       return jsonDecode(response.body);

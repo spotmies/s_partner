@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
+// import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:im_animations/im_animations.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 
 class Location extends StatefulWidget {
   @override

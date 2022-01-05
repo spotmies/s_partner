@@ -17,15 +17,7 @@ import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 
-List<Map<String, Object>> data = [
-  {
-    "name": "prabhas uppalapati",
-    "email": "prabhasuppalapati@gmail.com",
-    "mobile": "8019933883",
-    "orders": 24,
-    "savings": 1284,
-  },
-];
+
 
 photoPicker() async {
   final pickedFile = await ImagePicker().pickImage(
