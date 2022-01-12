@@ -13,10 +13,10 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class CatelogController extends ControllerMVC {
-  File catelogPic;
-  var imageLink;
-  var catformkey = GlobalKey<FormState>();
-  var netcatelogPic;
+  File? catelogPic;
+  String? imageLink;
+  GlobalKey<FormState> catformkey = GlobalKey<FormState>();
+  String? netcatelogPic;
   bool loader = false;
   TextEditingController catNameControl = TextEditingController();
   TextEditingController catPriceControl = TextEditingController();
@@ -28,7 +28,7 @@ class CatelogController extends ControllerMVC {
         imageQuality: 20,
         preferredCameraDevice: CameraDevice.front,
       );
-      final profilepicTemp = File(image.path);
+      final profilepicTemp = File(image!.path);
       catelogPic = profilepicTemp;
       setState(() {});
       // WidgetsBinding.instance!.addPostFrameCallback((_) => setState(() {}));
@@ -42,7 +42,7 @@ class CatelogController extends ControllerMVC {
     var postImageRef = FirebaseStorage.instance.ref().child('ProfilePic');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(catelogPic);
+        .putFile(catelogPic!);
     log(uploadTask.toString());
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink = imageUrl.toString();
@@ -75,7 +75,7 @@ class CatelogController extends ControllerMVC {
       "media.0.url": imageLink.toString().toString(),
     };
 
-    var response = await Server().postMethod(API.catelog + API.pid, body);
+    var response = await Server().postMethod(API.catelog + API.pid!, body);
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       log(response.statusCode.toString());
@@ -113,7 +113,7 @@ class CatelogController extends ControllerMVC {
     } else {
       log(response.statusCode.toString());
     }
-    partnerDetailsProvider.setOffileLoader(false);
+    partnerDetailsProvider!.setOffileLoader(false);
   }
 
   deleteCatelog(id) async {

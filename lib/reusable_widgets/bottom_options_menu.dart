@@ -3,11 +3,11 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
     {menuTitle = "Menu",
-   List options,
-    VoidCallback option1Click,
-    VoidCallback option2Click,
-    VoidCallback option3Click,
-    VoidCallback option4Click}) {
+    List? options,
+    VoidCallback? option1Click,
+    VoidCallback? option2Click,
+    VoidCallback? option3Click,
+    VoidCallback? option4Click}) {
   final _width = MediaQuery.of(context).size.width;
   final _height = MediaQuery.of(context).size.height;
 
@@ -26,7 +26,7 @@ bottomOptionsMenu(context,
             children: [
               TextWid(
                   text: menuTitle,
-                  color: Colors.grey[800],
+                  color: Colors.grey[800]!,
                   size: _width * 0.04,
                   weight: FontWeight.w300),
               Divider(
@@ -38,7 +38,7 @@ bottomOptionsMenu(context,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: options.length,
+                    itemCount: options!.length,
                     // physics: ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
@@ -57,9 +57,7 @@ bottomOptionsMenu(context,
                             case 3:
                               if (option4Click != null) option4Click();
                               break;
-
                             default:
-                              break;
                           }
                         },
                         child: Container(
@@ -79,7 +77,7 @@ bottomOptionsMenu(context,
                                 ),
                                 TextWid(
                                   text: options[index]['name'],
-                                  color: Colors.grey[800],
+                                  color: Colors.grey[800]!,
                                   weight: FontWeight.bold,
                                 )
                               ],

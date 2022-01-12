@@ -9,7 +9,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Widget step3UI(BuildContext context, StepperController stepperController,
     double _hight, double _width, String type,
-    {PartnerDetailsProvider provider}) {
+    {PartnerDetailsProvider? provider}) {
   return Container(
     height: _hight * 0.75,
     child: Form(
@@ -27,10 +27,10 @@ Widget step3UI(BuildContext context, StepperController stepperController,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: provider.getServiceListFromServer,
+                  onTap: provider!.getServiceListFromServer,
                   child: TextWid(
                     text: 'Business type:',
-                    color: Colors.grey[900],
+                    color: Colors.grey[900]!,
                     size: _width * 0.05,
                     weight: FontWeight.w600,
                   ),
@@ -42,7 +42,7 @@ Widget step3UI(BuildContext context, StepperController stepperController,
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.grey[300],
+                              color: Colors.grey[300]!,
                               blurRadius: 3,
                               spreadRadius: 1)
                         ],
@@ -57,33 +57,11 @@ Widget step3UI(BuildContext context, StepperController stepperController,
                         color: Colors.indigo[900],
                       ),
 
-                      // items: <int>[
-                      //   0,
-                      //   1,
-                      //   2,
-                      //   3,
-                      //   4,
-
-                      // ].map<DropdownMenuItem<int>>((int jobFromFAB) {
-                      //   return DropdownMenuItem<int>(
-                      //       value: jobFromFAB,
-                      //       child: TextWid(
-                      //         text: provider.getServiceList.elementAt(
-                      //             // jobFromHome == null
-                      //             //     ?
-                      //             jobFromFAB
-                      //             // : jobFromHome,
-                      //             )['nameOfService'],
-                      //         color: Colors.grey[900],
-                      //         size: _width * 0.04,
-                      //         weight: FontWeight.w500,
-                      //       ));
-                      // }).toList(),
                       items: provider.getServiceList.map((location) {
                         return DropdownMenuItem(
                           child: TextWid(
                             text: location['nameOfService'],
-                            color: Colors.grey[900],
+                            color: Colors.grey[900]!,
                             size: _width * 0.04,
                             weight: FontWeight.w500,
                           ),
@@ -92,7 +70,7 @@ Widget step3UI(BuildContext context, StepperController stepperController,
                       }).toList(),
                       onChanged: (newVal) {
                         log(newVal.toString());
-                        stepperController.dropDownValue = newVal;
+                        stepperController.dropDownValue = newVal as int;
                         stepperController.refresh();
                       },
                     ),
@@ -197,10 +175,10 @@ uploadUI(
                     image: DecorationImage(
                         fit: BoxFit.fill,
                         image: FileImage(imageType == 'front'
-                            ? stepperController.adharfront
+                            ? stepperController.adharfront!
                             : imageType == 'back'
-                                ? stepperController.adharback
-                                : stepperController.clgId))),
+                                ? stepperController.adharback!
+                                : stepperController.clgId!))),
               ),
               Positioned(
                   bottom: 0,

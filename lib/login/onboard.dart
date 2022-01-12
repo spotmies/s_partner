@@ -18,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     _controller.addListener(() {
       setState(() {
-        page = _controller.page.round();
+        page = _controller.page!.round();
       });
     });
     return Scaffold(
@@ -61,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           },
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize * 4,
+                          height: SizeConfig.defaultSize! * 4,
                         )
                       ],
                     ),
@@ -74,9 +74,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 //model
 
 class OnboardingModel {
-  String image;
-  String text;
-  String title;
+  String? image;
+  String? text;
+  String? title;
 
   OnboardingModel({this.image, this.text, this.title});
   static List<OnboardingModel> list = [
@@ -133,13 +133,13 @@ class MyAnimatedContainer extends StatelessWidget {
 //skip button
 class SkipButton extends StatelessWidget {
   const SkipButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize),
+      padding: EdgeInsets.all(SizeConfig.defaultSize!),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -151,7 +151,7 @@ class SkipButton extends StatelessWidget {
             child: Text(
               'Skip',
               style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.4, //14
+                  fontSize: SizeConfig.defaultSize! * 1.4, //14
                   color: Colors.black,
                   fontWeight: FontWeight.w600),
             ),
@@ -166,11 +166,11 @@ class SkipButton extends StatelessWidget {
 
 class StepsContainer extends StatelessWidget {
   const StepsContainer(
-      {Key key,
-      @required this.page,
-      @required List<OnboardingModel> list,
-      @required PageController controller,
-      @required this.showAnimatedContainerCallBack})
+      {Key? key,
+      required this.page,
+      required List<OnboardingModel> list,
+      required PageController controller,
+      required this.showAnimatedContainerCallBack})
       : _list = list,
         _controller = controller,
         super(key: key);
@@ -182,13 +182,13 @@ class StepsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: SizeConfig.defaultSize * 4.5,
-      height: SizeConfig.defaultSize * 4.5,
+      width: SizeConfig.defaultSize! * 4.5,
+      height: SizeConfig.defaultSize! * 4.5,
       child: Stack(
         children: [
           Container(
-            width: SizeConfig.defaultSize * 4.5,
-            height: SizeConfig.defaultSize * 4.5,
+            width: SizeConfig.defaultSize! * 4.5,
+            height: SizeConfig.defaultSize! * 4.5,
             child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
                 value: (page + 1) / (_list.length + 1)),
@@ -206,8 +206,8 @@ class StepsContainer extends StatelessWidget {
                 }
               },
               child: Container(
-                width: SizeConfig.defaultSize * 3.5,
-                height: SizeConfig.defaultSize * 3.5,
+                width: SizeConfig.defaultSize! * 3.5,
+                height: SizeConfig.defaultSize! * 3.5,
                 decoration: BoxDecoration(
                     color: Colors.blue[800],
                     borderRadius: BorderRadius.all(Radius.circular(100.0))),
@@ -227,14 +227,14 @@ class StepsContainer extends StatelessWidget {
 //common widget button
 
 class CommonButtonWidget extends StatelessWidget {
-  final Function onTap;
-  final Color textColor;
-  final Color bgColor;
-  final String title;
-  final double textSizePercentage;
-  final double width;
-  final double height;
-  final Color borderColor;
+  final Function? onTap;
+  final Color? textColor;
+  final Color? bgColor;
+  final String? title;
+  final double? textSizePercentage;
+  final double? width;
+  final double? height;
+  final Color? borderColor;
   final raduis;
   CommonButtonWidget(
       {this.textColor,
@@ -261,10 +261,10 @@ class CommonButtonWidget extends StatelessWidget {
                   topLeft: Radius.circular(25))),
       child: Center(
         child: CommonText(
-          text: title,
+          text: title!,
           textColor: textColor ?? Colors.black,
           fontWeight: FontWeight.bold,
-          fontSize: textSizePercentage,
+          fontSize: textSizePercentage!,
         ),
       ),
     );
@@ -274,11 +274,11 @@ class CommonButtonWidget extends StatelessWidget {
 //common text
 
 class CommonText extends StatelessWidget {
-  final String text;
-  final Color textColor;
-  final double fontSize;
-  final double padding;
-  final FontWeight fontWeight;
+  final String? text;
+  final Color? textColor;
+  final double? fontSize;
+  final double? padding;
+  final FontWeight? fontWeight;
   CommonText(
       {this.text,
       this.textColor,
@@ -288,18 +288,18 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       style: TextStyle(
           color: textColor ?? Colors.black,
           fontWeight: fontWeight ?? FontWeight.w400,
-          fontSize: SizeConfig.defaultSize * (fontSize ?? 1.8)),
+          fontSize: SizeConfig.defaultSize! * (fontSize ?? 1.8)),
     );
   }
 }
 
 class MainContent extends StatelessWidget {
   const MainContent(
-      {Key key, @required List<OnboardingModel> list, @required this.index})
+      {Key? key, required List<OnboardingModel> list, required this.index})
       : _list = list,
         super(key: key);
 
@@ -309,7 +309,7 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+      padding: EdgeInsets.all(SizeConfig.defaultSize! * 2),
       child: Column(
         children: [
           Expanded(
@@ -317,20 +317,20 @@ class MainContent extends StatelessWidget {
             child: FadeAnimation(
               0.5,
               Image.asset(
-                _list[index].image,
-                height: SizeConfig.defaultSize * 30,
-                width: SizeConfig.defaultSize * 30,
+                _list[index].image!,
+                height: SizeConfig.defaultSize! * 30,
+                width: SizeConfig.defaultSize! * 30,
               ),
             ),
           ),
           FadeAnimation(
             0.9,
             Text(
-              _list[index].title,
+              _list[index].title!,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: SizeConfig.defaultSize * 2.6),
+                  fontSize: SizeConfig.defaultSize! * 2.6),
             ),
           ),
           SizedBox(
@@ -339,12 +339,12 @@ class MainContent extends StatelessWidget {
           FadeAnimation(
             1.1,
             Text(
-              _list[index].text,
+              _list[index].text!,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w400,
-                  fontSize: SizeConfig.defaultSize * 1.4),
+                  fontSize: SizeConfig.defaultSize! * 1.4),
             ),
           ),
         ],
@@ -361,7 +361,7 @@ class FadeAnimation extends StatelessWidget {
   final double delay;
   final Widget child;
 
-  FadeAnimation(this.delay, this.child, {AssetImage image});
+  FadeAnimation(this.delay, this.child, {AssetImage? image});
 
   @override
   Widget build(BuildContext context) {
@@ -388,35 +388,35 @@ class FadeAnimation extends StatelessWidget {
 //configer
 
 class SizeConfig {
-  static MediaQueryData _mediaQueryData;
-  static double screenWidth;
-  static double screenHeight;
-  static double blockSizeHorizontal;
-  static double blockSizeVertical;
+  static MediaQueryData? _mediaQueryData;
+  static double? screenWidth;
+  static double? screenHeight;
+  static double? blockSizeHorizontal;
+  static double? blockSizeVertical;
 
-  static double _safeAreaHorizontal;
-  static double _safeAreaVertical;
-  static double safeBlockHorizontal;
-  static double safeBlockVertical;
-  static Orientation orientation;
-  static double defaultSize;
+  static double? _safeAreaHorizontal;
+  static double? _safeAreaVertical;
+  static double? safeBlockHorizontal;
+  static double? safeBlockVertical;
+  static Orientation? orientation;
+  static double? defaultSize;
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
-    orientation = _mediaQueryData.orientation;
+    screenWidth = _mediaQueryData!.size.width;
+    screenHeight = _mediaQueryData!.size.height;
+    orientation = _mediaQueryData!.orientation;
     defaultSize = orientation == Orientation.portrait
-        ? screenWidth * 0.03
-        : screenHeight * 0.03;
-    blockSizeHorizontal = screenWidth / 100;
-    blockSizeVertical = screenHeight / 100;
+        ? screenWidth! * 0.03
+        : screenHeight! * 0.03;
+    blockSizeHorizontal = screenWidth! / 100;
+    blockSizeVertical = screenHeight! / 100;
 
     _safeAreaHorizontal =
-        _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+        _mediaQueryData!.padding.left + _mediaQueryData!.padding.right;
     _safeAreaVertical =
-        _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
-    safeBlockHorizontal = (screenWidth - _safeAreaHorizontal) / 100;
-    safeBlockVertical = (screenHeight - _safeAreaVertical) / 100;
+        _mediaQueryData!.padding.top + _mediaQueryData!.padding.bottom;
+    safeBlockHorizontal = (screenWidth! - _safeAreaHorizontal!) / 100;
+    safeBlockVertical = (screenHeight! - _safeAreaVertical!) / 100;
   }
 }

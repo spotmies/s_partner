@@ -120,7 +120,7 @@ class Server {
     //     var responseJson = utf8.decode(response.bodyBytes);
     //     print(responseJson);
     //     return responseJson;
-    //     break;
+    //
     //   case 400:
     //     throw BadRequestException(
     //         utf8.decode(response.bodyBytes), response.request.url.toString());

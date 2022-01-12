@@ -1,9 +1,6 @@
 import 'dart:developer';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 // import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,27 +11,27 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Maps extends StatefulWidget {
-  final Map coordinates;
-  final bool isNavigate;
-  final Function onComplete;
+  final Map? coordinates;
+  final bool? isNavigate;
+  final Function? onComplete;
   Maps({this.coordinates, this.isNavigate = true, this.onComplete});
   @override
-  _MapsState createState() => _MapsState(coordinates);
+  _MapsState createState() => _MapsState();
 }
 
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
-  Map coordinates;
+  // Map coordinates;
   Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
 
-  _MapsState(this.coordinates);
+  // _MapsState(this.coordinates);
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
-  GoogleMapController googleMapController;
-  Position position;
-  double lat;
-  double long;
-  String addressline = "";
+  GoogleMapController? googleMapController;
+  Position? position;
+  double? lat;
+  double? long;
+  String? addressline = "";
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   void getmarker(double lat, double long) {
     MarkerId markerId = MarkerId(lat.toString() + long.toString());
@@ -42,26 +39,27 @@ class _MapsState extends State<Maps> {
         markerId: markerId,
         position: LatLng(lat, long),
         onTap: () async {
-          final coordinated = coordinates == null
-              ? Coordinates(position.latitude, position.longitude)
-              : Coordinates(coordinates['latitude'], coordinates['logitude']);
+          final coordinated = widget.coordinates!.isEmpty
+              ? Coordinates(position!.latitude, position!.longitude)
+              : Coordinates(widget.coordinates?['latitude'],
+                  widget.coordinates?['logitude']);
           var address =
               await Geocoder.local.findAddressesFromCoordinates(coordinated);
           var firstAddress = address.first.addressLine;
 
           setState(() {
-            lat = coordinates == null
-                ? position.latitude
-                : coordinates['latitude'];
-            long = coordinates == null
-                ? position.latitude
-                : coordinates['logitude'];
+            lat = widget.coordinates!.isEmpty
+                ? position?.latitude
+                : widget.coordinates?['latitude'];
+            long = widget.coordinates!.isEmpty
+                ? position?.latitude
+                : widget.coordinates?['logitude'];
             addressline = firstAddress;
           });
-          coordinates == null
-              ? bottomAddressSheet(position.latitude, position.longitude)
-              : bottomAddressSheet(
-                  coordinates['latitude'], coordinates['logitude']);
+          widget.coordinates!.isEmpty
+              ? bottomAddressSheet(position!.latitude, position!.longitude)
+              : bottomAddressSheet(widget.coordinates?['latitude'],
+                  widget.coordinates?['logitude']);
         },
         draggable: true,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
@@ -117,7 +115,7 @@ class _MapsState extends State<Maps> {
                 long = tapped.longitude;
                 addressline = firstAddress;
               });
-              bottomAddressSheet(lat, long);
+              bottomAddressSheet(lat!, long!);
             },
             // mapType: MapType.satellite,
 
@@ -132,11 +130,11 @@ class _MapsState extends State<Maps> {
               });
             },
             initialCameraPosition: CameraPosition(
-                target: coordinates != null
-                    ? navigateMaps(
-                        coordinates['latitude'], coordinates['logitude'])
+                target: widget.coordinates!.isEmpty
+                    ? navigateMaps(widget.coordinates?['latitude'],
+                        widget.coordinates?['logitude'])
                     //LatLng(coordinates['latitude'], coordinates['logitude'])
-                    : navigateMaps(position.latitude, position.longitude),
+                    : navigateMaps(position?.latitude, position?.longitude),
                 zoom: 17),
             markers: Set<Marker>.of(markers.values),
           ),
@@ -155,7 +153,7 @@ class _MapsState extends State<Maps> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey[300],
+                            color: Colors.grey[300]!,
                             blurRadius: 5,
                             spreadRadius: 3)
                       ],
@@ -166,11 +164,11 @@ class _MapsState extends State<Maps> {
                       TextWid(
                         text: 'Search',
                         size: _width * 0.05,
-                        color: Colors.grey[500],
+                        color: Colors.grey[500]!,
                       ),
                       Icon(
                         Icons.search,
-                        color: Colors.grey[500],
+                        color: Colors.grey[500]!,
                       ),
                     ],
                   ),
@@ -227,18 +225,18 @@ class _MapsState extends State<Maps> {
                         height: hight * 0.01,
                       ),
                       TextWid(
-                        text: addressline,
+                        text: addressline!,
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: Colors.grey[700]!,
                       ),
                       TextWid(
                         text: lat.toString() + ", " + long.toString(),
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: Colors.grey[700]!,
                       ),
                     ],
                   ),
@@ -249,9 +247,9 @@ class _MapsState extends State<Maps> {
                     ElevatedButtonWidget(
                       minWidth: width * 0.3,
                       height: hight * 0.05,
-                      bgColor: Colors.indigo[50],
+                      bgColor: Colors.indigo[50]!,
                       buttonName: 'Close',
-                      textColor: Colors.grey[900],
+                      textColor: Colors.grey[900]!,
                       borderRadius: 15.0,
                       textSize: width * 0.04,
                       leadingIcon: Icon(
@@ -259,16 +257,16 @@ class _MapsState extends State<Maps> {
                         size: width * 0.04,
                         color: Colors.grey[900],
                       ),
-                      borderSideColor: Colors.indigo[50],
+                      borderSideColor: Colors.indigo[50]!,
                       onClick: () {
                         Navigator.pop(context);
                       },
                     ),
-                    widget.isNavigate
+                    widget.isNavigate!
                         ? ElevatedButtonWidget(
                             minWidth: width * 0.5,
                             height: hight * 0.05,
-                            bgColor: Colors.indigo[900],
+                            bgColor: Colors.indigo[900]!,
                             onClick: () {
                               try {
                                 launch(
@@ -284,17 +282,17 @@ class _MapsState extends State<Maps> {
                               size: width * 0.03,
                               color: Colors.white,
                             ),
-                            borderSideColor: Colors.indigo[900],
+                            borderSideColor: Colors.indigo[900]!,
                           )
                         : ElevatedButtonWidget(
                             minWidth: width * 0.5,
                             height: hight * 0.05,
-                            bgColor: Colors.indigo[900],
+                            bgColor: Colors.indigo[900]!,
                             onClick: () {
                               if (widget.onComplete == null)
                                 return snackbar(
                                     context, "something went wrong");
-                              widget.onComplete(generatedCoordinates);
+                              widget.onComplete!(generatedCoordinates);
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
@@ -312,7 +310,7 @@ class _MapsState extends State<Maps> {
                               size: width * 0.03,
                               color: Colors.white,
                             ),
-                            borderSideColor: Colors.indigo[900],
+                            borderSideColor: Colors.indigo[900]!,
                           )
                   ],
                 )

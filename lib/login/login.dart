@@ -13,11 +13,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends StateMVC<LoginScreen> {
-  LoginPageController _loginPageController;
-  TimeProvider timerProvider;
-  _LoginScreenState() : super(LoginPageController()) {
-    this._loginPageController = controller;
-  }
+  LoginPageController? _loginPageController = LoginPageController();
+  TimeProvider? timerProvider;
+  // _LoginScreenState() : super(LoginPageController()) {
+  //   this._loginPageController = controller;
+  // }
 
   @override
   void initState() {
@@ -33,11 +33,11 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
     final _width = MediaQuery.of(context).size.width;
     return Consumer<TimeProvider>(builder: (context, data, child) {
       return Scaffold(
-          key: _loginPageController.scaffoldkey,
+          key: _loginPageController!.scaffoldkey,
           backgroundColor: Colors.white,
           body: ListView(children: [
             Form(
-              key: _loginPageController.formkey,
+              key: _loginPageController!.formkey,
               child: Container(
                 // height: _hight * 1.06,
                 width: _width * 1,
@@ -66,14 +66,14 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         text: 'SPOTMIES PARTNER',
                                         weight: FontWeight.w600,
                                         size: _width * 0.06,
-                                        color: Colors.indigo[900],
+                                        color: Colors.indigo[900]!,
                                         lSpace: 1.0,
                                       ),
                                       TextWid(
                                           text: 'BECOME A BOSE TO YOUR WORLD',
                                           weight: FontWeight.w600,
                                           size: _width * 0.019,
-                                          color: Colors.grey[900],
+                                          color: Colors.grey[900]!,
                                           lSpace: 4.0),
                                     ],
                                   )
@@ -96,7 +96,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                   text: 'LOGIN',
                                   weight: FontWeight.w600,
                                   size: _width * 0.06,
-                                  color: Colors.indigo[900],
+                                  color: Colors.indigo[900]!,
                                   lSpace: 1.0,
                                 ),
                                 SizedBox(
@@ -106,7 +106,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                   text: 'Please login to continue',
                                   weight: FontWeight.w600,
                                   size: _width * 0.035,
-                                  color: Colors.grey[500],
+                                  color: Colors.grey[500]!,
                                 ),
                               ],
                             ),
@@ -174,7 +174,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         ),
                                       ),
                                       validator: (value) {
-                                        if (value.length != 10) {
+                                        if (value!.length != 10) {
                                           return 'Please Enter Valid Mobile Number';
                                         }
                                         return null;
@@ -182,12 +182,13 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                       maxLength: 10,
                                       keyboardAppearance: Brightness.dark,
                                       buildCounter: (BuildContext context,
-                                              {int currentLength,
-                                              int maxLength,
-                                              bool isFocused}) =>
+                                              {int? currentLength,
+                                              int? maxLength,
+                                              bool? isFocused}) =>
                                           null,
                                       keyboardType: TextInputType.number,
-                                      controller: _loginPageController.loginnum,
+                                      controller:
+                                          _loginPageController!.loginnum,
                                     ),
                                   ),
                                 ),
@@ -214,8 +215,8 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                             onPressed: () {
                               // _loginPageController.dataToOTP();
                               if (data.loader) return;
-                              _loginPageController.dataToOTP(
-                                  context, timerProvider);
+                              _loginPageController!
+                                  .dataToOTP(context, timerProvider!);
                             })),
                   ],
                 ),

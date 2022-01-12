@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -22,15 +21,15 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends StateMVC<OTPScreen> {
-  LoginPageController _loginPageController;
-  _OTPScreenState() : super(LoginPageController()) {
-    this._loginPageController = controller;
-  }
+  LoginPageController? _loginPageController = LoginPageController();
+  // _OTPScreenState() : super(LoginPageController()) {
+  //   this._loginPageController = controller;
+  // }
 
-  TimeProvider timerProvider;
-  PartnerDetailsProvider partnerProvider;
-  Timer _timer;
-  int pinlength;
+  TimeProvider? timerProvider;
+  PartnerDetailsProvider? partnerProvider;
+  Timer? _timer;
+  int? pinlength;
 
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
@@ -43,8 +42,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   );
   startTimer() {
     _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
-      timerProvider.updateTime();
-      if (timerProvider.countDown < 2) timer?.cancel();
+      timerProvider!.updateTime();
+      if (timerProvider!.countDown < 2) timer.cancel();
     });
   }
 
@@ -61,15 +60,15 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer!.cancel();
     super.dispose();
   }
 
   void resendOtp() {
-    timerProvider.resetTimer();
+    timerProvider!.resetTimer();
     // _verifyPhone();
 
-    _loginPageController.verifyPhone(context, timerProvider, navigate: false);
+    _loginPageController!.verifyPhone(context, timerProvider!, navigate: false);
     startTimer();
   }
 
@@ -122,7 +121,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      key: _loginPageController.scaffoldkey,
+      key: _loginPageController!.scaffoldkey,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +157,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.075,
-                              color: Colors.indigo[900],
+                              color: Colors.indigo[900]!,
                             ),
                           ),
                           SizedBox(
@@ -171,7 +170,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.04,
-                              color: Colors.indigo[900],
+                              color: Colors.indigo[900]!,
                             ),
                           ),
                         ],
@@ -191,7 +190,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               align: TextAlign.center,
                               flow: TextOverflow.visible,
                               size: _width * 0.04,
-                              color: Colors.blueGrey[200],
+                              color: Colors.blueGrey[200]!,
                             ),
                           ),
                           Padding(
@@ -216,8 +215,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 data.setOtp(pin.toString());
                               },
                               onSubmit: (pin) {
-                                _loginPageController.loginUserWithOtp(pin,
-                                    context, partnerProvider, timerProvider);
+                                _loginPageController!.loginUserWithOtp(pin,
+                                    context, partnerProvider!, timerProvider!);
                                 setState(() {
                                   pinlength = pin.length;
                                 });
@@ -242,7 +241,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                   animationDuration: 99999,
                                   progressColor: Colors.indigo[50],
                                   percent: 1.0,
-                                  backgroundColor: Colors.indigo[900],
+                                  backgroundColor: Colors.indigo[900]!,
                                   center: Text(
                                     '${data.countDown}',
                                     style: TextStyle(
@@ -261,7 +260,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 bgColor: Colors.transparent,
                                 borderSideColor: Colors.transparent,
                                 textSize: _width * 0.037,
-                                textColor: Colors.indigo[900],
+                                textColor: Colors.indigo[900]!,
                               ),
                             ),
                     if (pinlength == 6)
@@ -270,8 +269,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                             top: data.countDown > 2 ? 0 : _hight * 0.25),
                         child: ElevatedButtonWidget(
                           onClick: () {
-                            _loginPageController.loginUserWithOtp(data.getOtp,
-                                context, partnerProvider, timerProvider);
+                            _loginPageController!.loginUserWithOtp(data.getOtp,
+                                context, partnerProvider!, timerProvider!);
                           },
                           height: _hight * 0.07,
                           textStyle: FontWeight.w600,
@@ -282,7 +281,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           textSize: _width * 0.045,
                           borderRadius: 10,
                           elevation: 1,
-                          textColor: Colors.blue[900],
+                          textColor: Colors.blue[900]!,
                           trailingIcon: Icon(
                             Icons.arrow_forward,
                             size: 20,

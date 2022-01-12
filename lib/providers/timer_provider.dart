@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class TimeProvider extends ChangeNotifier {
   int countDown = 99;
   bool loader = false;
-  String otp;
+  String? otp;
   String phNumber = "";
   String verifiedPhoneNumber = "";
   String loading = "";

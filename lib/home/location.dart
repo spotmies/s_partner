@@ -9,18 +9,19 @@ import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 
 class Location extends StatefulWidget {
+  const Location({Key? key}) : super(key: key);
   @override
   _LocationState createState() => _LocationState();
 }
 
 class _LocationState extends State<Location> {
-  double latitude;
-  double longitude;
-  String add1 = "";
-  String add2 = "";
-  String add3 = "";
-  Set<Marker> _marker = {};
-  BitmapDescriptor mapMarker;
+  double? latitude;
+  double? longitude;
+  String? add1;
+  String? add2;
+  String? add3;
+  Set<Marker>? _marker = {};
+  BitmapDescriptor? mapMarker;
 
   //function for location
 
@@ -51,12 +52,12 @@ class _LocationState extends State<Location> {
       ),
       body: GoogleMap(
           onMapCreated: onmapcreated,
-          markers: _marker,
+          markers: _marker!,
           myLocationButtonEnabled: true,
           // myLocationEnabled: true,
           mapType: MapType.terrain,
           initialCameraPosition: CameraPosition(
-            target: LatLng(latitude, longitude),
+            target: LatLng(latitude!, longitude!),
             zoom: 15,
           )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -65,7 +66,7 @@ class _LocationState extends State<Location> {
         onPressed: () {
           FirebaseFirestore.instance
               .collection('partner')
-              .doc(FirebaseAuth.instance.currentUser.uid)
+              .doc(FirebaseAuth.instance.currentUser!.uid)
               .update({
             'location.latitude': latitude,
             'location.longitude': longitude,
@@ -119,7 +120,7 @@ class _LocationState extends State<Location> {
 
   void onmapcreated(GoogleMapController controller) {
     setState(() {
-      _marker.add(Marker(
+      _marker!.add(Marker(
           // draggable: true,
           // onDragEnd: ((newPostion) {
           //   setState(() {
@@ -128,9 +129,9 @@ class _LocationState extends State<Location> {
           //     print('$latitude, $longitude');
           //   });
           // }),
-          icon: mapMarker,
+          icon: mapMarker!,
           markerId: MarkerId('id-1'),
-          position: LatLng(latitude, longitude),
+          position: LatLng(latitude!, longitude!),
           infoWindow: InfoWindow(
             title: add3,
             snippet: '$latitude,$longitude',

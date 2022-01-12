@@ -7,7 +7,7 @@ import 'constants.dart';
 
 class MediaPlayer extends StatefulWidget {
   final List mediaList;
-  const MediaPlayer({@required this.mediaList});
+  const MediaPlayer({required this.mediaList});
   // const MediaPlayer({ Key? key }) : super(key: key);
 
   @override
@@ -28,10 +28,10 @@ class _MediaPlayerState extends State<MediaPlayer> {
     switch (checkFileType(widget.mediaList[0])) {
       case "image":
         return ImageViewer(imageLink: widget.mediaList[0]);
-        break;
+
       case "video":
         return Video(videoLink: widget.mediaList[0]);
-        break;
+
       case "audio":
         // playAudio(context, hight, width, widget.mediaList[0]);
         return Scaffold(
@@ -41,11 +41,9 @@ class _MediaPlayerState extends State<MediaPlayer> {
                 child: FeatureButtonsView(message: widget.mediaList[0])),
           ),
         );
-        break;
 
       default:
         return Scaffold(body: Center(child: Text("something went wrong")));
-        break;
     }
   }
 

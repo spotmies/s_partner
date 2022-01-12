@@ -24,8 +24,8 @@ class AdharFront extends StatefulWidget {
 }
 
 class _AdharFrontState extends State<AdharFront> {
-  File _adharfront;
-  String imageLink = "";
+  File? _adharfront;
+  String? imageLink = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +62,7 @@ class _AdharFrontState extends State<AdharFront> {
                       size: 100,
                       color: Colors.grey,
                     )
-                  : Image.file(_adharfront),
+                  : Image.file(_adharfront!),
             ),
           ),
           Container(
@@ -121,7 +121,7 @@ class _AdharFrontState extends State<AdharFront> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      _adharfront = File(front.path);
+      _adharfront = File(front!.path);
     });
   }
 
@@ -130,12 +130,12 @@ class _AdharFrontState extends State<AdharFront> {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(_adharfront);
+        .putFile(_adharfront!);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink = imageUrl.toString();
     FirebaseFirestore.instance
         .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({'adhar.front': imageLink});
   }
 }
@@ -148,7 +148,7 @@ class AdharBack extends StatefulWidget {
 }
 
 class _AdharBackState extends State<AdharBack> {
-  File _adharback;
+  File? _adharback;
   String imageLink2 = "";
   @override
   Widget build(BuildContext context) {
@@ -186,7 +186,7 @@ class _AdharBackState extends State<AdharBack> {
                       size: 100,
                       color: Colors.grey,
                     )
-                  : Image.file(_adharback),
+                  : Image.file(_adharback!),
             ),
           ),
           Container(
@@ -245,7 +245,7 @@ class _AdharBackState extends State<AdharBack> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      _adharback = File(front.path);
+      _adharback = File(front!.path);
     });
   }
 
@@ -254,13 +254,13 @@ class _AdharBackState extends State<AdharBack> {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(_adharback);
+        .putFile(_adharback!);
     print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink2 = imageUrl.toString();
     FirebaseFirestore.instance
         .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({'adhar.back': imageLink2});
   }
 }
@@ -271,7 +271,7 @@ class ProfilePic extends StatefulWidget {
 }
 
 class _ProfilePicState extends State<ProfilePic> {
-  File _profilepic;
+  File? _profilepic;
   String imageLink3 = "";
   @override
   Widget build(BuildContext context) {
@@ -311,7 +311,7 @@ class _ProfilePicState extends State<ProfilePic> {
                               size: 65,
                             )
                           : Image.file(
-                              _profilepic,
+                              _profilepic!,
                               fit: BoxFit.cover,
                               width: MediaQuery.of(context).size.width,
                             ),
@@ -379,7 +379,7 @@ class _ProfilePicState extends State<ProfilePic> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      _profilepic = File(front.path);
+      _profilepic = File(front!.path);
     });
   }
 
@@ -388,14 +388,14 @@ class _ProfilePicState extends State<ProfilePic> {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(_profilepic);
+        .putFile(_profilepic!);
     print('aaa');
     print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink3 = imageUrl.toString();
     FirebaseFirestore.instance
         .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({'profilepic': imageLink3});
   }
 }

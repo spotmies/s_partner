@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -12,17 +11,15 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends StateMVC<SplashScreen> {
-  LoginPageController thisController;
+  LoginPageController thisController = LoginPageController();
 
-  _SplashScreenState() : super(LoginPageController()) {
-    this.thisController = controller;
-  }
-  PartnerDetailsProvider partnerProvider;
+  PartnerDetailsProvider? partnerProvider;
 
   @override
   void initState() {
@@ -30,9 +27,9 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     Timer(Duration(milliseconds: 100), () {
-      partnerProvider.getConstants(alwaysHit: false);
-      partnerProvider.fetchServiceList(alwaysHit: false);
-      thisController.splashScreenNavigation(context,partnerProvider);
+      partnerProvider?.getConstants(alwaysHit: false);
+      partnerProvider?.fetchServiceList(alwaysHit: false);
+      thisController.splashScreenNavigation(context, partnerProvider!);
     });
   }
 
@@ -49,7 +46,6 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             
               Container(
                   height: _hight * 0.23,
                   child: Lottie.asset('assets/spotmies_logo.json')),
@@ -61,7 +57,7 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                   TextWid(
                       text: 'SPOTMIES PARTNER',
                       size: _width * 0.06,
-                      color: Colors.indigo[900],
+                      color: Colors.indigo[900]!,
                       flow: TextOverflow.visible,
                       lSpace: 3.0,
                       weight: FontWeight.w600),
@@ -69,9 +65,8 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                       text: 'BECOME A BOSE TO YOUR WORLD',
                       weight: FontWeight.w600,
                       size: _width * 0.02,
-                      color: Colors.grey[900],
+                      color: Colors.grey[900]!,
                       lSpace: 5.0),
-                 
                 ],
               ),
             ],

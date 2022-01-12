@@ -28,7 +28,7 @@ class ChatController extends ControllerMVC {
   double val = 0;
 
   final picker = ImagePicker();
-  VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
 
   // ChatProvider chatProvider;
   ScrollController scrollController = ScrollController();
@@ -83,7 +83,7 @@ class ChatController extends ControllerMVC {
     };
     Map<String, dynamic> target = {
       'uId': user['uId'],
-      'pId': FirebaseAuth.instance.currentUser.uid,
+      'pId': FirebaseAuth.instance.currentUser!.uid,
       'msgId': msgId,
       'ordId': targetChat['ordId'],
       'deviceToken': [targetChat['uDetails']['userDeviceToken']],
@@ -119,7 +119,6 @@ class ChatController extends ControllerMVC {
     switch (type) {
       case 'text':
         return 'text';
-        break;
       case 'img':
         return 'img';
       case 'video':
@@ -127,7 +126,6 @@ class ChatController extends ControllerMVC {
       case 'audio':
         return 'audio';
 
-        break;
       default:
         return 'text';
     }
@@ -181,16 +179,16 @@ class ChatController extends ControllerMVC {
       imageQuality: 10,
     );
     setState(() {
-      chatimages.add(File(pickedFile?.path));
+      chatimages.add(File(pickedFile!.path));
     });
-    if (pickedFile.path == null) retrieveLostData();
+    if (pickedFile!.path.isEmpty) retrieveLostData();
     await uploadimage(sendCallBack, msgId);
   }
 
   pickVideo(sendCallBack, String msgId) async {
-    XFile pickedFile = await picker.pickVideo(
+    XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
-    chatVideo.add(File(pickedFile.path));
+    chatVideo.add(File(pickedFile!.path));
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
     uploadVideo(sendCallBack, msgId);
   }
@@ -202,7 +200,7 @@ class ChatController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        chatimages.add(File(response.file.path));
+        chatimages.add(File(response.file!.path));
       });
     } else {
       print(response.file);

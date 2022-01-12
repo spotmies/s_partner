@@ -33,12 +33,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends StateMVC<EditProfile> {
-  EditProfileController _editProfileController;
+  EditProfileController? _editProfileController = EditProfileController();
 
-  _EditProfileState() : super(EditProfileController()) {
-    this._editProfileController = controller;
-  }
-  PartnerDetailsProvider editProvider;
+  PartnerDetailsProvider? editProvider;
   void changeImages(whichImage, controller) async {
     print(" profile ${controller.profilePic}");
     final pickedFile = await photoPicker();
@@ -63,9 +60,9 @@ class _EditProfileState extends StateMVC<EditProfile> {
 
   void initState() {
     editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
-    _editProfileController.fillAllForms(widget.partner);
-    log("date ${_editProfileController.partner} ");
-    log("other ${_editProfileController.otherDocs[0]} ");
+    _editProfileController!.fillAllForms(widget.partner);
+    log("date ${_editProfileController!.partner} ");
+    log("other ${_editProfileController!.otherDocs![0]} ");
 
     super.initState();
   }
@@ -92,8 +89,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                     child: Container(
                       padding: EdgeInsets.only(top: 20),
                       child: ProfilePic(
-                        name: _editProfileController.partner['name'],
-                        profile: _editProfileController.profilePic,
+                        name: _editProfileController!.partner!['name'],
+                        profile: _editProfileController!.profilePic,
                         size: width * 0.15,
                         onClick: () {
                           changeImages("profile", _editProfileController);
@@ -102,7 +99,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                     ),
                   ),
                   Form(
-                      key: _editProfileController.editProfileForm,
+                      key: _editProfileController!.editProfileForm,
                       child: Column(
                         children: [
                           nameField(width),
@@ -112,10 +109,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             child: TextFieldWidget(
                               label: "Email",
                               controller:
-                                  _editProfileController.emailController,
+                                  _editProfileController!.emailController,
                               hint: 'Email',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
+                              focusBorderColor: Colors.indigo[900]!,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -124,7 +121,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Email address',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
+                              postIconColor: Colors.indigo[900]!,
                             ),
                           ),
                           Container(
@@ -141,10 +138,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                     RegExp(r'[0-9]')),
                               ],
                               controller:
-                                  _editProfileController.mobileController,
+                                  _editProfileController!.mobileController,
                               hint: 'ex : 9876543210',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
+                              focusBorderColor: Colors.indigo[900]!,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -152,7 +149,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Phone number',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
+                              postIconColor: Colors.indigo[900]!,
                             ),
                           ),
                           Container(
@@ -163,10 +160,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               type: "address",
                               maxLength: 200,
                               controller:
-                                  _editProfileController.tempAddressControl,
+                                  _editProfileController!.tempAddressControl,
                               hint: 'ex: Dr no,street,colony, city',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
+                              focusBorderColor: Colors.indigo[900]!,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -174,7 +171,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Temporary address',
                               maxLines: 4,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
+                              postIconColor: Colors.indigo[900]!,
                             ),
                           ),
                           Container(
@@ -186,10 +183,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               label: "perminent address",
                               maxLength: 200,
                               controller:
-                                  _editProfileController.perAddressControl,
+                                  _editProfileController!.perAddressControl,
                               hint: 'ex: Dr no,street,colony, city',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
+                              focusBorderColor: Colors.indigo[900]!,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               type: "address",
@@ -198,14 +195,14 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid perminent address',
                               maxLines: 4,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
+                              postIconColor: Colors.indigo[900]!,
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.only(bottom: 15),
                             child: InkWell(
                               onTap: () async {
-                                await _editProfileController.pickDate(context);
+                                await _editProfileController!.pickDate(context);
                               },
                               child: Container(
                                   width: width * 0.9,
@@ -213,7 +210,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             blurRadius: 3,
                                             spreadRadius: 1)
                                       ],
@@ -225,7 +222,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                         children: [
                                           TextWid(
                                             text: 'Date of Birth:',
-                                            color: Colors.grey[900],
+                                            color: Colors.grey[900]!,
                                             size: width * 0.05,
                                             weight: FontWeight.w600,
                                           ),
@@ -241,10 +238,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                               text: 'Date:  ' +
                                                   DateFormat('dd MMM yyyy').format(
                                                       (DateTime.fromMillisecondsSinceEpoch(
-                                                          (_editProfileController
-                                                              .pickedDate
+                                                          (_editProfileController!
+                                                              .pickedDate!
                                                               .millisecondsSinceEpoch)))),
-                                              color: Colors.grey[900],
+                                              color: Colors.grey[900]!,
                                               size: width * 0.04,
                                               weight: FontWeight.w500,
                                             ),
@@ -283,31 +280,31 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             padding: EdgeInsets.only(bottom: 15),
                             // padding: EdgeInsets.all(15),
                             child: TextFieldWidget(
-                              label: _editProfileController.dropDownValue == 2
+                              label: _editProfileController!.dropDownValue == 2
                                   ? "College Name"
                                   : "Business Name",
                               maxLength: 60,
-                              controller:
-                                  _editProfileController.dropDownValue == 2
-                                      ? _editProfileController.collgeNameControl
-                                      : _editProfileController
-                                          .businessNameControl,
-                              hint: _editProfileController.dropDownValue == 2
+                              controller: _editProfileController!
+                                          .dropDownValue ==
+                                      2
+                                  ? _editProfileController!.collgeNameControl
+                                  : _editProfileController!.businessNameControl,
+                              hint: _editProfileController!.dropDownValue == 2
                                   ? 'Enter your collge name here'
                                   : 'ex : Interior service pvt',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
+                              focusBorderColor: Colors.indigo[900]!,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
                               focusErrorRadius: 15,
                               validateMsg:
-                                  _editProfileController.dropDownValue == 2
+                                  _editProfileController!.dropDownValue == 2
                                       ? 'Enter Valid College Name'
                                       : 'Enter valid Business name',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
+                              postIconColor: Colors.indigo[900]!,
                               isRequired: false,
                             ),
                           ),
@@ -325,7 +322,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                     // padding: EdgeInsets.all(15),
                                     child: TextFieldWidget(
                                       label: "Experience",
-                                      controller: _editProfileController
+                                      controller: _editProfileController!
                                           .experienceControl,
                                       maxLength: 2,
                                       formatter: <TextInputFormatter>[
@@ -334,7 +331,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       ],
                                       hint: 'ex : 1 year, 2 year, etc...,',
                                       enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900],
+                                      focusBorderColor: Colors.indigo[900]!,
                                       enableBorderRadius: 15,
                                       focusBorderRadius: 15,
                                       errorBorderRadius: 15,
@@ -342,7 +339,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       validateMsg: 'Enter Valid experience',
                                       maxLines: 1,
                                       postIcon: Icon(Icons.change_circle),
-                                      postIconColor: Colors.indigo[900],
+                                      postIconColor: Colors.indigo[900]!,
                                     ),
                                   ),
                                 ),
@@ -353,30 +350,31 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                     child: DropdownButton(
                                       underline: SizedBox(),
                                       value:
-                                          _editProfileController.dropDownValue,
+                                          _editProfileController!.dropDownValue,
                                       icon: Icon(
                                         Icons.arrow_drop_down_circle,
                                         size: width * 0.06,
                                         color: Colors.indigo[900],
                                       ),
-                                      items: _editProfileController.accountType
+                                      items: _editProfileController!
+                                          .accountType!
                                           .map((type) {
                                         return DropdownMenuItem(
-                                            value: _editProfileController
-                                                .accountType
+                                            value: _editProfileController!
+                                                .accountType!
                                                 .indexOf(type),
                                             child: TextWid(
                                               text: type,
-                                              color: Colors.grey[900],
+                                              color: Colors.grey[900]!,
                                               size: width * 0.04,
                                               weight: FontWeight.w500,
                                             ));
                                       }).toList(),
                                       onChanged: (newVal) {
                                         if (newVal == 0) return;
-                                        _editProfileController.dropDownValue =
-                                            newVal;
-                                        _editProfileController.refresh();
+                                        _editProfileController!.dropDownValue =
+                                            newVal as int?;
+                                        _editProfileController!.refresh();
                                       },
                                     ),
                                   ),
@@ -400,7 +398,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                 Container(
                                   child: DropdownButton(
                                     underline: SizedBox(),
-                                    value: _editProfileController.job,
+                                    value: _editProfileController!.job,
                                     icon: Icon(
                                       Icons.arrow_drop_down_circle,
                                       size: width * 0.06,
@@ -410,7 +408,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       return DropdownMenuItem(
                                         child: TextWid(
                                           text: location['nameOfService'],
-                                          color: Colors.grey[900],
+                                          color: Colors.grey[900]!,
                                           size: width * 0.04,
                                           weight: FontWeight.w500,
                                         ),
@@ -418,9 +416,10 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       );
                                     }).toList(),
                                     onChanged: (newVal) {
-                                      _editProfileController.job = newVal;
+                                      _editProfileController!.job =
+                                          newVal as int?;
 
-                                      _editProfileController.refresh();
+                                      _editProfileController!.refresh();
                                     },
                                   ),
                                 ),
@@ -433,7 +432,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             constraints: boxConstraints,
                             child: ProfilePic(
                               name: "F",
-                              profile: _editProfileController.adharF,
+                              profile: _editProfileController!.adharF,
                               isProfile: false,
                               size: width * 0.15,
                               onClick: () {
@@ -453,7 +452,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             constraints: boxConstraints,
                             child: ProfilePic(
                               name: "B",
-                              profile: _editProfileController.adharB,
+                              profile: _editProfileController!.adharB,
                               isProfile: false,
                               size: width * 0.15,
                               onClick: () {
@@ -497,17 +496,18 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             padding: EdgeInsets.symmetric(vertical: 30),
                             child: ElevatedButtonWidget(
                               leadingIcon: Icon(Icons.save_rounded),
-                              bgColor: Colors.indigo[900],
+                              bgColor: Colors.indigo[900]!,
                               minWidth: width,
                               // height: hight * 0.06,
-                              textColor: Colors.grey[50],
+                              textColor: Colors.grey[50]!,
                               buttonName: 'Save',
                               textSize: width * 0.05,
                               textStyle: FontWeight.w600,
                               borderRadius: 5.0,
-                              borderSideColor: Colors.indigo[50],
+                              allRadius: true,
+                              borderSideColor: Colors.indigo[50]!,
                               onClick: () {
-                                _editProfileController.saveChanges(context);
+                                _editProfileController!.saveChanges(context);
                               },
                             ),
                           ),
@@ -532,7 +532,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
       width: width * 0.9,
       padding: EdgeInsets.only(bottom: 15, top: 15),
       child: TextFieldWidget(
-        controller: _editProfileController.nameController,
+        controller: _editProfileController!.nameController,
         hint: 'Name',
         label: "Name",
         maxLength: 20,
@@ -540,7 +540,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
           FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
         ],
         enableBorderColor: Colors.grey,
-        focusBorderColor: Colors.indigo[900],
+        focusBorderColor: Colors.indigo[900]!,
         enableBorderRadius: 15,
         focusBorderRadius: 15,
         errorBorderRadius: 15,
@@ -548,7 +548,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
         validateMsg: 'Enter Valid Name',
         maxLines: 1,
         postIcon: Icon(Icons.change_circle),
-        postIconColor: Colors.indigo[900],
+        postIconColor: Colors.indigo[900]!,
       ),
     );
   }
@@ -559,7 +559,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
     final width = MediaQuery.of(context).size.width;
     final hight = MediaQuery.of(context).size.height;
     return Scaffold(
-      key: _editProfileController.scaffoldkey,
+      key: _editProfileController!.scaffoldkey,
       appBar: basicAppbar(context,
           title: "Edit profile details",
           leadingIcon: Icon(

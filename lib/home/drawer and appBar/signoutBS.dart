@@ -37,7 +37,7 @@ Future signOut(BuildContext context, double hight, double width) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: Colors.indigo[900]!,
                     minWidth: width,
                     height: hight * 0.06,
                     textColor: Colors.white,
@@ -45,7 +45,7 @@ Future signOut(BuildContext context, double hight, double width) {
                     textSize: width * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 5.0,
-                    borderSideColor: Colors.indigo[900],
+                    borderSideColor: Colors.indigo[900]!,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
                       await FirebaseAuth.instance.signOut().then((action) {
@@ -61,15 +61,15 @@ Future signOut(BuildContext context, double hight, double width) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                  bgColor: Colors.indigo[50],
+                  bgColor: Colors.indigo[50]!,
                   minWidth: width,
                   height: hight * 0.06,
-                  textColor: Colors.grey[900],
+                  textColor: Colors.grey[900]!,
                   buttonName: 'Close',
                   textSize: width * 0.05,
                   textStyle: FontWeight.w600,
                   borderRadius: 5.0,
-                  borderSideColor: Colors.indigo[50],
+                  borderSideColor: Colors.indigo[50]!,
                   onClick: () {
                     Navigator.pop(context);
                   },

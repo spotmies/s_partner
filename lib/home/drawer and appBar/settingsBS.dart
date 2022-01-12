@@ -166,15 +166,15 @@ void settings(BuildContext context, double hight, double width) async {
               Container(
                       padding: EdgeInsets.all(5),
                       child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[50],
+                        bgColor: Colors.indigo[50]!,
                         minWidth: width,
                         height: hight * 0.06,
-                        textColor: Colors.grey[900],
+                        textColor: Colors.grey[900]!,
                         buttonName: 'Close',
                         textSize: width * 0.05,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[50],
+                        borderSideColor: Colors.indigo[50]!,
                         onClick: () {
                           Navigator.pop(context);
                         },

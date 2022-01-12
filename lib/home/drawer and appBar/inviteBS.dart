@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share/share.dart';
@@ -80,7 +79,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                     Container(
                       padding: EdgeInsets.all(5),
                       child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[900],
+                        bgColor: Colors.indigo[900]!,
                         minWidth: width,
                         height: hight * 0.06,
                         textColor: Colors.white,
@@ -88,7 +87,8 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         textSize: width * 0.05,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[900],
+                        allRadius: true,
+                        borderSideColor: Colors.indigo[900]!,
                         // trailingIcon: Icon(Icons.share),
                         onClick: () async {
                           String referal = await referalCode(pr);
@@ -101,15 +101,16 @@ Future invites(BuildContext context, double hight, double width, pr) {
                     Container(
                       padding: EdgeInsets.all(5),
                       child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[50],
+                        bgColor: Colors.indigo[50]!,
                         minWidth: width,
                         height: hight * 0.06,
-                        textColor: Colors.grey[900],
+                        textColor: Colors.grey[900]!,
                         buttonName: 'Close',
                         textSize: width * 0.05,
+                        allRadius: true,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[50],
+                        borderSideColor: Colors.indigo[50]!,
                         onClick: () {
                           Navigator.pop(context);
                         },

@@ -1,6 +1,5 @@
 
 
-import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -14,13 +13,13 @@ class Geocoder {
   static final Geocoding local = LocalGeocoding();
   static Geocoding google(
     String apiKey, {
-    String language,
-    Map<String, Object> headers,
+    String? language,
+    Map<String, Object>? headers,
     bool preserveHeaderCase = false,
   }) =>
       GoogleGeocoding(apiKey,
-          language: language,
-          headers: headers,
+          language: language!,
+          headers: headers!,
           preserveHeaderCase: preserveHeaderCase);
 }
 
@@ -54,43 +53,43 @@ class Coordinates {
 @immutable
 class Address {
   /// The geographic coordinates.
-  final Coordinates coordinates;
+  final Coordinates? coordinates;
 
   /// The formatted address with all lines.
-  final String addressLine;
+  final String? addressLine;
 
   /// The localized country name of the address.
-  final String countryName;
+  final String? countryName;
 
   /// The country code of the address.
-  final String countryCode;
+  final String? countryCode;
 
   /// The feature name of the address.
-  final String featureName;
+  final String? featureName;
 
   /// The postal code.
-  final String postalCode;
+  final String? postalCode;
 
   /// The administrative area name of the address
-  final String adminArea;
+  final String? adminArea;
 
   /// The administrative area code of the address
-  final String adminAreaCode;
+  final String? adminAreaCode;
 
   /// The sub-administrative area name of the address
-  final String subAdminArea;
+  final String? subAdminArea;
 
   /// The locality of the address
-  final String locality;
+  final String? locality;
 
   /// The sub-locality of the address
-  final String subLocality;
+  final String? subLocality;
 
   /// The thoroughfare name of the address
-  final String thoroughfare;
+  final String? thoroughfare;
 
   /// The sub-thoroughfare name of the address
-  final String subThoroughfare;
+  final String? subThoroughfare;
 
   Address({
     this.coordinates,
@@ -161,8 +160,8 @@ class GoogleGeocoding implements Geocoding {
   static const _host = 'https://maps.google.com/maps/api/geocode/json';
 
   final String apiKey;
-  final String language;
-  final Map<String, Object> headers;
+  final String? language;
+  final Map<String, Object>? headers;
   final bool preserveHeaderCase;
 
   final HttpClient _httpClient;
@@ -177,7 +176,7 @@ class GoogleGeocoding implements Geocoding {
   Future<List<Address>> findAddressesFromCoordinates(
       Coordinates coordinates) async {
     final url =
-        '$_host?key=$apiKey${language != null ? '&language=' + language : ''}&latlng=${coordinates.latitude},${coordinates.longitude}';
+        '$_host?key=$apiKey${language != null ? '&language=' + language! : ''}&latlng=${coordinates.latitude},${coordinates.longitude}';
     return await _send(url) ?? const <Address>[];
   }
 
@@ -187,12 +186,12 @@ class GoogleGeocoding implements Geocoding {
     return await _send(url) ?? const <Address>[];
   }
 
-  Future<List<Address>> _send(String url) async {
+  Future<List<Address>?> _send(String url) async {
     //print("Sending $url...");
     final uri = Uri.parse(url);
     final request = await this._httpClient.getUrl(uri);
     if (headers != null) {
-      headers.forEach((key, value) {
+      headers!.forEach((key, value) {
         request.headers.add(key, value, preserveHeaderCase: preserveHeaderCase);
       });
     }
@@ -211,7 +210,7 @@ class GoogleGeocoding implements Geocoding {
         .toList();
   }
 
-  Map _convertCoordinates(dynamic geometry) {
+  Map? _convertCoordinates(dynamic geometry) {
     if (geometry == null) return null;
 
     var location = geometry["location"];

@@ -26,7 +26,7 @@ lineGraphBig(hight, width) {
             getTitles: (value) {
               return '${value.toInt() + 0}';
             },
-            getTextStyles: (value) {
+            getTextStyles: (BuildContext context ,double) {
               return GoogleFonts.josefinSans(
                 color: Colors.grey[900],
                 fontSize: width * 0.035,
@@ -37,7 +37,7 @@ lineGraphBig(hight, width) {
             margin: 8.0),
         bottomTitles: SideTitles(
             showTitles: true,
-            getTextStyles: (value) {
+            getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
     color: Colors.grey[900],
     fontSize: width * 0.035,
@@ -104,7 +104,7 @@ lineGraphBig(hight, width) {
           isCurved: true,
           barWidth: 3,
           colors: [
-            Colors.blue[900],
+            Colors.blue[900]!,
           ],
           dotData: FlDotData(
             show: false,

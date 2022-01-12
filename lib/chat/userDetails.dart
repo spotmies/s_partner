@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -12,12 +11,12 @@ import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class UserDetails extends StatefulWidget {
-  final Map userDetails;
-  final bool isProfileRevealed;
-  final Function onTapPhone;
-  final ChatController ccontroller;
+  final Map? userDetails;
+  final bool? isProfileRevealed;
+  final Function? onTapPhone;
+  final ChatController? ccontroller;
   UserDetails(
-      {@required this.userDetails,
+      {required this.userDetails,
       this.isProfileRevealed = false,
       this.onTapPhone,
       this.ccontroller});
@@ -27,7 +26,7 @@ class UserDetails extends StatefulWidget {
 
 class _UserDetailsState extends State<UserDetails> {
   bool isSwitch = false;
-  ChatProvider chatProvider;
+  ChatProvider? chatProvider;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -46,7 +45,7 @@ class _UserDetailsState extends State<UserDetails> {
         //   title: Text('Customer Details'),
         //   backgroundColor: Colors.blue[900],
         // ),
-        body: widget.userDetails['userState'] == 'active'
+        body: widget.userDetails!['userState'] == 'active'
             ? CustomScrollView(
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
@@ -78,9 +77,9 @@ class _UserDetailsState extends State<UserDetails> {
                       // titlePadding: EdgeInsets.only(left: _width*0.15,bottom: _width*0.04),
                       title: TextWid(
                         text: toBeginningOfSentenceCase(
-                            widget.userDetails['name']),
+                            widget.userDetails!['name']).toString(),
                         size: _width * 0.06,
-                        color: Colors.grey[900],
+                        color: Colors.grey[900]!,
                         weight: FontWeight.w600,
                       ),
                       centerTitle: false,
@@ -90,25 +89,25 @@ class _UserDetailsState extends State<UserDetails> {
                         child:
                             //  widget.userDetails['pic'] == null
                             //     ?
-                            !Uri.parse(widget.userDetails['pic'].runtimeType ==
+                            !Uri.parse(widget.userDetails!['pic'].runtimeType ==
                                             String
-                                        ? widget.userDetails['pic']
+                                        ? widget.userDetails!['pic']
                                         : "s")
                                     .isAbsolute
                                 ? Center(
                                     child: ProfilePic(
-                                      name: widget.userDetails['name'],
-                                      profile: widget.userDetails['pic'],
+                                      name: widget.userDetails!['name'],
+                                      profile: widget.userDetails!['pic'],
                                       status: false,
-                                      bgColor: Colors.grey[100],
-                                      textColor: Colors.grey[900],
+                                      bgColor: Colors.grey[100]!,
+                                      textColor: Colors.grey[900]!,
                                       textSize: _width * 0.25,
                                       size: _width * 0.25,
                                       badge: false,
                                     ),
                                   )
                                 : Image.network(
-                                    widget.userDetails['pic'],
+                                    widget.userDetails!['pic'],
                                     fit: BoxFit.cover,
                                   ),
                       ),
@@ -145,7 +144,7 @@ class _UserDetailsState extends State<UserDetails> {
                                   child: TextWid(
                                     text: 'Spotmies Using From',
                                     size: _width * 0.05,
-                                    color: Colors.grey[700],
+                                    color: Colors.grey[700]!,
                                     weight: FontWeight.w600,
                                   )),
                               Container(
@@ -155,9 +154,9 @@ class _UserDetailsState extends State<UserDetails> {
                                     top: _width * 0.01,
                                   ),
                                   child: TextWid(
-                                    text: getDate(widget.userDetails['join']),
+                                    text: getDate(widget.userDetails!['join']),
                                     size: _width * 0.035,
-                                    color: Colors.grey[700],
+                                    color: Colors.grey[700]!,
                                     weight: FontWeight.w600,
                                   )),
                               SizedBox(
@@ -178,7 +177,7 @@ class _UserDetailsState extends State<UserDetails> {
                                     TextWid(
                                       text: 'Contact',
                                       size: _width * 0.05,
-                                      color: Colors.grey[700],
+                                      color: Colors.grey[700]!,
                                       weight: FontWeight.w600,
                                       align: TextAlign.start,
                                     ),
@@ -201,18 +200,18 @@ class _UserDetailsState extends State<UserDetails> {
                                                     width: double.infinity,
                                                     child: TextWid(
                                                       text: widget
-                                                              .isProfileRevealed
-                                                          ? widget.userDetails[
+                                                              .isProfileRevealed!
+                                                          ? widget.userDetails![
                                                                   'phNum']
                                                               .toString()
-                                                          : widget.userDetails[
+                                                          : widget.userDetails![
                                                                       'phNum']
                                                                   .toString()
                                                                   .substring(
                                                                       0, 5) +
                                                               "*****",
                                                       size: _width * 0.04,
-                                                      color: Colors.grey[800],
+                                                      color: Colors.grey[800]!,
                                                       weight: FontWeight.w600,
                                                     )),
                                               ],
@@ -241,7 +240,7 @@ class _UserDetailsState extends State<UserDetails> {
                                                       // launch("tel://$num");
                                                       if (widget.onTapPhone !=
                                                           null) {
-                                                        widget.onTapPhone();
+                                                        widget.onTapPhone!();
                                                       } else {
                                                         snackbar(context,
                                                             "something went wrong");
@@ -266,7 +265,7 @@ class _UserDetailsState extends State<UserDetails> {
                             "Delete Chat",
                             Colors.redAccent,
                             Icons.delete_sweep_rounded, onTap: () {
-                          widget.ccontroller.deleteChat(context, chatProvider);
+                          widget.ccontroller!.deleteChat(context, chatProvider!);
                         }),
                         /* ------------------------- reveal my profile code ------------------------- */
                         // Container(
@@ -422,7 +421,7 @@ class _UserDetailsState extends State<UserDetails> {
 
   Column actionButton(
       double width, double height, String text, Color color, IconData icon,
-      {VoidCallback onTap}) {
+      {VoidCallback? onTap}) {
     Divider divider = Divider(
       thickness: 10,
       color: Colors.grey[200],

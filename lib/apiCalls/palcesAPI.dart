@@ -17,8 +17,8 @@ class PlacesApi {
       log(geoLocations.toString());
 
       return geoLocations.map((json) => Places.fromJson(json)).where((geo) {
-        final subLocality = geo.subLocality.toLowerCase();
-        final locality = geo.addressLine.toLowerCase();
+        final subLocality = geo.subLocality!.toLowerCase();
+        final locality = geo.addressLine!.toLowerCase();
         final coord = geo.coordinates.toString();
         final searchLower = query.toLowerCase();
 

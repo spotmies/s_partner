@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -13,19 +12,19 @@ import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
 class PostList extends StatefulWidget {
-  final bool orderCompleted;
+  final bool? orderCompleted;
 
-  PostList({@required this.orderCompleted});
+  PostList({required this.orderCompleted});
   @override
   _PostListState createState() => _PostListState();
 }
 
 class _PostListState extends StateMVC<PostList> {
-  OrdersController _ordersController;
-  PartnerDetailsProvider partnerProvider;
-  _PostListState() : super(OrdersController()) {
-    this._ordersController = controller;
-  }
+  OrdersController? _ordersController = OrdersController();
+  PartnerDetailsProvider? partnerProvider;
+  // _PostListState() : super(OrdersController()) {
+  //   this._ordersController = controller;
+  // }
   List filter = ["All", "Today", "Tommorrow", "This week", "This month"];
   @override
   void initState() {
@@ -41,7 +40,7 @@ class _PostListState extends StateMVC<PostList> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        key: _ordersController.scaffoldkey,
+        key: _ordersController?.scaffoldkey,
         body: Column(
           children: [
             // orderFilters(),
@@ -68,7 +67,7 @@ class _PostListState extends StateMVC<PostList> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        await _ordersController.getOrderFromDB(context);
+                        await _ordersController!.getOrderFromDB(context);
                       },
                       child: ListView.builder(
                           itemCount: o.length,
@@ -133,7 +132,7 @@ class _PostListState extends StateMVC<PostList> {
                                                               .spaceBetween,
                                                       children: [
                                                         TextWid(
-                                                          text: partnerProvider
+                                                          text: partnerProvider!
                                                               .getServiceNameById(
                                                                   o[index]
                                                                       ['job']),
@@ -180,15 +179,16 @@ class _PostListState extends StateMVC<PostList> {
                                                                     0.01,
                                                               ),
                                                               TextWid(
-                                                                  text: _ordersController.orderStateText(o[
+                                                                  text: _ordersController?.orderStateText(o[
                                                                               index][
                                                                           'isOrderCompletedByPartner']
                                                                       ? 9
-                                                                      : o[index][
+                                                                      : o[index]
+                                                                          [
                                                                           'orderState']),
                                                                   color: Colors
                                                                           .indigo[
-                                                                      900],
+                                                                      900]!,
                                                                   weight:
                                                                       FontWeight
                                                                           .w600,
@@ -205,7 +205,7 @@ class _PostListState extends StateMVC<PostList> {
                                                           ' - ' +
                                                           getTime(o[index]
                                                               ['schedule']),
-                                                      color: Colors.grey[600],
+                                                      color: Colors.grey[600]!,
                                                       size: _width * 0.03,
                                                       weight: FontWeight.w600,
                                                     ),
@@ -283,8 +283,10 @@ class _PostListState extends StateMVC<PostList> {
                                                           ),
                                                           TextWid(
                                                               text: toBeginningOfSentenceCase(o[
-                                                                      index]
-                                                                  ['problem']),
+                                                                          index]
+                                                                      [
+                                                                      'problem'])
+                                                                  .toString(),
                                                               flow: TextOverflow
                                                                   .ellipsis,
                                                               size: _width *
@@ -336,9 +338,9 @@ class _PostListState extends StateMVC<PostList> {
                                               ElevatedButtonWidget(
                                                 minWidth: _width * 0.498,
                                                 height: _hight * 0.06,
-                                                bgColor: Colors.grey[50],
+                                                bgColor: Colors.grey[50]!,
                                                 buttonName: 'Need Help ?',
-                                                textColor: Colors.grey[900],
+                                                textColor: Colors.grey[900]!,
                                                 borderRadius: 0.0,
                                                 textSize: _width * 0.04,
                                                 leadingIcon: Icon(
@@ -347,14 +349,14 @@ class _PostListState extends StateMVC<PostList> {
                                                   color: Colors.grey[900],
                                                 ),
                                                 borderSideColor:
-                                                    Colors.grey[50],
+                                                    Colors.grey[50]!,
                                               ),
                                               ElevatedButtonWidget(
                                                 minWidth: _width * 0.498,
                                                 height: _hight * 0.06,
-                                                bgColor: Colors.grey[50],
+                                                bgColor: Colors.grey[50]!,
                                                 buttonName: 'View Menu',
-                                                textColor: Colors.grey[900],
+                                                textColor: Colors.grey[900]!,
                                                 borderRadius: 0.0,
                                                 textSize: _width * 0.04,
                                                 trailingIcon: Icon(
@@ -363,7 +365,7 @@ class _PostListState extends StateMVC<PostList> {
                                                   color: Colors.grey[900],
                                                 ),
                                                 borderSideColor:
-                                                    Colors.grey[50],
+                                                    Colors.grey[50]!,
                                                 onClick: () {
                                                   // postmenu(orderid, _hight, _width);
                                                 },

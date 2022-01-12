@@ -1,9 +1,6 @@
 import 'dart:developer';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
@@ -20,12 +17,12 @@ class FAQ extends StatefulWidget {
   _FAQState createState() => _FAQState();
 }
 
-PartnerDetailsProvider partnerDetailsProvider;
+PartnerDetailsProvider? partnerDetailsProvider;
 GlobalKey exKey = GlobalKey();
 
 apiHit() async {
   dynamic faq = await faqData();
-  if (faq != null) partnerDetailsProvider.setFAQ(faq);
+  if (faq != null) partnerDetailsProvider!.setFAQ(faq);
 }
 
 class _FAQState extends State<FAQ> {
@@ -134,7 +131,7 @@ class _FAQState extends State<FAQ> {
                                           size: width(context) * 0.05,
                                           weight: FontWeight.w500,
                                           flow: TextOverflow.visible,
-                                          color: Colors.indigo[900],
+                                          color: Colors.indigo[900]!,
                                         ),
 
                                         children: [
@@ -146,7 +143,7 @@ class _FAQState extends State<FAQ> {
                                               text: body[index]['answer'],
                                               flow: TextOverflow.visible,
                                               weight: FontWeight.w500,
-                                              color: Colors.grey[700],
+                                              color: Colors.grey[700]!,
                                               lineSpace:
                                                   height(context) * 0.002,
                                               lSpace: 0.4,
@@ -169,19 +166,20 @@ class _FAQState extends State<FAQ> {
       floatingActionButton: Container(
         padding: EdgeInsets.all(5),
         child: ElevatedButtonWidget(
-          bgColor: Colors.indigo[900],
+          bgColor: Colors.indigo[900]!,
           minWidth: width(context) * 0.6,
           height: height(context) * 0.06,
           textColor: Colors.white,
           buttonName: 'Rise Query',
           textSize: width(context) * 0.05,
+          allRadius: true,
           textStyle: FontWeight.w600,
           borderRadius: 10.0,
           trailingIcon: Icon(Icons.question_answer),
-          borderSideColor: Colors.indigo[900],
+          borderSideColor: Colors.indigo[900]!,
           onClick: () {
-            var pD = partnerDetailsProvider.partnerDetailsFull;
-            log(pD["_id"]);
+            var pD = partnerDetailsProvider!.partnerDetailsFull;
+            log(pD!["_id"]);
             newQuery(context, onSubmit: (String output) {
               submitQuery(output, pD["_id"], context);
             });
@@ -194,7 +192,7 @@ class _FAQState extends State<FAQ> {
 }
 
 newQuery(BuildContext context,
-    {Function onSubmit,
+    {Function? onSubmit,
     String type = "text",
     String heading = "Rise a new query",
     String hint = "Ask Question"}) {
@@ -237,7 +235,7 @@ newQuery(BuildContext context,
                   label: hint,
                   hint: hint,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.indigo[900],
+                  focusBorderColor: Colors.indigo[900]!,
                   enableBorderRadius: 15,
                   controller: queryControl,
                   isRequired: true,
@@ -250,12 +248,12 @@ newQuery(BuildContext context,
                   validateMsg: 'Please check above text',
                   maxLines: type == "text" ? 9 : 1,
                   // postIcon: Icon(Icons.change_circle),
-                  postIconColor: Colors.indigo[900],
+                  postIconColor: Colors.indigo[900]!,
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: Colors.indigo[900]!,
                     minWidth: width(context),
                     height: height(context) * 0.06,
                     textColor: Colors.white,
@@ -263,9 +261,10 @@ newQuery(BuildContext context,
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 10.0,
-                    borderSideColor: Colors.indigo[50],
+                    allRadius: true,
+                    borderSideColor: Colors.indigo[50]!,
                     onClick: () async {
-                      if (queryForm.currentState.validate()) {
+                      if (queryForm.currentState!.validate()) {
                         if (onSubmit != null) {
                           onSubmit(queryControl.text);
                           Navigator.pop(context);

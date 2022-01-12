@@ -1,42 +1,40 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class TextFieldWidget extends StatefulWidget {
-  final String text;
-  final String hint;
-  final String validateMsg;
-  final TextInputType keyBoardType;
-  final double borderRadius;
-  final Color bordercolor;
-  final double focusBorderRadius;
-  final double enableBorderRadius;
-  final Color focusBorderColor;
-  final Color enableBorderColor;
-  final double errorBorderRadius;
-  final double focusErrorRadius;
-  final Icon postIcon;
-  final Color postIconColor;
-  final Color hintColor;
-  final double hintSize;
-  final FontWeight hintWeight;
-  final String prefix;
-  final Color prefixColor;
-  final TextEditingController controller;
-  final Function onSubmitField;
-  final Function functionValidate;
-  final String parametersValidate;
-  final int maxLength;
-  final bool autofocus;
-  final int maxLines;
-  final String label;
-  final List<TextInputFormatter> formatter;
-  final bool isRequired;
-  final String type;
-  final double contentPad;
+  final String? text;
+  final String? hint;
+  final String? validateMsg;
+  final TextInputType? keyBoardType;
+  final double? borderRadius;
+  final Color? bordercolor;
+  final double? focusBorderRadius;
+  final double? enableBorderRadius;
+  final Color? focusBorderColor;
+  final Color? enableBorderColor;
+  final double? errorBorderRadius;
+  final double? focusErrorRadius;
+  final Icon? postIcon;
+  final Color? postIconColor;
+  final Color? hintColor;
+  final double? hintSize;
+  final FontWeight? hintWeight;
+  final String? prefix;
+  final Color? prefixColor;
+  final TextEditingController? controller;
+  final Function? onSubmitField;
+  final Function? functionValidate;
+  final String? parametersValidate;
+  final int? maxLength;
+  final bool? autofocus;
+  final int? maxLines;
+  final String? label;
+  final List<TextInputFormatter>? formatter;
+  final bool? isRequired;
+  final String? type;
+  final double? contentPad;
 
   TextFieldWidget(
       {this.text,
@@ -79,7 +77,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      inputFormatters: inputFormatter(widget.type),
+      inputFormatters: inputFormatter(widget.type!),
       controller: widget.controller,
       decoration: InputDecoration(
           counterText: '',
@@ -90,9 +88,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           suffixIcon: widget.postIcon != null
               ? IconButton(
                   onPressed: () {
-                    widget.controller.clear();
+                    widget.controller!.clear();
                   },
-                  icon: widget.postIcon ?? Icons.android,
+                  icon: widget.postIcon!,
                   color: widget.postIconColor ?? Colors.white,
                 )
               : null,
@@ -138,11 +136,11 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       maxLength: widget.maxLength,
       style: fonts(widget.hintSize, FontWeight.w500, Colors.grey[900]),
       validator: (value) {
-        if (!widget.isRequired) return null;
+        if (!widget.isRequired!) return null;
         return textFieldValidator(widget.type, value, widget.validateMsg);
       },
       onFieldSubmitted: (value) {
-        if (widget.onSubmitField != null) widget.onSubmitField();
+        if (widget.onSubmitField != null) widget.onSubmitField!();
       },
       keyboardType: widget.keyBoardType,
     );
@@ -157,34 +155,32 @@ inputFormatter(String type) {
             RegExp(r'[a-zA-Z ]', caseSensitive: false)),
       ];
 
-      break;
     // case "email":
     //   return <TextInputFormatter>[
     //     FilteringTextInputFormatter.allow(RegExp(
     //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
     //         caseSensitive: false)),
     //   ];
-    //   break;
+    //
     case "phone":
     case "number":
       return <TextInputFormatter>[
         FilteringTextInputFormatter.allow(
             RegExp(r'[0-9]', caseSensitive: false)),
       ];
-      break;
 
     // case "address":
     //   return <TextInputFormatter>[
     //     FilteringTextInputFormatter.allow(
     //         RegExp(r"^[A-Za-z0-9-, ]", caseSensitive: false)),
     //   ];
-    //   break;
+    //
     // case "text":
     //   return <TextInputFormatter>[
     //     FilteringTextInputFormatter.allow(
     //         RegExp(r'[a-z]', caseSensitive: false)),
     //   ];
-    //   break;
+    //
 
     default:
       return null;
@@ -199,46 +195,39 @@ textFieldValidator(type, value, errorMessage) {
     case "phone":
       if (value.length != 10 || int.parse(value) < 6000000000)
         return errorMessage ?? "Enter valid number";
-      break;
+break;
     case "email":
       if (!RegExp(
               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
           .hasMatch(value)) {
         return errorMessage ?? "enter valid email";
       }
-      break;
+break;
     case "address":
       if (!RegExp(r"^[A-Za-z0-9'\.\-\s\,]").hasMatch(value)) {
         return errorMessage ?? "enter valid house address";
       }
-      break;
+break;
     case "number":
       if (!RegExp(r'[0-9]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Number";
       }
-      break;
+break;
     case "name":
       if (!RegExp(r'[a-z]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Name";
       }
-      break;
+break;
     default:
       return null;
   }
 }
 
-
-
-
-
-
-
-
-        // if (widget.label == "Alternative Number") {
-        //   if (value.length == 10 && int.parse(value) < 5000000000) {
-        //     return 'Please Enter Valid Mobile Number';
-        //   } else if (value.length > 0 && value.length < 10) {
-        //     return 'Please Enter Valid Mobile Number';
-        //   }
-        //   return null;
-        // }
+// if (widget.label == "Alternative Number") {
+//   if (value.length == 10 && int.parse(value) < 5000000000) {
+//     return 'Please Enter Valid Mobile Number';
+//   } else if (value.length > 0 && value.length < 10) {
+//     return 'Please Enter Valid Mobile Number';
+//   }
+//   return null;
+// }

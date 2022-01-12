@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic(
-      {Key key,
+      {Key? key,
       @required this.profile,
-      @required this.name,
+      required this.name,
       this.onClick,
       this.bgColor,
       this.size,
@@ -21,18 +22,18 @@ class ProfilePic extends StatelessWidget {
       : super(key: key);
 
   final dynamic profile;
-  final String name;
-  final bool status;
-  final Color bgColor;
-  final double textSize;
-  final Color textColor;
-  final bool badge;
-  final Function onClick;
-  final double size;
-  final String onClickLabel;
-  final bool isProfile;
+  final String? name;
+  final bool? status;
+  final Color? bgColor;
+  final double? textSize;
+  final Color? textColor;
+  final bool? badge;
+  final Function? onClick;
+  final double? size;
+  final String? onClickLabel;
+  final bool? isProfile;
   Widget _activeIcon(double hight, double width) {
-    if (status) {
+    if (status!) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Container(
@@ -60,13 +61,13 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("type ${profile.runtimeType} ");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        if (onClick != null) onClick();
+        if (onClick != null) onClick!();
       },
       child: Container(
         child: Uri.parse(profile.runtimeType == String ? profile : "s")
@@ -74,25 +75,25 @@ class ProfilePic extends StatelessWidget {
             ? Stack(
                 // this is image from online
                 children: [
-                  isProfile
+                  isProfile!
                       ? CircleAvatar(
                           backgroundColor: bgColor ??
                               ([...Colors.primaries]..shuffle()).first,
-                          radius: size ?? _width * 0.07,
+                          radius: size ?? width(context) * 0.07,
                           backgroundImage: NetworkImage(profile ?? ""),
                         )
-                      : Container(
+                      : SizedBox(
                           child: Image.network(profile),
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width, onClick, isProfile),
+                    child: changeLable(width(context)),
                   ),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: badge == true
-                        ? _activeIcon(_hight, _width)
+                        ? _activeIcon(height(context), width(context))
                         : Container(),
                   ),
                 ],
@@ -102,17 +103,17 @@ class ProfilePic extends StatelessWidget {
                 children: [
                   profile.runtimeType == String
                       ? Container(
-                          child: isProfile
+                          child: isProfile!
                               ? CircleAvatar(
                                   //  this is circular avatar with name
                                   backgroundColor: bgColor ??
-                                      avatarColor(name[0].toLowerCase()),
-                                  radius: size ?? _width * 0.07,
+                                      avatarColor(name![0].toLowerCase()),
+                                  radius: size ?? width(context) * 0.07,
                                   child: Center(
                                     child: TextWid(
-                                      text: toBeginningOfSentenceCase(name[0]),
+                                      text: toBeginningOfSentenceCase(name![0]),
                                       color: textColor ?? Colors.white,
-                                      size: textSize ?? _width * 0.06,
+                                      size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
                                 )
@@ -120,33 +121,33 @@ class ProfilePic extends StatelessWidget {
                                   color: bgColor ?? Colors.grey[300],
                                   child: Center(
                                     child: TextWid(
-                                      text: toBeginningOfSentenceCase(name[0]),
+                                      text: toBeginningOfSentenceCase(name![0]),
                                       color: textColor ?? Colors.white,
-                                      size: textSize ?? _width * 0.06,
+                                      size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
                                 ),
                         )
                       : Container(
-                          child: isProfile
+                          child: isProfile!
                               ? CircleAvatar(
                                   // this is file image
                                   backgroundImage: FileImage(profile),
-                                  radius: size ?? _width * 0.07,
+                                  radius: size ?? width(context) * 0.07,
                                 )
-                              : Container(
+                              : SizedBox(
                                   child: Image.file(profile),
                                 ),
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width, onClick, isProfile),
+                    child: changeLable(width(context)),
                   ),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: badge == true
-                        ? _activeIcon(_hight, _width)
+                        ? _activeIcon(height(context), width(context))
                         : Container(),
                   ),
                 ],
@@ -155,21 +156,17 @@ class ProfilePic extends StatelessWidget {
     );
   }
 
-  Positioned changeLable(double _width, Function onClick, bool isProfile) {
+  Positioned changeLable(double width) {
     return Positioned(
-        bottom: 0,
-        left: isProfile ? _width * 0.03 : 0,
-        child: CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          radius: _width * 0.035,
-          child: IconButton(
-              padding: EdgeInsets.all(0.0),
-              onPressed: onClick,
-              icon: Icon(
-                Icons.change_circle,
-                color: Colors.grey[900],
-                size: _width * 0.05,
-              )),
+        left: width * 0.065,
+        bottom: width * 0.04,
+        child: SizedBox(
+          child: TextWid(
+            text: onClickLabel ?? "change",
+            color: Colors.grey[400],
+            size: width * 0.04,
+            weight: FontWeight.bold,
+          ),
         ));
   }
 }

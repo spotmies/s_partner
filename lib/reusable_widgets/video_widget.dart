@@ -5,28 +5,28 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:video_player/video_player.dart';
 
 class Video extends StatefulWidget {
-  final String videoLink;
-  const Video({this.videoLink, Key key}) : super(key: key);
+  final String? videoLink;
+  const Video({this.videoLink, Key? key}) : super(key: key);
 
   @override
   _VideoState createState() => _VideoState();
 }
 
 class _VideoState extends State<Video> {
-  VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
 
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(widget.videoLink)
+    videoPlayerController = VideoPlayerController.network(widget.videoLink!)
       ..addListener(() => setState(() {}))
       ..setLooping(true)
-      ..initialize().then((_) => videoPlayerController.pause());
+      ..initialize().then((_) => videoPlayerController!.pause());
   }
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
+    videoPlayerController!.dispose();
     super.dispose();
   }
 
@@ -56,7 +56,7 @@ class _VideoState extends State<Video> {
           children: [
             Container(
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: VideoPlayerWidget(controller: videoPlayerController)),
+                child: VideoPlayerWidget(controller: videoPlayerController!)),
                 SizedBox(height: 10,),
             Container(
               // height: MediaQuery.of(context).size.height * 0.05,
@@ -93,13 +93,13 @@ class VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
   const VideoPlayerWidget({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
-      controller != null && controller.value.isInitialized
+       controller.value.isInitialized
           ? Container(alignment: Alignment.topCenter, child: buildVideo())
           : Container(child: circleProgress());
 
@@ -120,8 +120,8 @@ class BasicOverlayWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
   const BasicOverlayWidget({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

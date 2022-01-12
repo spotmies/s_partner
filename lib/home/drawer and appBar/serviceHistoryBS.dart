@@ -96,7 +96,7 @@ Future history(BuildContext context, double hight, double width,
                                     ),
                                     TextWid(
                                         text: toBeginningOfSentenceCase(
-                                            o[index]['problem']),
+                                            o[index]['problem']).toString(),
                                         flow: TextOverflow.ellipsis,
                                         size: width * 0.04),
                                     SizedBox(
@@ -106,7 +106,7 @@ Future history(BuildContext context, double hight, double width,
                                       text: getDate(o[index]['schedule']) +
                                           ' - ' +
                                           getTime(o[index]['schedule']),
-                                      color: Colors.grey[600],
+                                      color: Colors.grey[600]!,
                                       size: width * 0.02,
                                       weight: FontWeight.w600,
                                     ),

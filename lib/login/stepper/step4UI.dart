@@ -43,7 +43,7 @@ Widget step4UI(BuildContext context, StepperController stepperController) {
                               image: DecorationImage(
                                   fit: BoxFit.fill,
                                   image: FileImage(
-                                      stepperController.profilepics))),
+                                      stepperController.profilepics!))),
                         ),
                 ),
                 radius: 30,

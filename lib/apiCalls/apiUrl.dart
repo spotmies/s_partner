@@ -5,7 +5,7 @@ var field2 = true;
 var field3 = 'req';
 
 class API {
-  static var pid = FirebaseAuth.instance.currentUser.uid; //user id
+  static var pid = FirebaseAuth.instance.currentUser?.uid; //user id
   static var host = 'spotmiesserver.herokuapp.com'; //server path
   static var localHost = "http://localhost:4000";
   static var partnerRegister = '/api/partner/newPartner'; //post

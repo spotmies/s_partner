@@ -66,23 +66,23 @@ orderStateIcon({ordState = 0, bool isCompleted = false}) {
   switch (orderState) {
     case 0:
       return Icons.pending_actions;
-      break;
+
     case 1:
       return Icons.stop_circle;
-      break;
+
     case 2:
       return Icons.update;
-      break;
+
     case 8:
       return Icons.run_circle_rounded;
-      break;
+
     case 9:
     case 10:
       return Icons.verified_rounded;
-      break;
+
     case 3:
       return Icons.cancel;
-      break;
+
     default:
       return Icons.search;
   }

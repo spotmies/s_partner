@@ -12,24 +12,24 @@ import 'package:spotmies_partner/reusable_widgets/incall.dart';
 // import 'package:flutter_incall/flutter_incall.dart';
 
 class MyCalling extends StatefulWidget {
-  final String msgId;
+  final String? msgId;
   final dynamic ordId;
   final dynamic uId;
   final dynamic pId;
-  final bool isIncoming;
+  final bool? isIncoming;
   final dynamic roomId;
-  final String name;
-  final String profile;
-  final String userDeviceToken;
+  final String? name;
+  final String? profile;
+  final String? userDeviceToken;
   // final String userName;
   // final String userProfile;
 
   MyCalling(
       {this.msgId,
-      @required this.pId,
-      @required this.uId,
-      @required this.ordId,
-      @required this.isIncoming,
+      required this.pId,
+      required this.uId,
+      required this.ordId,
+      required this.isIncoming,
       this.roomId,
       this.name,
       this.profile,
@@ -43,12 +43,12 @@ class MyCalling extends StatefulWidget {
 
 class _MyCallingState extends State<MyCalling> {
   IncallManager incallManager = new IncallManager();
-  ChatProvider chatProvider;
-  PartnerDetailsProvider partnerProvider;
+  ChatProvider? chatProvider;
+  PartnerDetailsProvider? partnerProvider;
   Signaling signaling = Signaling();
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
-  String roomId;
+  String? roomId;
   bool timerFlag = true;
   bool callDisconnectFlag = true;
   TextEditingController textEditingController = TextEditingController(text: '');
@@ -56,7 +56,7 @@ class _MyCallingState extends State<MyCalling> {
   Future<void> createRoomId() async {
     await signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     roomId = await signaling.createRoom(_remoteRenderer);
-    chatProvider.setAcceptCall(false);
+    chatProvider!.setAcceptCall(false);
     log("room is is $roomId");
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
@@ -68,38 +68,38 @@ class _MyCallingState extends State<MyCalling> {
     Map<String, dynamic> target = {
       'uId': widget.uId,
       'pId': widget.pId,
-      'msgId': widget?.msgId ?? "",
+      'msgId': widget.msgId ?? "",
       'ordId': widget.ordId,
       'type': 'call',
       'roomId': roomId.toString(),
-      'incomingName': partnerProvider.getProfileDetails['name'],
-      'incomingProfile': partnerProvider.getProfileDetails['partnerPic'],
+      'incomingName': partnerProvider!.getProfileDetails['name'],
+      'incomingProfile': partnerProvider!.getProfileDetails['partnerPic'],
       'deviceToken': [widget.userDeviceToken]
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
       "target": target
     };
-    chatProvider.addnewMessage(sendPayload);
-    chatProvider.setSendMessage(sendPayload);
+    chatProvider!.addnewMessage(sendPayload);
+    chatProvider!.setSendMessage(sendPayload);
     setState(() {});
   }
 
   Future<void> rejectCall() async {
     log('call rejected');
-    chatProvider.resetDuration();
-    chatProvider.setAcceptCall(true);
-    chatProvider.resetCallInitTimeout();
-    chatProvider.setStopTimer();
+    chatProvider!.resetDuration();
+    chatProvider!.setAcceptCall(true);
+    chatProvider!.resetCallInitTimeout();
+    chatProvider!.setStopTimer();
   }
 
   Future<void> handUpCall() async {
-    chatProvider.setCallStatus(0);
+    chatProvider!.setCallStatus(0);
     log("===== handUp call =======");
     await signaling.hangUp(_localRenderer);
-    chatProvider.setAcceptCall(true);
-    chatProvider.resetCallInitTimeout();
-    chatProvider.resetDuration();
+    chatProvider!.setAcceptCall(true);
+    chatProvider!.resetCallInitTimeout();
+    chatProvider!.resetDuration();
   }
 
   Future<void> joinOnRoom() async {
@@ -109,7 +109,7 @@ class _MyCallingState extends State<MyCalling> {
       widget.roomId,
       _remoteRenderer,
     );
-    chatProvider.setAcceptCall(false);
+    chatProvider!.setAcceptCall(false);
   }
 
   @override
@@ -127,7 +127,7 @@ class _MyCallingState extends State<MyCalling> {
     // incallManager.start(
     //     media: MediaType.AUDIO, auto: false, ringback: '_DEFAULT_');
     signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
-    if (!widget.isIncoming) {
+    if (!widget.isIncoming!) {
       incallManager.enableProximitySensor(true);
       incallManager.turnScreenOff();
       createRoomId();
@@ -137,12 +137,12 @@ class _MyCallingState extends State<MyCalling> {
       incallManager.setSpeakerphoneOn(true);
     }
 
-    chatProvider.addListener(() {
-      int callState = chatProvider.getCallStatus;
+    chatProvider!.addListener(() {
+      int callState = chatProvider!.getCallStatus;
 
       if (callState == 3 && timerFlag) {
         timerFlag = false;
-        chatProvider.startCallDuration();
+        chatProvider!.startCallDuration();
       }
     });
 
@@ -195,8 +195,8 @@ class _MyCallingState extends State<MyCalling> {
           log("spelaer is $state");
           incallManager.setSpeakerphoneOn(state);
         },
-        name: widget?.name ?? "unknown",
-        image: widget?.profile ?? "",
+        name: widget.name ?? "unknown",
+        image: widget.profile ?? "",
       );
     });
   }

@@ -11,16 +11,16 @@ import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class CatelogPost extends StatefulWidget {
-  final int index;
-  final Map cat;
-  const CatelogPost({Key key, this.index, this.cat}) : super(key: key);
+  final int? index;
+  final Map? cat;
+  const CatelogPost({Key? key, this.index, this.cat}) : super(key: key);
 
   @override
   _CatelogPostState createState() => _CatelogPostState();
 }
 
 CatelogController catelogController = CatelogController();
-PartnerDetailsProvider partnerDetailsProvider;
+PartnerDetailsProvider? partnerDetailsProvider;
 
 class _CatelogPostState extends State<CatelogPost> {
   // var cate;
@@ -37,7 +37,7 @@ class _CatelogPostState extends State<CatelogPost> {
 
   @override
   Widget build(BuildContext context) {
-    if (partnerDetailsProvider.offlineScreenLoader == true)
+    if (partnerDetailsProvider!.offlineScreenLoader == true)
       return circleProgress();
     return Scaffold(
       body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
@@ -100,7 +100,7 @@ class _CatelogPostState extends State<CatelogPost> {
                                     image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: FileImage(
-                                            catelogController.catelogPic))),
+                                            catelogController.catelogPic!))),
                               ),
                               Positioned(
                                   right: 0,
@@ -150,7 +150,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   label: 'Service Name',
                   controller: catelogController.catNameControl,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.grey[900],
+                  focusBorderColor: Colors.grey[900]!,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -159,7 +159,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   validateMsg: 'Enter Valid Money',
                   maxLines: 1,
                   postIcon: Icon(Icons.home_repair_service),
-                  postIconColor: Colors.grey[900],
+                  postIconColor: Colors.grey[900]!,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -174,7 +174,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   formatter: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  focusBorderColor: Colors.grey[900],
+                  focusBorderColor: Colors.grey[900]!,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -196,7 +196,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   enableBorderColor: Colors.grey,
                   isRequired: true,
 
-                  focusBorderColor: Colors.grey[900],
+                  focusBorderColor: Colors.grey[900]!,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -205,53 +205,54 @@ class _CatelogPostState extends State<CatelogPost> {
                   maxLines: 8,
                   // maxLength: 150,
                   postIcon: Icon(Icons.info),
-                  postIconColor: Colors.grey[900],
+                  postIconColor: Colors.grey[900]!,
                 ),
                 SizedBox(height: height(context) * 0.1),
                 ElevatedButtonWidget(
                   buttonName: 'Add Service',
                   height: height(context) * 0.055,
                   minWidth: width(context) * 0.5,
-                  bgColor: Colors.indigo[900],
-                  textColor: Colors.grey[50],
+                  bgColor: Colors.indigo[900]!,
+                  textColor: Colors.grey[50]!,
                   textSize: width(context) * 0.04,
+                  allRadius: true,
                   leadingIcon: Icon(
                     Icons.add_circle,
                     color: Colors.grey[50],
                     size: width(context) * 0.05,
                   ),
                   borderRadius: 10.0,
-                  borderSideColor: Colors.grey[900],
+                  borderSideColor: Colors.grey[900]!,
                   onClick: () async {
-                    if (catelogController.catformkey.currentState.validate()) {
+                    if (catelogController.catformkey.currentState!.validate()) {
                       setState(() {
-                        partnerDetailsProvider.offlineScreenLoader = true;
+                        partnerDetailsProvider!.offlineScreenLoader = true;
                       });
 
-                      int itemCode = partnerDetailsProvider
-                          .partnerDetailsFull['catelogs'].length;
+                      int itemCode = partnerDetailsProvider!
+                          .partnerDetailsFull!['catelogs'].length;
                       int job =
-                          partnerDetailsProvider.partnerDetailsFull['job'];
+                          partnerDetailsProvider!.partnerDetailsFull!['job'];
 
                       // log(cat[widget.index]["_id"].toString());
                       var res;
                       var resp;
                       if (widget.cat == null) {
                         res = await catelogController.addCatlogList(
-                            itemCode, job,context);
+                            itemCode, job, context);
                       } else {
-                        resp = await catelogController
-                            .updateCat(widget.cat["_id"],context);
+                        resp = await catelogController.updateCat(
+                            widget.cat!["_id"], context);
                       }
 
                       log(res.toString());
                       log(resp.toString());
                       if (res != null) {
                         if (res != null)
-                          partnerDetailsProvider.setCategoryItem(res);
+                          partnerDetailsProvider!.setCategoryItem(res);
 
                         setState(() {
-                          partnerDetailsProvider.offlineScreenLoader = false;
+                          partnerDetailsProvider!.offlineScreenLoader = false;
                           catelogController.catDescControl.clear();
                           catelogController.catNameControl.clear();
                           catelogController.catPriceControl.clear();
@@ -263,10 +264,10 @@ class _CatelogPostState extends State<CatelogPost> {
 
                       if (resp != null) {
                         if (resp != null)
-                          partnerDetailsProvider.updateCategoryItem(
-                              resp, widget.index);
+                          partnerDetailsProvider!
+                              .updateCategoryItem(resp, widget.index);
                         setState(() {
-                          partnerDetailsProvider.offlineScreenLoader = false;
+                          partnerDetailsProvider!.offlineScreenLoader = false;
                         });
 
                         Navigator.pop(context);

@@ -2,20 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String myPid = FirebaseAuth.instance.currentUser.uid.toString();
+String myPid = FirebaseAuth.instance.currentUser!.uid.toString();
 
 class TextWid extends StatelessWidget {
-  final String text;
-  final double size;
-  final FontWeight weight;
-  final Color color;
-  final String family;
-  final double lSpace;
-  final double lineSpace;
-  final int maxlines;
-  final TextOverflow flow;
-  final TextDecoration decoration;
-  final TextAlign align;
+  final String? text;
+  final double? size;
+  final FontWeight? weight;
+  final Color? color;
+  final String? family;
+  final double? lSpace;
+  final double? lineSpace;
+  final int? maxlines;
+  final TextOverflow? flow;
+  final TextDecoration? decoration;
+  final TextAlign? align;
 
   TextWid(
       {this.text,
@@ -32,7 +32,7 @@ class TextWid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
+    return Text(text!,
         overflow: flow ?? TextOverflow.ellipsis,
         textAlign: align ?? TextAlign.start,
         maxLines: maxlines,

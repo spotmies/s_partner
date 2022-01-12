@@ -6,22 +6,22 @@ import 'package:spotmies_partner/utilities/custom_drawer/app_theme.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(
-      {Key key,
+      {Key? key,
       this.screenIndex,
       this.iconAnimationController,
       this.callBackIndex})
       : super(key: key);
 
-  final AnimationController iconAnimationController;
-  final DrawerIndex screenIndex;
-  final Function(DrawerIndex) callBackIndex;
+  final AnimationController? iconAnimationController;
+  final DrawerIndex? screenIndex;
+  final Function(DrawerIndex)? callBackIndex;
 
   @override
   _HomeDrawerState createState() => _HomeDrawerState();
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  List<DrawerList> drawerList;
+  List<DrawerList>? drawerList;
   bool darkMode = false;
   @override
   void initState() {
@@ -147,18 +147,18 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         flex: 2,
                         child: Container(
                           child: AnimatedBuilder(
-                            animation: widget.iconAnimationController,
-                            builder: (BuildContext context, Widget child) {
+                            animation: widget.iconAnimationController!,
+                            builder: (BuildContext context, Widget? child) {
                               return ScaleTransition(
                                 scale: AlwaysStoppedAnimation<double>(1.0 -
-                                    (widget.iconAnimationController.value) *
+                                    (widget.iconAnimationController!.value) *
                                         0.2),
                                 child: RotationTransition(
                                   turns: AlwaysStoppedAnimation<double>(
                                       Tween<double>(begin: 0.0, end: 24.0)
                                               .animate(CurvedAnimation(
                                                   parent: widget
-                                                      .iconAnimationController,
+                                                      .iconAnimationController!,
                                                   curve: Curves.fastOutSlowIn))
                                               .value /
                                           360),
@@ -282,7 +282,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               padding: const EdgeInsets.all(0.0),
               itemCount: drawerList?.length,
               itemBuilder: (BuildContext context, int index) {
-                return inkwell(drawerList[index]);
+                return inkwell(drawerList![index]);
               },
             ),
           ),
@@ -333,7 +333,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         splashColor: Colors.grey.withOpacity(0.1),
         highlightColor: Colors.transparent,
         onTap: () {
-          navigationtoScreen(listData.index);
+          navigationtoScreen(listData.index!);
         },
         child: Stack(
           children: <Widget>[
@@ -391,13 +391,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
             widget.screenIndex == listData.index
                 ? AnimatedBuilder(
-                    animation: widget.iconAnimationController,
-                    builder: (BuildContext context, Widget child) {
+                    animation: widget.iconAnimationController!,
+                    builder: (BuildContext context, Widget? child) {
                       return Transform(
                         transform: Matrix4.translationValues(
                             (MediaQuery.of(context).size.width * 0.75 - 64) *
                                 (1.0 -
-                                    widget.iconAnimationController.value -
+                                    widget.iconAnimationController!.value -
                                     1.0),
                             0.0,
                             0.0),
@@ -429,7 +429,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 
   Future<void> navigationtoScreen(DrawerIndex indexScreen) async {
-    widget.callBackIndex(indexScreen);
+    widget.callBackIndex!(indexScreen);
   }
 }
 
@@ -453,8 +453,8 @@ class DrawerList {
   });
 
   String labelName;
-  Icon icon;
+  Icon? icon;
   bool isAssetsImage;
   String imageName;
-  DrawerIndex index;
+  DrawerIndex? index;
 }

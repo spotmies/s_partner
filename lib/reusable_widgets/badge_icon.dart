@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BadgeIcon extends StatelessWidget {
-  final Icon iconData;
-  final VoidCallback onTap;
-  final Text badgeText;
-  final Color badgeColor;
+  final Icon? iconData;
+  final VoidCallback? onTap;
+  final Text? badgeText;
+  final Color? badgeColor;
 
   const BadgeIcon({
-    Key key,
+    Key? key,
     this.onTap,
     @required this.iconData,
     this.badgeColor,
@@ -24,7 +24,7 @@ class BadgeIcon extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            iconData,
+            iconData!,
             Positioned(
               top: 0,
               right: 0,

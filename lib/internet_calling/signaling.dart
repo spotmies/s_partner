@@ -21,14 +21,14 @@ class Signaling {
     ]
   };
 
-  RTCPeerConnection peerConnection;
-  MediaStream localStream;
-  MediaStream remoteStream;
-  String roomId;
-  String currentRoomText;
-  StreamStateCallback onAddRemoteStream;
-    BuildContext context;
-     ChatProvider chatProvider;
+  RTCPeerConnection? peerConnection;
+  MediaStream? localStream;
+  MediaStream? remoteStream;
+  String? roomId;
+  String? currentRoomText;
+  StreamStateCallback? onAddRemoteStream;
+    BuildContext? context;
+     ChatProvider? chatProvider;
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -40,8 +40,8 @@ class Signaling {
 
     registerPeerConnectionListeners();
 
-    localStream?.getTracks()?.forEach((track) {
-      peerConnection?.addTrack(track, localStream);
+    localStream?.getTracks().forEach((track) {
+      peerConnection?.addTrack(track, localStream!);
     });
 
     // Code for collecting ICE candidates below
@@ -54,8 +54,8 @@ class Signaling {
     // Finish Code for collecting ICE candidate
 
     // Add code for creating a room
-    RTCSessionDescription offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
+    RTCSessionDescription offer = await peerConnection!.createOffer();
+    await peerConnection!.setLocalDescription(offer);
     log('Created offer: $offer');
 
     Map<String, dynamic> roomWithOffer = {'offer': offer.toMap()};
@@ -100,7 +100,7 @@ class Signaling {
           // ignore: unnecessary_cast
           Map<String, dynamic> data = change.doc.data() as Map<String, dynamic>;
           log('Got new remote ICE candidate: ${jsonEncode(data)}');
-          peerConnection.addCandidate(
+          peerConnection!.addCandidate(
             RTCIceCandidate(
               data['candidate'],
               data['sdpMid'],
@@ -127,13 +127,13 @@ class Signaling {
 
       registerPeerConnectionListeners();
 
-      localStream?.getTracks()?.forEach((track) {
-        peerConnection?.addTrack(track, localStream);
+      localStream?.getTracks().forEach((track) {
+        peerConnection?.addTrack(track, localStream!);
       });
 
       // Code for collecting ICE candidates below
       var calleeCandidatesCollection = roomRef.collection('calleeCandidates');
-      peerConnection.onIceCandidate = (RTCIceCandidate candidate) {
+      peerConnection!.onIceCandidate = (RTCIceCandidate? candidate) {
         if (candidate == null) {
           log('onIceCandidate: complete!');
           return;
@@ -158,10 +158,10 @@ class Signaling {
       await peerConnection?.setRemoteDescription(
         RTCSessionDescription(offer['sdp'], offer['type']),
       );
-      var answer = await peerConnection.createAnswer();
+      var answer = await peerConnection!.createAnswer();
       log('Created Answer $answer');
 
-      await peerConnection.setLocalDescription(answer);
+      await peerConnection!.setLocalDescription(answer);
 
       Map<String, dynamic> roomWithAnswer = {
         'answer': {'type': answer.type, 'sdp': answer.sdp}
@@ -177,7 +177,7 @@ class Signaling {
           var data = document.doc.data() as Map<String, dynamic>;
           // log(data);
           log('Got new remote ICE candidate: $data');
-          peerConnection.addCandidate(
+          peerConnection!.addCandidate(
             RTCIceCandidate(
               data['candidate'],
               data['sdpMid'],
@@ -197,7 +197,7 @@ class Signaling {
     BuildContext contextt
   ) async {
     context = contextt;
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    chatProvider = Provider.of<ChatProvider>(context!, listen: false);
     var stream = await navigator.mediaDevices
         .getUserMedia({'audio': true});
 
@@ -208,15 +208,15 @@ class Signaling {
   }
 
   Future<void> hangUp(RTCVideoRenderer localVideo) async {
-    List<MediaStreamTrack> tracks = localVideo.srcObject.getTracks();
+    List<MediaStreamTrack> tracks = localVideo.srcObject!.getTracks();
     tracks.forEach((track) {
       track.stop();
     });
 
     if (remoteStream != null) {
-      remoteStream.getTracks().forEach((track) => track.stop());
+      remoteStream!.getTracks().forEach((track) => track.stop());
     }
-    if (peerConnection != null) peerConnection.close();
+    if (peerConnection != null) peerConnection!.close();
 
     if (roomId != null) {
       var db = FirebaseFirestore.instance;
@@ -230,7 +230,7 @@ class Signaling {
       await roomRef.delete();
     }
 
-    localStream.dispose();
+    localStream!.dispose();
     remoteStream?.dispose();
   }
 
@@ -244,12 +244,12 @@ class Signaling {
             if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected || state ==  RTCPeerConnectionState.RTCPeerConnectionStateFailed || state == RTCPeerConnectionState.RTCPeerConnectionStateClosed) {
         log("connection diconted");
         // Navigator.pop(context);
-       if(chatProvider.getCallStatus !=0) chatProvider.setCallStatus(6);
+       if(chatProvider!.getCallStatus !=0) chatProvider!.setCallStatus(6);
       }
       if(state == RTCPeerConnectionState.RTCPeerConnectionStateConnected){
         //call connected
         log("=============     call connected       ================");
-        chatProvider.setCallStatus(3);
+        chatProvider!.setCallStatus(3);
       }
     };
 

@@ -48,44 +48,21 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  // final quickActions = QuickActions();
-
-  @override
-  void initState() {
-    // quickActions.setShortcutItems([
-    //   ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
-    //   ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
-    //   ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
-    //   ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
-    // ]);
-
-    // quickActions.initialize((type) {
-    //   if(type == 'Home'){
-    //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:1)));
-    //   }if(type == 'Chat'){
-    //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:2)));
-    //   }if(type == 'Jobs'){
-    //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:3)));
-    //   }if(type == 'Learn'){
-    //      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:4)));
-    //   }
-    // });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      // home: SplashScreen(),
       home: StreamBuilder(
           stream: Connectivity().onConnectivityChanged,
           builder: (BuildContext context,
-              AsyncSnapshot<ConnectivityResult> snapshot) {
+              AsyncSnapshot<ConnectivityResult>? snapshot) {
             if (snapshot != null &&
                 snapshot.hasData &&
                 snapshot.data != ConnectivityResult.none) {
@@ -98,10 +75,31 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+// final quickActions = QuickActions();
+
+// quickActions.setShortcutItems([
+//   ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
+//   ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
+//   ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
+//   ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
+// ]);
+
+// quickActions.initialize((type) {
+//   if(type == 'Home'){
+//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:1)));
+//   }if(type == 'Chat'){
+//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:2)));
+//   }if(type == 'Jobs'){
+//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:3)));
+//   }if(type == 'Learn'){
+//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:4)));
+//   }
+// });
+
 //notifications
 
 class NotificationsDemo extends StatefulWidget {
-  const NotificationsDemo({Key key}) : super(key: key);
+  const NotificationsDemo({Key? key}) : super(key: key);
 
   @override
   _NotificationsDemoState createState() => _NotificationsDemoState();
@@ -191,14 +189,14 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
 }
 
 class Demo extends StatelessWidget {
-  final String payload;
-  const Demo({Key key, this.payload}) : super(key: key);
+  final String? payload;
+  const Demo({Key? key, this.payload}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(payload),
+        child: Text(payload!),
       ),
     );
   }

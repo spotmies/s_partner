@@ -9,11 +9,12 @@ import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
 class Offline extends StatefulWidget {
+  const Offline({Key? key}) : super(key: key);
   @override
   _OfflineState createState() => _OfflineState();
 }
 
-PartnerDetailsProvider partnerDetailsProvider;
+PartnerDetailsProvider? partnerDetailsProvider;
 
 class _OfflineState extends State<Offline> {
   @override
@@ -40,9 +41,10 @@ class _OfflineState extends State<Offline> {
       width: _width,
       decoration: BoxDecoration(color: Colors.grey[200]),
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-        var pd = data.getPartnerDetailsFull;
-        var dash = data.orders;
-        log(dash.toString());
+        dynamic pd = data.getPartnerDetailsFull;
+        dynamic dash = data.orders;
+        log('---------------------------------46------------');
+        // log(dash[0].toString());
 
         var cat = pd['catelogs'];
 
@@ -57,17 +59,17 @@ class _OfflineState extends State<Offline> {
                     circularIndicator(
                         _hight * 0.35,
                         _width * 0.44,
-                        Colors.blue[900],
+                        Colors.blue[900]!,
                         'Rating',
                         Icons.star_rate,
-                        dash.isEmpty ? 100 : avg(dash, 'rate')),
+                        dash?.isEmpty ? 100 : avg(dash, 'rate')),
                     SizedBox(
                       height: _hight * 0.02,
                     ),
                     graphIndicator(
                         _hight * 0.45,
                         _width * 0.44,
-                        Colors.red[400],
+                        Colors.red[400]!,
                         'Earnings',
                         Icons.account_balance_wallet,
                         earnSum(dash))
@@ -87,7 +89,7 @@ class _OfflineState extends State<Offline> {
                     circularIndicator(
                         _hight * 0.35,
                         _width * 0.44,
-                        Colors.lightBlue[700],
+                        Colors.lightBlue[700]!,
                         'Acceptance',
                         Icons.done_rounded,
                         avg(pd['acceptance'], 'acce')),
@@ -107,7 +109,7 @@ class _OfflineState extends State<Offline> {
               ? Container()
               : reviewMsgs(
                   context,
-                  dash,
+                  rateFilter(dash!),
                 ),
           SizedBox(
             height: _width * 0.25,
@@ -118,14 +120,29 @@ class _OfflineState extends State<Offline> {
   }
 }
 
-avg(List<dynamic> args, String type) {
+rateFilter(orders) {
+  List outputList = orders.where((o) => o['feedBackDetails'] != null).toList();
+  return outputList;
+}
+
+avg(List<dynamic>? args, String? type) {
   int sum = 0;
-  List avg = args;
+  List avg = args!;
 
   for (var i = 0; i < avg.length; i++) {
-    sum += (type == 'rate')
-        ? (avg[i]['feedBackDetails']['rating'] ?? 100)
-        : (avg[i] ?? 100);
+    if (type == 'rate') {
+      if (avg[i]['feedBackDetails']?['rating'] != null) {
+        sum += avg[i]['feedBackDetails']?['rating'] as int;
+      } else {
+        sum += 100;
+      }
+    } else {
+      if (avg[i] != null) {
+        sum += avg[i] as int;
+      } else {
+        sum += 100;
+      }
+    }
   }
 
   int rate = (sum / avg.length).round();
@@ -142,7 +159,12 @@ earnSum(
   // log(args[0]['moneyTakenByPartner'].toString());
 
   for (var i = 0; i < avg.length; i++) {
-    sum += avg[i]['moneyTakenByPartner'] ?? 0;
+    // sum += avg[i]['moneyTakenByPartner'] ?? 0;
+    if (avg[i]['moneyTakenByPartner'] != null) {
+      sum += avg[i]['moneyTakenByPartner'] as int;
+    } else {
+      sum += 0;
+    }
   }
 
   return sum;

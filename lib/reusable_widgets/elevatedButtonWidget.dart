@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
-class ElevatedButtonWidget extends StatefulWidget {
-  final Color bgColor;
-  final Color textColor;
-  final String buttonName;
-  final double borderRadius;
-  final double minWidth;
-  final double height;
-  final Color borderSideColor;
-  final TextStyle style;
-  final Widget leadingIcon;
-  final Widget trailingIcon;
-  final double textSize;
-  final VoidCallback onClick;
-  final FontWeight textStyle;
-  final double elevation;
+class ElevatedButtonWidget extends StatelessWidget {
+  final Color? bgColor;
+  final Color? textColor;
+  final String? buttonName;
+  final double? borderRadius;
+  final double? minWidth;
+  final double? height;
+  final Color? borderSideColor;
+  final TextStyle? style;
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
+  final double? textSize;
+  final VoidCallback? onClick;
+  final FontWeight? textStyle;
+  final double? elevation;
+  final bool? allRadius;
+  final double? leftRadius;
+  final double? rightRadius;
 
-  ElevatedButtonWidget({
+  const ElevatedButtonWidget({
+    Key? key,
     this.bgColor,
     this.textColor,
     this.buttonName,
     this.borderRadius,
+    this.leftRadius,
+    this.rightRadius,
     this.minWidth,
     this.height,
+    this.allRadius,
     this.borderSideColor,
     this.style,
     this.leadingIcon,
@@ -32,54 +39,50 @@ class ElevatedButtonWidget extends StatefulWidget {
     this.textStyle,
     this.onClick,
     this.elevation,
-  });
+  }) : super(key: key);
 
-  @override
-  _ElevatedButtonWidgetState createState() => _ElevatedButtonWidgetState();
-}
-
-class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.minWidth ?? double.infinity,
-      height: widget.height ?? 50.0,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
+      width: minWidth ?? double.infinity,
+      height: height ?? 50.0,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(borderRadius ?? 0)),
       child: ElevatedButton(
           onPressed: () {
-            return widget.onClick();
+            return onClick!();
           },
           style: ButtonStyle(
-              elevation: MaterialStateProperty.all(widget.elevation ?? 0),
+              elevation: MaterialStateProperty.all(elevation ?? 0),
               backgroundColor: MaterialStateProperty.all(
-                widget.bgColor ?? Colors.blue,
+                bgColor ?? Colors.blue,
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(widget.borderRadius ?? 0),
-                      side: BorderSide(
-                          color: widget.borderSideColor ?? Colors.white)))),
+                      borderRadius: allRadius == true
+                          ? BorderRadius.circular(borderRadius ?? 0)
+                          : BorderRadius.only(
+                              topLeft: Radius.circular(leftRadius ?? 0),
+                              topRight: Radius.circular(rightRadius ?? 0)),
+                      side:
+                          BorderSide(color: borderSideColor ?? Colors.white)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildLeadingIcon(widget.leadingIcon),
-              TextWid(
-                text: widget.buttonName ?? 'Button',
-                size: widget.textSize ?? 10.0,
-                weight: widget.textStyle ?? FontWeight.w500,
-                color: widget.textColor ?? Colors.black,
+              buildLeadingIcon(leadingIcon),
+              Text(
+                buttonName ?? 'Button',
+                style: fonts(
+                    textSize ?? 10.0, textStyle, textColor ?? Colors.black),
               ),
-             
-              buildTrailingIcon(widget.trailingIcon),
+              buildTrailingIcon(trailingIcon),
             ],
           )),
     );
   }
 }
 
-Widget buildLeadingIcon(Widget leadingIcon) {
+Widget buildLeadingIcon(Widget? leadingIcon) {
   if (leadingIcon != null) {
     return Row(
       children: <Widget>[leadingIcon, SizedBox(width: 10)],
@@ -88,7 +91,7 @@ Widget buildLeadingIcon(Widget leadingIcon) {
   return Container();
 }
 
-Widget buildTrailingIcon(Widget trailingIcon) {
+Widget buildTrailingIcon(Widget? trailingIcon) {
   if (trailingIcon != null) {
     return Row(
       children: <Widget>[

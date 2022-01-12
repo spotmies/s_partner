@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
@@ -7,8 +6,8 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class AccountType extends StatefulWidget {
-  final String phoneNumber;
-  final Map coordinates;
+  final String? phoneNumber;
+  final Map? coordinates;
   AccountType({this.phoneNumber, this.coordinates});
 
   @override
@@ -31,9 +30,9 @@ class _AccountTypeState extends State<AccountType> {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => StepperPersonalInfo(
-              phone: widget.phoneNumber,
+              phone: widget.phoneNumber!,
               type: userAccountType,
-              coordinates: widget.coordinates)),
+              coordinates: widget.coordinates!)),
     );
   }
 
@@ -72,7 +71,7 @@ class _AccountTypeState extends State<AccountType> {
                   width: _width * 0.9,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.blueGrey[200])),
+                      border: Border.all(color: Colors.blueGrey[200]!)),
                   child: TextWid(
                     text: "What is your role ?",
                     size: _width * 0.055,
@@ -100,7 +99,7 @@ class _AccountTypeState extends State<AccountType> {
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !freelanace
-                                ? Colors.blueGrey[200]
+                                ? Colors.blueGrey[200]!
                                 : Colors.white)),
                     child: Row(
                       children: [
@@ -109,7 +108,7 @@ class _AccountTypeState extends State<AccountType> {
                             checkColor: Colors.indigo[900],
                             value: userAccountType == "business",
                             shape: CircleBorder(),
-                            onChanged: (bool value) {
+                            onChanged: (bool? value) {
                               setState(() {
                                 // freelanace = value;
                                 // student = false;
@@ -122,7 +121,7 @@ class _AccountTypeState extends State<AccountType> {
                             size: _width * 0.055,
                             weight: FontWeight.w600,
                             maxlines: 3,
-                            color: freelanace ? Colors.white : Colors.grey[700],
+                            color: freelanace ? Colors.white : Colors.grey[700]!,
                           ),
                         ),
                       ],
@@ -150,7 +149,7 @@ class _AccountTypeState extends State<AccountType> {
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !student
-                                ? Colors.blueGrey[200]
+                                ? Colors.blueGrey[200]!
                                 : Colors.white)),
                     child: Row(
                       children: [
@@ -159,7 +158,7 @@ class _AccountTypeState extends State<AccountType> {
                             checkColor: Colors.indigo[900],
                             value: userAccountType == "student",
                             shape: CircleBorder(),
-                            onChanged: (bool value) {
+                            onChanged: (bool? value) {
                               setState(() {
                                 // student = value;
                                 // freelanace = false;
@@ -170,7 +169,7 @@ class _AccountTypeState extends State<AccountType> {
                           text: "Student",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
-                          color: student ? Colors.white : Colors.grey[700],
+                          color: student ? Colors.white : Colors.grey[700]!,
                         ),
                       ],
                     ),
@@ -197,7 +196,7 @@ class _AccountTypeState extends State<AccountType> {
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !student
-                                ? Colors.blueGrey[200]
+                                ? Colors.blueGrey[200]!
                                 : Colors.white)),
                     child: Row(
                       children: [
@@ -206,7 +205,7 @@ class _AccountTypeState extends State<AccountType> {
                             checkColor: Colors.indigo[900],
                             value: userAccountType == "freelancer",
                             shape: CircleBorder(),
-                            onChanged: (bool value) {
+                            onChanged: (bool? value) {
                               setState(() {
                                 // student = value;
                                 // freelanace = false;
@@ -217,7 +216,7 @@ class _AccountTypeState extends State<AccountType> {
                           text: "freelancer",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
-                          color: student ? Colors.white : Colors.grey[700],
+                          color: student ? Colors.white : Colors.grey[700]!,
                         ),
                       ],
                     ),
@@ -230,7 +229,7 @@ class _AccountTypeState extends State<AccountType> {
                     height: _hight * 0.06,
                     minWidth: _width * 0.35,
                     buttonName: 'Join',
-                    bgColor: Colors.indigo[900],
+                    bgColor: Colors.indigo[900]!,
                     textColor: Colors.white,
                     textSize: _width * 0.05,
                     borderRadius: 15.0,

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 
-String pid = FirebaseAuth.instance.currentUser.uid;
+String pid = FirebaseAuth.instance.currentUser!.uid;
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
@@ -91,18 +91,20 @@ class ChatProvider extends ChangeNotifier {
           case "disableChat":
           case "deleteChat":
             disableChatByMsgId(msgId, notify: false);
-            break;
+          break;
+
           case "enableProfile":
             revealProfile(true, msgId, pid, notify: false);
-            break;
+             break;
+
           case "disableProfile":
             revealProfile(false, msgId, pid, notify: false);
-            break;
+             break;
+
           case "acceptOrder": //need to work on later
           case "rejectOrder": //need to work on later
-            break;
+
           default:
-            break;
         }
         allChats[i]['lastModified'] =
             int.parse(DateTime.now().millisecondsSinceEpoch.toString());
@@ -129,7 +131,6 @@ class ChatProvider extends ChangeNotifier {
         }
         chatList = allChats;
         sortChatListByTime();
-        break;
       }
     }
     scrollEvent = !scrollEvent;

@@ -17,30 +17,30 @@ class IncomingOrdersController extends ControllerMVC {
   var incomingscaffoldkey = GlobalKey<ScaffoldState>();
 
   TextEditingController moneyController = TextEditingController();
-  PartnerDetailsProvider partnerProvider;
+  PartnerDetailsProvider? partnerProvider;
 
-  var updateFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> updateFormKey = GlobalKey<FormState>();
 
-  var path;
-  var userid;
-  var orderid;
-  var incoming;
-  var partner;
-  var localData;
-  String pid = FirebaseAuth.instance.currentUser.uid.toString(); //user id
+  // var path;
+  // var userid;
+  // var orderid;
+  // var incoming;
+  // var partner;
+  // var localData;
+  String pid = FirebaseAuth.instance.currentUser!.uid.toString(); //user id
   // var socketincomingorder;
-  String pmoney;
-  DateTime pickedDate;
-  TimeOfDay pickedTime;
+  String? pmoney;
+  DateTime? pickedDate;
+  TimeOfDay? pickedTime;
 
   // StreamController socketIncomingOrders;
-  IncomingOrdersProvider incomingOrdersProvider;
+  IncomingOrdersProvider? incomingOrdersProvider;
 
-  Stream stream;
+  Stream? stream;
   var onlineOrd;
   var localOrd;
-  IO.Socket socket;
-  List jobs = [
+  IO.Socket? socket;
+  List? jobs = [
     'AC Service',
     'Computer',
     'TV Repair',
@@ -63,11 +63,11 @@ class IncomingOrdersController extends ControllerMVC {
   addDataToSocket(neworders, ld) {
     if (neworders != null) {
       if (ld.last['ordId'] != neworders['ordId']) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
+        WidgetsBinding.instance?.addPostFrameCallback((_) async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString(
               'inComingOrders', jsonEncode(List.from(ld)..addAll([neworders])));
-          incomingOrdersProvider.localOrdersGet();
+          incomingOrdersProvider?.localOrdersGet();
           setState(() {});
         });
       }
@@ -75,16 +75,16 @@ class IncomingOrdersController extends ControllerMVC {
   }
 
   pickedDateandTime(BuildContext context, {setStatee}) async {
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
         context: context,
-        initialDate: pickedDate,
+        initialDate: pickedDate!,
         firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      TimeOfDay t = await showTimePicker(
+      TimeOfDay? t = await showTimePicker(
         context: context,
-        initialTime: pickedTime,
+        initialTime: pickedTime!,
       );
       if (t != null) {
         pickedTime = t;
@@ -98,9 +98,10 @@ class IncomingOrdersController extends ControllerMVC {
     }
   }
 
-  respondToOrder(orderData, pDetailsId, responseType, BuildContext context) async {
+  respondToOrder(
+      orderData, pDetailsId, responseType, BuildContext context) async {
     //enable loader
-    if (partnerProvider.inComingLoader) return;
+    if ((partnerProvider?.inComingLoader)!) return;
     if (orderData['orderState'] > 6) {
       if (responseType != "reject") {
         snackbar(
@@ -108,7 +109,7 @@ class IncomingOrdersController extends ControllerMVC {
         return;
       }
     }
-    partnerProvider.setInComingLoader(true);
+    partnerProvider?.setInComingLoader(true);
     Map<String, dynamic> body = {
       //
       "responseType": responseType,
@@ -131,20 +132,20 @@ class IncomingOrdersController extends ControllerMVC {
       body["money"] = orderData['money'].toString();
       body['schedule'] = orderData['schedule'].toString();
       body['notificationBody'] =
-          "Your request order accepted by ${partnerProvider.getProfileDetails['name']}";
+          "Your request order accepted by ${partnerProvider?.getProfileDetails['name']}";
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
-      body['schedule'] = pickedDate.millisecondsSinceEpoch.toString();
+      body['schedule'] = pickedDate?.millisecondsSinceEpoch.toString();
       body['notificationBody'] =
-          "Your request order bid by ${partnerProvider.getProfileDetails['name']}";
+          "Your request order bid by ${partnerProvider?.getProfileDetails['name']}";
     }
 
     log("order $body");
 
     var response = await Server().postMethod(API.updateOrder, body);
     //disable loader here.
-    partnerProvider.setInComingLoader(false);
+    partnerProvider?.setInComingLoader(false);
     if (response.statusCode == 200 || response.statusCode == 204) {
       if (responseType == "reject")
         snackbar(context, "Deleted successfully");
@@ -153,15 +154,15 @@ class IncomingOrdersController extends ControllerMVC {
         if (responseType == "accept") {
           dynamic getThatOrder = await Server()
               .getMethod(API.acceptOrder + orderData['ordId'].toString());
-          if(response.statusCode == 200){
-          getThatOrder = jsonDecode(getThatOrder.body);
-          partnerProvider.pushOrder(getThatOrder);
-          }
-          else snackbar(context, "something went wrong");
+          if (response.statusCode == 200) {
+            getThatOrder = jsonDecode(getThatOrder.body);
+            partnerProvider?.pushOrder(getThatOrder);
+          } else
+            snackbar(context, "something went wrong");
         }
       }
 
-      partnerProvider.removeIncomingOrderById(orderData['ordId']);
+      partnerProvider?.removeIncomingOrderById(orderData['ordId']);
       moneyController.clear();
     } else {
       snackbar(context, "Something went wrong please try again later");

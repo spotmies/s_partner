@@ -11,8 +11,8 @@ import 'package:spotmies_partner/utilities/shared_preference.dart';
 class PartnerDetailsProvider extends ChangeNotifier {
   // final controller = TestController();
   bool registrationInProgress = false;
-  Map partnerDetailsFull;
-  Map profileDetails;
+  Map? partnerDetailsFull;
+  Map? profileDetails;
   List inComingOrders = [];
   List orders = [];
   bool ordsLoader = false;
@@ -87,14 +87,14 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool get inComingLoader => inComingOrdersLoader;
   bool get ordersLoader => ordsLoader;
   bool get editLoader => editProfileLoader;
-  Map get getProfileDetails => profileDetails;
-  Map get getPartnerDetailsFull => partnerDetailsFull;
+  Map get getProfileDetails => profileDetails!;
+  Map get getPartnerDetailsFull => partnerDetailsFull!;
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
   List get getServiceList => servicesList;
 
   void setRegistrationInProgress(bool state) {
-    registrationInProgress = state ?? true;
+    registrationInProgress = state;
     notifyListeners();
   }
 
@@ -253,32 +253,32 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   void setAvailability(state) {
-    partnerDetailsFull['availability'] = state;
-    profileDetails['availability'] = state;
+    partnerDetailsFull!['availability'] = state;
+    profileDetails!['availability'] = state;
     notifyListeners();
   }
 
   void setCategoryItemState(state, index) {
-    partnerDetailsFull['catelogs'][index]['isActive'] = state;
+    partnerDetailsFull!['catelogs'][index]['isActive'] = state;
     notifyListeners();
   }
 
   void setCategoryItem(body) {
-    partnerDetailsFull['catelogs'].add(body);
+    partnerDetailsFull!['catelogs'].add(body);
     notifyListeners();
   }
 
   void updateCategoryItem(body, index) {
-    partnerDetailsFull['catelogs'][index]['name'] = body['name'];
-    partnerDetailsFull['catelogs'][index]['description'] = body['description'];
-    partnerDetailsFull['catelogs'][index]['price'] = body['price'];
-    partnerDetailsFull['catelogs'][index]['media'][0]['url'] =
+    partnerDetailsFull!['catelogs'][index]['name'] = body['name'];
+    partnerDetailsFull!['catelogs'][index]['description'] = body['description'];
+    partnerDetailsFull!['catelogs'][index]['price'] = body['price'];
+    partnerDetailsFull!['catelogs'][index]['media'][0]['url'] =
         body['media'][0]['url'];
     notifyListeners();
   }
 
   void removeCategoryItem(cat) {
-    partnerDetailsFull['catelogs']
+    partnerDetailsFull!['catelogs']
         .removeWhere((element) => element['_id'].toString() == cat.toString());
     notifyListeners();
   }

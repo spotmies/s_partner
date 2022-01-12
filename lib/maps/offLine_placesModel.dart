@@ -18,7 +18,7 @@ class OfflinePlaceSearch extends StatefulWidget {
 class OfflinePlaceSearchState extends State<OfflinePlaceSearch> {
   List<Places> geoLocations = [];
   String query = '';
-  Timer debouncer;
+  Timer? debouncer;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class OfflinePlaceSearchState extends State<OfflinePlaceSearch> {
     Duration duration = const Duration(milliseconds: 1000),
   }) {
     if (debouncer != null) {
-      debouncer.cancel();
+      debouncer!.cancel();
     }
 
     debouncer = Timer(duration, callback);
@@ -159,12 +159,12 @@ class OfflinePlaceSearchState extends State<OfflinePlaceSearch> {
           ),
         ),
         title: TextWid(
-          text: geo.subLocality,
+          text: geo.subLocality!,
           size: 15,
           weight: FontWeight.w600,
         ),
         subtitle: TextWid(
-          text: geo.addressLine,
+          text: geo.addressLine!,
           size: 12,
         ),
         trailing: Icon(Icons.directions));
@@ -176,8 +176,8 @@ class PlacesLocal {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var location = prefs.getString('places');
-    final places = jsonDecode(location);
-    if (location != null) {
+    final places = jsonDecode(location!);
+    if (location.isNotEmpty) {
       return places.map((json) => Places.fromJson(json)).where((geo) {
         final subLocality = geo.subLocality.toLowerCase();
         final locality = geo.addressLine.toLowerCase();

@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 
 class SizeConfig {
-  static MediaQueryData _mediaQueryData;
-  static double screenWidth;
-  static double screenHeight;
-  static double defaultSize;
-  static Orientation orientation;
+  static MediaQueryData? _mediaQueryData;
+  static double? screenWidth;
+  static double? screenHeight;
+  static double? defaultSize;
+  static Orientation? orientation;
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
-    orientation = _mediaQueryData.orientation;
+    screenWidth = _mediaQueryData?.size.width;
+    screenHeight = _mediaQueryData?.size.height;
+    orientation = _mediaQueryData?.orientation;
   }
 }
 
 double getProportionateScreenHeight(double inputHeight) {
-  double screenHeight = SizeConfig.screenHeight;
-  return (inputHeight / 896.0) * screenHeight;
+  double? screenHeight = SizeConfig.screenHeight;
+  return (inputHeight / 896.0) * screenHeight!;
 }
 
 double getProportionateScreenWidth(double inputWidth) {
-  double screenWidth = SizeConfig.screenWidth;
-  return (inputWidth / 414.0) * screenWidth;
+  double? screenWidth = SizeConfig.screenWidth;
+  return (inputWidth / 414.0) * screenWidth!;
 }
 
 class VerticalSpacing extends StatelessWidget {
   const VerticalSpacing({
-    Key key,
+    Key? key,
     this.of = 20,
   }) : super(key: key);
 
@@ -43,7 +43,7 @@ class VerticalSpacing extends StatelessWidget {
 
 class HorizontalSpacing extends StatelessWidget {
   const HorizontalSpacing({
-    Key key,
+    Key? key,
     this.of = 20,
   }) : super(key: key);
 

@@ -26,23 +26,23 @@ class AppBarScreen extends StatefulWidget {
 }
 
 class _AppBarScreenState extends StateMVC<AppBarScreen> {
-  DrawerandAppBarController _appBarController;
-  _AppBarScreenState() : super(DrawerandAppBarController()) {
-    this._appBarController = controller;
-  }
-  PartnerDetailsProvider partnerDetailsProvider;
-  var pd;
+  DrawerandAppBarController? _appBarController = DrawerandAppBarController();
+  // _AppBarScreenState() : super(DrawerandAppBarController()) {
+  //   this._appBarController = controller;
+  // }
+  PartnerDetailsProvider? partnerDetailsProvider;
+  dynamic pd;
 
   updatePartnerData(body) async {
     var response = await Server().editMethod(API.partnerStatus + pId, body);
     if (response.statusCode == 200) {
       Map<String, dynamic> data =
           jsonDecode(response.body) as Map<String, dynamic>;
-      partnerDetailsProvider.setPartnerDetailsOnly(data);
+      partnerDetailsProvider!.setPartnerDetailsOnly(data);
     } else {
-      partnerDetailsProvider.setAvailability(!pd['availability']);
+      partnerDetailsProvider!.setAvailability(!pd['availability']);
     }
-    partnerDetailsProvider.setOffileLoader(false);
+    partnerDetailsProvider!.setOffileLoader(false);
   }
 
   @override
@@ -61,10 +61,11 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
     final _width = MediaQuery.of(context).size.width;
 
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      pd = data.getProfileDetails ??
-          {'name': 'Fetching...', 'availability': false};
+      pd = data.getProfileDetails.isEmpty
+          ? {'name': 'Fetching...', 'availability': false}
+          : data.getProfileDetails;
       return Scaffold(
-        key: _appBarController.drawerAppbarScoffoldKey,
+        key: _appBarController?.drawerAppbarScoffoldKey,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.grey[100],
@@ -80,8 +81,8 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
           title: TextWid(
             text: pd['name'] == 'Fetching...'
                 ? 'User'
-                : toBeginningOfSentenceCase(pd['name']),
-            color: Colors.grey[900],
+                : toBeginningOfSentenceCase(pd['name']).toString(),
+            color: Colors.grey[900]!,
             size: _width * 0.045,
             weight: FontWeight.w600,
           ),
@@ -94,10 +95,10 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                     BoxShadow(
                         blurRadius: 2,
                         spreadRadius: 2,
-                        color: Colors.grey[100]),
+                        color: Colors.grey[100]!),
                   ]),
               child: FlutterSwitch(
-                  activeColor: Colors.grey[200],
+                  activeColor: Colors.grey[200]!,
                   activeIcon: Icon(
                     Icons.done,
                     color: Colors.white,
@@ -106,12 +107,12 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                     Icons.work_off,
                     color: Colors.white,
                   ),
-                  inactiveColor: Colors.grey[200],
+                  inactiveColor: Colors.grey[200]!,
                   activeToggleColor: Colors.greenAccent[700],
                   inactiveToggleColor: Colors.redAccent[700],
                   activeText: 'Online',
-                  activeTextColor: Colors.grey[900],
-                  inactiveTextColor: Colors.grey[900],
+                  activeTextColor: Colors.grey[900]!,
+                  inactiveTextColor: Colors.grey[900]!,
                   inactiveText: 'Offline',
                   width: _width * 0.2,
                   height: _hight * 0.04,

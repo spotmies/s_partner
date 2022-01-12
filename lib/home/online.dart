@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +25,17 @@ class Online extends StatefulWidget {
 }
 
 class _OnlineState extends StateMVC<Online> {
-  IncomingOrdersController _incomingOrdersController;
-  PartnerDetailsProvider partnerProvider;
-  Map<dynamic, dynamic> partnerProfile;
-  _OnlineState() : super(IncomingOrdersController()) {
-    this._incomingOrdersController = controller;
-  }
+  IncomingOrdersController? _incomingOrdersController =
+      IncomingOrdersController();
+  PartnerDetailsProvider? partnerProvider;
+  Map<dynamic, dynamic>? partnerProfile;
+  // _OnlineState() : super(IncomingOrdersController()) {
+  //   this._incomingOrdersController = controller;
+  // }
 
   @override
   void initState() {
-    _incomingOrdersController.incomingOrdersProvider =
+    _incomingOrdersController!.incomingOrdersProvider =
         Provider.of<IncomingOrdersProvider>(context, listen: false);
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
@@ -46,8 +48,8 @@ class _OnlineState extends StateMVC<Online> {
     // });
 
     super.initState();
-    _incomingOrdersController.pickedDate = DateTime.now();
-    _incomingOrdersController.pickedTime = TimeOfDay.now();
+    _incomingOrdersController!.pickedDate = DateTime.now();
+    _incomingOrdersController!.pickedTime = TimeOfDay.now();
   }
 
   @override
@@ -57,11 +59,11 @@ class _OnlineState extends StateMVC<Online> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        key: _incomingOrdersController.incomingscaffoldkey,
+        key: _incomingOrdersController!.incomingscaffoldkey,
         backgroundColor: Colors.grey[50],
         body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          List<dynamic> ld = data.getIncomingOrder;
-          List<dynamic> o = List.from(ld.reversed);
+          List<dynamic>? ld = data.getIncomingOrder;
+          List<dynamic>? o = List.from(ld.reversed);
           partnerProfile = data.getProfileDetails;
           // if (data.reloadIncomingOrders == true)
           //   _incomingOrdersController.incomingOrders(notify: false);
@@ -69,7 +71,7 @@ class _OnlineState extends StateMVC<Online> {
             children: [
               Container(
                   child: RefreshIndicator(
-                onRefresh: partnerProvider.getOnlyIncomingOrders,
+                onRefresh: partnerProvider!.getOnlyIncomingOrders,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: o.length,
@@ -91,14 +93,14 @@ class _OnlineState extends StateMVC<Online> {
                                       o[index]["ordId"],
                                       o[index]["pId"],
                                       u['_id'],
-                                      partnerProfile['_id'],
+                                      partnerProfile!['_id'],
                                       from: "outside");
                                 },
                                 orderId: o[index]['ordId'].toString(),
                                 from: "incomingOrders",
                                 onclick: (orderData, pDetailsId, responseType) {
                                   print("onclick>>>>>>>");
-                                  _incomingOrdersController.respondToOrder(
+                                  _incomingOrdersController!.respondToOrder(
                                       orderData,
                                       pDetailsId,
                                       responseType,
@@ -110,7 +112,7 @@ class _OnlineState extends StateMVC<Online> {
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey[300],
+                                color: Colors.grey[300]!,
                                 blurRadius: 4,
                                 spreadRadius: 1,
                               )
@@ -140,11 +142,11 @@ class _OnlineState extends StateMVC<Online> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextWid(
-                                          text: partnerProvider
+                                          text: partnerProvider!
                                               .getServiceNameById(
                                                   o[index]['job']),
                                           size: _width * 0.04,
-                                          color: Colors.grey[900],
+                                          color: Colors.grey[900]!,
                                           weight: FontWeight.w600,
                                         ),
                                         Row(
@@ -164,7 +166,7 @@ class _OnlineState extends StateMVC<Online> {
                                                       o[index]['ordId'],
                                                       o[index]['pId'],
                                                       u['_id'],
-                                                      partnerProfile['_id'],
+                                                      partnerProfile!['_id'],
                                                       _hight,
                                                       _width);
                                                 }),
@@ -193,14 +195,14 @@ class _OnlineState extends StateMVC<Online> {
                                                 TextWid(
                                                   text: getDate(
                                                       o[index]['schedule']),
-                                                  color: Colors.grey[900],
+                                                  color: Colors.grey[900]!,
                                                   size: _width * 0.04,
                                                 ),
                                                 TextWid(
                                                   text: '-' +
                                                       getTime(
                                                           o[index]['schedule']),
-                                                  color: Colors.grey[900],
+                                                  color: Colors.grey[900]!,
                                                   size: _width * 0.04,
                                                 ),
                                               ],
@@ -217,7 +219,7 @@ class _OnlineState extends StateMVC<Online> {
                                                       o[index]['money']
                                                           .toString() +
                                                       ' /-',
-                                                  color: Colors.grey[900],
+                                                  color: Colors.grey[900]!,
                                                   size: _width * 0.04,
                                                 )
                                               : TextWid(
@@ -260,14 +262,14 @@ class _OnlineState extends StateMVC<Online> {
                                                 width: _width * 0.13,
                                                 child: CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  child: images == null
-                                                      ? NetworkImage(
+                                                  child: images.isNotEmpty
+                                                      ? Image.network(
                                                           images.first)
                                                       : Icon(
                                                           Icons
                                                               .home_repair_service_outlined,
                                                           color:
-                                                              Colors.grey[900],
+                                                              Colors.grey[900]!,
                                                         ),
                                                 )),
                                           ),
@@ -277,7 +279,7 @@ class _OnlineState extends StateMVC<Online> {
                                             child: TextWid(
                                               text: toBeginningOfSentenceCase(
                                                 o[index]['problem'].toString(),
-                                              ),
+                                              ).toString(),
                                               align: TextAlign.center,
                                               flow: TextOverflow.visible,
                                               size: _width * 0.04,
@@ -298,61 +300,73 @@ class _OnlineState extends StateMVC<Online> {
 
                                     // o[index]['orderState'] < 7
                                     //     ?
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            ElevatedButtonWidget(
-                                              buttonName: 'Reject',
-                                              height: _hight * 0.05,
-                                              minWidth: _width * 0.3,
-                                              bgColor: Colors.grey[200],
-                                              textColor: Colors.grey[900],
-                                              textSize: _width * 0.04,
-                                              leadingIcon: Icon(
-                                                Icons.close,
-                                                color: Colors.grey[900],
-                                                size: _width * 0.04,
+                                    SizedBox(
+                                      height: _hight * 0.057,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              ElevatedButtonWidget(
+                                                buttonName: 'Reject',
+                                                height: _hight * 0.05,
+                                                minWidth: _width * 0.3,
+                                                bgColor: Colors.grey[200]!,
+                                                textColor: Colors.grey[900]!,
+                                                textSize: _width * 0.04,
+                                                allRadius: true,
+                                                leadingIcon: Icon(
+                                                  Icons.close,
+                                                  color: Colors.grey[900],
+                                                  size: _width * 0.04,
+                                                ),
+                                                borderRadius: 15.0,
+                                                borderSideColor:
+                                                    Colors.grey[50]!,
+                                                onClick: () {
+                                                  _incomingOrdersController!
+                                                      .respondToOrder(
+                                                          o[index],
+                                                          partnerProfile![
+                                                              '_id'],
+                                                          "reject",
+                                                          context);
+                                                },
                                               ),
-                                              borderRadius: 15.0,
-                                              borderSideColor: Colors.grey[50],
-                                              onClick: () {
-                                                _incomingOrdersController
-                                                    .respondToOrder(
-                                                        o[index],
-                                                        partnerProfile['_id'],
-                                                        "reject",
-                                                        context);
-                                              },
-                                            ),
-                                            ElevatedButtonWidget(
-                                              buttonName: 'Accept',
-                                              height: _hight * 0.05,
-                                              minWidth: _width * 0.55,
-                                              bgColor: Colors.grey[900],
-                                              textColor: Colors.white,
-                                              textSize: _width * 0.04,
-                                              trailingIcon: Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                                size: _width * 0.04,
+                                              SizedBox(
+                                                // height: _hight * 0.057,
+                                                child: ElevatedButtonWidget(
+                                                  buttonName: 'Accept',
+                                                  height: _hight * 0.05,
+                                                  minWidth: _width * 0.55,
+                                                  bgColor: Colors.grey[900]!,
+                                                  textColor: Colors.white,
+                                                  textSize: _width * 0.04,
+                                                  allRadius: true,
+                                                  trailingIcon: Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: _width * 0.04,
+                                                  ),
+                                                  borderRadius: 15.0,
+                                                  borderSideColor:
+                                                      Colors.grey[100]!,
+                                                  onClick: () async {
+                                                    await _incomingOrdersController
+                                                        ?.respondToOrder(
+                                                            o[index],
+                                                            partnerProfile![
+                                                                '_id'],
+                                                            "accept",
+                                                            context);
+                                                  },
+                                                ),
                                               ),
-                                              borderRadius: 15.0,
-                                              borderSideColor: Colors.grey[100],
-                                              onClick: () async {
-                                                _incomingOrdersController
-                                                    .respondToOrder(
-                                                        o[index],
-                                                        partnerProfile['_id'],
-                                                        "accept",
-                                                        context);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     )
                                     // : TextWid(
                                     //     text: 'Order Accepted',
@@ -404,7 +418,7 @@ class _OnlineState extends StateMVC<Online> {
           ),
           TextWid(
               text: "Take over by Someone else",
-              color: Colors.grey[900],
+              color: Colors.grey[900]!,
               weight: FontWeight.w600,
               size: _width * 0.03)
         ],
@@ -466,14 +480,14 @@ class _OnlineState extends StateMVC<Online> {
                                     ordid,
                                     pid,
                                     ordDetails['uDetails']['_id'],
-                                    partnerProfile['_id'],
+                                    partnerProfile!['_id'],
                                     from: "outside");
                               },
                               orderId: ordid.toString(),
                               from: "incomingOrders",
                               onclick: (orderData, pDetailsId, responseType) {
                                 print("onclick>>>>>>>");
-                                _incomingOrdersController.respondToOrder(
+                                _incomingOrdersController!.respondToOrder(
                                     orderData,
                                     pDetailsId,
                                     responseType,
@@ -548,12 +562,16 @@ class _OnlineState extends StateMVC<Online> {
         builder: (BuildContext context) {
           return Container(
             height: hight * 0.35,
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            margin: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: StatefulBuilder(
                 // builder: (BuildContext context, StateSetter setStatee) {
                 builder: (BuildContext context, setStatee) {
               return Form(
-                key: _incomingOrdersController.updateFormKey,
+                key: _incomingOrdersController!.updateFormKey,
                 child: ListView(
                   children: [
                     Container(
@@ -566,8 +584,8 @@ class _OnlineState extends StateMVC<Online> {
                     ),
                     InkWell(
                       onTap: () {
-                        _incomingOrdersController.pickedDateandTime(context,
-                            setStatee: setStatee);
+                        _incomingOrdersController!
+                            .pickedDateandTime(context, setStatee: setStatee);
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 10),
@@ -579,9 +597,9 @@ class _OnlineState extends StateMVC<Online> {
                             border: Border.all(color: Colors.grey)),
                         child: TextWid(
                           text: 'Schedule:  ' +
-                              ' ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}' +
+                              ' ${_incomingOrdersController!.pickedDate!.day}/${_incomingOrdersController!.pickedDate!.month}/${_incomingOrdersController!.pickedDate!.year}' +
                               '@' +
-                              '${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
+                              '${_incomingOrdersController!.pickedTime!.hour}:${_incomingOrdersController!.pickedTime!.minute}',
                           size: width * 0.045,
                           weight: FontWeight.w600,
                         ),
@@ -590,14 +608,14 @@ class _OnlineState extends StateMVC<Online> {
                     Container(
                       padding: EdgeInsets.all(15),
                       child: TextFieldWidget(
-                        controller: _incomingOrdersController.moneyController,
+                        controller: _incomingOrdersController!.moneyController,
                         hint: 'Money',
                         type: "number",
                         enableBorderColor: Colors.grey,
                         formatter: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         ],
-                        focusBorderColor: Colors.grey[900],
+                        focusBorderColor: Colors.grey[900]!,
                         enableBorderRadius: 15,
                         focusBorderRadius: 15,
                         errorBorderRadius: 15,
@@ -605,7 +623,7 @@ class _OnlineState extends StateMVC<Online> {
                         validateMsg: 'Enter Valid Money',
                         maxLines: 1,
                         postIcon: Icon(Icons.change_circle),
-                        postIconColor: Colors.grey[900],
+                        postIconColor: Colors.grey[900]!,
                       ),
                     ),
                     SizedBox(
@@ -617,13 +635,14 @@ class _OnlineState extends StateMVC<Online> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButtonWidget(
-                            bgColor: Colors.grey[300],
+                            bgColor: Colors.grey[300]!,
                             minWidth: width * 0.3,
                             height: hight * 0.06,
                             borderRadius: 15.0,
-                            textColor: Colors.grey[900],
+                            textColor: Colors.grey[900]!,
                             textSize: width * 0.04,
                             buttonName: 'Close',
+                            allRadius: true,
                             leadingIcon: Icon(
                               Icons.close,
                               color: Colors.grey[900],
@@ -633,23 +652,24 @@ class _OnlineState extends StateMVC<Online> {
                             },
                           ),
                           ElevatedButtonWidget(
-                            bgColor: Colors.grey[900],
+                            bgColor: Colors.grey[900]!,
                             borderSideColor: Colors.white,
                             minWidth: width * 0.55,
                             height: hight * 0.06,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
                             textColor: Colors.white,
+                            allRadius: true,
                             buttonName: 'Change',
                             trailingIcon: Icon(Icons.send),
                             onClick: () {
-                              if (_incomingOrdersController
-                                  .updateFormKey.currentState
+                              if (_incomingOrdersController!
+                                  .updateFormKey.currentState!
                                   .validate()) {
                                 Navigator.pop(context);
-                                _incomingOrdersController.respondToOrder(
+                                _incomingOrdersController?.respondToOrder(
                                     ordDetails,
-                                    partnerProfile['_id'],
+                                    partnerProfile?['_id'],
                                     "bid",
                                     context);
                                 if (from == "outside") {
@@ -690,7 +710,7 @@ class _OnlineState extends StateMVC<Online> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
-                                        _incomingOrdersController
+                                        _incomingOrdersController!
                                             .pickedDateandTime(context);
                                       },
                                       child: Container(
@@ -706,10 +726,10 @@ class _OnlineState extends StateMVC<Online> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                                'Date:  ${_incomingOrdersController.pickedDate.day}/${_incomingOrdersController.pickedDate.month}/${_incomingOrdersController.pickedDate.year}',
+                                                'Date:  ${_incomingOrdersController!.pickedDate!.day}/${_incomingOrdersController!.pickedDate!.month}/${_incomingOrdersController!.pickedDate!.year}',
                                                 style: TextStyle(fontSize: 15)),
                                             Text(
-                                                'Time:  ${_incomingOrdersController.pickedTime.hour}:${_incomingOrdersController.pickedTime.minute}',
+                                                'Time:  ${_incomingOrdersController!.pickedTime!.hour}:${_incomingOrdersController!.pickedTime!.minute}',
                                                 style: TextStyle(fontSize: 15))
                                           ],
                                         ),
@@ -739,7 +759,7 @@ class _OnlineState extends StateMVC<Online> {
                                           contentPadding: EdgeInsets.all(20),
                                         ),
                                         onChanged: (value) {
-                                          _incomingOrdersController.pmoney =
+                                          _incomingOrdersController!.pmoney =
                                               value;
                                         },
                                       ),
@@ -754,11 +774,12 @@ class _OnlineState extends StateMVC<Online> {
                                       child: Text('Done'),
                                       onPressed: () async {
                                         var body = {
-                                          "money": _incomingOrdersController
+                                          "money": _incomingOrdersController!
                                               .pmoney
                                               .toString(),
-                                          "schedule": _incomingOrdersController
-                                              .pickedDate.millisecondsSinceEpoch
+                                          "schedule": _incomingOrdersController!
+                                              .pickedDate!
+                                              .millisecondsSinceEpoch
                                               .toString(),
                                           "uId": uid.toString(),
                                           "pId": API.pid.toString(),

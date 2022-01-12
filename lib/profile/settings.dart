@@ -5,15 +5,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-String updatedEmail;
-String updatedob;
-String updatedNum;
-String updatedtempad;
-File _profilepic;
+String? updatedEmail;
+String? updatedob;
+String? updatedNum;
+String? updatedtempad;
+File? _profilepic;
 String imageLink1 = "";
 var updatePath = FirebaseFirestore.instance
     .collection('partner')
-    .doc(FirebaseAuth.instance.currentUser.uid);
+    .doc(FirebaseAuth.instance.currentUser!.uid);
 
 class Setting extends StatefulWidget {
   @override
@@ -44,14 +44,14 @@ class _SettingState extends State<Setting> {
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('partner')
-                  .doc(FirebaseAuth.instance.currentUser.uid)
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                var document = snapshot.data;
+                dynamic document = snapshot.data;
                 return Center(
                     child: Container(
                   //color: Colors.amber,
@@ -258,7 +258,7 @@ class _SettingState extends State<Setting> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      _profilepic = File(profile.path);
+      _profilepic = File(profile!.path);
     });
   }
 
@@ -267,12 +267,12 @@ class _SettingState extends State<Setting> {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(_profilepic);
+        .putFile(_profilepic!);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink1 = imageUrl.toString();
     await FirebaseFirestore.instance
         .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({'profilepic': imageLink1});
     // setState(() {
     //   _profilepic = null;

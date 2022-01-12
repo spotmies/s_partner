@@ -11,7 +11,7 @@ singleBarChart(hight, width) {
             getTitles: (value) {
               return '${value.toInt()}';
             },
-            getTextStyles: (value) {
+            getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
                 color: Colors.grey[900],
                 fontSize: width * 0.035,
@@ -22,7 +22,7 @@ singleBarChart(hight, width) {
             margin: 8.0),
         bottomTitles: SideTitles(
             showTitles: true,
-            getTextStyles: (value) {
+            getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
                 color: Colors.grey[900],
                 fontSize: width * 0.035,

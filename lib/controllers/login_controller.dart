@@ -38,8 +38,8 @@ class LoginPageController extends ControllerMVC {
   // }
 
   dataToOTP(BuildContext context, TimeProvider timerProvider) {
-    if (formkey.currentState.validate()) {
-      formkey.currentState.save();
+    if (formkey.currentState!.validate()) {
+      formkey.currentState!.save();
       timerProvider.setPhNumber(loginnum.text.toString());
 
       verifyPhone(context, timerProvider);
@@ -74,11 +74,11 @@ class LoginPageController extends ControllerMVC {
             snackbar(context, e.message.toString());
             timerProvider.setLoader(false);
           },
-          codeSent: (String verficationID, int resendToken) {
+          codeSent: (String? verficationID, int? resendToken) {
             timerProvider.setLoader(false);
             snackbar(context, "Otp send successfully ");
 
-            _verificationCode = verficationID;
+            _verificationCode = verficationID!;
             timerProvider.setVerificationCode(verficationID);
             log("verfication code $_verificationCode");
 
@@ -121,9 +121,9 @@ class LoginPageController extends ControllerMVC {
           log("114 ${timerProvider.phNumber}");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           // print("user already login");
-          String resp = await checkPartnerRegistered(value.user.uid);
+          String resp = await checkPartnerRegistered(value.user!.uid);
           timerProvider.setLoader(false);
-          partnerProvider.setCurrentPid(value.user.uid);
+          partnerProvider.setCurrentPid(value.user!.uid);
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -164,9 +164,10 @@ class LoginPageController extends ControllerMVC {
   splashScreenNavigation(
       BuildContext context, PartnerDetailsProvider partnerProvider) async {
     if (FirebaseAuth.instance.currentUser != null) {
-      partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
+      partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser!.uid);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+      log(FirebaseAuth.instance.currentUser!.uid.toString());
     } else {
       Navigator.pushAndRemoveUntil(
           context,

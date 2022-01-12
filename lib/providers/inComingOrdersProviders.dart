@@ -9,7 +9,7 @@ class IncomingOrdersProvider extends ChangeNotifier {
   // final controller = TestController();
   var orders;
   var local;
-  String pid = FirebaseAuth.instance.currentUser.uid.toString(); //user id
+  String pid = FirebaseAuth.instance.currentUser!.uid.toString(); //user id
 
   final queryParameters = {
     'showOnly': 'inComingOrders',
@@ -21,11 +21,11 @@ class IncomingOrdersProvider extends ChangeNotifier {
   localOrdersGet() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String ico = prefs.getString('inComingOrders');
+    String? ico = prefs.getString('inComingOrders');
     if (ico == null) {
       incomingOrders();
     }
-    local = jsonDecode(ico);
+    local = jsonDecode(ico!);
   }
 
   incomingOrders() async {

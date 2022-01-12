@@ -37,7 +37,7 @@ List topics = [
 // final List<Item> _data = generateItems(3);
 
 class BuildPanel extends StatefulWidget {
-  const BuildPanel({Key key}) : super(key: key);
+  const BuildPanel({Key? key}) : super(key: key);
 
   @override
   _BuildPanelState createState() => _BuildPanelState();

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:geocoder/geocoder.dart';
 // import 'package:geocoder/model.dart';
@@ -20,11 +19,11 @@ class PostOverViewController extends ControllerMVC {
   TextEditingController problem = TextEditingController();
   // ChatProvider chatProvider;
   // PartnerDetailsProvider partnerProvider;
-  String title;
-  int dropDownValue = 0;
-  DateTime pickedDate;
-  TextEditingController moneyController = TextEditingController();
-  TimeOfDay pickedTime;
+  String? title;
+  int? dropDownValue = 0;
+  DateTime? pickedDate;
+  TextEditingController? moneyController = TextEditingController();
+  TimeOfDay? pickedTime;
 
   // @override
   // void initState() {
@@ -48,14 +47,14 @@ class PostOverViewController extends ControllerMVC {
 
   isServiceCompleted(
       BuildContext context, PartnerDetailsProvider partnerProvider,
-      {String ordId, String money}) async {
+      {String? ordId, String? money}) async {
     Map<String, String> body = {
       "isOrderCompletedByPartner": "true",
-      "moneyTakenByPartner": money
+      "moneyTakenByPartner": money!
     };
 
     partnerProvider.setOrderViewLoader(true);
-    dynamic response = await Server().editMethod(API.acceptOrder + ordId, body);
+    dynamic response = await Server().editMethod(API.acceptOrder + ordId!, body);
     partnerProvider.setOrderViewLoader(false);
     if (response.statusCode == 200) {
       return snackbar(context, "Order completed successfully");
@@ -150,17 +149,17 @@ class PostOverViewController extends ControllerMVC {
   }
 
   pickedDateandTime(BuildContext context) async {
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
         context: context,
-        initialDate: pickedDate,
+        initialDate: pickedDate!,
         firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
       setState(() async {
-        TimeOfDay t = await showTimePicker(
+        TimeOfDay? t = await showTimePicker(
           context: context,
-          initialTime: pickedTime,
+          initialTime: pickedTime!,
         );
         if (t != null) {
           setState(() {
@@ -176,22 +175,16 @@ class PostOverViewController extends ControllerMVC {
     switch (orderState) {
       case 'req':
         return 'Waiting for conformation';
-        break;
       case 'noPartner':
         return 'No technicians found';
-        break;
       case 'updated':
         return 'updated';
-        break;
       case 'onGoing':
         return 'On Going';
-        break;
       case 'completed':
         return 'Completed';
-        break;
       case 'cancel':
         return 'Cancelled';
-        break;
       default:
         return 'Booking done';
     }
@@ -201,22 +194,16 @@ class PostOverViewController extends ControllerMVC {
     switch (orderState) {
       case 'req':
         return Icons.pending_actions;
-        break;
       case 'noPartner':
         return Icons.stop_circle;
-        break;
       case 'updated':
         return Icons.update;
-        break;
       case 'onGoing':
         return Icons.run_circle_rounded;
-        break;
       case 'completed':
         return Icons.done_all;
-        break;
       case 'cancel':
         return Icons.cancel;
-        break;
       default:
         return Icons.search;
     }
@@ -251,7 +238,7 @@ class PostOverViewController extends ControllerMVC {
                     child: TextFormField(
                       controller: problem,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please discribe your problem';
                         }
                         return null;
@@ -263,11 +250,11 @@ class PostOverViewController extends ControllerMVC {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                                BorderSide(width: 1, color: Colors.grey[100])),
+                                BorderSide(width: 1, color: Colors.grey[100]!)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                                BorderSide(width: 1, color: Colors.grey[100])),
+                                BorderSide(width: 1, color: Colors.grey[100]!)),
                         hintStyle: TextStyle(fontSize: 17),
                         hintText: edit == 'problem' ? 'Problem' : 'Amount',
                         suffixIcon: Icon(

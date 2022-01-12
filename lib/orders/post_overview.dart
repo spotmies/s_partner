@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,10 +28,10 @@ import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
-  final String orderId;
-  final Function onclick;
-  final String from;
-  final Function onBottomSheet;
+  final String? orderId;
+  final Function? onclick;
+  final String? from;
+  final Function? onBottomSheet;
 
   PostOverView(
       {@required this.orderId, this.onclick, this.from, this.onBottomSheet});
@@ -41,15 +40,15 @@ class PostOverView extends StatefulWidget {
 }
 
 class _PostOverViewState extends StateMVC<PostOverView> {
-  PostOverViewController _postOverViewController;
-  _PostOverViewState() : super(PostOverViewController()) {
-    this._postOverViewController = controller;
-  }
-  int ordId;
+  PostOverViewController? _postOverViewController = PostOverViewController();
+  // _PostOverViewState() : super(PostOverViewController()) {
+  //   this._postOverViewController = controller;
+  // }
+  int? ordId;
   dynamic d;
   dynamic partnerProfile;
-  PartnerDetailsProvider partnerProvider;
-  ChatProvider chatProvider;
+  PartnerDetailsProvider? partnerProvider;
+  ChatProvider? chatProvider;
   bool showOrderStatusQuestion = false;
 
   void chatWithPatner(responseData) {
@@ -57,8 +56,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       snackbar(context, "you can't make a chat");
       return;
     }
-    _postOverViewController.chatWithpatner(
-        responseData, context, chatProvider, partnerProvider);
+    _postOverViewController!
+        .chatWithpatner(responseData, context, chatProvider!, partnerProvider);
   }
 
   @override
@@ -70,7 +69,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     //     Provider.of<PartnerDetailsProvider>(context, listen: false);
     try {
       setState(() {
-        if (!partnerProvider
+        if (!partnerProvider!
             .getOrderById(widget.orderId)['isOrderCompletedByPartner']) {
           showOrderStatusQuestion = true;
         } else {
@@ -83,7 +82,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   isThisOrderCompleted({state = false, responseId = 123}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(context, responseId: responseId);
+      _postOverViewController!
+          .isOrderCompleted(context, responseId: responseId);
     }
     showOrderStatusQuestion = false;
     refresh();
@@ -146,7 +146,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                               ? Icon(Icons.post_add, color: Colors.indigo[900])
                               : InkWell(
                                   onTap: () {
-                                    if (!isExtended) widget.onBottomSheet();
+                                    if (!isExtended) widget.onBottomSheet!();
                                   },
                                   child: Row(
                                     children: [
@@ -162,7 +162,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           text: 'RISE BID',
                                           size: _width * 0.045,
                                           weight: FontWeight.w600,
-                                          color: Colors.indigo[900])
+                                          color: Colors.indigo[900]!)
                                     ],
                                   ),
                                 ),
@@ -195,11 +195,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWid(
-                    text: partnerProvider.getServiceNameById(d['job']),
+                    text: partnerProvider!.getServiceNameById(d['job']),
                     size: _width * 0.04,
                     color: d['orderState'] > 8 || d['isOrderCompletedByPartner']
                         ? Colors.white
-                        : Colors.grey[500],
+                        : Colors.grey[500]!,
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
@@ -227,7 +227,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             color: d['orderState'] > 8 ||
                                     d['isOrderCompletedByPartner']
                                 ? Colors.white
-                                : Colors.grey[700],
+                                : Colors.grey[700]!,
                             weight: FontWeight.w700,
                             flow: TextOverflow.visible,
                             size: _width * 0.03),
@@ -247,12 +247,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                               ElevatedButtonWidget(
                                   height: _hight * 0.05,
                                   minWidth: _width * 0.3,
-                                  bgColor: Colors.indigo[50],
-                                  borderSideColor: Colors.grey[200],
+                                  bgColor: Colors.indigo[50]!,
+                                  borderSideColor: Colors.grey[200]!,
                                   borderRadius: 10.0,
                                   buttonName: 'Reject',
-                                  textColor: Colors.indigo[900],
+                                  textColor: Colors.indigo[900]!,
                                   textSize: _width * 0.04,
+                                  allRadius: true,
                                   leadingIcon: Icon(
                                     Icons.cancel,
                                     color: Colors.indigo[900],
@@ -260,23 +261,24 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   ),
                                   onClick: () {
                                     if (widget.from == "incomingOrders") {
-                                      widget.onclick(
+                                      widget.onclick!(
                                           d, partnerProfile['_id'], "reject");
                                       Navigator.pop(context);
                                     }
                                   }),
                               ElevatedButtonWidget(
                                 onClick: () {
-                                  widget.onclick(
+                                  widget.onclick!(
                                       d, partnerProfile['_id'], "accept");
                                   Navigator.pop(context);
                                 },
                                 height: _hight * 0.05,
                                 minWidth: _width * 0.6,
-                                bgColor: Colors.indigo[900],
-                                borderSideColor: Colors.grey[200],
+                                bgColor: Colors.indigo[900]!,
+                                borderSideColor: Colors.grey[200]!,
                                 borderRadius: 10.0,
                                 buttonName: 'Accept',
+                                allRadius: true,
                                 textColor: Colors.white,
                                 textSize: _width * 0.04,
                                 trailingIcon: Icon(
@@ -317,7 +319,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 IconButton(
                     onPressed: () {
                       helpAndSupport(context, _hight, _width,
-                          partnerProvider.partnerDetailsFull);
+                          partnerProvider!.partnerDetailsFull);
                     },
                     icon: Icon(
                       Icons.help,
@@ -492,10 +494,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 },
                                                 bgColor: Colors.white,
                                                 borderSideColor:
-                                                    Colors.grey[200],
+                                                    Colors.grey[200]!,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Not yet',
                                                 textSize: _width * 0.04,
+                                                allRadius: true,
                                                 leadingIcon: Icon(
                                                   Icons.cancel,
                                                   color: Colors.grey[900],
@@ -505,11 +508,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                               ElevatedButtonWidget(
                                                 height: _hight * 0.05,
                                                 minWidth: _width * 0.45,
-                                                bgColor: Colors.indigo[900],
+                                                bgColor: Colors.indigo[900]!,
                                                 borderSideColor:
-                                                    Colors.grey[200],
+                                                    Colors.grey[200]!,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Completed',
+                                                allRadius: true,
                                                 onClick: () {
                                                   // isThisOrderCompleted(
                                                   //     state: true,
@@ -523,10 +527,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                       hint:
                                                           "Amount you charged",
                                                       onSubmit: (money) {
-                                                    _postOverViewController
+                                                    _postOverViewController!
                                                         .isServiceCompleted(
                                                             context,
-                                                            partnerProvider,
+                                                            partnerProvider!,
                                                             money: money
                                                                 .toString(),
                                                             ordId: d['ordId']
@@ -573,7 +577,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   }
 
   serviceDetailsListTile(width, hight, title, icon, subtitle,
-      {Function onClick}) {
+      {Function? onClick}) {
     return ListTile(
         onTap: () {
           if (onClick != null) onClick();
@@ -587,7 +591,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           text: title,
           size: width * 0.045,
           weight: FontWeight.w600,
-          color: Colors.grey[900],
+          color: Colors.grey[900]!,
           lSpace: 1.5,
         ),
         subtitle: TextWid(
@@ -595,7 +599,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           size: width * 0.04,
           flow: TextOverflow.visible,
           weight: FontWeight.w600,
-          color: Colors.grey[600],
+          color: Colors.grey[600]!,
           lSpace: 1,
         ),
         trailing: Container(
@@ -695,7 +699,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       margin: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
           color: Colors.indigo[900],
-          border: Border.all(color: Colors.indigo[900]),
+          border: Border.all(color: Colors.indigo[900]!),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -717,7 +721,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ),
                 TextWid(
                   text: 'VALID TILL',
-                  color: Colors.indigo[200],
+                  color: Colors.indigo[200]!,
                   size: width * 0.035,
                   weight: FontWeight.w600,
                 ),
@@ -824,11 +828,14 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ProfilePic(
-                  profile: orderDetails['uDetails']['pic'],
-                  name: orderDetails['uDetails']['name'],
-                  size: hight * 0.05,
-                ),
+                orderDetails['uDetails']?['name'] != null
+                    ? ProfilePic(
+                        profile: orderDetails['uDetails']?['pic'],
+                        name: orderDetails['uDetails']?['name'],
+                        size: hight * 0.05,
+                      )
+                    : CircleAvatar(
+                        radius: hight * 0.05, child: Icon(Icons.person)),
                 SizedBox(
                   width: width * 0.07,
                 ),
@@ -845,11 +852,12 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                             children: [
                               TextWid(
                                 text: toBeginningOfSentenceCase(
-                                  orderDetails['uDetails']['name'] ?? 'Unknown',
-                                ),
+                                  orderDetails['uDetails']?['name'] ??
+                                      'Unknown',
+                                ).toString(),
                                 size: width * 0.04,
                                 weight: FontWeight.w600,
-                                color: Colors.grey[900],
+                                color: Colors.grey[900]!,
                               )
                             ],
                           ),
@@ -861,14 +869,14 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                                   text: '123456789',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: Colors.grey[700]!,
                                 ),
                                 TextWid(
                                   // text: pDetails['rate'][0].toString(),
                                   text: '4.5',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: Colors.grey[700]!,
                                 ),
                                 Icon(
                                   Icons.star,
@@ -946,10 +954,11 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                             uId: orderDetails['uDetails']['uId'],
                             pId: myPid,
                             isIncoming: false,
-                            name: orderDetails['uDetails']['name'].toString(),
-                            profile: orderDetails['uDetails']['pic'].toString(),
+                            name: orderDetails['uDetails']?['name'].toString(),
+                            profile:
+                                orderDetails['uDetails']?['pic'].toString(),
                             userDeviceToken: orderDetails['uDetails']
-                                    ['userDeviceToken']
+                                    ?['userDeviceToken']
                                 .toString(),
                           )));
                 });
@@ -972,7 +981,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                     text: 'Call',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900],
+                    color: Colors.grey[900]!,
                   ),
                 ],
               ),
@@ -999,7 +1008,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                     text: 'Message',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900],
+                    color: Colors.grey[900]!,
                   ),
                 ],
               ),
@@ -1065,7 +1074,7 @@ class _Timeline2 extends StatelessWidget {
             switch (index) {
               case 0:
                 return solidLineConnector;
-                break;
+
               case 1:
                 if (orderData['orderState'] > 7) return solidLineConnector;
                 return solidLineConnectorEmpty;
@@ -1169,7 +1178,6 @@ class TimeLineTitle extends StatelessWidget {
         return "Feedback";
       default:
         return "Something Went wrong";
-        break;
     }
   }
 
@@ -1185,7 +1193,7 @@ class TimeLineTitle extends StatelessWidget {
       case 4:
         if (orderState > 9) return true;
         return false;
-        break;
+
       default:
         return false;
     }
@@ -1200,7 +1208,7 @@ class TimeLineTitle extends StatelessWidget {
           text: getStatus(),
           size: _width * 0.04,
           weight: FontWeight.w600,
-          color: isCompleted() ? Colors.grey[850] : Colors.grey[600],
+          color: isCompleted() ? Colors.grey[800]! : Colors.grey[600]!,
         ));
   }
 }
@@ -1213,11 +1221,12 @@ Container mediaContent(file, {bool isOnline = false}) {
       return Container(
         decoration: BoxDecoration(
             color: Colors.amber,
-            image: DecorationImage(
-                image: !isOnline ? FileImage(file) : NetworkImage(file),
-                fit: BoxFit.cover)),
+            image: !isOnline
+                ? DecorationImage(image: FileImage(file), fit: BoxFit.cover)
+                : DecorationImage(
+                    image: NetworkImage(file), fit: BoxFit.cover)),
       );
-      break;
+
     case "audio":
       return Container(
         color: Colors.grey[800],
@@ -1228,7 +1237,7 @@ Container mediaContent(file, {bool isOnline = false}) {
           color: Colors.grey[100],
         ),
       );
-      break;
+
     case "video":
       return Container(
         color: Colors.grey[800],
@@ -1239,13 +1248,12 @@ Container mediaContent(file, {bool isOnline = false}) {
           color: Colors.grey[100],
         ),
       );
-      break;
+
     default:
       return Container(
         color: Colors.grey[400],
         alignment: Alignment.center,
         child: TextWid(text: "undefined"),
       );
-      break;
   }
 }

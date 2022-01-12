@@ -34,9 +34,9 @@ class ChattingProvider extends ChangeNotifier {
 
   localData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String partnerData = prefs.getString('chat');
+    String? partnerData = prefs.getString('chat');
     List<dynamic> details =
-        chatLocal == null ? jsonDecode(partnerData) : chatLocal;
+        chatLocal == null ? jsonDecode(partnerData!) : chatLocal;
     chatLocal = details;
 
     // print('print from provider');

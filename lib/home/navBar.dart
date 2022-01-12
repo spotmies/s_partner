@@ -32,49 +32,49 @@ void main() => runApp(NavBar());
 String pId = "123456"; //user id
 
 class NavBar extends StatefulWidget {
-  final int data;
-  final String payload;
+  final int? data;
+  final String? payload;
   NavBar({this.data, this.payload});
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
-  ChatProvider chatProvider;
-  PartnerDetailsProvider partnerProvider;
+  ChatProvider? chatProvider;
+  PartnerDetailsProvider? partnerProvider;
 //socket
 
   // StreamController _chatResponse;
 
   // Stream stream;
 
-  IO.Socket socket;
+  IO.Socket? socket;
 
   void socketResponse() {
     socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
-    socket.onConnect((data) {
+    socket!.onConnect((data) {
       setStringToSF(id: "isSocketConnected", value: true);
       print("Connected");
-      socket.on("message", (msg) {
+      socket!.on("message", (msg) {
         print(msg);
       });
     });
-    socket.onDisconnect((data) {
+    socket!.onDisconnect((data) {
       log("disconnect $data");
       log("socket disconnected >>>>>>>>>");
       setStringToSF(id: "isSocketConnected", value: false);
       logoutUser();
     });
-    socket.connect();
-    socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
-    socket.on('recieveNewMessage', (socket) {
+    socket!.connect();
+    socket!.emit('join-room', FirebaseAuth.instance.currentUser!.uid);
+    socket!.on('recieveNewMessage', (socket) {
       var typeCheck = socket['target']['type'];
       if (typeCheck == "call") {
         log("======== incoming call ===========");
-        chatProvider.startCallTimeout();
+        chatProvider!.startCallTimeout();
         var newTarget = socket['target'];
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MyCalling(
@@ -89,24 +89,24 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                 )));
       }
       // _chatResponse.add(socket);
-      chatProvider.addnewMessage(socket);
+      chatProvider!.addnewMessage(socket);
     });
-    socket.on("recieveReadReciept", (data) {
-      chatProvider.chatReadReceipt(data['msgId'], data['status']);
+    socket!.on("recieveReadReciept", (data) {
+      chatProvider!.chatReadReceipt(data['msgId'], data['status']);
     });
-    socket.on('inComingOrders', (socket) {
+    socket!.on('inComingOrders', (socket) {
       socket['action'] == "new"
-          ? partnerProvider.addNewIncomingOrder(socket['payload'])
-          : partnerProvider.refressIncomingOrder(true);
+          ? partnerProvider!.addNewIncomingOrder(socket['payload'])
+          : partnerProvider!.refressIncomingOrder(true);
       log("incoming ord $socket");
     });
-    socket.on("chatStream", (socket) async {
+    socket!.on("chatStream", (socket) async {
       if (socket['type'] == "insert") {
         var newChat = await getChatByIdFromDB(socket['doc']['msgId']);
-        chatProvider.addNewChat(newChat);
+        chatProvider!.addNewChat(newChat);
       } else if (socket['type'] == "disable") {
         log("disable chat $socket");
-        chatProvider.disableChatByMsgId(socket['msgId']);
+        chatProvider!.disableChatByMsgId(socket['msgId']);
       }
     });
   }
@@ -118,17 +118,17 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     log("chat $chats");
     log("user $user");
     log("order $orders");
-    if (chats != null) chatProvider.setChatList(chats);
-    if (orders != null) partnerProvider.setOrder(orders);
-    if (user != null) partnerProvider.setPartnerDetails(user);
+    if (chats != null) chatProvider!.setChatList(chats);
+    if (orders != null) partnerProvider!.setOrder(orders);
+    if (user != null) partnerProvider!.setPartnerDetails(user);
   }
 
   loginPartner() async {
     if (FirebaseAuth.instance.currentUser != null) {
       String resp =
-          await checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
+          await checkPartnerRegistered(FirebaseAuth.instance.currentUser!.uid);
       if (resp == "true") {
-        partnerProvider.setCurrentPid(FirebaseAuth.instance.currentUser.uid);
+        partnerProvider!.setCurrentPid(FirebaseAuth.instance.currentUser!.uid);
         log("login succssfully");
       } else if (resp == "false") {
         Navigator.pushAndRemoveUntil(
@@ -142,7 +142,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                         MaterialPageRoute(
                             builder: (context) => AccountType(
                                   coordinates: cords,
-                                  phoneNumber: timerProvider.phNumber,
+                                  phoneNumber: timerProvider!.phNumber,
                                 )),
                         // (route) => false
                       );
@@ -166,17 +166,17 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     dynamic details = await partnerDetailsFull(currentPid);
 
     if (details != null) {
-      partnerProvider.setPartnerDetails(details);
+      partnerProvider!.setPartnerDetails(details);
       if (details['appConfig'] == true) {
-        partnerProvider.getServiceListFromServer();
-        partnerProvider.getConstants(alwaysHit: false);
+        partnerProvider!.getServiceListFromServer();
+        partnerProvider!.getConstants(alwaysHit: false);
       }
     }
     getImportantAPIs(currentPid);
 
     dynamic partnerOrders = await partnerAllOrders(currentPid);
 
-    if (partnerOrders != null) partnerProvider.setOrder(partnerOrders);
+    if (partnerOrders != null) partnerProvider!.setOrder(partnerOrders);
 
     log("hitting all api completed");
   }
@@ -184,7 +184,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   void getImportantAPIs(String currentPid) async {
     dynamic chatList = await getChatListFromDb(currentPid);
 
-    if (chatList != null) chatProvider.setChatList(chatList);
+    if (chatList != null) chatProvider!.setChatList(chatList);
   }
 
   connectNotifications() async {
@@ -192,12 +192,12 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesPartner");
   }
 
-  TimeProvider timerProvider;
+  TimeProvider? timerProvider;
 
   @override
   initState() {
-    WidgetsBinding.instance.addObserver(this);
-    pId = FirebaseAuth.instance.currentUser.uid.toString();
+    WidgetsBinding.instance!.addObserver(this);
+    pId = FirebaseAuth.instance.currentUser!.uid.toString();
 
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
@@ -227,8 +227,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
       if (message.notification != null) {
-        log(message.notification.title);
-        log(message.notification.body);
+        log(message.notification!.title!);
+        log(message.notification!.body!);
         await displayAwesomeNotification(message, context);
       }
     });
@@ -242,44 +242,44 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
           MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
     });
 
-    log("current pid ${partnerProvider.currentPid}");
+    log("current pid ${partnerProvider!.currentPid}");
     connectNotifications();
 
     socketResponse();
-    hittingAllApis(partnerProvider.currentPid.toString());
+    hittingAllApis(partnerProvider!.currentPid.toString());
 
-    chatProvider.addListener(() {
+    chatProvider!.addListener(() {
       log("event");
-      var newMessageObject = chatProvider.newMessagetemp();
-      var readReceiptsList = chatProvider.getReadReceipt();
+      var newMessageObject = chatProvider!.newMessagetemp();
+      var readReceiptsList = chatProvider!.getReadReceipt();
       if (readReceiptsList.length > 0) {
         log("readReceipt evewnt");
         for (var item in readReceiptsList) {
-          socket.emit("sendReadReciept", item);
+          socket!.emit("sendReadReciept", item);
         }
 
-        chatProvider.setReadReceipt("clear");
+        chatProvider!.setReadReceipt("clear");
       }
-      if (chatProvider.getReadyToSend() == false) {
-        log(chatProvider.getReadyToSend().toString());
+      if (chatProvider!.getReadyToSend() == false) {
+        log(chatProvider!.getReadyToSend().toString());
         return;
       }
 
       if (newMessageObject.length > 0) {
         log("sending");
-        chatProvider.setReadyToSend(false);
+        chatProvider!.setReadyToSend(false);
         for (int i = 0; i < newMessageObject.length; i++) {
           var item = newMessageObject[i];
 
           log("new msg $item");
-          socket.emitWithAck('sendNewMessageCallback', item,
+          socket!.emitWithAck('sendNewMessageCallback', item,
               ack: (var callback) {
             if (callback == 'success') {
               print('working Fine');
               if (i == newMessageObject.length - 1) {
                 var msgId = item['target']['msgId'];
                 log("clear msg queue $msgId");
-                chatProvider.clearMessageQueue(msgId);
+                chatProvider!.clearMessageQueue(msgId);
               }
               // chatProvider.addnewMessage(item);
             } else {
@@ -298,7 +298,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   void dispose() {
     AwesomeNotifications().actionSink.close();
     AwesomeNotifications().createdSink.close();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
 
     super.dispose();
   }
@@ -308,13 +308,13 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     if (!socketStatus) {
       snackbar(context, "socket disconnected trying to connect again");
       log("socket disconnected trying to connect again");
-      socket.disconnect();
-      socket.connect();
-      socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+      socket!.disconnect();
+      socket!.connect();
+      socket!.emit('join-room', FirebaseAuth.instance.currentUser!.uid);
 
-      checkPartnerRegistered(FirebaseAuth.instance.currentUser.uid);
-      getImportantAPIs(FirebaseAuth.instance.currentUser.uid);
-      partnerProvider.getOnlyIncomingOrders();
+      checkPartnerRegistered(FirebaseAuth.instance.currentUser!.uid);
+      getImportantAPIs(FirebaseAuth.instance.currentUser!.uid);
+      partnerProvider!.getOnlyIncomingOrders();
     } else {
       log("socket on connection");
     }
@@ -331,7 +331,6 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         log("APP is detached");
         logoutUser();
-
         break;
       case AppLifecycleState.paused:
         log("APP is background");
@@ -339,11 +338,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         log("APP is resumed");
         checkSocketStatus();
-
         break;
-
       default:
-        break;
     }
   }
 
@@ -406,9 +402,9 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     // final width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-        var pd = data.getProfileDetails;
-        if (pd == null) return circleProgress();
+      home: Consumer<PartnerDetailsProvider?>(builder: (context, data, child) {
+        dynamic pd = data!.getProfileDetails;
+        if (pd.isEmpty) return circleProgress();
         if (pd['isDocumentsVerified'] != false)
           return VerifictionInProgress(pd);
         return Scaffold(
@@ -447,7 +443,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                             ),
                             TextWid(
                               text: text[index],
-                              color: color,
+                              color: color!,
                               size: width(context) * 0.03,
                             )
                           ],

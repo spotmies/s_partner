@@ -4,12 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:story_view/story_view.dart';
 
 class ReadTopics extends StatefulWidget {
-  final String value;
+  final String? value;
   ReadTopics({this.value});
   // const ReadTopics({ Key key }) : super(key: key);
 
   @override
-  _ReadTopicsState createState() => _ReadTopicsState(value);
+  _ReadTopicsState createState() => _ReadTopicsState(value!);
 }
 
 class _ReadTopicsState extends State<ReadTopics> {
@@ -100,7 +100,7 @@ class _ReadTopicsState extends State<ReadTopics> {
                       color: mode ? Colors.white : Color(0xFF121212),
                       boxShadow: [
                         BoxShadow(
-                            color: mode ? Colors.grey[200] : Colors.black87,
+                            color: mode ? Colors.grey[200]! : Colors.black87,
                             blurRadius: 5,
                             spreadRadius: 3)
                       ]),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-
 /// Add a dotted border around any [child] widget. The [strokeWidth] property
 /// defines the width of the dashed border and [color] determines the stroke
 /// paint color. [CircularIntervalList] is populated with the [dashPattern] to
@@ -9,7 +8,7 @@ import 'package:path_drawing/path_drawing.dart';
 /// only if the [borderType] is [BorderType.RRect]. A [customPath] can be passed in
 /// as a parameter if you want to draw a custom shaped border.
 class DottedBorder extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final EdgeInsets padding;
   final double strokeWidth;
   final Color color;
@@ -17,7 +16,7 @@ class DottedBorder extends StatelessWidget {
   final BorderType borderType;
   final Radius radius;
   final StrokeCap strokeCap;
-  final PathBuilder customPath;
+  final PathBuilder? customPath;
 
   DottedBorder({
     @required this.child,
@@ -62,8 +61,8 @@ class DottedBorder extends StatelessWidget {
   /// * Cannot be null or empty
   /// * If [dashPattern] has only 1 element, it cannot be 0
   bool _isValidDashPattern(List<double> dashPattern) {
-    Set<double> _dashSet = dashPattern?.toSet();
-    if (_dashSet == null) return false;
+    Set<double> _dashSet = dashPattern.toSet();
+    if (_dashSet.isEmpty) return false;
     if (_dashSet.length == 1 && _dashSet.elementAt(0) == 0.0) return false;
     if (_dashSet.length == 0) return false;
     return true;
@@ -73,15 +72,7 @@ class DottedBorder extends StatelessWidget {
 /// The different supported BorderTypes
 enum BorderType { Circle, RRect, Rect, Oval }
 
-
-
-
-
-
 //dash painter
-
-
-
 
 typedef PathBuilder = Path Function(Size);
 
@@ -92,7 +83,7 @@ class _DashPainter extends CustomPainter {
   final BorderType borderType;
   final Radius radius;
   final StrokeCap strokeCap;
-  final PathBuilder customPath;
+  final PathBuilder? customPath;
 
   _DashPainter({
     this.strokeWidth = 2,
@@ -117,7 +108,7 @@ class _DashPainter extends CustomPainter {
     Path _path;
     if (customPath != null) {
       _path = dashPath(
-        customPath(size),
+        customPath!(size),
         dashArray: CircularIntervalList(dashPattern),
       );
     } else {

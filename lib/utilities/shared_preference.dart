@@ -61,16 +61,16 @@ getOrders() async {
   return responses;
 }
 
-setStringToSF({String id, value}) async {
+setStringToSF({String? id, value}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString(id, jsonEncode(value));
+  prefs.setString(id!, jsonEncode(value));
 }
 
 getStringValuesSF(String id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
   if (!prefs.containsKey(id)) return null;
-  String stringValue = prefs.getString(id);
+  String stringValue = prefs.getString(id)!;
   dynamic returnedValue = jsonDecode(stringValue);
   return returnedValue;
 }

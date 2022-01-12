@@ -42,13 +42,13 @@ Future audioRecoder(BuildContext context, double hight, double width,
 }
 
 class FeatureButtonsView extends StatefulWidget {
-  final Function onUploadComplete;
-  final ChatController chatController;
-  final Function sendCallBack;
-  final String message;
-  final String msgId;
+  final Function? onUploadComplete;
+  final ChatController? chatController;
+  final Function? sendCallBack;
+  final String? message;
+  final String? msgId;
   const FeatureButtonsView({
-    Key key,
+    Key? key,
     this.onUploadComplete,
     this.chatController,
     this.sendCallBack,
@@ -60,15 +60,15 @@ class FeatureButtonsView extends StatefulWidget {
 }
 
 class _FeatureButtonsViewState extends State<FeatureButtonsView> {
-  bool _isPlaying;
+  bool? _isPlaying;
   // bool _isUploading;
-  bool _isRecorded;
-  bool _isRecording;
+  bool? _isRecorded;
+  bool? _isRecording;
 
-  AudioPlayer _audioPlayer;
-  String _filePath;
+  AudioPlayer? _audioPlayer;
+  String? _filePath;
 
-  FlutterAudioRecorder2 _audioRecorder;
+  FlutterAudioRecorder2? _audioRecorder;
 
   @override
   void initState() {
@@ -84,8 +84,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   Widget build(BuildContext context) {
     var hight = MediaQuery.of(context).size.height;
     return Center(
-      child: _isRecorded
-          ? widget.chatController.isUploading
+      child: _isRecorded!
+          ? widget.chatController!.isUploading
               ? Container(
                   height: hight * 0.2,
                   child: Column(
@@ -115,18 +115,18 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                       ),
                       IconButton(
                         icon: Icon(
-                          _isPlaying ? Icons.pause : Icons.play_circle,
+                          _isPlaying! ? Icons.pause : Icons.play_circle,
                           size: hight * 0.05,
                         ),
                         onPressed: () {
-                          _onPlayButtonPressed(widget.message);
+                          _onPlayButtonPressed(widget.message!);
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.done),
                         onPressed: () {
-                          widget.chatController.audioUpload(_filePath,
-                              widget.sendCallBack, widget.msgId, context);
+                          widget.chatController!.audioUpload(_filePath!,
+                              widget.sendCallBack!, widget.msgId!, context);
                           setState(() {});
                         },
                       ),
@@ -140,11 +140,11 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextWid(
-                          text: _isRecording
+                          text: _isRecording!
                               ? 'Recording...'
                               : 'Start Recording'),
                       IconButton(
-                        icon: _isRecording
+                        icon: _isRecording!
                             ? Icon(
                                 Icons.pause,
                                 size: hight * 0.05,
@@ -166,15 +166,15 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                     children: [
                       IconButton(
                         icon: Icon(
-                          _isPlaying ? Icons.pause : Icons.play_circle,
+                          _isPlaying! ? Icons.pause : Icons.play_circle,
                           size: hight * 0.05,
                         ),
                         onPressed: () {
-                          _onPlayButtonPressed(widget.message);
+                          _onPlayButtonPressed(widget.message!);
                         },
                       ),
                       TextWid(
-                        text: _isPlaying
+                        text: _isPlaying!
                             ? '    Stop Playing....'
                             : '    Start Playing....',
                       ),
@@ -191,8 +191,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   Future<void> _onRecordButtonPressed() async {
-    if (_isRecording) {
-      _audioRecorder.stop();
+    if (_isRecording!) {
+      _audioRecorder!.stop();
       _isRecording = false;
       _isRecorded = true;
     } else {
@@ -205,24 +205,24 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   void _onPlayButtonPressed(String message) {
-    if (!_isPlaying) {
+    if (!_isPlaying!) {
       _isPlaying = true;
 
-      _audioPlayer.play(message == null ? _filePath : message, isLocal: true);
-      _audioPlayer.onPlayerCompletion.listen((duration) {
+      _audioPlayer!.play(message.isEmpty ? _filePath! : message, isLocal: true);
+      _audioPlayer!.onPlayerCompletion.listen((duration) {
         setState(() {
           _isPlaying = false;
         });
       });
     } else {
-      _audioPlayer.pause();
+      _audioPlayer!.pause();
       _isPlaying = false;
     }
     setState(() {});
   }
 
   Future<void> _startRecording() async {
-    final bool hasRecordingPermission =
+    final bool? hasRecordingPermission =
         await FlutterAudioRecorder2.hasPermissions;
 
     if (hasRecordingPermission ?? false) {
@@ -233,8 +233,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
           '.aac';
       _audioRecorder =
           FlutterAudioRecorder2(filepath, audioFormat: AudioFormat.AAC);
-      await _audioRecorder.initialized;
-      _audioRecorder.start();
+      await _audioRecorder!.initialized;
+      _audioRecorder!.start();
       _filePath = filepath;
       setState(() {});
     } else {

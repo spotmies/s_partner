@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Places {
-  final int id;
-  final String subLocality;
-  final String addressLine;
-  final Map coordinates;
-  final int postalCode;
+  final int? id;
+  final String? subLocality;
+  final String? addressLine;
+  final Map? coordinates;
+  final int? postalCode;
 
   const Places({
     @required this.id,

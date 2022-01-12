@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -6,6 +8,8 @@ import 'package:spotmies_partner/utilities/app_config.dart';
 
 class RatingScreen extends StatefulWidget {
   final dynamic rating;
+  // const RatingScreen({Key? key, this.rating}) : super(key: key);
+
   RatingScreen(this.rating);
 
   @override
@@ -139,6 +143,7 @@ class _RatingScreenState extends State<RatingScreen> {
 //offline page card
 
 reviewMsgs(BuildContext context, rating) {
+  log(rating.toString());
   var len = rating.length > 3 ? 3 : rating.length;
 
   // if (rating[0]['feedBackDetails'] == null) {
@@ -151,7 +156,7 @@ reviewMsgs(BuildContext context, rating) {
     padding: EdgeInsets.only(top: width(context) * 0.06),
     margin: EdgeInsets.all(10),
     decoration: BoxDecoration(boxShadow: [
-      BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300])
+      BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300]!)
     ], color: Colors.grey[50], borderRadius: BorderRadius.circular(15.0)),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -172,16 +177,21 @@ reviewMsgs(BuildContext context, rating) {
           child: ListView.builder(
               itemCount: len,
               itemBuilder: (context, index) {
+                // var r = rating[index]['feedBackDetails'];
+                // if (rating[index]['feedBackDetails']?['rating'] == null)
+                //   return Container();
                 return Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        // if (rating[index]['feedBackDetails']?['rating'] != null)
                         CircleAvatar(
                           radius: width(context) * 0.07,
                           backgroundColor: Colors.grey[200],
                           child: TextWid(
-                            text: rating[index]['uDetails']['name'][0],
+                            // text: rating[index]['uDetails']['name'][0],
+                            text: '',
                             size: width(context) * 0.06,
                           ),
                         ),
@@ -190,9 +200,10 @@ reviewMsgs(BuildContext context, rating) {
                           children: [
                             Row(
                               children: [
+                                // if (rating[index]?['feedBackDetails'] != null)
                                 TextWid(
-                                  text: (rating[index]['feedBackDetails']
-                                              ['rating'] /
+                                  text: ((rating[index]['feedBackDetails']
+                                              ?['rating']) /
                                           20)
                                       .toString(),
                                   size: width(context) * 0.06,
@@ -207,7 +218,7 @@ reviewMsgs(BuildContext context, rating) {
                                       animationDuration: 500,
                                       progressColor: Colors.amber,
                                       percent: rating[index]['feedBackDetails']
-                                              ['rating'] /
+                                              ?['rating']! /
                                           100,
                                       backgroundColor: Colors.grey[300],
                                     ))
@@ -216,26 +227,27 @@ reviewMsgs(BuildContext context, rating) {
                             SizedBox(
                               height: height(context) * 0.003,
                             ),
-                            Container(
-                              width: width(context) * 0.6,
-                              child: TextWid(
-                                text: rating[index]['uDetails']['name']
-                                    .toString(),
-                                size: width(context) * 0.03,
-                                weight: FontWeight.w600,
-                                flow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            SizedBox(
-                              height: height(context) * 0.012,
-                            ),
+                            // Container(
+                            //   width: width(context) * 0.6,
+                            //   child: TextWid(
+                            //     text: rating[index]['uDetails']['name']
+                            //         .toString(),
+                            //     size: width(context) * 0.03,
+                            //     weight: FontWeight.w600,
+                            //     flow: TextOverflow.ellipsis,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: height(context) * 0.012,
+                            // ),
                             Container(
                               width: width(context) * 0.6,
                               child: TextWid(
                                 text: reviewDesc(
                                     rating[index]['feedBackDetails']
-                                        ['description'],
-                                    rating[index]['feedBackDetails']['rating']),
+                                        ?['description'],
+                                    rating[index]['feedBackDetails']
+                                        ?['rating']),
                                 size: width(context) * 0.05,
                                 weight: FontWeight.w500,
                                 flow: TextOverflow.ellipsis,
@@ -265,7 +277,7 @@ reviewMsgs(BuildContext context, rating) {
                         height: height(context) * 0.055,
                         minWidth: width(context) * 0.9,
                         bgColor: Colors.transparent,
-                        textColor: Colors.grey[900],
+                        textColor: Colors.grey[900]!,
                         textSize: width(context) * 0.04,
                         borderRadius: 15.0,
                         borderSideColor: Colors.transparent,

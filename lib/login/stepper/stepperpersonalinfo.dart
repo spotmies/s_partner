@@ -1,5 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -16,34 +14,34 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class StepperPersonalInfo extends StatefulWidget {
-  final String phone;
-  final String type;
-  final Map<String, double> coordinates;
+  final String? phone;
+  final String? type;
+  final Map<dynamic, dynamic>? coordinates;
   StepperPersonalInfo(
-      {@required this.phone, @required this.type, this.coordinates});
+      {required this.phone, required this.type, this.coordinates});
   @override
   _StepperPersonalInfoState createState() => _StepperPersonalInfoState();
 }
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
-  StepperController _stepperController;
-  PartnerDetailsProvider partnerProvider;
-  _StepperPersonalInfoState() : super(StepperController()) {
-    this._stepperController = controller;
-  }
+  StepperController? _stepperController;
+  PartnerDetailsProvider? partnerProvider;
+  // _StepperPersonalInfoState() : super(StepperController()) {
+  //   this._stepperController = controller;
+  // }
 
   void initState() {
     super.initState();
     partnerProvider =
-        Provider.of<PartnerDetailsProvider>(context, listen: false); 
-    _stepperController.pickedDate = DateTime.now();
-    _stepperController.pickedTime = TimeOfDay.now();
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    _stepperController!.pickedDate = DateTime.now();
+    _stepperController!.pickedTime = TimeOfDay.now();
 
-    _stepperController.workLocation = widget.coordinates;
-    _stepperController.verifiedNumber = widget.phone.toString();
+    _stepperController!.workLocation = widget.coordinates as Map<String,double>;
+    _stepperController!.verifiedNumber = widget.phone.toString();
     // print("76 ${FirebaseAuth.instance.currentUser.uid}");
     // partnerProvider.getServiceListFromServer();
-    partnerProvider.setCurrentConstants("welcome");
+    partnerProvider!.setCurrentConstants("welcome");
   }
 
   @override
@@ -67,7 +65,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               iconTheme: IconThemeData(color: Colors.black),
               title: TextWid(
                 text:
-                    _stepperController.pagename(_stepperController.currentStep),
+                    _stepperController!.pagename(_stepperController!.currentStep),
                 size: _width * 0.051,
                 weight: FontWeight.w600,
                 lSpace: 1.0,
@@ -84,12 +82,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               ),
               child: Stepper(
                   type: StepperType.horizontal,
-                  currentStep: _stepperController.currentStep,
+                  currentStep: _stepperController!.currentStep,
                   onStepTapped: (int step) =>
-                      setState(() => _stepperController.currentStep = step),
-                  controlsBuilder: (BuildContext context,
-                      {VoidCallback onStepContinue,
-                      VoidCallback onStepCancel}) {
+                      setState(() => _stepperController!.currentStep = step),
+                  controlsBuilder:
+                      (BuildContext context, ControlsDetails controls) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Row(
@@ -99,7 +96,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                           ElevatedButtonWidget(
                             height: _hight * 0.05,
                             minWidth: _width * 0.35,
-                            bgColor: Colors.indigo[900],
+                            bgColor: Colors.indigo[900]!,
                             buttonName: 'Back',
                             textColor: Colors.white,
                             textSize: _width * 0.04,
@@ -107,14 +104,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 size: _width * 0.04),
                             borderRadius: 10.0,
                             onClick: () {
-                              onStepCancel();
+                              controls.onStepCancel!();
                             },
                           ),
                           ElevatedButtonWidget(
                             height: _hight * 0.05,
                             minWidth: _width * 0.35,
-                            bgColor: Colors.indigo[900],
-                            buttonName: _stepperController.currentStep == 2
+                            bgColor: Colors.indigo[900]!,
+                            buttonName: _stepperController!.currentStep == 2
                                 ? 'Finish'
                                 : 'Next',
                             textColor: Colors.white,
@@ -123,26 +120,25 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 Icon(Icons.navigate_next, size: _width * 0.04),
                             borderRadius: 10.0,
                             onClick: () {
-                              switch (_stepperController.currentStep) {
+                              switch (_stepperController!.currentStep) {
                                 case 0:
-                                  onStepContinue();
-                                  break;
+                                  controls.onStepContinue!();
+                                break;
                                 case 1:
-                                  if (_stepperController.profilepics == null)
+                                  if (_stepperController!.profilepics == null)
                                     return snackbar(context,
                                         'please add your profile picture');
-                                  if (_stepperController.localLang.length < 1)
+                                  if (_stepperController!.localLang!.length < 1)
                                     return snackbar(
                                         context, "select your known language");
-                                  onStepContinue();
-                                  break;
+                                  controls.onStepContinue!();
+break;
                                 case 2:
-                                  _stepperController.step3(context, widget.type,
-                                      widget.phone, widget.coordinates);
-                                  break;
+                                  _stepperController!.step3(context, widget.type!,
+                                      widget.phone!, widget.coordinates!);
+break;
                                 default:
                                   snackbar(context, "notthing");
-                                  break;
                               }
                             },
                           ),
@@ -150,27 +146,27 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       ),
                     );
                   },
-                  onStepContinue: _stepperController.currentStep == 0
+                  onStepContinue: _stepperController!.currentStep == 0
                       ? () => setState(() {
-                            _stepperController.step1(
-                                context, _stepperController);
+                            _stepperController!.step1(
+                                context, _stepperController!);
                           })
-                      : _stepperController.currentStep == 1
+                      : _stepperController!.currentStep == 1
                           ? () => setState(() {
-                                _stepperController.step2(context);
+                                _stepperController!.step2(context);
                               })
-                          : _stepperController.currentStep == 2
+                          : _stepperController!.currentStep == 2
                               ? () => setState(() {
-                                    _stepperController.step3(
+                                    _stepperController!.step3(
                                         context,
-                                        widget.type,
-                                        widget.phone,
-                                        widget.coordinates);
+                                        widget.type!,
+                                        widget.phone!,
+                                        widget.coordinates!);
                                   })
                               : null,
-                  onStepCancel: _stepperController.currentStep > 0
+                  onStepCancel: _stepperController!.currentStep > 0
                       ? () =>
-                          setState(() => _stepperController.currentStep -= 1)
+                          setState(() => _stepperController!.currentStep -= 1)
                       : null,
                   steps: <Step>[
                     Step(
@@ -188,13 +184,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                               context,
                               _width,
                               _hight,
-                              _stepperController.scrollController,
-                              _stepperController,
-                              widget.type,
+                              _stepperController!.scrollController!,
+                              _stepperController!,
+                              widget.type!,
                               partnerProvider
-                                  .getValue("terms_and_conditions") ?? _stepperController.offlineTermsAndConditions)),
-                      isActive: _stepperController.currentStep >= 0,
-                      state: _stepperController.currentStep >= 0
+                                      !.getValue("terms_and_conditions") ??
+                                  _stepperController
+                                      !.offlineTermsAndConditions)),
+                      isActive: _stepperController!.currentStep >= 0,
+                      state: _stepperController!.currentStep >= 0
                           ? StepState.complete
                           : StepState.disabled,
                     ),
@@ -202,7 +200,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       title: TextWid(
                         text: 'Step 2',
                         size: _width * 0.045,
-                        weight: _stepperController.currentStep > 0
+                        weight: _stepperController!.currentStep > 0
                             ? FontWeight.w700
                             : FontWeight.w500,
                       ),
@@ -213,10 +211,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       content: Container(
                           child:
                               // step2UI(context, _stepperController, _hight, _width)
-                              step2(context, _stepperController, _hight, _width,
-                                  widget.type)),
-                      isActive: _stepperController.currentStep >= 1,
-                      state: _stepperController.currentStep >= 1
+                              step2(context, _stepperController!, _hight, _width,
+                                  widget.type!)),
+                      isActive: _stepperController!.currentStep >= 1,
+                      state: _stepperController!.currentStep >= 1
                           ? StepState.complete
                           : StepState.disabled,
                     ),
@@ -224,7 +222,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       title: TextWid(
                         text: 'Step 3',
                         size: _width * 0.045,
-                        weight: _stepperController.currentStep > 1
+                        weight: _stepperController!.currentStep > 1
                             ? FontWeight.w700
                             : FontWeight.w500,
                       ),
@@ -232,11 +230,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         text: 'Business Details',
                         size: _width * 0.025,
                       ),
-                      content: step3UI(context, _stepperController, _hight,
-                          _width, widget.type,
+                      content: step3UI(context, _stepperController!, _hight,
+                          _width, widget.type!,
                           provider: partnerProvider),
-                      isActive: _stepperController.currentStep >= 2,
-                      state: _stepperController.currentStep >= 2
+                      isActive: _stepperController!.currentStep >= 2,
+                      state: _stepperController!.currentStep >= 2
                           ? StepState.complete
                           : StepState.disabled,
                     ),
@@ -252,7 +250,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
 }
 
 class Register {
-  Docs docs;
+  Docs? docs;
 
   Register({this.docs});
 
@@ -263,15 +261,15 @@ class Register {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.docs != null) {
-      data['docs'] = this.docs.toJson();
+      data['docs'] = this.docs!.toJson();
     }
     return data;
   }
 }
 
 class Docs {
-  String adharF;
-  String adharB;
+  String? adharF;
+  String? adharB;
 
   Docs({this.adharF, this.adharB});
 

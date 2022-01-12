@@ -10,7 +10,7 @@ localOrdersGet() async {
   
   SharedPreferences prefs = await SharedPreferences.getInstance();
   
-  String ico = prefs.getString('inComingOrders');
+  String? ico = prefs.getString('inComingOrders');
   // log(ico);
    if (ico == null) {
     incomingOrders();
@@ -24,7 +24,7 @@ localOrdersGet() async {
   //   incomingOrders();
   //   log('orders api called');
   // }
-  return jsonDecode(ico);
+  return jsonDecode(ico!);
 }
 
 //get partner details from local db
@@ -32,8 +32,8 @@ localOrdersGet() async {
 localPartnerDetailsGet() async {
   
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String pd = prefs.getString('localPartnerDetails');
-  if (pd == null) {
+  String pd = prefs.getString('localPartnerDetails')!;
+  if (pd.isEmpty) {
    return partnerDetail();
   }
   Map<String, dynamic> parData = jsonDecode(pd) as Map<String, dynamic>;
@@ -45,10 +45,10 @@ localPartnerDetailsGet() async {
 
 localChatListGet() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String lc = prefs.getString('chatListStore');
+  String lc = prefs.getString('chatListStore')!;
   List<dynamic> localChat = jsonDecode(lc);
   // log(localChat.toString());
-  if (localChat == null) {
+  if (localChat.isEmpty) {
     chattingList();
   }
   return localChat;

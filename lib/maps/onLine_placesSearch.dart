@@ -11,7 +11,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
-  final Function onSave;
+  final Function? onSave;
   OnlinePlaceSearch({this.onSave});
 
   @override
@@ -21,8 +21,8 @@ class OnlinePlaceSearch extends StatefulWidget {
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   // List<Places> geoLocations = [];
   String query = '';
-  Timer debouncer;
-  UniversalProvider universalProvider;
+  Timer? debouncer;
+  UniversalProvider? universalProvider;
 
   @override
   void initState() {
@@ -43,19 +43,19 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
     Duration duration = const Duration(milliseconds: 1000),
   }) {
     if (debouncer != null) {
-      debouncer.cancel();
+      debouncer!.cancel();
     }
 
     debouncer = Timer(duration, callback);
   }
 
   Future init() async {
-    if (universalProvider.geoLocations.length > 0) return;
+    if (universalProvider!.geoLocations.length > 0) return;
     // var geoLocationss = await PlacesApi.getLoc(query);
   //  universalProvider.setLocationsLoader(true);
     List geoLocationss = await PlacesApi.getAllLocations();
-    universalProvider.setLocationsLoader(false);
-    universalProvider.setGeoLocations(geoLocationss);
+    universalProvider!.setLocationsLoader(false);
+    universalProvider!.setGeoLocations(geoLocationss);
     // setState(() => this.geoLocations = geoLocations);
   }
 
@@ -107,7 +107,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                                           return snackbar(
                                                               context,
                                                               "something went wrong");
-                                                        widget.onSave(cords,
+                                                        widget.onSave!(cords,
                                                             "fullAddress");
                                                     
                                                       },
@@ -148,10 +148,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       );
   searchLocations(String query) {
     if (query.length > 3) {
-      dynamic searches = getArea(query, universalProvider.geoLocations);
-      universalProvider.setSearchLocations(searches);
+      dynamic searches = getArea(query, universalProvider!.geoLocations);
+      universalProvider!.setSearchLocations(searches);
     } else if (query.length == 0) {
-      universalProvider.showAllLocation();
+      universalProvider!.showAllLocation();
     }
   }
 
@@ -181,7 +181,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                         if (widget.onSave == null)
                           return snackbar(context, "something went wrong");
 
-                        widget.onSave(cords, "fullAddress");
+                        widget.onSave!(cords, "fullAddress");
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(

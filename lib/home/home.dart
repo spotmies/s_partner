@@ -4,7 +4,7 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/drawer.dart';
 import 'package:spotmies_partner/reusable_widgets/zoom_drawer.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();

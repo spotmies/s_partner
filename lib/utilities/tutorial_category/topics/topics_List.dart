@@ -5,7 +5,7 @@ import 'package:spotmies_partner/utilities/tutorial_category/topics/expansionLis
 
 
 class TopicsList extends StatefulWidget {
-  const TopicsList({Key key}) : super(key: key);
+  const TopicsList({Key? key}) : super(key: key);
 
   @override
   _TopicsListState createState() => _TopicsListState();
@@ -13,7 +13,7 @@ class TopicsList extends StatefulWidget {
 
 class _TopicsListState extends State<TopicsList>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
+  TabController? _controller;
   var list = [
     Center(
       child: Text('1'),

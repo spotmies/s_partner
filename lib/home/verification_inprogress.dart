@@ -38,8 +38,8 @@ class VerifictionInProgress extends StatelessWidget {
           buttonName: 'Need Help',
           height: height(context) * 0.055,
           minWidth: width(context) * 0.5,
-          bgColor: Colors.indigo[900],
-          textColor: Colors.grey[50],
+          bgColor: Colors.indigo[900]!,
+          textColor: Colors.grey[50]!,
           textSize: width(context) * 0.04,
           trailingIcon: Icon(
             Icons.help,
@@ -47,7 +47,7 @@ class VerifictionInProgress extends StatelessWidget {
             size: width(context) * 0.05,
           ),
           borderRadius: 15.0,
-          borderSideColor: Colors.grey[900],
+          borderSideColor: Colors.grey[900]!,
           onClick: () {
             helpAndSupport(context, height(context), width(context), pd);
           },

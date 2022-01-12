@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -11,14 +10,14 @@ class LocalNotidication {
   static final sound = 'notification_sound.wav';
 
   static Future notificationDetails(
-      {String bigImage, String largeIcon, bool show = false}) async {
+      {String? bigImage, String? largeIcon, bool show = false}) async {
     final styleInformation = BigPictureStyleInformation(
-        FilePathAndroidBitmap(bigImage),
-        largeIcon: FilePathAndroidBitmap(largeIcon));
+        FilePathAndroidBitmap(bigImage!),
+        largeIcon: FilePathAndroidBitmap(largeIcon!));
 
     return NotificationDetails(
         android: AndroidNotificationDetails(
-            'channel id 1', 'channel name', 'channel Description',
+            'channel id 1', 'channel name', 
             sound: RawResourceAndroidNotificationSound(sound.split('.').first),
             styleInformation: show ? styleInformation : null,
             importance: Importance.max),
@@ -26,16 +25,16 @@ class LocalNotidication {
   }
 
   static Future firebasePushNotification(
-      {String bigImage, String largeIcon, bool show = false}) async {
+      {String? bigImage, String? largeIcon, bool show = false}) async {
     final styleInformation = BigPictureStyleInformation(
-        FilePathAndroidBitmap(bigImage),
-        largeIcon: FilePathAndroidBitmap(largeIcon));
+        FilePathAndroidBitmap(bigImage!),
+        largeIcon: FilePathAndroidBitmap(largeIcon!));
 
     return NotificationDetails(
         android: AndroidNotificationDetails(
             'firebasePushNotifictions',
             'channel firebasePushNotifictions',
-            'this is firebase push notifications',
+            
             priority: Priority.high,
             sound: RawResourceAndroidNotificationSound(sound.split('.').first),
             styleInformation: show ? styleInformation : null,
@@ -51,12 +50,12 @@ class LocalNotidication {
     // when app is closed
     final details = await notifications.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
-      onNotifications.add(details.payload);
+      onNotifications.add(details.payload!);
     }
 
     await notifications.initialize(settings,
         onSelectNotification: (payload) async {
-      onNotifications.add(payload);
+      onNotifications.add(payload!);
     });
 
     if (initSchedule) {
@@ -68,11 +67,11 @@ class LocalNotidication {
 
   static Future showFirebaseNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      String bigImage,
-      String largeIcon}) async {
+      String? title,
+      String? body,
+      String? payload,
+      String? bigImage,
+      String? largeIcon}) async {
     notifications.show(
         id,
         title,
@@ -84,11 +83,11 @@ class LocalNotidication {
 
   static Future showNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      String bigImage,
-      String largeIcon}) async {
+      String? title,
+      String? body,
+      String? payload,
+      String? bigImage,
+      String? largeIcon}) async {
     notifications.show(
         id,
         title,
@@ -100,10 +99,10 @@ class LocalNotidication {
 
   static Future showShedduleNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      @required DateTime scheduledDate}) async {
+      String? title,
+      String? body,
+      String? payload,
+      required DateTime scheduledDate}) async {
     notifications.zonedSchedule(
       id,
       title,

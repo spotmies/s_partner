@@ -7,7 +7,7 @@ import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
-String chatInput;
+String? chatInput;
 TextEditingController inputController = TextEditingController();
 List mediaOptions = [
   {
@@ -52,7 +52,7 @@ Container chatInputField(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey[200], blurRadius: 2, spreadRadius: 2)
+                    color: Colors.grey[200]!, blurRadius: 2, spreadRadius: 2)
               ],
               borderRadius: BorderRadius.circular(25),
             ),

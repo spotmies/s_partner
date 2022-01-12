@@ -12,6 +12,7 @@ import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 // bool isCountHigh = true;
 
@@ -21,11 +22,9 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends StateMVC<ChatList> {
-  ChatController _chatController;
-  _ChatListState() : super(ChatController()) {
-    this._chatController = controller;
-  }
-  ChatProvider chatProvider;
+  ChatController? _chatController = ChatController();
+
+  ChatProvider? chatProvider;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -39,7 +38,7 @@ class _ChatListState extends StateMVC<ChatList> {
     final _width = MediaQuery.of(context).size.width;
     print('======render chatList screen =======');
     return Scaffold(
-      key: _chatController.scaffoldkey,
+      key: _chatController?.scaffoldkey,
       appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -72,22 +71,25 @@ class _ChatListState extends StateMVC<ChatList> {
                     }
                     return RefreshIndicator(
                       onRefresh: () async {
-                        await _chatController.fetchNewChatList(
-                            context, chatProvider);
+                        await _chatController?.fetchNewChatList(
+                            context, chatProvider!);
                       },
                       child: ListView.builder(
-                        itemCount: chatList?.length,
+                        itemCount: chatList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Map user = chatList[index]['uDetails'];
+                          Map<dynamic, dynamic>? user =
+                              chatList[index]['uDetails'];
+                          log('$chatList');
                           List messages = chatList[index]['msgs'];
+                          // log('$messages');
                           int count = chatList[index]['pCount'];
 
                           var lastMessage = jsonDecode(messages.last);
                           // log(lastMessage['type'].toString());
 
                           return ChatListCard(
-                            user['pic'],
-                            user['name'],
+                            user?['pic'],
+                            user?['name'],
                             lastMessage['msg'].toString(),
                             getTime(lastMessage['time']),
                             chatList[index]['msgId'],
@@ -95,7 +97,7 @@ class _ChatListState extends StateMVC<ChatList> {
                             lastMessage['type'],
                             chatList[index]['uId'],
                             chatList[index]['pId'],
-                            callBack: _chatController.cardOnClick,
+                            callBack: _chatController!.cardOnClick,
                           );
                         },
                       ),
@@ -116,16 +118,13 @@ typeofLastMessage(type, lastMessage, data) {
     switch (type) {
       case 'text':
         return lastMessage;
-        break;
       case 'img':
         return 'Image File';
-        break;
+
       case 'video':
         return 'Video File';
-        break;
       case 'audio':
         return 'Audio File';
-        break;
       default:
         return 'Unknown';
     }
@@ -133,16 +132,12 @@ typeofLastMessage(type, lastMessage, data) {
     switch (type) {
       case 'text':
         return Icons.textsms;
-        break;
       case 'img':
         return Icons.image;
-        break;
       case 'video':
         return Icons.slow_motion_video;
-        break;
       case 'audio':
         return Icons.mic;
-        break;
       default:
         return Icons.connect_without_contact;
     }
@@ -150,16 +145,16 @@ typeofLastMessage(type, lastMessage, data) {
 }
 
 class ChatListCard extends StatefulWidget {
-  final String profile;
-  final String name;
-  final String lastMessage;
-  final String time;
-  final String msgId;
-  final int count;
-  final Function callBack;
-  final String type;
-  final String uId;
-  final String pId;
+  final String? profile;
+  final String? name;
+  final String? lastMessage;
+  final String? time;
+  final String? msgId;
+  final int? count;
+  final Function? callBack;
+  final String? type;
+  final String? uId;
+  final String? pId;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
       this.msgId, this.count, this.type, this.uId, this.pId,
       {this.callBack});
@@ -169,7 +164,7 @@ class ChatListCard extends StatefulWidget {
 }
 
 class _ChatListCardState extends State<ChatListCard> {
-  ChatProvider chatProvider;
+  ChatProvider? chatProvider;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -178,6 +173,7 @@ class _ChatListCardState extends State<ChatListCard> {
 
   @override
   Widget build(BuildContext context) {
+    log("173" + widget.name.toString());
     // final _hight = MediaQuery.of(context).size.height -
     //     MediaQuery.of(context).padding.top -
     //     kToolbarHeight;
@@ -191,7 +187,7 @@ class _ChatListCardState extends State<ChatListCard> {
             "sender": "partner",
             "status": 3
           };
-          widget.callBack(
+          widget.callBack!(
               widget.msgId, widget.msgId, readReceiptobject, chatProvider);
           //navigate strore msg count value
 
@@ -199,19 +195,21 @@ class _ChatListCardState extends State<ChatListCard> {
               builder: (context) => PersonalChat(widget.msgId.toString())));
           log("fback $count");
 
-          widget.callBack(widget.msgId, "", "", chatProvider);
+          widget.callBack!(widget.msgId, "", "", chatProvider);
         },
         title: TextWid(
-            text: toBeginningOfSentenceCase(widget.name),
+            text: widget.name != null
+                ? toBeginningOfSentenceCase(widget.name).toString()
+                : 'Unkown',
             size: _width * 0.045,
             weight: FontWeight.w600,
-            color: widget.count > 0 ? Colors.black : Colors.grey[700]),
+            color: widget.count! > 0 ? Colors.black : Colors.grey[700]!),
         subtitle: Row(
           children: [
             Icon(
               typeofLastMessage(widget.type, widget.lastMessage, 'icon'),
               size: 12,
-              color: widget.count > 0 ? Colors.black : Colors.grey[500],
+              color: widget.count! > 0 ? Colors.black : Colors.grey[500],
             ),
             SizedBox(
               width: 3,
@@ -221,33 +219,36 @@ class _ChatListCardState extends State<ChatListCard> {
               child: TextWid(
                   text: toBeginningOfSentenceCase(
                     typeofLastMessage(widget.type, widget.lastMessage, 'text'),
-                  ),
+                  ).toString(),
                   size: _width * 0.035,
                   flow: TextOverflow.ellipsis,
-                  weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-                  color: widget.count > 0
-                      ? Colors.blueGrey[600]
-                      : Colors.grey[500]),
+                  weight: widget.count! > 0 ? FontWeight.w600 : FontWeight.w500,
+                  color: widget.count! > 0
+                      ? Colors.blueGrey[600]!
+                      : Colors.grey[500]!),
             ),
           ],
         ),
-        leading: ProfilePic(
-          badge: true,
-          profile: widget.profile,
-          name: widget.name,
-        ),
+        leading: widget.name != null
+            ? ProfilePic(
+                badge: true,
+                profile: widget.profile,
+                name: widget.name,
+              )
+            : CircleAvatar(
+                radius: width(context) * 0.07, child: Icon(Icons.person)),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             TextWid(
-                text: widget.time,
+                text: widget.time!,
                 size: _width * 0.035,
                 weight: FontWeight.w600,
-                color: widget.count > 0 ? Colors.black : Colors.grey[700]),
+                color: widget.count! > 0 ? Colors.black : Colors.grey[700]!),
             SizedBox(
               height: 10,
             ),
-            widget.count > 0
+            widget.count! > 0
                 ? Container(
                     width: _width * 0.1,
                     height: _width * 0.055,
@@ -261,7 +262,7 @@ class _ChatListCardState extends State<ChatListCard> {
                           text: widget.count.toString(),
                           size: _width * 0.03,
                           weight: FontWeight.w900,
-                          color: Colors.blueGrey[700]),
+                          color: Colors.blueGrey[700]!),
                     ),
                   )
                 : Container(

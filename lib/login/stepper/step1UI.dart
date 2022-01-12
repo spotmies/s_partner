@@ -48,7 +48,7 @@ Widget step1UI(
                                 checkColor: Colors.white,
                                 value: stepperController.accept,
                                 shape: CircleBorder(),
-                                onChanged: (bool value) {
+                                onChanged: (bool? value) {
                                   stepperController.accept = value;
                                   if (stepperController.accept == true) {
                                     stepperController.tca = 'accepted';

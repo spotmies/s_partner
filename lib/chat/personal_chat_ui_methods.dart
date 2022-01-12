@@ -29,17 +29,16 @@ typeofChat(type, message, sender, double hight, double width,
     switch (type) {
       case 'text':
         return TextWid(
-          text: toBeginningOfSentenceCase(message),
+          text: toBeginningOfSentenceCase(message).toString(),
           maxlines: 200,
           lSpace: 1.5,
           color: sender == "partner"
-              ? Colors.grey[800]
+              ? Colors.grey[800]!
               : sender == "user"
-                  ? Colors.grey[900]
-                  : Colors.grey[50],
+                  ? Colors.grey[900]!
+                  : Colors.grey[50]!,
           weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
         );
-        break;
       case 'img':
         return InkWell(
             onTap: () {
@@ -53,7 +52,6 @@ typeofChat(type, message, sender, double hight, double width,
                     image: DecorationImage(
                         image: NetworkImage(message), fit: BoxFit.cover))));
 
-        break;
       case 'video':
         return TextButton(
             onPressed: () {
@@ -76,7 +74,6 @@ typeofChat(type, message, sender, double hight, double width,
                     decoration: TextDecoration.underline),
               ],
             ));
-        break;
       case 'audio':
         return TextButton(
             onPressed: () {
@@ -103,10 +100,9 @@ typeofChat(type, message, sender, double hight, double width,
           text: sender != "user" ? "OutGoing Call" : "Incoming Call",
           maxlines: 200,
           lSpace: 1.5,
-          color: sender != "user" ? Colors.grey[800] : Colors.grey[900],
+          color: sender != "user" ? Colors.grey[800]! : Colors.grey[900]!,
           weight: sender != "user" ? FontWeight.w600 : FontWeight.w600,
         );
-        break;
       default:
         return TextWid(
           text: message,
@@ -142,7 +138,6 @@ Container readReciept(double _width, status) {
       case 3:
         return Icons.done_all;
 
-        break;
       default:
         return Icons.done;
     }

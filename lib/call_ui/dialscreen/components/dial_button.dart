@@ -4,10 +4,10 @@ import 'package:spotmies_partner/call_ui/audioCallWithImage/size.config.dart';
 
 class DialButton extends StatelessWidget {
   const DialButton({
-    Key key,
-    @required this.iconSrc,
-    @required this.text,
-    @required this.press,
+    Key? key,
+    required this.iconSrc,
+    required this.text,
+    required this.press,
   }) : super(key: key);
 
   final String iconSrc, text;

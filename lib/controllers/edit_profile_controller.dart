@@ -10,23 +10,23 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
 class EditProfileController extends ControllerMVC {
-  PartnerDetailsProvider editProvider;
+  PartnerDetailsProvider? editProvider;
 
-  DateTime pickedDate = DateTime.now();
-  int dropDownValue = 0;
-  List accountType = [
+  DateTime? pickedDate = DateTime.now();
+  int? dropDownValue = 0;
+  List? accountType = [
     'Select AccountType',
     'business',
     'student',
     'freelancer'
   ];
-  int job = 0;
+  int? job = 0;
 
-  var profilePic;
-  var adharF;
-  var adharB;
-  List otherDocs = [];
-  Map partner;
+  String? profilePic;
+  String? adharF;
+  String? adharB;
+  List? otherDocs = [];
+  Map? partner;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -48,36 +48,36 @@ class EditProfileController extends ControllerMVC {
   fillAllForms(partnerData) {
     partner = partnerData;
     setDate(partnerData['dob']);
-    profilePic = partner['partnerPic'];
-    adharF = partner['docs']['adharF'];
-    adharB = partner['docs']['adharB'];
-    otherDocs = partner['docs']['otherDocs'];
-    job = partner['job'].runtimeType == String
-        ? int.parse(partner['job'])
-        : partner['job'];
+    profilePic = partner!['partnerPic'];
+    adharF = partner!['docs']['adharF'];
+    adharB = partner!['docs']['adharB'];
+    otherDocs = partner!['docs']['otherDocs'];
+    job = partner!['job'].runtimeType == String
+        ? int.parse(partner!['job'])
+        : partner!['job'];
     nameController.text =
-        partner['name'] != null ? partner['name'].toString() : "";
+        partner!['name'] != null ? partner!['name'].toString() : "";
     emailController.text =
-        partner['eMail'] != null ? partner['eMail'].toString() : "";
+        partner!['eMail'] != null ? partner!['eMail'].toString() : "";
     mobileController.text =
-        partner['altNum'] != null ? partner['altNum'].toString() : "";
+        partner!['altNum'] != null ? partner!['altNum'].toString() : "";
     tempAddressControl.text =
-        partner['tempAdd'] != null ? partner['tempAdd'].toString() : "";
+        partner!['tempAdd'] != null ? partner!['tempAdd'].toString() : "";
     perAddressControl.text =
-        partner['perAdd'] != null ? partner['perAdd'].toString() : "";
-    businessNameControl.text = partner['businessName'] != null
-        ? partner['businessName'].toString()
+        partner!['perAdd'] != null ? partner!['perAdd'].toString() : "";
+    businessNameControl.text = partner!['businessName'] != null
+        ? partner!['businessName'].toString()
         : "";
-    collgeNameControl.text = partner['collegeName'] ?? "";
+    collgeNameControl.text = partner!['collegeName'] ?? "";
     experienceControl.text =
-        partner['experience'] != null ? partner['experience'].toString() : "";
-    setAccountType(partner['accountType']);
+        partner!['experience'] != null ? partner!['experience'].toString() : "";
+    setAccountType(partner!['accountType']);
     refresh();
   }
 
   setAccountType(value) {
-    for (var i = 0; i < accountType.length; i++) {
-      if (accountType[i] == value.toString()) {
+    for (var i = 0; i < accountType!.length; i++) {
+      if (accountType![i] == value.toString()) {
         dropDownValue = i;
         break;
       }
@@ -92,10 +92,10 @@ class EditProfileController extends ControllerMVC {
   }
 
   pickDate(BuildContext context) async {
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
         confirmText: 'SET DATE',
         context: context,
-        initialDate: pickedDate,
+        initialDate: pickedDate!,
         // firstDate: pickedDate,
         firstDate: DateTime(DateTime.now().year - 80, DateTime.now().month - 0,
             DateTime.now().day - 0),
@@ -103,39 +103,39 @@ class EditProfileController extends ControllerMVC {
     if (date != null) {
       setState(() {
         pickedDate = date;
-        print(pickedDate.millisecondsSinceEpoch);
+        print(pickedDate!.millisecondsSinceEpoch);
         print(pickedDate);
       });
     }
   }
 
   saveChanges(BuildContext context) async {
-    if (editProfileForm.currentState.validate()) {
+    if (editProfileForm.currentState!.validate()) {
       log("valid");
-      editProfileForm.currentState.save();
+      editProfileForm.currentState!.save();
       if (dropDownValue == 0) {
         snackbar(context, "Select account type Business or student");
         return;
       }
 
       // log("$profilePic $adharF $adharB  ");
-      editProvider.setEditLoader(true, loaderName: "Uploading Images");
+      editProvider?.setEditLoader(true, loaderName: "Uploading Images");
       await uploadFile();
-      editProvider.setEditLoader(false);
+      editProvider?.setEditLoader(false);
 
       log("loop completed");
       var docs = {
         "adharF": adharF.toString(),
         "adharB": adharB.toString(),
-        "otherDocs": partner['docs']['otherDocs']
+        "otherDocs": partner!['docs']['otherDocs']
       };
       var body = {
         "name": "${nameController.text}",
         "altNum": "${mobileController.text}",
         "eMail": "${emailController.text}",
         "job": "$job",
-        "accountType": "${accountType[dropDownValue]}",
-        "dob": "${pickedDate.millisecondsSinceEpoch}",
+        "accountType": "${accountType![dropDownValue!]}",
+        "dob": "${pickedDate!.millisecondsSinceEpoch}",
         "businessName": "${businessNameControl.text}",
         "collegeName": "${collgeNameControl.text}",
         "experience": "${experienceControl.text}",
@@ -145,14 +145,14 @@ class EditProfileController extends ControllerMVC {
         "docs": jsonEncode(docs),
       };
       log("body $body");
-      editProvider.setEditLoader(true, loaderName: "Applying Changes");
+      editProvider?.setEditLoader(true, loaderName: "Applying Changes");
       log("uid>> $pId");
       var response = await Server().editMethod(API.partnerDetails + pId, body);
-      editProvider.setEditLoader(false);
+      editProvider?.setEditLoader(false);
       if (response.statusCode == 200) {
         log("change applyed");
-        var res = jsonDecode(response.body);
-        editProvider.setPartnerDetailsOnly(res);
+        dynamic res = jsonDecode(response.body);
+        editProvider?.setPartnerDetailsOnly(res!);
 
         log("response $res");
         Navigator.pop(context);

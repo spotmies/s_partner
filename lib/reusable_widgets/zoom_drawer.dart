@@ -2,33 +2,32 @@ import 'dart:math' show pi;
 // ignore: unused_import
 import 'dart:ui' as ui show window;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ZoomDrawerController {
   /// callback function to open the drawer
-  Function open;
+  Function? open;
 
   /// callback function to close the drawer
-  Function close;
+  Function? close;
 
   /// callback function to toggle the drawer
-  Function toggle;
+  Function? toggle;
 
   /// callback function to determine the status of the drawer
-  Function isOpen;
+  Function? isOpen;
 
   /// Drawer state notifier
   /// opening, closing, open, closed
-  ValueNotifier<DrawerState> stateNotifier;
+  ValueNotifier<DrawerState>? stateNotifier;
 }
 
 class ZoomDrawer extends StatefulWidget {
   ZoomDrawer({
     this.style = DrawerStyle.DefaultStyle,
     this.controller,
-    @required this.menuScreen,
-    @required this.mainScreen,
+    required this.menuScreen,
+    required this.mainScreen,
     this.mainScreenScale = 0.3,
     this.slideWidth = 275.0,
     this.borderRadius = 16.0,
@@ -39,57 +38,57 @@ class ZoomDrawer extends StatefulWidget {
     this.closeCurve,
     this.duration,
     this.disableGesture = false,
-    this.isRtl= false,
-    this.clipMainScreen= true,
-  }) : assert(angle <= 0.0 && angle >= -30.0);
+    this.isRtl = false,
+    this.clipMainScreen = true,
+  }) : assert(angle! <= 0.0 && angle >= -30.0);
 
   /// Layout style
-  final DrawerStyle style;
+  final DrawerStyle? style;
 
   /// controller to have access to the open/close/toggle function of the drawer
-  final ZoomDrawerController controller;
+  final ZoomDrawerController? controller;
 
   /// Screen containing the menu/bottom screen
-  final Widget menuScreen;
+  final Widget? menuScreen;
 
   /// Screen containing the main content to display
-  final Widget mainScreen;
+  final Widget? mainScreen;
 
   /// MainScreen scale factor
-  final double mainScreenScale;
+  final double? mainScreenScale;
 
   /// Sliding width of the drawer - defaults to 275.0
-  final double slideWidth;
+  final double? slideWidth;
 
   /// Border radius of the slided content - defaults to 16.0
-  final double borderRadius;
+  final double? borderRadius;
 
   /// Rotation angle of the drawer - defaults to -12.0
-  final double angle;
+  final double? angle;
 
   /// Background color of the drawer shadows - defaults to white
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// Boolean, whether to show the drawer shadows - defaults to false
-  final bool showShadow;
+  final bool? showShadow;
 
   /// Drawer slide out curve
-  final Curve openCurve;
+  final Curve? openCurve;
 
   /// Drawer slide in curve
-  final Curve closeCurve;
+  final Curve? closeCurve;
 
   /// Drawer Duration
-  final Duration duration;
+  final Duration? duration;
 
   /// Disable swipe gesture
-  final bool disableGesture;
+  final bool? disableGesture;
 
   /// display the drawer in RTL
-  final bool isRtl;
+  final bool? isRtl;
 
   /// determine whether to clip the main screen
-  final bool clipMainScreen;
+  final bool? clipMainScreen;
 
   @override
   _ZoomDrawerState createState() => new _ZoomDrawerState();
@@ -110,24 +109,24 @@ class _ZoomDrawerState extends State<ZoomDrawer>
       Interval(0.0, 1.0, curve: Curves.easeOut); // Curves.bounceOut
 
   /// check the slide direction
-  int _rtlSlide;
+  int? _rtlSlide;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
   DrawerState _state = DrawerState.closed;
 
-  double get _percentOpen => _animationController.value;
+  double get _percentOpen => _animationController!.value;
 
   /// Open drawer
   open() {
-    _animationController.forward();
+    _animationController!.forward();
   }
 
   /// Close drawer
   close() {
-    _animationController.reverse();
+    _animationController!.reverse();
   }
 
-  AnimationController get animationController => _animationController;
+  AnimationController get animationController => _animationController!;
 
   /// Toggle drawer
   toggle() {
@@ -143,7 +142,7 @@ class _ZoomDrawerState extends State<ZoomDrawer>
       _state == DrawerState.open /* || _state == DrawerState.opening*/;
 
   /// Drawer state
-  ValueNotifier<DrawerState> stateNotifier;
+  ValueNotifier<DrawerState>? stateNotifier;
 
   @override
   void initState() {
@@ -163,49 +162,48 @@ class _ZoomDrawerState extends State<ZoomDrawer>
           case AnimationStatus.forward:
             _state = DrawerState.opening;
             _updateStatusNotifier();
-            break;
+break;
           case AnimationStatus.reverse:
             _state = DrawerState.closing;
             _updateStatusNotifier();
-            break;
+break;
           case AnimationStatus.completed:
             _state = DrawerState.open;
             _updateStatusNotifier();
-            break;
+break;
           case AnimationStatus.dismissed:
             _state = DrawerState.closed;
             _updateStatusNotifier();
-            break;
         }
       });
 
     /// assign controller function to the widget methods
     if (widget.controller != null) {
-      widget.controller.open = open;
-      widget.controller.close = close;
-      widget.controller.toggle = toggle;
-      widget.controller.isOpen = isOpen;
-      widget.controller.stateNotifier = stateNotifier;
+      widget.controller!.open = open;
+      widget.controller!.close = close;
+      widget.controller!.toggle = toggle;
+      widget.controller!.isOpen = isOpen;
+      widget.controller!.stateNotifier = stateNotifier;
     }
 
-    _rtlSlide = widget.isRtl  ? -1 : 1;
+    _rtlSlide = widget.isRtl! ? -1 : 1;
   }
 
   @override
   void didUpdateWidget(covariant ZoomDrawer oldWidget) {
     if (oldWidget.isRtl != widget.isRtl) {
-      _rtlSlide = widget.isRtl  ? -1 : 1;
+      _rtlSlide = widget.isRtl! ? -1 : 1;
     }
     super.didUpdateWidget(oldWidget);
   }
 
   _updateStatusNotifier() {
-    stateNotifier.value = _state;
+    stateNotifier!.value = _state;
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController!.dispose();
     super.dispose();
   }
 
@@ -221,7 +219,7 @@ class _ZoomDrawerState extends State<ZoomDrawer>
   /// * [slide] is the sliding amount of the drawer
   ///
   Widget _zoomAndSlideContent(Widget container,
-      {double angle, double scale, double slide = 0}) {
+      {double? angle, double? scale, double slide = 0}) {
     var slidePercent, scalePercent;
 
     /// determine current slide percent based on the MenuStatus
@@ -229,42 +227,41 @@ class _ZoomDrawerState extends State<ZoomDrawer>
       case DrawerState.closed:
         slidePercent = 0.0;
         scalePercent = 0.0;
-        break;
+break;
       case DrawerState.open:
         slidePercent = 1.0;
         scalePercent = 1.0;
-        break;
+break;
       case DrawerState.opening:
         slidePercent =
             (widget.openCurve ?? _slideOutCurve).transform(_percentOpen);
         scalePercent = _scaleDownCurve.transform(_percentOpen);
-        break;
+break;
       case DrawerState.closing:
         slidePercent =
             (widget.closeCurve ?? _slideInCurve).transform(_percentOpen);
         scalePercent = _scaleUpCurve.transform(_percentOpen);
-        break;
     }
 
     /// calculated sliding amount based on the RTL and animation value
-    final slideAmount = (widget.slideWidth - slide) * slidePercent * _rtlSlide;
+    final slideAmount = (widget.slideWidth! - slide) * slidePercent * _rtlSlide!;
 
     /// calculated scale amount based on the provided scale and animation value
     final contentScale = (scale ?? 1.0) - (0.2 * scalePercent);
 
     /// calculated radius based on the provided radius and animation value
-    final cornerRadius = widget.borderRadius * _percentOpen;
+    final cornerRadius = widget.borderRadius! * _percentOpen;
 
     /// calculated rotation amount based on the provided angle and animation value
     final rotationAngle =
-        (((angle ?? widget.angle) * pi * _rtlSlide) / 180) * _percentOpen;
+        (((angle ?? widget.angle)! * pi * _rtlSlide!) / 180) * _percentOpen;
 
     return Transform(
       transform: Matrix4.translationValues(slideAmount, 0.0, 0.0)
         ..rotateZ(rotationAngle)
         ..scale(contentScale, contentScale),
       alignment: Alignment.centerLeft,
-      child: widget.clipMainScreen
+      child: widget.clipMainScreen!
           ? ClipRRect(
               borderRadius: BorderRadius.circular(cornerRadius),
               child: container,
@@ -275,14 +272,14 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.disableGesture) return renderLayout();
+    if (widget.disableGesture!) return renderLayout();
 
     return GestureDetector(
       /// Detecting the slide amount to close the drawer in RTL & LTR
       onPanUpdate: (details) {
         if (_state == DrawerState.open &&
-            ((details.delta.dx < -6 && !widget.isRtl ) ||
-                (details.delta.dx < 6 && widget.isRtl ))) {
+            ((details.delta.dx < -6 && !widget.isRtl!) ||
+                (details.delta.dx < 6 && widget.isRtl!))) {
           toggle();
         }
       },
@@ -313,21 +310,21 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderDefault() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        double slide = widget.slideWidth * _percentOpen * _rtlSlide;
-        double scale = 1 - (_percentOpen * widget.mainScreenScale);
-        final cornerRadius = widget.borderRadius * _percentOpen;
+        double slide = widget.slideWidth! * _percentOpen * _rtlSlide!;
+        double scale = 1 - (_percentOpen * widget.mainScreenScale!);
+        final cornerRadius = widget.borderRadius! * _percentOpen;
 
         return Stack(
           children: [
-            widget.menuScreen,
+            widget.menuScreen!,
             Transform(
               transform: Matrix4.identity()
                 ..translate(slide)
                 ..scale(scale),
               alignment: Alignment.center,
-              child: widget.clipMainScreen
+              child: widget.clipMainScreen!
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(cornerRadius),
                       child: widget.mainScreen,
@@ -341,31 +338,32 @@ class _ZoomDrawerState extends State<ZoomDrawer>
   }
 
   Widget renderStyle1() {
-    final slidePercent = widget.isRtl  ? MediaQuery.of(context).size.width * .1 : 15.0;
+    final slidePercent =
+        widget.isRtl! ? MediaQuery.of(context).size.width * .1 : 15.0;
     return Stack(
       children: [
-        widget.menuScreen,
-        if (widget.showShadow) ...[
+        widget.menuScreen!,
+        if (widget.showShadow!) ...[
           /// Displaying the first shadow
           AnimatedBuilder(
-            animation: _animationController,
+            animation: _animationController!,
             builder: (_, w) => _zoomAndSlideContent(
-              w,
-              angle: (widget.angle == 0.0) ? 0.0 : widget.angle - 8,
+              w!,
+              angle: (widget.angle == 0.0) ? 0.0 : widget.angle! - 8,
               scale: .9,
               slide: slidePercent * 2,
             ),
             child: Container(
-              color: widget.backgroundColor.withAlpha(31),
+              color: widget.backgroundColor!.withAlpha(31),
             ),
           ),
 
           /// Displaying the second shadow
           AnimatedBuilder(
-            animation: _animationController,
+            animation: _animationController!,
             builder: (_, w) => _zoomAndSlideContent(
-              w,
-              angle: (widget.angle == 0.0) ? 0.0 : widget.angle - 4.0,
+              w!,
+              angle: (widget.angle == 0.0) ? 0.0 : widget.angle! - 4.0,
               scale: .95,
               slide: slidePercent,
             ),
@@ -377,8 +375,8 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
         /// Displaying the main screen
         AnimatedBuilder(
-          animation: _animationController,
-          builder: (_, w) => _zoomAndSlideContent(w),
+          animation: _animationController!,
+          builder: (_, w) => _zoomAndSlideContent(w!),
           child: GestureDetector(
             child: widget.mainScreen,
             onTap: () {
@@ -394,18 +392,18 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle2() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        double slide = widget.slideWidth * _rtlSlide * _percentOpen;
-        final cornerRadius = widget.borderRadius * _percentOpen;
+        double slide = widget.slideWidth! * _rtlSlide! * _percentOpen;
+        final cornerRadius = widget.borderRadius! * _percentOpen;
 
         return Stack(
           children: [
-            widget.menuScreen,
+            widget.menuScreen!,
             Transform(
               transform: Matrix4.identity()..translate(slide),
               alignment: Alignment.center,
-              child: widget.clipMainScreen
+              child: widget.clipMainScreen!
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(cornerRadius),
                       child: widget.mainScreen,
@@ -420,10 +418,10 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle3() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        double slide = widget.slideWidth * _percentOpen * _rtlSlide;
-        double left = (1 - _percentOpen) * widget.slideWidth * _rtlSlide;
+        double slide = widget.slideWidth! * _percentOpen * _rtlSlide!;
+        double left = (1 - _percentOpen) * widget.slideWidth! * _rtlSlide!;
 
         return Stack(
           children: [
@@ -447,13 +445,13 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle4() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        double left = (1 - _percentOpen) * widget.slideWidth * _rtlSlide;
+        double left = (1 - _percentOpen) * widget.slideWidth! * _rtlSlide!;
 
         return Stack(
           children: [
-            widget.mainScreen,
+            widget.mainScreen!,
             Transform.translate(
               offset: Offset(-left, 0),
               child: Container(
@@ -469,22 +467,22 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle5() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        double slide = widget.slideWidth * _rtlSlide * _percentOpen;
-        double scale = 1 - (_percentOpen * widget.mainScreenScale);
-        double top = _percentOpen * widget.slideWidth;
-        final cornerRadius = widget.borderRadius * _percentOpen;
+        double slide = widget.slideWidth! * _rtlSlide! * _percentOpen;
+        double scale = 1 - (_percentOpen * widget.mainScreenScale!);
+        double top = _percentOpen * widget.slideWidth!;
+        final cornerRadius = widget.borderRadius! * _percentOpen;
 
         return Stack(
           children: [
-            widget.menuScreen,
+            widget.menuScreen!,
             Transform(
               transform: Matrix4.identity()
                 ..translate(slide, top)
                 ..scale(scale),
               alignment: Alignment.center,
-              child: widget.clipMainScreen
+              child: widget.clipMainScreen!
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(cornerRadius),
                       child: widget.mainScreen,
@@ -499,26 +497,26 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle6() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
-        final slideWidth = widget.isRtl  ? widget.slideWidth : widget.slideWidth / 2;
-        double x = _percentOpen * slideWidth * _rtlSlide;
-        double scale =
-            1 - (_percentOpen * widget.mainScreenScale);
+        final slideWidth =
+            widget.isRtl! ? widget.slideWidth : widget.slideWidth! / 2;
+        double x = _percentOpen * slideWidth! * _rtlSlide!;
+        double scale = 1 - (_percentOpen * widget.mainScreenScale!);
         double rotate = _percentOpen * (pi / 4);
-        final cornerRadius = widget.borderRadius * _percentOpen;
+        final cornerRadius = widget.borderRadius! * _percentOpen;
 
         return Stack(
           children: [
-            widget.menuScreen,
+            widget.menuScreen!,
             Transform(
               transform: Matrix4.identity()
                 ..setEntry(3, 2, 0.0009)
                 ..translate(x)
                 ..scale(scale)
-                ..rotateY(rotate * _rtlSlide),
+                ..rotateY(rotate * _rtlSlide!),
               alignment: Alignment.centerRight,
-              child: widget.clipMainScreen
+              child: widget.clipMainScreen!
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(cornerRadius),
                       child: widget.mainScreen,
@@ -533,26 +531,25 @@ class _ZoomDrawerState extends State<ZoomDrawer>
 
   Widget renderStyle7() {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
         final slideWidth =
-        widget.isRtl  ? widget.slideWidth * 1.2 : widget.slideWidth / 2;
-        double x = _percentOpen * slideWidth * _rtlSlide;
-        double scale =
-            1 - (_percentOpen * widget.mainScreenScale);
+            widget.isRtl! ? widget.slideWidth! * 1.2 : widget.slideWidth! / 2;
+        double x = _percentOpen * slideWidth * _rtlSlide!;
+        double scale = 1 - (_percentOpen * widget.mainScreenScale!);
         double rotate = _percentOpen * (pi / 4);
-        final cornerRadius = widget.borderRadius * _percentOpen;
+        final cornerRadius = widget.borderRadius! * _percentOpen;
         return Stack(
           children: [
-            widget.menuScreen,
+            widget.menuScreen!,
             Transform(
               transform: Matrix4.identity()
                 ..setEntry(3, 2, 0.0009)
                 ..translate(x)
                 ..scale(scale)
-                ..rotateY(-rotate * _rtlSlide),
+                ..rotateY(-rotate * _rtlSlide!),
               alignment: Alignment.centerRight,
-              child: widget.clipMainScreen
+              child: widget.clipMainScreen!
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(cornerRadius),
                       child: widget.mainScreen,

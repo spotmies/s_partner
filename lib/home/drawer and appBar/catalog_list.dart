@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -13,13 +12,13 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Catalog extends StatefulWidget {
-  const Catalog({Key key}) : super(key: key);
+  const Catalog({Key? key}) : super(key: key);
 
   @override
   _CatalogState createState() => _CatalogState();
 }
 
-PartnerDetailsProvider partnerDetailsProvider;
+PartnerDetailsProvider? partnerDetailsProvider;
 CatelogController catelogController = CatelogController();
 
 class _CatalogState extends State<Catalog> {
@@ -54,16 +53,17 @@ class _CatalogState extends State<Catalog> {
           buttonName: 'Add Service',
           height: height(context) * 0.055,
           minWidth: width(context) * 0.4,
-          bgColor: Colors.indigo[900],
-          textColor: Colors.grey[50],
+          bgColor: Colors.indigo[900]!,
+          textColor: Colors.grey[50]!,
           textSize: width(context) * 0.04,
+          allRadius: true,
           leadingIcon: Icon(
             Icons.add_circle,
             color: Colors.grey[50],
             size: width(context) * 0.05,
           ),
           borderRadius: 15.0,
-          borderSideColor: Colors.grey[900],
+          borderSideColor: Colors.grey[900]!,
           onClick: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => CatelogPost()));
@@ -115,7 +115,7 @@ catelogListCard(BuildContext context, cat, int index) {
                   "isActive": val.toString(),
                 };
                 catelogController.updateCatListState(body, cat['_id']);
-                partnerDetailsProvider.setCategoryItemState(val, index);
+                partnerDetailsProvider!.setCategoryItemState(val, index);
               }),
         ],
       ),
@@ -143,15 +143,16 @@ Future bottomMenu(BuildContext context, cat, int index) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: Colors.indigo[900]!,
                     minWidth: width(context) * 0.45,
                     height: height(context) * 0.06,
                     textColor: Colors.white,
                     buttonName: 'Edit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
+                    allRadius: true,
                     borderRadius: 15.0,
-                    borderSideColor: Colors.indigo[900],
+                    borderSideColor: Colors.indigo[900]!,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
                       Navigator.push(
@@ -164,19 +165,20 @@ Future bottomMenu(BuildContext context, cat, int index) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                  bgColor: Colors.indigo[50],
+                  bgColor: Colors.indigo[50]!,
                   minWidth: width(context) * 0.45,
                   height: height(context) * 0.06,
-                  textColor: Colors.grey[900],
+                  textColor: Colors.grey[900]!,
                   buttonName: 'Delete',
                   textSize: width(context) * 0.05,
                   textStyle: FontWeight.w600,
+                  allRadius: true,
                   borderRadius: 15.0,
-                  borderSideColor: Colors.indigo[50],
+                  borderSideColor: Colors.indigo[50]!,
                   onClick: () async {
                     var res = await catelogController.deleteCatelog(cat['_id']);
                     if (res == 200 || res == 204) {
-                      partnerDetailsProvider.removeCategoryItem(cat['_id']);
+                      partnerDetailsProvider!.removeCategoryItem(cat['_id']);
                       Navigator.pop(context);
                     }
                   },
@@ -213,16 +215,17 @@ addCatelog(BuildContext context) {
       buttonName: 'Add Service',
       height: height(context) * 0.055,
       minWidth: width(context) * 0.5,
-      bgColor: Colors.indigo[900],
-      textColor: Colors.grey[50],
+      bgColor: Colors.indigo[900]!,
+      textColor: Colors.grey[50]!,
       textSize: width(context) * 0.04,
+      allRadius: true,
       leadingIcon: Icon(
         Icons.add_circle,
         color: Colors.grey[50],
         size: width(context) * 0.05,
       ),
       borderRadius: 15.0,
-      borderSideColor: Colors.grey[900],
+      borderSideColor: Colors.grey[900]!,
       onClick: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => CatelogPost()));
@@ -239,7 +242,7 @@ catelogCard(BuildContext context, cat) {
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(boxShadow: [
-          BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300])
+          BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300]!)
         ], color: Colors.grey[50], borderRadius: BorderRadius.circular(15.0)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -313,7 +316,7 @@ catelogCard(BuildContext context, cat) {
               height: height(context) * 0.055,
               minWidth: width(context) * 0.9,
               bgColor: Colors.transparent,
-              textColor: Colors.grey[900],
+              textColor: Colors.grey[900]!,
               textSize: width(context) * 0.04,
               borderRadius: 15.0,
               borderSideColor: Colors.transparent,

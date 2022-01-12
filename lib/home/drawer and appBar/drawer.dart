@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -29,12 +28,10 @@ class DrawerScreen extends StatefulWidget {
 }
 
 class _DrawerScreenState extends StateMVC<DrawerScreen> {
-  DrawerandAppBarController _drawerController;
-  _DrawerScreenState() : super(DrawerandAppBarController()) {
-    this._drawerController = controller;
-  }
+  DrawerandAppBarController? _drawerController = DrawerandAppBarController();
+  
 
-  PartnerDetailsProvider partnerDetailsProvider;
+  PartnerDetailsProvider? partnerDetailsProvider;
   var isLoading = false;
 
   @override
@@ -53,7 +50,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
     final _width = MediaQuery.of(context).size.width;
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
       var pd = data.getProfileDetails;
-      if (pd == null) {
+      if (pd.isEmpty) {
         return Center(child: CircularProgressIndicator());
       }
       // log(pr.toString());
@@ -67,8 +64,8 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
               children: [
                 ProfilePic(
                   badge: false,
-                  profile: pd['partnerPic'],
-                  name: pd['name'],
+                  profile: pd['partnerPic']!,
+                  name: pd['name']!,
                 ),
                 SizedBox(
                   width: 10,
@@ -79,7 +76,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                     TextWid(
                       text: toBeginningOfSentenceCase(
                         pd['name'],
-                      ),
+                      ).toString(),
                       size: _width * 0.045,
                       weight: FontWeight.w600,
                     ),
@@ -90,13 +87,13 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                             pd['availability'] == false
                                 ? 'Inactive Now'
                                 : 'Active Now',
-                          ),
+                          ).toString(),
                           size: _width * 0.03,
                           weight: FontWeight.w500,
                         ),
                         Text('  |  '),
                         TextWid(
-                          text: partnerDetailsProvider
+                          text: partnerDetailsProvider!
                               .getServiceNameById(pd['job']),
                           size: _width * 0.03,
                           weight: FontWeight.w500,
@@ -124,8 +121,8 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                                   _hight,
                                   _width,
                                   pd,
-                                  partnerDetailsProvider,
-                                  _drawerController);
+                                  partnerDetailsProvider!,
+                                  _drawerController!);
                               log(element['title']);
                             },
                             child: Row(
@@ -172,39 +169,39 @@ drawerItemsFunction(
   switch (element) {
     case 'Sign Out':
       return signOut(context, hight, width);
-      break;
+
     case 'Settings':
       // return settings(context, hight, width);
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
-      break;
+
     case 'Edit Details':
       // return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
-      break;
+
     case 'Service History':
       return history(context, hight, width, partnerDetailsProvider);
-      break;
+
     case 'Help & Support':
       return helpAndSupport(context, hight, width, pr);
-      break;
+
     case 'Privacy Policies':
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => PrivacyPolicyWebView()));
-      break;
+
     case 'Catelog':
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => Catalog()));
-      break;
+
     case 'Invite':
       return invites(context, hight, width, pr);
-      break;
+
     case 'FeedBack':
       return newQuery(context, onSubmit: (String output) {
         submitQuery(output, pr["_id"], context);
       });
-      break;
+
     default:
       return '';
   }

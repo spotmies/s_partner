@@ -9,9 +9,9 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class OrdersController extends ControllerMVC {
-  var scaffoldkey = GlobalKey<ScaffoldState>();
+  GlobalKey? scaffoldkey = GlobalKey<ScaffoldState>();
   // final controller = TestController();
-  PartnerDetailsProvider partnerProvider;
+  PartnerDetailsProvider? partnerProvider;
   List jobs = [
     'AC Service',
     'Computer',
@@ -66,22 +66,16 @@ class OrdersController extends ControllerMVC {
     switch (orderState) {
       case 'req':
         return Icons.pending_actions;
-        break;
       case 'noPartner':
         return Icons.stop_circle;
-        break;
       case 'updated':
         return Icons.update;
-        break;
       case 'onGoing':
         return Icons.run_circle_rounded;
-        break;
       case 'completed':
         return Icons.done_all;
-        break;
       case 'cancel':
         return Icons.cancel;
-        break;
       default:
         return Icons.search;
     }
@@ -99,7 +93,7 @@ class OrdersController extends ControllerMVC {
     var response = await Server().getMethod(API.allOrder + pId);
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);
-      partnerProvider.setOrder(ordersList);
+      partnerProvider!.setOrder(ordersList);
 
       snackbar(context, "sync with new changes");
     } else

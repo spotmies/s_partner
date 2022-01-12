@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -8,8 +7,8 @@ Widget profileShimmer(BuildContext context) {
       kToolbarHeight;
   final _width = MediaQuery.of(context).size.width;
   return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
-      highlightColor: Colors.grey[100],
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
       enabled: true,
       child: Container(
         height: _hight,

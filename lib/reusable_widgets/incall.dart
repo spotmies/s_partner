@@ -22,7 +22,7 @@ class IncallManager {
   Future<void> start(
       {bool auto = true,
       MediaType media = MediaType.AUDIO,
-      String ringback}) async {
+      String? ringback}) async {
     await _channel.invokeMethod('start', <String, dynamic>{
       'media': media == MediaType.AUDIO ? 'audio' : 'video',
       'auto': auto,
@@ -31,7 +31,7 @@ class IncallManager {
   }
 
   /// Stop InCallManager
-  Future<void> stop({String busytone}) async {
+  Future<void> stop({String? busytone}) async {
     await _channel
         .invokeMethod('stop', <String, dynamic>{'busytone': busytone});
   }
@@ -179,22 +179,22 @@ class IncallManager {
         String deviceName = event['deviceName'];
         print(
             "WiredHeadset:isPlugged:$isPlugged hasMic:$hasMic deviceName:$deviceName");
-        break;
+break;
       case 'Proximity':
         bool isNear = event['isNear'];
         onProximity.add(isNear);
-        break;
+break;
       /* ----- For Android only ------ */
       case 'NoisyAudio': //noisy audio
         String status = event['status'];
         print("NoisyAudio:status:$status");
-        break;
+break;
       case 'MediaButton':
         String eventText = event['eventText'];
         // ignore: unused_local_variable
         int eventCode = event['eventCode'];
         onMediaButton.add(eventText);
-        break;
+break;
       case 'onAudioFocusChange':
         String eventText = event['eventText'];
         // ignore: unused_local_variable
@@ -202,13 +202,13 @@ class IncallManager {
             ? event['eventCode'] > 0
             : event['eventCode'];
         onAudioFocusChange.add(eventText);
-        break;
+break;
       case 'onAudioDeviceChanged':
         // ignore: unused_local_variable
         String availableAudioDeviceList = event['availableAudioDeviceList'];
         String selectedAudioDevice = event['selectedAudioDevice'];
         onAudioDeviceChanged.add(selectedAudioDevice);
-        break;
+
       /* ----- For Android only ------ */
     }
   }

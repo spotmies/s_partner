@@ -1,22 +1,22 @@
 class ChatModel {
-  int localid;
-  List<dynamic> msgs;
-  int lastModified;
-  String id;
-  String msgId;
-  int cBuild;
-  int join;
-  String ordId;
-  String pId;
-  String uId;
-  int pState;
-  int uState;
-  int uCount;
-  int pCount;
+  int? localid;
+  List<dynamic>? msgs;
+  int? lastModified;
+  String? id;
+  String? msgId;
+  int? cBuild;
+  int? join;
+  String? ordId;
+  String? pId;
+  String? uId;
+  int? pState;
+  int? uState;
+  int? uCount;
+  int? pCount;
   // UDetails uDetails;
   // PDetails pDetails;
   // OrderDetails orderDetails;
-  int v;
+  int? v;
 
   ChatModel({
     this.msgs,
