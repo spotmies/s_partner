@@ -27,7 +27,8 @@ class EditProfileController extends ControllerMVC {
   var adharF;
   var adharB;
   List otherDocs = [];
-  Map partner;
+  Map partner = {};
+  bool enableModifications = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -48,6 +49,8 @@ class EditProfileController extends ControllerMVC {
 
   fillAllForms(partnerData) {
     partner = partnerData;
+    enableModifications = partnerData['enableModifications'] ?? false;
+
     setDate(partnerData['dob']);
     profilePic = partner['partnerPic'];
     adharF = partner['docs']['adharF'];

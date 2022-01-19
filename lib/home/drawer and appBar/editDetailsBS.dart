@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/edit_profile_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
 import 'package:spotmies_partner/reusable_widgets/basic_app_bar.dart';
@@ -16,8 +17,7 @@ import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
-
-
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 photoPicker() async {
   final pickedFile = await ImagePicker().pickImage(
@@ -257,7 +257,6 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   )),
                             ),
                           ),
-
                           Container(
                               width: width * 0.95,
                               padding: EdgeInsets.only(
@@ -280,220 +279,270 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   color: Colors.grey,
                                 )),
                               ])),
-                          Container(
-                            width: width * 0.9,
-                            padding: EdgeInsets.only(bottom: 15),
-                            // padding: EdgeInsets.all(15),
-                            child: TextFieldWidget(
-                              label: _editProfileController.dropDownValue == 2
-                                  ? "College Name"
-                                  : "Business Name",
-                              maxLength: 60,
-                              controller:
-                                  _editProfileController.dropDownValue == 2
-                                      ? _editProfileController.collgeNameControl
-                                      : _editProfileController
-                                          .businessNameControl,
-                              hint: _editProfileController.dropDownValue == 2
-                                  ? 'Enter your collge name here'
-                                  : 'ex : Interior service pvt',
-                              enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900],
-                              enableBorderRadius: 15,
-                              focusBorderRadius: 15,
-                              errorBorderRadius: 15,
-                              focusErrorRadius: 15,
-                              validateMsg:
-                                  _editProfileController.dropDownValue == 2
-                                      ? 'Enter Valid College Name'
-                                      : 'Enter valid Business name',
-                              maxLines: 1,
-                              postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900],
-                              isRequired: false,
-                            ),
-                          ),
-
-                          Container(
-                            width: width * 0.9,
-                            padding: EdgeInsets.only(bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    // color: Colors.green,
-
+                          GestureDetector(
+                            onTap: () {
+                              if (!_editProfileController.enableModifications) {
+                                snackbar(context,
+                                    "You don't have a access to update this data",
+                                    label: "Ask permission", ontap: () {
+                                  return newQuery(context,
+                                      defaultContent:
+                                          "Give access to update my professional data",
+                                      onSubmit: (String output) {
+                                    submitQuery(
+                                        output,
+                                        _editProfileController.partner["_id"],
+                                        context,
+                                        suggestionFor: "other");
+                                  });
+                                });
+                              }
+                            },
+                            child: AbsorbPointer(
+                              absorbing:
+                                  !_editProfileController.enableModifications,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: width * 0.9,
+                                    padding: EdgeInsets.only(bottom: 15),
                                     // padding: EdgeInsets.all(15),
                                     child: TextFieldWidget(
-                                      label: "Experience",
+                                      label: _editProfileController
+                                                  .dropDownValue ==
+                                              2
+                                          ? "College Name"
+                                          : "Business Name",
+                                      maxLength: 60,
                                       controller: _editProfileController
-                                          .experienceControl,
-                                      maxLength: 2,
-                                      formatter: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]')),
-                                      ],
-                                      hint: 'ex : 1 year, 2 year, etc...,',
+                                                  .dropDownValue ==
+                                              2
+                                          ? _editProfileController
+                                              .collgeNameControl
+                                          : _editProfileController
+                                              .businessNameControl,
+                                      hint: _editProfileController
+                                                  .dropDownValue ==
+                                              2
+                                          ? 'Enter your collge name here'
+                                          : 'ex : Interior service pvt',
                                       enableBorderColor: Colors.grey,
                                       focusBorderColor: Colors.indigo[900],
                                       enableBorderRadius: 15,
                                       focusBorderRadius: 15,
                                       errorBorderRadius: 15,
                                       focusErrorRadius: 15,
-                                      validateMsg: 'Enter Valid experience',
+                                      validateMsg: _editProfileController
+                                                  .dropDownValue ==
+                                              2
+                                          ? 'Enter Valid College Name'
+                                          : 'Enter valid Business name',
                                       maxLines: 1,
                                       postIcon: Icon(Icons.change_circle),
                                       postIconColor: Colors.indigo[900],
+                                      isRequired: false,
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.centerRight,
-                                    // color: Colors.amber,
-                                    child: DropdownButton(
-                                      underline: SizedBox(),
-                                      value:
-                                          _editProfileController.dropDownValue,
-                                      icon: Icon(
-                                        Icons.arrow_drop_down_circle,
-                                        size: width * 0.06,
-                                        color: Colors.indigo[900],
-                                      ),
-                                      items: _editProfileController.accountType
-                                          .map((type) {
-                                        return DropdownMenuItem(
-                                            value: _editProfileController
-                                                .accountType
-                                                .indexOf(type),
+
+                                  Container(
+                                    width: width * 0.9,
+                                    padding: EdgeInsets.only(bottom: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            // color: Colors.green,
+
+                                            // padding: EdgeInsets.all(15),
+                                            child: TextFieldWidget(
+                                              label: "Experience",
+                                              controller: _editProfileController
+                                                  .experienceControl,
+                                              maxLength: 2,
+                                              formatter: <TextInputFormatter>[
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]')),
+                                              ],
+                                              hint:
+                                                  'ex : 1 year, 2 year, etc...,',
+                                              enableBorderColor: Colors.grey,
+                                              focusBorderColor:
+                                                  Colors.indigo[900],
+                                              enableBorderRadius: 15,
+                                              focusBorderRadius: 15,
+                                              errorBorderRadius: 15,
+                                              focusErrorRadius: 15,
+                                              validateMsg:
+                                                  'Enter Valid experience',
+                                              maxLines: 1,
+                                              postIcon:
+                                                  Icon(Icons.change_circle),
+                                              postIconColor: Colors.indigo[900],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            // color: Colors.amber,
+                                            child: DropdownButton(
+                                              underline: SizedBox(),
+                                              value: _editProfileController
+                                                  .dropDownValue,
+                                              icon: Icon(
+                                                Icons.arrow_drop_down_circle,
+                                                size: width * 0.06,
+                                                color: Colors.indigo[900],
+                                              ),
+                                              items: _editProfileController
+                                                  .accountType
+                                                  .map((type) {
+                                                return DropdownMenuItem(
+                                                    value:
+                                                        _editProfileController
+                                                            .accountType
+                                                            .indexOf(type),
+                                                    child: TextWid(
+                                                      text: type,
+                                                      color: Colors.grey[900],
+                                                      size: width * 0.04,
+                                                      weight: FontWeight.w500,
+                                                    ));
+                                              }).toList(),
+                                              onChanged: (newVal) {
+                                                if (newVal == 0) return;
+                                                _editProfileController
+                                                    .dropDownValue = newVal;
+                                                _editProfileController
+                                                    .refresh();
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: width * 0.9,
+                                    padding: EdgeInsets.only(bottom: 15),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
                                             child: TextWid(
-                                              text: type,
-                                              color: Colors.grey[900],
-                                              size: width * 0.04,
-                                              weight: FontWeight.w500,
-                                            ));
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        if (newVal == 0) return;
-                                        _editProfileController.dropDownValue =
-                                            newVal;
-                                        _editProfileController.refresh();
+                                          text: "Select your Category",
+                                          size: width * 0.045,
+                                          weight: FontWeight.bold,
+                                        )),
+                                        Container(
+                                          child: DropdownButton(
+                                            underline: SizedBox(),
+                                            value: _editProfileController.job,
+                                            icon: Icon(
+                                              Icons.arrow_drop_down_circle,
+                                              size: width * 0.06,
+                                              color: Colors.indigo[900],
+                                            ),
+                                            items: data.getServiceList
+                                                .map((location) {
+                                              return DropdownMenuItem(
+                                                child: TextWid(
+                                                  text:
+                                                      location['nameOfService'],
+                                                  color: Colors.grey[900],
+                                                  size: width * 0.04,
+                                                  weight: FontWeight.w500,
+                                                ),
+                                                value: location['serviceId'],
+                                              );
+                                            }).toList(),
+                                            onChanged: (newVal) {
+                                              _editProfileController.job =
+                                                  newVal;
+
+                                              _editProfileController.refresh();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  Container(
+                                    padding: EdgeInsets.only(top: 20),
+                                    constraints: boxConstraints,
+                                    child: ProfilePic(
+                                      name: "F",
+                                      profile: _editProfileController.adharF,
+                                      isProfile: false,
+                                      size: width * 0.15,
+                                      onClick: () {
+                                        changeImages(
+                                            "adharF", _editProfileController);
                                       },
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: width * 0.9,
-                            padding: EdgeInsets.only(bottom: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
+                                  Container(
+                                    padding: EdgeInsets.all(15),
                                     child: TextWid(
-                                  text: "Select your Category",
-                                  size: width * 0.045,
-                                  weight: FontWeight.bold,
-                                )),
-                                Container(
-                                  child: DropdownButton(
-                                    underline: SizedBox(),
-                                    value: _editProfileController.job,
-                                    icon: Icon(
-                                      Icons.arrow_drop_down_circle,
-                                      size: width * 0.06,
-                                      color: Colors.indigo[900],
+                                      text: "Adhar ID Front",
+                                      size: width * 0.035,
                                     ),
-                                    items: data.getServiceList.map((location) {
-                                      return DropdownMenuItem(
-                                        child: TextWid(
-                                          text: location['nameOfService'],
-                                          color: Colors.grey[900],
-                                          size: width * 0.04,
-                                          weight: FontWeight.w500,
-                                        ),
-                                        value: location['serviceId'],
-                                      );
-                                    }).toList(),
-                                    onChanged: (newVal) {
-                                      _editProfileController.job = newVal;
-
-                                      _editProfileController.refresh();
-                                    },
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    padding: EdgeInsets.only(top: 20),
+                                    constraints: boxConstraints,
+                                    child: ProfilePic(
+                                      name: "B",
+                                      profile: _editProfileController.adharB,
+                                      isProfile: false,
+                                      size: width * 0.15,
+                                      onClick: () {
+                                        changeImages(
+                                            "adharB", _editProfileController);
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(15),
+                                    child: TextWid(
+                                      text: "Adhar ID Back",
+                                      size: width * 0.035,
+                                    ),
+                                  ),
+                                  // otherDocs != null
+                                  //     ? Container(
+                                  //         height: 200,
+                                  //         width: 300,
+                                  //         child: ListView.builder(
+                                  //             itemCount: otherDocs.length,
+                                  //             itemBuilder: (BuildContext cxtx, int index) {
+                                  //               return Container(
+                                  //                 padding: EdgeInsets.only(top: 20),
+                                  //                 constraints: boxConstraints,
+                                  //                 color: Colors.amber,
+                                  //                 child: ProfilePic(
+                                  //                   name: "B",
+                                  //                   profile: otherDocs[index],
+                                  //                   isProfile: false,
+                                  //                   size: width * 0.15,
+                                  //                   // onClick: () {
+                                  //                   //   changeImages("adharB");
+                                  //                   // },
+                                  //                 ),
+                                  //               );
+                                  //             }),
+                                  //       )
+                                  //     : Container(),
+                                ],
+                              ),
                             ),
                           ),
-
-                          Container(
-                            padding: EdgeInsets.only(top: 20),
-                            constraints: boxConstraints,
-                            child: ProfilePic(
-                              name: "F",
-                              profile: _editProfileController.adharF,
-                              isProfile: false,
-                              size: width * 0.15,
-                              onClick: () {
-                                changeImages("adharF", _editProfileController);
-                              },
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            child: TextWid(
-                              text: "Adhar ID Front",
-                              size: width * 0.035,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 20),
-                            constraints: boxConstraints,
-                            child: ProfilePic(
-                              name: "B",
-                              profile: _editProfileController.adharB,
-                              isProfile: false,
-                              size: width * 0.15,
-                              onClick: () {
-                                changeImages("adharB", _editProfileController);
-                              },
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            child: TextWid(
-                              text: "Adhar ID Back",
-                              size: width * 0.035,
-                            ),
-                          ),
-                          // otherDocs != null
-                          //     ? Container(
-                          //         height: 200,
-                          //         width: 300,
-                          //         child: ListView.builder(
-                          //             itemCount: otherDocs.length,
-                          //             itemBuilder: (BuildContext cxtx, int index) {
-                          //               return Container(
-                          //                 padding: EdgeInsets.only(top: 20),
-                          //                 constraints: boxConstraints,
-                          //                 color: Colors.amber,
-                          //                 child: ProfilePic(
-                          //                   name: "B",
-                          //                   profile: otherDocs[index],
-                          //                   isProfile: false,
-                          //                   size: width * 0.15,
-                          //                   // onClick: () {
-                          //                   //   changeImages("adharB");
-                          //                   // },
-                          //                 ),
-                          //               );
-                          //             }),
-                          //       )
-                          //     : Container(),
                           Container(
                             width: width * 0.4,
                             padding: EdgeInsets.symmetric(vertical: 30),
