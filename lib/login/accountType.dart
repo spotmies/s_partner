@@ -18,11 +18,11 @@ class _AccountTypeState extends State<AccountType> {
   bool freelanace = false;
   bool student = false;
   String userAccountType = "";
-   @override
+  @override
   void initState() {
     super.initState();
-    
   }
+
   userType(student, freelanace, BuildContext context) {
     if (userAccountType == "")
       return snackbar(context, 'Please select any one of above');
@@ -121,7 +121,8 @@ class _AccountTypeState extends State<AccountType> {
                             size: _width * 0.055,
                             weight: FontWeight.w600,
                             maxlines: 3,
-                            color: freelanace ? Colors.white : Colors.grey[700]!,
+                            color:
+                                freelanace ? Colors.white : Colors.grey[700]!,
                           ),
                         ),
                       ],
@@ -233,6 +234,7 @@ class _AccountTypeState extends State<AccountType> {
                     textColor: Colors.white,
                     textSize: _width * 0.05,
                     borderRadius: 15.0,
+                    allRadius: true,
                     trailingIcon: Icon(
                       Icons.app_registration,
                     ),

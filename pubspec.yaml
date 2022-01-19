@@ -41,6 +41,7 @@ dependencies:
   geolocator: ^8.0.1
   location: ^4.3.0
   geocoder:
+  geocoding: ^2.0.1
   shared_preferences: ^2.0.11
   simple_animations: ^4.0.1
   carousel_slider: ^4.0.0

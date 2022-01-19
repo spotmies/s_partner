@@ -17,6 +17,7 @@ import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
 class StepperController extends ControllerMVC {
   PartnerDetailsProvider? partnerProvider;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey? stepperCotroller = GlobalKey<ScaffoldState>();
   TextEditingController? nameTf = TextEditingController();
   TextEditingController? dobTf = TextEditingController();
@@ -114,9 +115,12 @@ class StepperController extends ControllerMVC {
   // }
 
   step1(BuildContext context, StepperController stepperController) {
+    log(accept.toString());
     if (accept == true) {
+      log('119');
       currentStep += 1;
     } else {
+      log('122');
       Timer(
           Duration(milliseconds: 100),
           () => scrollController!

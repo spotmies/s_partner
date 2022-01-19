@@ -5,10 +5,10 @@ import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 
-Widget step2(BuildContext context, StepperController stepperController,
+Widget step2(BuildContext context, StepperController? stepperController,
     double hight, double width, String type) {
   return Form(
-    key: stepperController.step2Formkey,
+    key: stepperController?.step2Formkey,
     child: Column(
       children: [
         Container(
@@ -23,11 +23,12 @@ Widget step2(BuildContext context, StepperController stepperController,
                   width: width * 0.4,
                   child: CircleAvatar(
                     child: Center(
-                      child: stepperController.profilepics == null
+                      child: stepperController?.profilepics == null
                           ? IconButton(
                               padding: EdgeInsets.all(0.0),
                               onPressed: () {
-                                stepperController.profilePic();
+                                stepperController?.profilePic();
+                                stepperController?.refresh();
                               },
                               icon: Icon(
                                 Icons.photo_camera,
@@ -42,8 +43,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: FileImage(
-                                              stepperController.profilepics!))),
+                                          image: FileImage(stepperController!
+                                              .profilepics!))),
                                 ),
                                 Positioned(
                                     bottom: width * 0.02,
@@ -66,14 +67,14 @@ Widget step2(BuildContext context, StepperController stepperController,
                             ),
                     ),
                     radius: 30,
-                    backgroundColor: Colors.grey[100],
+                    backgroundColor: Colors.grey[100]!,
                   ),
                 ),
               ),
               registrationField(
                   hight,
                   context,
-                  stepperController,
+                  stepperController!,
                   'Name',
                   'Enter Valid Name',
                   stepperController.nameTf,
@@ -99,8 +100,8 @@ Widget step2(BuildContext context, StepperController stepperController,
                     weight: FontWeight.w600,
                   ),
                   subtitle: TextWid(
-                    text: getDate(
-                            stepperController.pickedDate!.millisecondsSinceEpoch)
+                    text: getDate(stepperController
+                            .pickedDate!.millisecondsSinceEpoch)
                         .toString(),
                   ),
                   trailing: Icon(
@@ -322,6 +323,3 @@ registrationField(
     ),
   );
 }
-
-
-

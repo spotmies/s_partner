@@ -70,6 +70,8 @@ class _MapsState extends State<Maps> {
   }
 
   void getCurrentLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
     Position currentPosition =
         await GeolocatorPlatform.instance.getCurrentPosition();
     setState(() {
@@ -252,6 +254,7 @@ class _MapsState extends State<Maps> {
                       textColor: Colors.grey[900]!,
                       borderRadius: 15.0,
                       textSize: width * 0.04,
+                      allRadius: true,
                       leadingIcon: Icon(
                         Icons.clear,
                         size: width * 0.04,
@@ -275,6 +278,7 @@ class _MapsState extends State<Maps> {
                             },
                             buttonName: 'Navigate',
                             textColor: Colors.white,
+                            allRadius: true,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
                             trailingIcon: Icon(
@@ -303,6 +307,7 @@ class _MapsState extends State<Maps> {
                             },
                             buttonName: 'Save',
                             textColor: Colors.white,
+                            allRadius: true,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
                             trailingIcon: Icon(

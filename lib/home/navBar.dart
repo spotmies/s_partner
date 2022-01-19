@@ -403,7 +403,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Consumer<PartnerDetailsProvider?>(builder: (context, data, child) {
-        dynamic pd = data!.getProfileDetails;
+        dynamic pd = data?.getProfileDetails;
         if (pd.isEmpty) return circleProgress();
         if (pd['isDocumentsVerified'] != false)
           return VerifictionInProgress(pd);
