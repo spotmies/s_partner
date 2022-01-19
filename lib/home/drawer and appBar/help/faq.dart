@@ -197,8 +197,10 @@ newQuery(BuildContext context,
     {Function onSubmit,
     String type = "text",
     String heading = "Rise a new query",
-    String hint = "Ask Question"}) {
-  TextEditingController queryControl = TextEditingController();
+    String hint = "Ask Question",
+    String defaultContent = ""}) {
+  TextEditingController queryControl =
+      TextEditingController(text: defaultContent);
   GlobalKey<FormState> queryForm = GlobalKey<FormState>();
   // bool loader = false;
   return showModalBottomSheet(
@@ -281,13 +283,13 @@ newQuery(BuildContext context,
       });
 }
 
-submitQuery(subject, pDID, BuildContext context) async {
+submitQuery(subject, pDID, BuildContext context, {String suggestionFor}) async {
   Map<String, String> body = {
     "subject": subject.toString(),
-    "suggestionFor": "faq",
+    "suggestionFor": suggestionFor ?? "faq",
     "suggestionFrom": "partnerApp",
-    "uId": API.pid.toString(),
-    "uDetails": pDID.toString(),
+    "pId": API.pid.toString(),
+    "pDetails": pDID.toString(),
   };
   dynamic response = await Server().postMethod(API.suggestions, body);
   // print("36 $response");
