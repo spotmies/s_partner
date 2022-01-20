@@ -124,6 +124,7 @@ class LoginPageController extends ControllerMVC {
           String resp = await checkPartnerRegistered(value.user!.uid);
           timerProvider.setLoader(false);
           partnerProvider.setCurrentPid(value.user!.uid);
+          saveNumber( timerProvider.phNumber);
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,

@@ -29,7 +29,6 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends StateMVC<DrawerScreen> {
   DrawerandAppBarController? _drawerController = DrawerandAppBarController();
-  
 
   PartnerDetailsProvider? partnerDetailsProvider;
   var isLoading = false;
@@ -50,7 +49,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
     final _width = MediaQuery.of(context).size.width;
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
       var pd = data.getProfileDetails;
-      if (pd.isEmpty) {
+      if (data.getProfileDetails.isEmpty) {
         return Center(child: CircularProgressIndicator());
       }
       // log(pr.toString());

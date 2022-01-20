@@ -9,6 +9,7 @@ import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
+import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
@@ -41,6 +42,8 @@ void main() async {
           create: (context) => IncomingOrdersProvider()),
       ChangeNotifierProvider<PartnerDetailsProvider>(
           create: (context) => PartnerDetailsProvider()),
+      ChangeNotifierProvider<LocationProvider>(
+          create: (context) => LocationProvider()),
       ChangeNotifierProvider<TimeProvider>(create: (context) => TimeProvider()),
       ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
     ], child: MyApp()));
@@ -55,7 +58,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,

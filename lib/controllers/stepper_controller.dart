@@ -12,6 +12,7 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
@@ -104,19 +105,9 @@ class StepperController extends ControllerMVC {
     'Plumber',
   ];
 
-  //functions
-
-  // void initState() {
-  //   super.initState();
-  //   partnerProvider =
-  //       Provider.of<PartnerDetailsProvider>(context, listen: false);
-
-  //   // print("76 ${FirebaseAuth.instance.currentUser.uid}");
-  // }
-
-  step1(BuildContext context, StepperController stepperController) {
+  step1(BuildContext context) {
     log(accept.toString());
-    if (accept == true) {
+    if (accept!) {
       log('119');
       currentStep += 1;
     } else {
@@ -173,7 +164,7 @@ class StepperController extends ControllerMVC {
       "partnerPic": pictureLink.toString(),
       "altNum": altnumberTf?.text.toString(),
       "name": nameTf?.text.toString(),
-      "phNum": (phone.isEmpty) ? verifiedNumber : phone,
+      "phNum": (phone.isEmpty) ? await getNumber() : phone,
       "eMail": emailTf?.text.toString(),
       "job": (dropDownValue).toString(),
       "pId": FirebaseAuth.instance.currentUser?.uid.toString(),
@@ -258,9 +249,8 @@ class StepperController extends ControllerMVC {
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
-    setState(() {
-      profilepics = File(profile!.path);
-    });
+
+    profilepics = File(profile!.path);
   }
 
   //image pick
@@ -270,9 +260,9 @@ class StepperController extends ControllerMVC {
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
-    setState(() {
-      adharfront = File(front!.path);
-    });
+    adharfront = File(front!.path);
+    log(adharfront.toString());
+    // setState(() {});
   }
 
   Future<void> adharBack() async {
@@ -281,9 +271,8 @@ class StepperController extends ControllerMVC {
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
-    setState(() {
-      adharback = File(back!.path);
-    });
+    adharback = File(back!.path);
+    // setState(() {});
   }
 
   Future<void> clgIdImage() async {
@@ -292,9 +281,10 @@ class StepperController extends ControllerMVC {
       imageQuality: 10,
       preferredCameraDevice: CameraDevice.rear,
     );
-    setState(() {
-      clgId = File(id!.path);
-    });
+    clgId = File(id!.path);
+    // setState(() {
+    //   clgId = File(id!.path);
+    // });
   }
 
   pickedDates(BuildContext context) async {

@@ -72,45 +72,6 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     startTimer();
   }
 
-  // loginUserWithOtp(otpValue) async {
-  //   log(otpValue.toString());
-  //   timerProvider.setLoader(true);
-  //   try {
-  //     await FirebaseAuth.instance
-  //         .signInWithCredential(PhoneAuthProvider.credential(
-  //             verificationId: _verificationCode, smsCode: otpValue))
-  //         .then((value) async {
-  //       if (value.user != null) {
-  //         // log("${value.user}");
-  //         // log("$value");
-  //         timerProvider.setPhoneNumber(widget.phone.toString());
-  //         // print("user already login");
-  //         bool resp = await checkUserRegistered(value.user.uid);
-  //         timerProvider.setLoader(false);
-  //         if (resp == false) {
-  //           Navigator.pushAndRemoveUntil(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
-  //               (route) => false);
-  //         } else {
-  //           Navigator.pushAndRemoveUntil(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => GoogleNavBar()),
-  //               (route) => false);
-  //         }
-  //       } else {
-  //         timerProvider.setLoader(false);
-  //         snackbar(context, "Something went wrong");
-  //       }
-  //     });
-  //   } catch (e) {
-  //     FocusScope.of(context).unfocus();
-  //     log(e.toString());
-  //     timerProvider.setLoader(false);
-  //     snackbar(context, "Invalid OTP");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -

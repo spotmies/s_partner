@@ -30,6 +30,14 @@ saveOrders(dynamic data) {
   setStringToSF(id: "orders", value: data);
 }
 
+saveLocation(dynamic data) {
+  setStringToSF(id: "geoLocation", value: data);
+}
+
+saveNumber(dynamic data) {
+  setStringToSF(id: "number", value: data);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                       GET DATA FROM SHARED PREFERENCE                      */
 /* -------------------------------------------------------------------------- */
@@ -61,15 +69,20 @@ getOrders() async {
   return responses;
 }
 
+getNumber()async{
+  dynamic responses = await getStringValuesSF('number');
+  return responses;
+}
+
 setStringToSF({String? id, value}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString(id!, jsonEncode(value));
 }
 
-getStringValuesSF(String id) async {
+getStringValuesSF(String? id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
-  if (!prefs.containsKey(id)) return null;
+  if (!prefs.containsKey(id!)) return null;
   String stringValue = prefs.getString(id)!;
   dynamic returnedValue = jsonDecode(stringValue);
   return returnedValue;

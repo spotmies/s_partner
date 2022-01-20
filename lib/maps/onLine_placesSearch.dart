@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
-import 'package:spotmies_partner/maps/maps.dart';
+import 'package:spotmies_partner/maps/offLine_placesModel.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -52,7 +53,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   Future init() async {
     if (universalProvider!.geoLocations.length > 0) return;
     // var geoLocationss = await PlacesApi.getLoc(query);
-  //  universalProvider.setLocationsLoader(true);
+    //  universalProvider.setLocationsLoader(true);
     List geoLocationss = await PlacesApi.getAllLocations();
     universalProvider!.setLocationsLoader(false);
     universalProvider!.setGeoLocations(geoLocationss);
@@ -101,7 +102,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                             MaterialPageRoute(
                                                 builder: (context) => Maps(
                                                       isNavigate: false,
-                                                      onComplete: (cords) {
+                                                      onSave: (cords) {
                                                         if (widget.onSave ==
                                                             null)
                                                           return snackbar(
@@ -109,7 +110,6 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                                               "something went wrong");
                                                         widget.onSave!(cords,
                                                             "fullAddress");
-                                                    
                                                       },
                                                     )));
                                       },
@@ -176,7 +176,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                 builder: (context) => Maps(
                       coordinates: geo['coordinates'],
                       isNavigate: false,
-                      onComplete: (cords) {
+                      onSave: (cords) {
                         log("completed $cords");
                         if (widget.onSave == null)
                           return snackbar(context, "something went wrong");

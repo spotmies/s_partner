@@ -70,7 +70,9 @@ class _MapsState extends State<Maps> {
   }
 
   void getCurrentLocation() async {
+    // ignore: unused_local_variable
     LocationPermission permission;
+    
     permission = await Geolocator.requestPermission();
     Position currentPosition =
         await GeolocatorPlatform.instance.getCurrentPosition();
