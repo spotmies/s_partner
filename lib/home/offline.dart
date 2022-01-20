@@ -3,10 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Offline extends StatefulWidget {
   const Offline({Key? key}) : super(key: key);
@@ -49,6 +53,60 @@ class _OfflineState extends State<Offline> {
         var cat = pd['catelogs'];
 
         return ListView(children: [
+          Container(
+            height: height(context) * 0.3,
+            // width: width(context) * 0.9,
+            margin: EdgeInsets.only(left: 15, right: 15, top: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.pending_actions,
+                  size: width(context) * 0.07,
+                ),
+                SizedBox(
+                  height: height(context) * 0.02,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextWid(
+                    text:
+                        'Your business profile successfully sumbitted to spotmies, your account is under verification. It might take upto 24 to 48 hours, till then please keep checking your app every 6 hours.',
+                    flow: TextOverflow.visible,
+                    size: width(context) * 0.04,
+                    align: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: height(context) * 0.02,
+                ),
+                ElevatedButtonWidget(
+                  buttonName: 'Need Help',
+                  height: height(context) * 0.047,
+                  minWidth: width(context) * 0.38,
+                  bgColor: Colors.white,
+                  textColor: Colors.grey[900]!,
+                  allRadius: true,
+                  textSize: width(context) * 0.04,
+                  trailingIcon: Icon(
+                    Icons.help,
+                    color: Colors.grey[900],
+                    size: width(context) * 0.05,
+                  ),
+                  borderRadius: 15.0,
+                  borderSideColor: Colors.grey[900]!,
+                  onClick: () {
+                    helpAndSupport(
+                        context, height(context), width(context), pd);
+                  },
+                ),
+              ],
+            ),
+          ),
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, top: 20),
             child: Row(
