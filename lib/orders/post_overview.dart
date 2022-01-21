@@ -11,7 +11,7 @@ import 'package:spotmies_partner/controllers/post_overview_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
-import 'package:spotmies_partner/maps/offLine_placesModel.dart';
+import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';

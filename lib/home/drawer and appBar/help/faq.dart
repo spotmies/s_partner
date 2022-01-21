@@ -193,10 +193,12 @@ class _FAQState extends State<FAQ> {
 
 newQuery(BuildContext context,
     {Function? onSubmit,
-    String type = "text",
-    String heading = "Rise a new query",
-    String hint = "Ask Question"}) {
-  TextEditingController queryControl = TextEditingController();
+    String? type = "text",
+    String? heading = "Rise a new query",
+    String? hint = "Ask Question",
+    String? defaultContent = ""}) {
+  TextEditingController queryControl =
+      TextEditingController(text: defaultContent);
   GlobalKey<FormState> queryForm = GlobalKey<FormState>();
   // bool loader = false;
   return showModalBottomSheet(
@@ -235,7 +237,7 @@ newQuery(BuildContext context,
                   label: hint,
                   hint: hint,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.indigo[900]!,
+                  focusBorderColor: Colors.indigo[900],
                   enableBorderRadius: 15,
                   controller: queryControl,
                   isRequired: true,
@@ -248,21 +250,21 @@ newQuery(BuildContext context,
                   validateMsg: 'Please check above text',
                   maxLines: type == "text" ? 9 : 1,
                   // postIcon: Icon(Icons.change_circle),
-                  postIconColor: Colors.indigo[900]!,
+                  postIconColor: Colors.indigo[900],
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900]!,
+                    bgColor: Colors.indigo[900],
                     minWidth: width(context),
+                    allRadius: true,
                     height: height(context) * 0.06,
                     textColor: Colors.white,
                     buttonName: 'Submit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 10.0,
-                    allRadius: true,
-                    borderSideColor: Colors.indigo[50]!,
+                    borderSideColor: Colors.indigo[50],
                     onClick: () async {
                       if (queryForm.currentState!.validate()) {
                         if (onSubmit != null) {
@@ -280,13 +282,14 @@ newQuery(BuildContext context,
       });
 }
 
-submitQuery(subject, pDID, BuildContext context) async {
+submitQuery(subject, pDID, BuildContext context,
+    {String? suggestionFor}) async {
   Map<String, String> body = {
     "subject": subject.toString(),
-    "suggestionFor": "faq",
+    "suggestionFor": suggestionFor ?? "faq",
     "suggestionFrom": "partnerApp",
-    "uId": API.pid.toString(),
-    "uDetails": pDID.toString(),
+    "pId": API.pid.toString(),
+    "pDetails": pDID.toString(),
   };
   dynamic response = await Server().postMethod(API.suggestions, body);
   // print("36 $response");

@@ -1,4 +1,4 @@
-package com.example.spotmies_partner
+package com.spotmiespartner
 
 import io.flutter.embedding.android.FlutterActivity
 

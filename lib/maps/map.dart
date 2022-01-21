@@ -107,6 +107,7 @@ class _MapsState extends State<Maps> {
   @override
   void initState() {
     super.initState();
+    
     getCurrentLocation();
     locationProvider = Provider.of<LocationProvider>(context, listen: false);
   }

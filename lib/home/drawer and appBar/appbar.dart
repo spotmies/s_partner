@@ -12,6 +12,7 @@ import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 import '../navBar.dart';
 
@@ -124,7 +125,10 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                   value: pd['availability'],
                   onToggle: (value) {
                     //  displayAwesomeNotification(context);
-
+                    if (value && pd['permission'] < 10) {
+                      return snackbar(context,
+                          "Your account In verfication please Try again later");
+                    }
                     if (data.offlineScreenLoader) return;
                     data.setOffileLoader(true);
                     data.setAvailability(value);

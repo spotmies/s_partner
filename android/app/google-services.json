@@ -8,55 +8,34 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:277034750528:android:fa01f6f01cbc2b435b45a5",
+        "mobilesdk_app_id": "1:277034750528:android:b6117fa218f83e115b45a5",
         "android_client_info": {
-          "package_name": "com.example.spotmies"
+          "package_name": "com.spotmies"
         }
       },
       "oauth_client": [
         {
-          "client_id": "277034750528-4f65j8e6057vgmdeet1no3njc8jqdufa.apps.googleusercontent.com",
+          "client_id": "277034750528-5l3ee0ssft3ol7aa38bpkue6vfsjcgj2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.spotmies",
-            "certificate_hash": "5f4b0856b12b53cdd850f8c27ef030a72e95fe4b"
+            "package_name": "com.spotmies",
+            "certificate_hash": "6ff0c350f1d7f304d1f59937ddb21b4707912684"
           }
         },
         {
-          "client_id": "277034750528-9kkb5rl365jkg1r8mg2i3nssd2did4rc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCemaJvDWTHO1kTQd8g95Tr0NGJexszcyE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "277034750528-9kkb5rl365jkg1r8mg2i3nssd2did4rc.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:277034750528:android:42e3626fd9fc35775b45a5",
-        "android_client_info": {
-          "package_name": "com.example.spotmies_partner"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "277034750528-1hpvskrogjvgs4uppraefp42j1mf0to5.apps.googleusercontent.com",
+          "client_id": "277034750528-nj0e80pntgj5qmjonuq0stdr7kr3rmc7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.spotmies_partner",
-            "certificate_hash": "5f4b0856b12b53cdd850f8c27ef030a72e95fe4b"
+            "package_name": "com.spotmies",
+            "certificate_hash": "b0c0bffb904cd200b6df8912707bcd22af113063"
+          }
+        },
+        {
+          "client_id": "277034750528-vkv54ockbel0f190m2bim8878iepd9oq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spotmies",
+            "certificate_hash": "298203839d9cc7454518c1c9f392b1cff24eda54"
           }
         },
         {
@@ -89,11 +68,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "277034750528-f5dlo5672h34513o2hru7djor133f2di.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spotmiespartner",
+            "certificate_hash": "298203839d9cc7454518c1c9f392b1cff24eda54"
+          }
+        },
+        {
           "client_id": "277034750528-ml1p0p7kr8s9358n7hi9are421llapct.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.spotmiespartner",
             "certificate_hash": "5f4b0856b12b53cdd850f8c27ef030a72e95fe4b"
+          }
+        },
+        {
+          "client_id": "277034750528-ng1igqh16no1hrm9il3cpl470pq259qk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spotmiespartner",
+            "certificate_hash": "3dbffde4441117b8d66383df3513a82d867baaa2"
           }
         },
         {

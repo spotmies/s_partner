@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
-import 'package:spotmies_partner/maps/offLine_placesModel.dart';
+import 'package:spotmies_partner/maps/geo_position.dart';
+import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -28,6 +29,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   @override
   void initState() {
     super.initState();
+    // getGeoLocationPosition();
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
     init();

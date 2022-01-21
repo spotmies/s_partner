@@ -96,26 +96,28 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
           displayOnForeground: true,
           icon: 'resource://drawable/logo',
           locked: false,
+          // payload: message.payload ,
           // displayedDate: DateTime.now().toString(),
           bigPicture:
               'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
       // schedule: NotificationInterval(
       //     interval: 2, timeZone: timeZone, repeats: false),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'accept',
-          label: 'Accept',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-        NotificationActionButton(
-          key: 'cancel',
-          label: 'Cancel',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-      ]);
+      // actionButtons: [
+      //   NotificationActionButton(
+      //     key: 'accept',
+      //     label: 'Accept',
+      //     enabled: true,
+      //     buttonType: ActionButtonType.Default,
+      //   ),
+      //   NotificationActionButton(
+      //     key: 'cancel',
+      //     label: 'Cancel',
+      //     enabled: true,
+      //     buttonType: ActionButtonType.Default,
+      //   ),
+      // ]
+      );
 
   AwesomeNotifications().actionStream.listen((receivedNotifiction) {
     log('step one');
@@ -159,26 +161,28 @@ displayAwesomeNotificationBackground(
           displayOnForeground: true,
           icon: 'resource://drawable/logo',
           locked: false,
+
           // displayedDate: DateTime.now().toString(),
           bigPicture:
               'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
       // schedule: NotificationInterval(
       //     interval: 2, timeZone: timeZone, repeats: false),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'accept',
-          label: 'Accept',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-        NotificationActionButton(
-          key: 'cancel',
-          label: 'Cancel',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-      ]);
+      // actionButtons: [
+      //   NotificationActionButton(
+      //     key: 'accept',
+      //     label: 'Accept',
+      //     enabled: true,
+      //     buttonType: ActionButtonType.Default,
+      //   ),
+      //   NotificationActionButton(
+      //     key: 'cancel',
+      //     label: 'Cancel',
+      //     enabled: true,
+      //     buttonType: ActionButtonType.Default,
+      //   ),
+      // ]
+      );
 
   AwesomeNotifications().actionStream.listen((receivedNotifiction) {
     log('step one');

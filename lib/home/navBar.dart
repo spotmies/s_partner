@@ -9,7 +9,6 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.d
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/home/home.dart';
-import 'package:spotmies_partner/home/verification_inprogress.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/login/onboard.dart';
@@ -21,7 +20,6 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
@@ -218,6 +216,16 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     //         (value) => AwesomeNotifications().setGlobalBadgeCounter(value - 1));
     //   }
     // });
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 10,
+            channelKey: 'firebasePushNotifictions',
+            title: 'Simple Notification',
+            body: 'Simple body'));
+    // AwesomeNotifications().actionStream.listen((receivedNotification) {
+    //   Navigator.pushNamed(context, '/NotificationMessage',
+    //       arguments: {'message': receivedNotification});
+    // });
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
       log(routefromMessage);
@@ -403,10 +411,10 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Consumer<PartnerDetailsProvider?>(builder: (context, data, child) {
-        dynamic pd = data?.getProfileDetails;
-        if (pd.isEmpty) return circleProgress();
-        if (pd['isDocumentsVerified'] != false)
-          return VerifictionInProgress(pd);
+        // dynamic pd = data?.getProfileDetails;
+        // if (pd.isEmpty) return circleProgress();
+        // if (pd['isDocumentsVerified'] != false)
+        //   return VerifictionInProgress(pd);
         return Scaffold(
           backgroundColor: Colors.white,
           body: Consumer<ChatProvider>(builder: (context, notifier, child) {
