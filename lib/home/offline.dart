@@ -53,6 +53,7 @@ class _OfflineState extends State<Offline> {
   void initState() {
     partnerDetailsProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
+    partnerDetailsProvider?.setCurrentConstants('home');
 
     super.initState();
   }
@@ -73,7 +74,9 @@ class _OfflineState extends State<Offline> {
       width: _width,
       decoration: BoxDecoration(color: Colors.grey[200]),
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+        dynamic alert = data.getText('home_screen_message');
         dynamic pd = data.getPartnerDetailsFull;
+
         dynamic dash = data.orders;
         log('---------------------------------46------------');
         // log(dash[0].toString());
@@ -81,7 +84,7 @@ class _OfflineState extends State<Offline> {
         var cat = pd['catelogs'];
 
         return ListView(children: [
-          if (pd['permission'] < 10)
+          if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
             Container(
               height: height(context) * 0.3,
               // width: width(context) * 0.9,
@@ -94,7 +97,9 @@ class _OfflineState extends State<Offline> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.pending_actions,
+                    alert != 'loading..'
+                        ? Icons.message
+                        : Icons.pending_actions,
                     size: width(context) * 0.07,
                   ),
                   SizedBox(
@@ -103,7 +108,9 @@ class _OfflineState extends State<Offline> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextWid(
-                      text: verifyText(pd['permission']),
+                      text: (alert != 'loading..' && alert != 'null')
+                          ? alert.toString()
+                          : verifyText(pd['permission']),
                       flow: TextOverflow.visible,
                       size: width(context) * 0.04,
                       align: TextAlign.center,

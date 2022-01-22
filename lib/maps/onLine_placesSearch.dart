@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
-import 'package:spotmies_partner/maps/geo_position.dart';
 import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';

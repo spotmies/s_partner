@@ -19,6 +19,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/notification_message_view.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -167,7 +168,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       partnerProvider!.setPartnerDetails(details);
       if (details['appConfig'] == true) {
         partnerProvider!.getServiceListFromServer();
-        partnerProvider!.getConstants(alwaysHit: false);
+        log('17100');
+        partnerProvider!.getConstants(alwaysHit: true);
       }
     }
     getImportantAPIs(currentPid);
@@ -216,12 +218,12 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     //         (value) => AwesomeNotifications().setGlobalBadgeCounter(value - 1));
     //   }
     // });
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'firebasePushNotifictions',
-            title: 'Simple Notification',
-            body: 'Simple body'));
+    // AwesomeNotifications().createNotification(
+    //     content: NotificationContent(
+    //         id: 10,
+    //         channelKey: 'firebasePushNotifictions',
+    //         title: 'Simple Notification',
+    //         body: 'Simple body'));
     // AwesomeNotifications().actionStream.listen((receivedNotification) {
     //   Navigator.pushNamed(context, '/NotificationMessage',
     //       arguments: {'message': receivedNotification});
@@ -229,8 +231,19 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
       log(routefromMessage);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+      // RemoteNotification? notification = message!.notification;
+      // AndroidNotification? android = message.notification!.android;
+      // if (notification != null && android != null) {
+      //   log(message.toString());
+      //   // Navigator.push(
+      //   //   context,
+      //   //   MaterialPageRoute(
+      //   //     builder: (context) => NotificationMessage(
+      //   //       message: message.notification,
+      //   //     ),
+      //   //   ),
+      //   // );
+      // }
     });
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
@@ -245,9 +258,17 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       log('Recent');
       final routefromMessage = message.data["route"];
       log(routefromMessage);
-      await displayAwesomeNotification(message, context);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+      if (message.notification != null) {
+        await displayAwesomeNotification(message, context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationMessage(
+              message: message.notification,
+            ),
+          ),
+        );
+      }
     });
 
     log("current pid ${partnerProvider!.currentPid}");

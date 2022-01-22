@@ -1,11 +1,9 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 // import 'package:quick_actions/quick_actions.dart';
-import 'package:spotmies_partner/home/noInternetScreen.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
@@ -21,7 +19,14 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
   // LocalNotificationService.displayAwesomeNotification(message);
-  displayAwesomeNotificationBackground(message);
+
+  if (message.notification != null) {
+    await displayAwesomeNotificationBackground(message);
+    // OneContext().push(MaterialPageRoute(
+    //     builder: (_) => NotificationMessage(
+    //           message: message.notification,
+    //         )));
+  }
 }
 
 void main() async {
@@ -59,47 +64,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // home: SplashScreen(),
-      home: StreamBuilder(
-          stream: Connectivity().onConnectivityChanged,
-          builder: (BuildContext context,
-              AsyncSnapshot<ConnectivityResult>? snapshot) {
-            if (snapshot != null &&
-                snapshot.hasData &&
-                snapshot.data != ConnectivityResult.none) {
-              return SplashScreen();
-            } else {
-              return NoInternet();
-            }
-          }),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }
-
-// final quickActions = QuickActions();
-
-// quickActions.setShortcutItems([
-//   ShortcutItem(type: 'Home', localizedTitle: 'Go Home'),
-//   ShortcutItem(type: 'Chat', localizedTitle: 'Go Chat'),
-//   ShortcutItem(type: 'Jobs', localizedTitle: 'Go Jobs'),
-//   ShortcutItem(type: 'Learn', localizedTitle: 'Go Learn')
-// ]);
-
-// quickActions.initialize((type) {
-//   if(type == 'Home'){
-//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:1)));
-//   }if(type == 'Chat'){
-//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:2)));
-//   }if(type == 'Jobs'){
-//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:3)));
-//   }if(type == 'Learn'){
-//      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NavBar(data:4)));
-//   }
-// });
-
-//notifications
 
 class NotificationsDemo extends StatefulWidget {
   const NotificationsDemo({Key? key}) : super(key: key);

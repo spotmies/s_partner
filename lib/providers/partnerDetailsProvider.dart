@@ -47,6 +47,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
   getText(String objId) {
     if (currentConstants == null) return "loading..";
+    // log('50' + currentConstants.toString());
     int index = currentConstants?.indexWhere(
         (element) => element['objId'].toString() == objId.toString());
 
@@ -72,12 +73,14 @@ class PartnerDetailsProvider extends ChangeNotifier {
         log("constants already in sf");
         return;
       }
+      
     }
 
     dynamic appConstants = await constantsAPI();
     if (appConstants != null) {
       log("new constatns downloaded");
       allConstants = appConstants;
+      
     }
     return;
   }

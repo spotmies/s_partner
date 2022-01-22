@@ -77,6 +77,7 @@ dependencies:
   # flutter_incall: ^1.0.0
   path: ^1.8.0
   file: ^6.1.2
+  one_context: ^1.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

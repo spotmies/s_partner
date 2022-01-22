@@ -84,8 +84,8 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                         TextWid(
                           text: toBeginningOfSentenceCase(
                             pd['availability'] == false
-                                ? 'Inactive Now'
-                                : 'Active Now',
+                                ? 'Offline     '
+                                : 'Online      ',
                           ).toString(),
                           size: _width * 0.03,
                           weight: FontWeight.w500,

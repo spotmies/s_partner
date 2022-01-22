@@ -51,7 +51,8 @@ class _RatingScreenState extends State<RatingScreen> {
                         radius: width(context) * 0.08,
                         backgroundColor: Colors.grey[200],
                         child: TextWid(
-                          text: widget.rating[index]['uDetails']['name'][0],
+                          // text: widget.rating[index]['uDetails']?['name'][0],
+                          text: 'S',
                           size: width(context) * 0.06,
                         ),
                       ),
@@ -62,7 +63,7 @@ class _RatingScreenState extends State<RatingScreen> {
                             children: [
                               TextWid(
                                 text: (widget.rating[index]['feedBackDetails']
-                                            ['rating'] /
+                                            ?['rating'] /
                                         20)
                                     .toString(),
                                 size: width(context) * 0.06,
@@ -77,7 +78,7 @@ class _RatingScreenState extends State<RatingScreen> {
                                     animationDuration: 500,
                                     progressColor: Colors.amber,
                                     percent: widget.rating[index]
-                                            ['feedBackDetails']['rating'] /
+                                            ['feedBackDetails']?['rating'] /
                                         100,
                                     backgroundColor: Colors.grey[300],
                                   ))
@@ -89,7 +90,8 @@ class _RatingScreenState extends State<RatingScreen> {
                           Container(
                             width: width(context) * 0.6,
                             child: TextWid(
-                              text: widget.rating[index]['uDetails']['name'],
+                              // text: widget.rating[index]['uDetails']?['name'],
+                              text: '',
                               size: width(context) * 0.03,
                               weight: FontWeight.w600,
                               flow: TextOverflow.ellipsis,
@@ -103,9 +105,9 @@ class _RatingScreenState extends State<RatingScreen> {
                             child: TextWid(
                               text: reviewDesc(
                                   widget.rating[index]['feedBackDetails']
-                                      ['description'],
+                                      ?['description'],
                                   widget.rating[index]['feedBackDetails']
-                                      ['rating']),
+                                      ?['rating']),
                               size: width(context) * 0.05,
                               weight: FontWeight.w500,
                               flow: TextOverflow.ellipsis,
@@ -191,7 +193,7 @@ reviewMsgs(BuildContext context, rating) {
                           backgroundColor: Colors.grey[200],
                           child: TextWid(
                             // text: rating[index]['uDetails']['name'][0],
-                            text: '',
+                            text: 'S',
                             size: width(context) * 0.06,
                           ),
                         ),

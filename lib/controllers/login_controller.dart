@@ -124,7 +124,7 @@ class LoginPageController extends ControllerMVC {
           String resp = await checkPartnerRegistered(value.user!.uid);
           timerProvider.setLoader(false);
           partnerProvider.setCurrentPid(value.user!.uid);
-          saveNumber( timerProvider.phNumber);
+          saveNumber(timerProvider.phNumber);
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -176,6 +176,19 @@ class LoginPageController extends ControllerMVC {
           (route) => false);
     }
   }
+
+  // StreamBuilder(
+  //       stream: Connectivity().onConnectivityChanged,
+  //       builder: (BuildContext context,
+  //           AsyncSnapshot<ConnectivityResult>? snapshot) {
+  //         if (snapshot != null &&
+  //             snapshot.hasData &&
+  //             snapshot.data != ConnectivityResult.none) {
+  //           return nav(partnerProvider, context);
+  //         } else {
+  //           return NoInternet();
+  //         }
+  //       });
 
   // getConstants(BuildContext context,{bool alwaysHit = false}) async {
   //   if (alwaysHit == false) {

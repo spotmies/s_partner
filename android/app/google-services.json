@@ -68,6 +68,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "277034750528-3fapdvp2gin220v2de5fuqa9gq5a0ntg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spotmiespartner",
+            "certificate_hash": "e3e4af9423d6014f3dbdb01877f82abed7454a4d"
+          }
+        },
+        {
           "client_id": "277034750528-f5dlo5672h34513o2hru7djor133f2di.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

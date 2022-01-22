@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 //permisiion
 
@@ -74,7 +72,8 @@ void awesomeInitilize() async {
             importance: NotificationImportance.High,
             channelShowBadge: true,
             defaultRingtoneType: DefaultRingtoneType.Ringtone,
-            ledColor: Colors.white, channelDescription: 'test message'),
+            ledColor: Colors.white,
+            channelDescription: 'test message'),
       ],
       debug: true);
 }
@@ -86,60 +85,61 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
   // final String timeZone =
   //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'firebasePushNotifiction',
-          title: message.notification!.title,
-          body: message.notification!.body,
-          notificationLayout: NotificationLayout.BigPicture,
-          displayOnBackground: true,
-          displayOnForeground: true,
-          icon: 'resource://drawable/logo',
-          locked: false,
-          // payload: message.payload ,
-          // displayedDate: DateTime.now().toString(),
-          bigPicture:
-              'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
+    content: NotificationContent(
+        id: id,
+        channelKey: 'firebasePushNotifiction',
+        title: message.notification!.title,
+        body: message.notification!.body,
+        notificationLayout: NotificationLayout.BigPicture,
+        displayOnBackground: true,
+        displayOnForeground: true,
+        icon: 'resource://drawable/logo',
+        locked: false,
+        
+        // payload: message,
+        // displayedDate: DateTime.now().toString(),
+        bigPicture:
+            'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
-      // schedule: NotificationInterval(
-      //     interval: 2, timeZone: timeZone, repeats: false),
-      // actionButtons: [
-      //   NotificationActionButton(
-      //     key: 'accept',
-      //     label: 'Accept',
-      //     enabled: true,
-      //     buttonType: ActionButtonType.Default,
-      //   ),
-      //   NotificationActionButton(
-      //     key: 'cancel',
-      //     label: 'Cancel',
-      //     enabled: true,
-      //     buttonType: ActionButtonType.Default,
-      //   ),
-      // ]
-      );
+    // schedule: NotificationInterval(
+    //     interval: 2, timeZone: timeZone, repeats: false),
+    // actionButtons: [
+    //   NotificationActionButton(
+    //     key: 'accept',
+    //     label: 'Accept',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    //   NotificationActionButton(
+    //     key: 'cancel',
+    //     label: 'Cancel',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    // ]
+  );
 
-  AwesomeNotifications().actionStream.listen((receivedNotifiction) {
-    log('step one');
-    if (receivedNotifiction.buttonKeyPressed == 'cancel') {
-      log('cancel');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TutCategory(),
-          ),
-          (route) => route.isFirst);
-    }
-    if (receivedNotifiction.buttonKeyPressed == 'accept') {
-      log('Accept');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TutCategory(),
-          ),
-          (route) => route.isFirst);
-    }
-  });
+  // AwesomeNotifications().actionStream.listen((receivedNotifiction) {
+  //   log('step one');
+  //   if (receivedNotifiction.buttonKeyPressed == 'cancel') {
+  //     log('cancel');
+  //     Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (_) => TutCategory(),
+  //         ),
+  //         (route) => route.isFirst);
+  //   }
+  //   if (receivedNotifiction.buttonKeyPressed == 'accept') {
+  //     log('Accept');
+  //     Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (_) => TutCategory(),
+  //         ),
+  //         (route) => route.isFirst);
+  //   }
+  // });
 }
 
 //background
@@ -151,46 +151,46 @@ displayAwesomeNotificationBackground(
   // final String timeZone =
   //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'firebasePushNotifictions',
-          title: message.notification!.title,
-          body: message.notification!.body,
-          notificationLayout: NotificationLayout.BigPicture,
-          displayOnBackground: true,
-          displayOnForeground: true,
-          icon: 'resource://drawable/logo',
-          locked: false,
+    content: NotificationContent(
+        id: id,
+        channelKey: 'firebasePushNotifictions',
+        title: message.notification!.title,
+        body: message.notification!.body,
+        notificationLayout: NotificationLayout.BigPicture,
+        displayOnBackground: true,
+        displayOnForeground: true,
+        icon: 'resource://drawable/logo',
+        locked: false,
 
-          // displayedDate: DateTime.now().toString(),
-          bigPicture:
-              'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
+        // displayedDate: DateTime.now().toString(),
+        bigPicture:
+            'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
-      // schedule: NotificationInterval(
-      //     interval: 2, timeZone: timeZone, repeats: false),
-      // actionButtons: [
-      //   NotificationActionButton(
-      //     key: 'accept',
-      //     label: 'Accept',
-      //     enabled: true,
-      //     buttonType: ActionButtonType.Default,
-      //   ),
-      //   NotificationActionButton(
-      //     key: 'cancel',
-      //     label: 'Cancel',
-      //     enabled: true,
-      //     buttonType: ActionButtonType.Default,
-      //   ),
-      // ]
-      );
+    // schedule: NotificationInterval(
+    //     interval: 2, timeZone: timeZone, repeats: false),
+    // actionButtons: [
+    //   NotificationActionButton(
+    //     key: 'accept',
+    //     label: 'Accept',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    //   NotificationActionButton(
+    //     key: 'cancel',
+    //     label: 'Cancel',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    // ]
+  );
 
-  AwesomeNotifications().actionStream.listen((receivedNotifiction) {
-    log('step one');
-    if (receivedNotifiction.buttonKeyPressed == 'cancel') {
-      log('cancel');
-    }
-    if (receivedNotifiction.buttonKeyPressed == 'accept') {
-      log('Accept');
-    }
-  });
+  // AwesomeNotifications().actionStream.listen((receivedNotifiction) {
+  //   log('step one');
+  //   if (receivedNotifiction.buttonKeyPressed == 'cancel') {
+  //     log('cancel');
+  //   }
+  //   if (receivedNotifiction.buttonKeyPressed == 'accept') {
+  //     log('Accept');
+  //   }
+  // });
 }

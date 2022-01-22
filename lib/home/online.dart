@@ -15,6 +15,7 @@ import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Online extends StatefulWidget {
   Online(pr);
@@ -66,6 +67,19 @@ class _OnlineState extends StateMVC<Online> {
           partnerProfile = data.getProfileDetails;
           // if (data.reloadIncomingOrders == true)
           //   _incomingOrdersController.incomingOrders(notify: false);
+          if (o.isEmpty) {
+            return Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(width(context) * 0.03),
+                width: width(context),
+                child: TextWid(
+                  text:
+                      'You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications ',
+                  align: TextAlign.center,
+                  flow: TextOverflow.visible,
+                  size: width(context) * 0.05,
+                ));
+          }
           return Stack(
             children: [
               Container(
