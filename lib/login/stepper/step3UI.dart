@@ -35,6 +35,7 @@ class _Step3State extends State<Step3> {
               width: height(context) * 0.8,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // alignment: WrapAlignment.spaceBetween,
                 children: [
                   InkWell(
                     onTap: widget.provider?.getServiceListFromServer,
@@ -47,9 +48,9 @@ class _Step3State extends State<Step3> {
                   ),
                   Flexible(
                     child: Container(
-                      padding: EdgeInsets.only(
-                          left: width(context) * 0.03,
-                          right: width(context) * 0.03),
+                      // padding: EdgeInsets.only(
+                      //     left: width(context) * 0.03,
+                      //     right: width(context) * 0.03),
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -171,12 +172,18 @@ class _UploadUIState extends State<UploadUI> {
                   children: [
                     InkWell(
                       onTap: () async {
+                        print("ontap >>>>>>>");
                         if (widget.imageType == 'front')
                           await widget.stepperController?.adharfrontpage();
+                        setState(() {});
                         if (widget.imageType == 'back')
                           await widget.stepperController?.adharBack();
+                        setState(() {});
                         if (widget.imageType == 'clgId')
                           await widget.stepperController?.clgIdImage();
+                        setState(() {});
+                        widget.stepperController?.refresh();
+                        print("refress >>>>>>>>>");
                         setState(() {});
                       },
                       child: Icon(

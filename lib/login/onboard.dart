@@ -120,10 +120,13 @@ class MyAnimatedContainer extends StatelessWidget {
         return Container(
           width: value,
           height: value,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                  image: AssetImage("images/welcome_image.png"))),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+          // decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     image: DecorationImage(
+          //         image: AssetImage("images/welcome_image.png"))),
         );
       },
     );

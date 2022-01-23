@@ -145,6 +145,7 @@ class StepperController extends ControllerMVC {
   step4(
       BuildContext context, String type, String phone, Map coordinates) async {
     partnerProvider?.setRegistrationInProgress(true);
+    snackbar(context, "Uploading images.....");
     // setState(() {
     //   isProcess = true;
     // });
@@ -179,7 +180,7 @@ class StepperController extends ControllerMVC {
       "acceptance": "100",
       "availability": "false",
       "perAdd": peradTf?.text.toString(),
-      "tempAdd": tempadTf?.text.toString(),
+      // "tempAdd": tempadTf?.text.toString(),
       "partnerDeviceToken":
           await FirebaseMessaging.instance.getToken().then((value) {
         return value.toString();
@@ -196,7 +197,7 @@ class StepperController extends ControllerMVC {
       body["lang.$i"] = localLang![i];
     }
     log(body.toString());
-
+    snackbar(context, "Please wait...");
     Server().postMethod(API.partnerRegister, body).then((response) {
       partnerProvider?.setRegistrationInProgress(false);
       log(response.statusCode.toString());
