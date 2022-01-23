@@ -22,9 +22,9 @@ class EditProfileController extends ControllerMVC {
   ];
   int? job = 0;
 
-  String? profilePic;
-  String? adharF;
-  String? adharB;
+  dynamic profilePic;
+  dynamic adharF;
+  dynamic adharB;
   List? otherDocs = [];
   Map? partner;
   bool? enableModifications = false;
@@ -102,13 +102,16 @@ class EditProfileController extends ControllerMVC {
         firstDate: DateTime(DateTime.now().year - 80, DateTime.now().month - 0,
             DateTime.now().day - 0),
         lastDate: DateTime.now());
+    log(date.toString());
     if (date != null) {
-      setState(() {
-        pickedDate = date;
-        print(pickedDate!.millisecondsSinceEpoch);
-        print(pickedDate);
-      });
+      // setState(() {
+      pickedDate = date;
+      print(pickedDate!.millisecondsSinceEpoch);
+      print(pickedDate);
+      // });
+
     }
+    setState(() {});
   }
 
   saveChanges(BuildContext context) async {
@@ -152,17 +155,18 @@ class EditProfileController extends ControllerMVC {
       var response = await Server().editMethod(API.partnerDetails + pId, body);
       editProvider?.setEditLoader(false);
       if (response.statusCode == 200) {
-        log("change applyed");
+        //log("change applyed");
         dynamic res = jsonDecode(response.body);
         editProvider?.setPartnerDetailsOnly(res!);
 
-        log("response $res");
+        //log("response $res");
+        snackbar(context, "Your changes updated");
         Navigator.pop(context);
       } else {
-        log("something went wrong");
+        //log("something went wrong");
       }
 
-      log("body is $body");
+      //log("body is $body");
     }
   }
 

@@ -42,15 +42,19 @@ class _EditProfileState extends StateMVC<EditProfile> {
   void changeImages(whichImage, controller) async {
     print(" profile ${controller.profilePic}");
     final pickedFile = await photoPicker();
+    log(pickedFile.path.toString());
     switch (whichImage) {
       case "profile":
         controller.profilePic = File(pickedFile?.path);
+
         break;
       case "adharF":
         controller.adharF = File(pickedFile?.path);
+
         break;
       case "adharB":
         controller.adharB = File(pickedFile?.path);
+
         break;
 
       default:
@@ -73,7 +77,6 @@ class _EditProfileState extends StateMVC<EditProfile> {
   editDetails(
     BuildContext context,
   ) {
-    
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
       return Stack(
         children: [
@@ -206,6 +209,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             child: InkWell(
                               onTap: () async {
                                 await _editProfileController!.pickDate(context);
+                                setState(() {});
                               },
                               child: Container(
                                   width: width(context) * 0.9,
@@ -356,6 +360,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
 
                                                     _editProfileController!
                                                         .refresh();
+                                                    setState(() {});
                                                   },
                                                 ),
                                               ),
@@ -400,6 +405,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                         newVal as int?;
                                                     _editProfileController!
                                                         .refresh();
+                                                    setState(() {});
                                                   },
                                                 ),
                                               ),

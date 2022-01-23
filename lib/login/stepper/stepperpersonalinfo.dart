@@ -1,4 +1,3 @@
- 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/onPending.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
@@ -55,8 +55,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     // if (_stepperController.isFail == true)
     //   return onFail(_hight, _width, context, _stepperController);
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      // if (data.registrationInProgress)
-      //   return onPending(_hight, _width, scafffoldKey: _scaffoldKey);
+      if (data.registrationInProgress)
+        return onPending(_hight, _width,
+            scafffoldKey: _stepperController!.scaffoldKey);
       return Stack(
         children: [
           Scaffold(

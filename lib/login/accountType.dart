@@ -92,7 +92,7 @@ class _AccountTypeState extends State<AccountType> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: _width * 0.05),
-                    height: _hight * 0.06,
+                    // height: _hight * 0.06,
                     width: _width * 0.9,
                     decoration: BoxDecoration(
                         color: freelanace ? Colors.indigo[900] : Colors.white,
@@ -101,7 +101,7 @@ class _AccountTypeState extends State<AccountType> {
                             color: !freelanace
                                 ? Colors.blueGrey[200]!
                                 : Colors.white)),
-                    child: Row(
+                    child: Wrap(
                       children: [
                         Checkbox(
                             activeColor: Colors.white,
