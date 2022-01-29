@@ -183,7 +183,7 @@ drawerItemsFunction(
       return history(context, hight, width, partnerDetailsProvider);
 
     case 'Help & Support':
-      return helpAndSupport(context, hight, width, pr);
+      return helpAndSupport(context, pr);
 
     case 'Privacy Policies':
       return Navigator.push(

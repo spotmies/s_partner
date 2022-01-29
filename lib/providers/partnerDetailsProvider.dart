@@ -25,6 +25,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
   String currentPid = "123456";
   List servicesList = [];
   dynamic freqAskQue;
+  bool? statNote = true;
+  bool? msgNote = true;
 
 /* ------------------------- constant variables here ------------------------ */
 

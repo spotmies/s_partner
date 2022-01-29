@@ -318,8 +318,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      helpAndSupport(context, _hight, _width,
-                          partnerProvider!.partnerDetailsFull);
+                      helpAndSupport(
+                          context, partnerProvider!.partnerDetailsFull);
                     },
                     icon: Icon(
                       Icons.help,

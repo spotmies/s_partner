@@ -49,7 +49,7 @@ class VerifictionInProgress extends StatelessWidget {
           borderRadius: 15.0,
           borderSideColor: Colors.grey[900]!,
           onClick: () {
-            helpAndSupport(context, height(context), width(context), pd);
+            helpAndSupport(context, pd);
           },
         ),
       ]),

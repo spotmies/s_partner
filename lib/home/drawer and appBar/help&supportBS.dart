@@ -7,7 +7,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Future helpAndSupport(BuildContext context, double hight, double width, pd) {
+Future helpAndSupport(BuildContext context, pd) {
   List names = ['FAQ', 'Mail', 'Contact'];
   List icons = [Icons.question_answer, Icons.mail, Icons.support_agent];
   return showModalBottomSheet(
@@ -21,7 +21,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
       ),
       builder: (BuildContext context) {
         return Container(
-            height: hight * 0.68,
+            height: height(context) * 0.68,
             padding: EdgeInsets.only(top: height(context) * 0.03),
             child: SingleChildScrollView(
               child: Column(children: [
@@ -29,10 +29,10 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: width * 0.25,
+                      width: width(context) * 0.25,
                       child: TextWid(
                         text: 'How do you want to reach us?',
-                        size: width * 0.075,
+                        size: width(context) * 0.075,
                         lineSpace: height(context) * 0.0017,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
@@ -40,8 +40,8 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                       ),
                     ),
                     Container(
-                        height: hight * 0.2,
-                        width: width * 0.55,
+                        height: height(context) * 0.2,
+                        width: width(context) * 0.55,
                         child: SvgPicture.asset('assets/help.svg')),
                   ],
                 ),
@@ -51,12 +51,12 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   child: Text(
                     'If you need any help, you can reach us through below options.',
                     style:
-                        fonts(width * 0.05, FontWeight.w500, Colors.grey[900]),
+                        fonts(width(context) * 0.05, FontWeight.w500, Colors.grey[900]),
                   ),
                 ),
                 Container(
-                  height: hight * 0.15,
-                  width: width,
+                  height: height(context) * 0.15,
+                  width: width(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -73,7 +73,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                                 },
                                 icon: Icon(
                                   icons[0],
-                                  size: width * 0.06,
+                                  size: width(context) * 0.06,
                                   color: Colors.grey[900],
                                 ),
                               ),
@@ -83,7 +83,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                             ),
                             Text(
                               names[0],
-                              style: fonts(width * 0.04, FontWeight.w600,
+                              style: fonts(width(context) * 0.04, FontWeight.w600,
                                   Colors.grey[900]),
                             )
                           ],
@@ -104,7 +104,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                                 },
                                 icon: Icon(
                                   icons[1],
-                                  size: width * 0.06,
+                                  size: width(context) * 0.06,
                                   color: Colors.grey[900],
                                 ),
                               ),
@@ -114,7 +114,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                             ),
                             Text(
                               names[1],
-                              style: fonts(width * 0.04, FontWeight.w600,
+                              style: fonts(width(context) * 0.04, FontWeight.w600,
                                   Colors.grey[900]),
                             )
                           ],
@@ -132,7 +132,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                                 },
                                 icon: Icon(
                                   icons[2],
-                                  size: width * 0.06,
+                                  size: width(context) * 0.06,
                                   color: Colors.grey[900],
                                 ),
                               ),
@@ -142,7 +142,7 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                             ),
                             Text(
                               names[2],
-                              style: fonts(width * 0.04, FontWeight.w600,
+                              style: fonts(width(context) * 0.04, FontWeight.w600,
                                   Colors.grey[900]),
                             )
                           ],
@@ -152,12 +152,12 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   ),
                 ),
                 Container(
-                  height: hight * 0.07,
+                  height: height(context) * 0.07,
                   child: Center(
                     child: Text(
                       'Tap to Select Any Option',
                       style: fonts(
-                          width * 0.05, FontWeight.w400, Colors.grey[500]),
+                          width(context) * 0.05, FontWeight.w400, Colors.grey[500]),
                     ),
                   ),
                 ),
@@ -165,11 +165,11 @@ Future helpAndSupport(BuildContext context, double hight, double width, pd) {
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
                     bgColor: Colors.indigo[50]!,
-                    minWidth: width,
-                    height: hight * 0.06,
+                    minWidth: width(context),
+                    height: height(context) * 0.06,
                     textColor: Colors.grey[900]!,
                     buttonName: 'Close',
-                    textSize: width * 0.05,
+                    textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 5.0,
                     borderSideColor: Colors.indigo[50]!,

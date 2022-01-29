@@ -1,4 +1,3 @@
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -51,28 +50,29 @@ void awesomeInitilize() async {
       'resource://drawable/logo',
       [
         NotificationChannel(
-            channelKey: 'firebasePushNotifictions',
-            channelName: 'firebase Push Notifictions',
-            channelDescription: 'test message',
-            playSound: true,
-            enableLights: true,
-            enableVibration: true,
-            defaultColor: Colors.teal,
-            importance: NotificationImportance.High,
-            defaultRingtoneType: DefaultRingtoneType.Ringtone,
-            channelShowBadge: true,
-            ledColor: Colors.white),
+          channelKey: 'firebasePushNotifictions',
+          channelName: 'firebase Push Notifictions',
+          channelDescription: 'test message',
+          // playSound: true,
+          enableLights: true,
+          enableVibration: true,
+          defaultColor: Colors.blue,
+          ledColor: Colors.white,
+          // importance: NotificationImportance.High,
+          defaultRingtoneType: DefaultRingtoneType.Notification,
+          channelShowBadge: true,
+        ),
         NotificationChannel(
             channelKey: 'firebasePushNotifiction',
             channelName: 'firebase Push Notifiction',
-            playSound: true,
+            // playSound: true,
             enableLights: true,
             enableVibration: true,
-            defaultColor: Colors.teal,
-            importance: NotificationImportance.High,
-            channelShowBadge: true,
-            defaultRingtoneType: DefaultRingtoneType.Ringtone,
+            defaultColor: Colors.blue,
             ledColor: Colors.white,
+            // importance: NotificationImportance.High,
+            channelShowBadge: true,
+            defaultRingtoneType: DefaultRingtoneType.Notification,
             channelDescription: 'test message'),
       ],
       debug: true);
@@ -90,16 +90,16 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
         channelKey: 'firebasePushNotifiction',
         title: message.notification!.title,
         body: message.notification!.body,
-        notificationLayout: NotificationLayout.BigPicture,
+        notificationLayout: NotificationLayout.BigText,
         displayOnBackground: true,
         displayOnForeground: true,
         icon: 'resource://drawable/logo',
         locked: false,
-        
+        largeIcon: 'resource://drawable/logo',
+
         // payload: message,
         // displayedDate: DateTime.now().toString(),
-        bigPicture:
-            'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
+        bigPicture: 'resource://drawable/logo'),
 
     // schedule: NotificationInterval(
     //     interval: 2, timeZone: timeZone, repeats: false),
@@ -156,11 +156,12 @@ displayAwesomeNotificationBackground(
         channelKey: 'firebasePushNotifictions',
         title: message.notification!.title,
         body: message.notification!.body,
-        notificationLayout: NotificationLayout.BigPicture,
+        notificationLayout: NotificationLayout.BigText,
         displayOnBackground: true,
         displayOnForeground: true,
         icon: 'resource://drawable/logo',
         locked: false,
+        largeIcon: 'resource://drawable/logo',
 
         // displayedDate: DateTime.now().toString(),
         bigPicture:
