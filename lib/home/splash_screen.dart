@@ -26,9 +26,9 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    Timer(Duration(milliseconds: 100), () {
-      partnerProvider?.getConstants(alwaysHit: false);
-      partnerProvider?.fetchServiceList(alwaysHit: false);
+    Timer(Duration(milliseconds: 100), () async {
+      await partnerProvider?.getConstants(alwaysHit: false);
+      await partnerProvider?.fetchServiceList(alwaysHit: false);
       thisController.splashScreenNavigation(context, partnerProvider!);
     });
   }

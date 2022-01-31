@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies_partner/login/login.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
+List onBoardList = [];
+
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  List<OnboardingModel> _list = OnboardingModel.list;
+  PartnerDetailsProvider? partnerProvider;
+  // List<OnboardingModel> _list = OnboardingModel.list;
+
   int page = 0;
   var _controller = PageController();
   var showAnimatedContainer = false;
+  void initState() {
+    super.initState();
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
+    // partnerProvider?.setCurrentConstants("onBoard");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    partnerProvider?.setCurrentConstants("onBoard");
+    dynamic temp = partnerProvider?.getValue("screens");
+    print(temp);
+    print(temp.runtimeType);
+    onBoardList = temp;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -36,15 +59,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Expanded(
                           child: PageView.builder(
                               controller: _controller,
-                              itemCount: _list.length,
+                              itemCount: onBoardList.length,
                               itemBuilder: (context, index) => MainContent(
-                                    list: _list,
+                                    list: onBoardList,
                                     index: index,
                                   )),
                         ),
                         StepsContainer(
                           page: page,
-                          list: _list,
+                          list: onBoardList,
                           controller: _controller,
                           showAnimatedContainerCallBack: (value) {
                             setState(() {
@@ -75,30 +98,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class OnboardingModel {
   String? image;
-  String? text;
+  String? content;
   String? title;
 
-  OnboardingModel({this.image, this.text, this.title});
+  OnboardingModel({this.image, this.content, this.title});
   static List<OnboardingModel> list = [
     OnboardingModel(
         image: "assets/1.png",
-        title: "take picture",
-        text:
+        title: "takee picture",
+        content:
             "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
     OnboardingModel(
         image: "assets/2.png",
-        title: "add location",
-        text:
+        title: "addd location",
+        content:
             "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
     OnboardingModel(
         image: "assets/3.png",
-        title: "get quotes from technicians",
-        text:
+        title: "gett quotes from technicians",
+        content:
             "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
     OnboardingModel(
         image: "assets/4.png",
-        title: "get service instantly",
-        text:
+        title: "gett service instantly",
+        content:
             "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities")
   ];
 }
@@ -171,7 +194,7 @@ class StepsContainer extends StatelessWidget {
   const StepsContainer(
       {Key? key,
       required this.page,
-      required List<OnboardingModel> list,
+      required List list,
       required PageController controller,
       required this.showAnimatedContainerCallBack})
       : _list = list,
@@ -179,7 +202,7 @@ class StepsContainer extends StatelessWidget {
         super(key: key);
 
   final int page;
-  final List<OnboardingModel> _list;
+  final List _list;
   final PageController _controller;
   final Function showAnimatedContainerCallBack;
   @override
@@ -301,12 +324,11 @@ class CommonText extends StatelessWidget {
 }
 
 class MainContent extends StatelessWidget {
-  const MainContent(
-      {Key? key, required List<OnboardingModel> list, required this.index})
+  const MainContent({Key? key, required List list, required this.index})
       : _list = list,
         super(key: key);
 
-  final List<OnboardingModel> _list;
+  final List _list;
   final index;
 
   @override
@@ -320,7 +342,7 @@ class MainContent extends StatelessWidget {
             child: FadeAnimation(
               0.5,
               Image.asset(
-                _list[index].image!,
+                onBoardList[index]!["image"],
                 height: SizeConfig.defaultSize! * 30,
                 width: SizeConfig.defaultSize! * 30,
               ),
@@ -329,7 +351,7 @@ class MainContent extends StatelessWidget {
           FadeAnimation(
             0.9,
             Text(
-              _list[index].title!,
+              onBoardList[index]!["title"],
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
@@ -342,7 +364,7 @@ class MainContent extends StatelessWidget {
           FadeAnimation(
             1.1,
             Text(
-              _list[index].text!,
+              onBoardList[index]!["content"],
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.black,
