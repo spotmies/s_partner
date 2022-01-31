@@ -70,7 +70,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         lSpace: 1.0,
                                       ),
                                       TextWid(
-                                          text: 'BECOME A BOSE TO YOUR WORLD',
+                                          text: 'BECOME A BOSS TO YOUR WORLD',
                                           weight: FontWeight.w600,
                                           size: _width * 0.019,
                                           color: Colors.grey[900]!,
