@@ -26,9 +26,9 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    Timer(Duration(milliseconds: 100), () {
-      partnerProvider?.getConstants(alwaysHit: false);
-      partnerProvider?.fetchServiceList(alwaysHit: false);
+    Timer(Duration(milliseconds: 100), () async {
+      await partnerProvider?.getConstants(alwaysHit: false);
+      await partnerProvider?.fetchServiceList(alwaysHit: false);
       thisController.splashScreenNavigation(context, partnerProvider!);
     });
   }
@@ -62,7 +62,7 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                       lSpace: 3.0,
                       weight: FontWeight.w600),
                   TextWid(
-                      text: 'BECOME A BOSE TO YOUR WORLD',
+                      text: 'BECOME A BOSS TO YOUR WORLD',
                       weight: FontWeight.w600,
                       size: _width * 0.02,
                       color: Colors.grey[900]!,
