@@ -101,7 +101,7 @@ class _AccountTypeState extends State<AccountType> {
                             color: !freelanace
                                 ? Colors.blueGrey[200]!
                                 : Colors.white)),
-                    child: Wrap(
+                    child: Row(
                       children: [
                         Checkbox(
                             activeColor: Colors.white,

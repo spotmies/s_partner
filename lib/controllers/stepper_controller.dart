@@ -299,9 +299,9 @@ class StepperController extends ControllerMVC {
           DateTime.now().day + 0,
         ));
     if (date != null) {
-      setState(() {
-        pickedDate = date;
-      });
+      // setState(() {
+      pickedDate = date;
+      // });
     }
   }
 

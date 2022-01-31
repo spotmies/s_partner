@@ -21,7 +21,7 @@ class _Step3State extends State<Step3> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height(context) * 0.75,
+      height: height(context) * 0.72,
       child: Form(
         key: widget.stepperController?.step3Formkey,
         child: ListView(
@@ -48,9 +48,9 @@ class _Step3State extends State<Step3> {
                   ),
                   Flexible(
                     child: Container(
-                      // padding: EdgeInsets.only(
-                      //     left: width(context) * 0.03,
-                      //     right: width(context) * 0.03),
+                      padding: EdgeInsets.only(
+                          left: width(context) * 0.03,
+                          right: width(context) * 0.03),
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -79,6 +79,12 @@ class _Step3State extends State<Step3> {
                             value: location['serviceId'],
                           );
                         }).toList(),
+                        hint: TextWid(
+                          text: 'Select Service',
+                          color: Colors.grey[900]!,
+                          size: width(context) * 0.04,
+                          weight: FontWeight.w500,
+                        ),
                         onChanged: (newVal) {
                           setState(() {
                             widget.stepperController?.dropDownValue =
@@ -118,21 +124,22 @@ class _Step3State extends State<Step3> {
               imageType: 'front',
               stepperController: widget.stepperController,
               condition: widget.stepperController?.adharfront == null,
+              onClick: () async {
+                await widget.stepperController?.adharfrontpage();
+
+                setState(() {});
+              },
             ),
             UploadUI(
               imageType: 'back',
               stepperController: widget.stepperController,
               condition: widget.stepperController?.adharback == null,
-            ),
+              onClick: () async {
+                await widget.stepperController?.adharBack();
 
-            // uploadUI('front', widget.stepperController!,
-            //     widget.stepperController?.adharfront == null, context),
-            // uploadUI('back', widget.stepperController!,
-            // widget.stepperController?.adharback == null, context),
-            // type == "student"
-            //     ? uploadUI(_hight, _width, 'clgId', stepperController,
-            //         stepperController.clgId == null)
-            //     : Container(),
+                setState(() {});
+              },
+            ), 
           ],
         ),
       ),
@@ -144,8 +151,13 @@ class UploadUI extends StatefulWidget {
   final String? imageType;
   final StepperController? stepperController;
   final bool? condition;
+  final VoidCallback? onClick;
   const UploadUI(
-      {Key? key, this.imageType, this.stepperController, this.condition})
+      {Key? key,
+      this.imageType,
+      this.stepperController,
+      this.condition,
+      this.onClick})
       : super(key: key);
 
   @override
@@ -171,20 +183,9 @@ class _UploadUIState extends State<UploadUI> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () async {
+                      onTap: () {
                         print("ontap >>>>>>>");
-                        if (widget.imageType == 'front')
-                          await widget.stepperController?.adharfrontpage();
-                        setState(() {});
-                        if (widget.imageType == 'back')
-                          await widget.stepperController?.adharBack();
-                        setState(() {});
-                        if (widget.imageType == 'clgId')
-                          await widget.stepperController?.clgIdImage();
-                        setState(() {});
-                        widget.stepperController?.refresh();
-                        print("refress >>>>>>>>>");
-                        setState(() {});
+                        return widget.onClick!();
                       },
                       child: Icon(
                         Icons.cloud_upload,
@@ -228,13 +229,14 @@ class _UploadUIState extends State<UploadUI> {
                       child: IconButton(
                           padding: EdgeInsets.all(0.0),
                           onPressed: () async {
-                            if (widget.imageType == 'front')
-                              await widget.stepperController?.adharfrontpage();
-                            if (widget.imageType == 'back')
-                              await widget.stepperController?.adharBack();
-                            if (widget.imageType == 'clgId')
-                              await widget.stepperController?.clgIdImage();
-                            setState(() {});
+                            return widget.onClick!();
+                            // if (widget.imageType == 'front')
+                            //   await widget.stepperController?.adharfrontpage();
+                            // if (widget.imageType == 'back')
+                            //   await widget.stepperController?.adharBack();
+                            // if (widget.imageType == 'clgId')
+                            //   await widget.stepperController?.clgIdImage();
+                            // setState(() {});
                           },
                           icon: Icon(
                             Icons.change_circle,

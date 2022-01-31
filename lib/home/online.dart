@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -366,8 +367,8 @@ class _OnlineState extends StateMVC<Online> {
                                                   borderSideColor:
                                                       Colors.grey[100]!,
                                                   onClick: () async {
-                                                    await _incomingOrdersController
-                                                        ?.respondToOrder(
+                                                    await _incomingOrdersController!
+                                                        .respondToOrder(
                                                             o[index],
                                                             partnerProfile![
                                                                 '_id'],
@@ -563,6 +564,7 @@ class _OnlineState extends StateMVC<Online> {
   bidSendingBottomSheet(double hight, double width, uid, ordDetails, ordid, pid,
       uDetails, pDetails,
       {from = "inside"}) {
+    log(uid.toString());
     return showModalBottomSheet(
         context: context,
         elevation: 22,

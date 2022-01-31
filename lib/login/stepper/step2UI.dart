@@ -23,7 +23,7 @@ class _Step2State extends State<Step2> {
       child: Column(
         children: [
           Container(
-            height: height(context) * 0.75,
+            height: height(context) * 0.72,
             child: ListView(
               children: [
                 Center(
@@ -105,8 +105,9 @@ class _Step2State extends State<Step2> {
                   child: ListTile(
                     dense: true,
                     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    onTap: () {
-                      widget.stepperController?.pickedDates(context);
+                    onTap: () async {
+                      await widget.stepperController?.pickedDates(context);
+                      setState(() {});
                     },
                     title: TextWid(
                       text: 'DOB',

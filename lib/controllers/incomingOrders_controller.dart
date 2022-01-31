@@ -14,7 +14,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class IncomingOrdersController extends ControllerMVC {
-  var incomingscaffoldkey = GlobalKey<ScaffoldState>();
+  final GlobalKey incomingscaffoldkey = GlobalKey<ScaffoldState>();
 
   TextEditingController moneyController = TextEditingController();
   PartnerDetailsProvider? partnerProvider;
@@ -101,7 +101,7 @@ class IncomingOrdersController extends ControllerMVC {
   respondToOrder(
       orderData, pDetailsId, responseType, BuildContext context) async {
     //enable loader
-    if ((partnerProvider?.inComingLoader)!) return;
+    // if (partnerProvider!.inComingLoader) return;
     if (orderData['orderState'] > 6) {
       if (responseType != "reject") {
         snackbar(
@@ -148,9 +148,10 @@ class IncomingOrdersController extends ControllerMVC {
     partnerProvider?.setInComingLoader(false);
     if (response.statusCode == 200 || response.statusCode == 204) {
       if (responseType == "reject")
-        snackbar(context, "Deleted successfully");
+        snackbar(incomingscaffoldkey.currentContext!, "Deleted successfully");
       else {
-        snackbar(context, "Request send successfully");
+        snackbar(
+            incomingscaffoldkey.currentContext!, "Request send successfully");
         if (responseType == "accept") {
           dynamic getThatOrder = await Server()
               .getMethod(API.acceptOrder + orderData['ordId'].toString());
@@ -158,7 +159,8 @@ class IncomingOrdersController extends ControllerMVC {
             getThatOrder = jsonDecode(getThatOrder.body);
             partnerProvider?.pushOrder(getThatOrder);
           } else
-            snackbar(context, "something went wrong");
+            snackbar(
+                incomingscaffoldkey.currentContext!, "something went wrong");
         }
       }
 

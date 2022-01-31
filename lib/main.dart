@@ -19,14 +19,14 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
   // LocalNotificationService.displayAwesomeNotification(message);
-
-  if (message.notification != null) {
-    await displayAwesomeNotificationBackground(message);
-    // OneContext().push(MaterialPageRoute(
-    //     builder: (_) => NotificationMessage(
-    //           message: message.notification,
-    //         )));
-  }
+  displayAwesomeNotificationBackground(message);
+  // if (message.notification != null) {
+  //   await displayAwesomeNotificationBackground(message);
+  //   // OneContext().push(MaterialPageRoute(
+  //   //     builder: (_) => NotificationMessage(
+  //   //           message: message.notification,
+  //   //         )));
+  // }
 }
 
 void main() async {

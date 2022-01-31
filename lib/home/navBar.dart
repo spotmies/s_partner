@@ -247,11 +247,12 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     });
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
-      if (message.notification != null) {
-        log(message.notification!.title!);
-        log(message.notification!.body!);
-        await displayAwesomeNotification(message, context);
-      }
+      await displayAwesomeNotification(message, context);
+      // if (message.notification != null) {
+      //   log(message.notification!.title!);
+      //   log(message.notification!.body!);
+
+      // }
     });
     // when app background but in recent
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
