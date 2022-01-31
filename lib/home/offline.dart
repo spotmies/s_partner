@@ -55,16 +55,14 @@ class _OfflineState extends State<Offline> {
 
         return ListView(children: [
           // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
-          if (pd['permission'] <= 10 && data.statNote!)
+          if (pd['permission'] < 10)
             Container(
               height: height(context) * (pd['permission'] == 10 ? 0.15 : 0.2),
               child: MessageCard(
                 statusCode: pd['permission'],
-                pd:pd,
+                pd: pd,
                 type: 'offline',
-                onClick: () {
-                  
-                },
+                onClick: () {},
               ),
             ),
           if (alert != 'loading..' && alert != 'null' && data.msgNote!)
