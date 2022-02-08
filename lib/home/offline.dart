@@ -8,6 +8,7 @@ import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/message_card.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Offline extends StatefulWidget {
@@ -50,8 +51,9 @@ class _OfflineState extends State<Offline> {
         dynamic dash = data.orders;
         log('---------------------------------46------------');
         // log(dash[0].toString());
-
-        var cat = pd['catelogs'];
+        log(pd["pId"].toString());
+        if (pd["pId"] == null || pd["pId"] == "null") return circleProgress();
+        dynamic cat = pd['catelogs'];
 
         return ListView(children: [
           // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')

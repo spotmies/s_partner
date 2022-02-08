@@ -11,8 +11,8 @@ import 'package:spotmies_partner/utilities/shared_preference.dart';
 class PartnerDetailsProvider extends ChangeNotifier {
   // final controller = TestController();
   bool registrationInProgress = false;
-  Map? partnerDetailsFull;
-  Map? profileDetails;
+  Map? partnerDetailsFull = {};
+  Map? profileDetails = {};
   List inComingOrders = [];
   List orders = [];
   bool ordsLoader = false;
@@ -75,14 +75,12 @@ class PartnerDetailsProvider extends ChangeNotifier {
         log("constants already in sf");
         return;
       }
-      
     }
 
     dynamic appConstants = await constantsAPI();
     if (appConstants != null) {
       log("new constatns downloaded");
       allConstants = appConstants;
-      
     }
     return;
   }
