@@ -48,7 +48,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      var pd = data.getProfileDetails;
+      dynamic pd = data.getProfileDetails;
       if (data.getProfileDetails.isEmpty) {
         return Center(child: CircularProgressIndicator());
       }
