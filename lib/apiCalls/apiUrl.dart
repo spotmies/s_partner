@@ -6,7 +6,8 @@ var field3 = 'req';
 
 class API {
   static var pid = FirebaseAuth.instance.currentUser?.uid; //user id
-  static var host = 'spotmiesserver.herokuapp.com'; //server path
+  // static var host = 'spotmiesserver.herokuapp.com'; //server path
+  static var host = 'spotmies.herokuapp.com';
   static var localHost = "http://localhost:4000";
   static var partnerRegister = '/api/partner/newPartner'; //post
   static var partnerDetails = '/api/partner/partners/'; //get with user id
@@ -32,6 +33,7 @@ class API {
 
   static var faq = "/api/support/faq/all-faqs";
   static var suggestions = "/api/suggestion/new-suggestion";
+  static var accessToken = "/api/public/access-token";
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"
