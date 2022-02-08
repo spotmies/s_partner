@@ -10,8 +10,8 @@ setAppConstants(dynamic data) {
   setStringToSF(id: "constants", value: data);
 }
 
-setListOfServices(dynamic data){
-  setStringToSF(id:"servicesList",value: data);
+setListOfServices(dynamic data) {
+  setStringToSF(id: "servicesList", value: data);
 }
 
 saveMyProfile(dynamic data) {
@@ -38,6 +38,10 @@ saveNumber(dynamic data) {
   setStringToSF(id: "number", value: data);
 }
 
+saveToken(dynamic data) {
+  setStringToSF(id: "token", value: data);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                       GET DATA FROM SHARED PREFERENCE                      */
 /* -------------------------------------------------------------------------- */
@@ -45,7 +49,8 @@ getAppConstants() async {
   dynamic constants = await getStringValuesSF("constants");
   return constants;
 }
-getListOfServices()async {
+
+getListOfServices() async {
   return await getStringValuesSF("servicesList");
 }
 
@@ -69,8 +74,13 @@ getOrders() async {
   return responses;
 }
 
-getNumber()async{
+getNumber() async {
   dynamic responses = await getStringValuesSF('number');
+  return responses;
+}
+
+getToken() async {
+  dynamic responses = await getStringValuesSF('token');
   return responses;
 }
 
