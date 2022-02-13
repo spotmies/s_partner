@@ -68,7 +68,10 @@ class _Step3State extends State<Step3> {
                           size: width(context) * 0.06,
                           color: Colors.indigo[900],
                         ),
-                        items: widget.provider?.getServiceList.map((location) {
+                        items: widget.provider?.getServiceList
+                            .where(
+                                (element) => element['isMainService'] == true)
+                            .map((location) {
                           return DropdownMenuItem(
                             child: TextWid(
                               text: location['nameOfService'],
@@ -139,7 +142,7 @@ class _Step3State extends State<Step3> {
 
                 setState(() {});
               },
-            ), 
+            ),
           ],
         ),
       ),
