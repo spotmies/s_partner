@@ -247,7 +247,7 @@ class StepperController extends ControllerMVC {
   Future<void> profilePic() async {
     var profile = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear,
     );
 
@@ -258,7 +258,7 @@ class StepperController extends ControllerMVC {
   Future<void> adharfrontpage() async {
     var front = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 50,
       preferredCameraDevice: CameraDevice.rear,
     );
     adharfront = File(front!.path);
@@ -269,7 +269,7 @@ class StepperController extends ControllerMVC {
   Future<void> adharBack() async {
     var back = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 50,
       preferredCameraDevice: CameraDevice.rear,
     );
     adharback = File(back!.path);
@@ -279,7 +279,7 @@ class StepperController extends ControllerMVC {
   Future<void> clgIdImage() async {
     var id = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 50,
       preferredCameraDevice: CameraDevice.rear,
     );
     clgId = File(id!.path);
