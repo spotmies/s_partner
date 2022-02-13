@@ -11,6 +11,7 @@ import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -36,6 +37,7 @@ class _ChatListState extends StateMVC<ChatList> {
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
+    final _height = MediaQuery.of(context).size.height;
     print('======render chatList screen =======');
     return Scaffold(
       key: _chatController?.scaffoldkey,
@@ -60,48 +62,44 @@ class _ChatListState extends StateMVC<ChatList> {
                 child: Consumer<ChatProvider>(
                   builder: (context, data, child) {
                     List chatList = data.getChatList2();
-
-                    // log(chatList[0].toString());
-                    if (chatList.length < 1) {
-                      return Center(
-                          child: TextWid(
-                        text: "No Chats Available",
-                        size: 18,
-                      ));
-                    }
                     return RefreshIndicator(
-                      onRefresh: () async {
-                        await _chatController?.fetchNewChatList(
-                            context, chatProvider!);
-                      },
-                      child: ListView.builder(
-                        itemCount: chatList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Map<dynamic, dynamic>? user =
-                              chatList[index]['uDetails'];
-                          log('$chatList');
-                          List messages = chatList[index]['msgs'];
-                          // log('$messages');
-                          int count = chatList[index]['pCount'];
-
-                          var lastMessage = jsonDecode(messages.last);
-                          // log(lastMessage['type'].toString());
-
-                          return ChatListCard(
-                            user?['pic'],
-                            user?['name'],
-                            lastMessage['msg'].toString(),
-                            getTime(lastMessage['time']),
-                            chatList[index]['msgId'],
-                            count,
-                            lastMessage['type'],
-                            chatList[index]['uId'],
-                            chatList[index]['pId'],
-                            callBack: _chatController!.cardOnClick,
-                          );
+                        onRefresh: () async {
+                          await _chatController?.fetchNewChatList(
+                              context, chatProvider!);
                         },
-                      ),
-                    );
+                        child: chatList.length > 0
+                            ? ListView.builder(
+                                itemCount: chatList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Map<dynamic, dynamic>? user =
+                                      chatList[index]['uDetails'];
+                                  log('$chatList');
+                                  List messages = chatList[index]['msgs'];
+                                  // log('$messages');
+                                  int count = chatList[index]['pCount'];
+
+                                  var lastMessage = jsonDecode(messages.last);
+                                  // log(lastMessage['type'].toString());
+
+                                  return ChatListCard(
+                                    user?['pic'],
+                                    user?['name'],
+                                    lastMessage['msg'].toString(),
+                                    getTime(lastMessage['time']),
+                                    chatList[index]['msgId'],
+                                    count,
+                                    lastMessage['type'],
+                                    chatList[index]['uId'],
+                                    chatList[index]['pId'],
+                                    callBack: _chatController!.cardOnClick,
+                                  );
+                                },
+                              )
+                            : NoDataPlaceHolder(
+                                height: _height,
+                                width: _width,
+                                title: "No Chats Available",
+                              ));
                   },
                 ),
               ),

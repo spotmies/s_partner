@@ -14,6 +14,7 @@ import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -68,336 +69,343 @@ class _OnlineState extends StateMVC<Online> {
           partnerProfile = data.getProfileDetails;
           // if (data.reloadIncomingOrders == true)
           //   _incomingOrdersController.incomingOrders(notify: false);
-          if (o.isEmpty) {
-            return Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(width(context) * 0.03),
-                width: width(context),
-                child: TextWid(
-                  text:
-                      'You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications ',
-                  align: TextAlign.center,
-                  flow: TextOverflow.visible,
-                  size: width(context) * 0.05,
-                ));
-          }
           return Stack(
             children: [
               Container(
                   child: RefreshIndicator(
                 onRefresh: partnerProvider!.getOnlyIncomingOrders,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: o.length,
-                    padding: EdgeInsets.all(15),
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      var u = o[index]['uDetails'];
-                      List<String> images = List.from(o[index]['media']);
+                child: o.length < 1
+                    ? Container(
+                        padding: EdgeInsets.all(width(context) * 0.09),
+                        alignment: Alignment.center,
+                        child: NoDataPlaceHolder(
+                            height: height(context),
+                            width: width(context),
+                            title:
+                                "You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications "),
+                      )
+                    : ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: o.length,
+                        padding: EdgeInsets.all(15),
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          var u = o[index]['uDetails'];
+                          List<String> images = List.from(o[index]['media']);
 
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PostOverView(
-                                onBottomSheet: () {
-                                  bidSendingBottomSheet(
-                                      _hight,
-                                      _width,
-                                      o[index]["uId"],
-                                      o[index],
-                                      o[index]["ordId"],
-                                      o[index]["pId"],
-                                      u['_id'],
-                                      partnerProfile!['_id'],
-                                      from: "outside");
-                                },
-                                orderId: o[index]['ordId'].toString(),
-                                from: "incomingOrders",
-                                onclick: (orderData, pDetailsId, responseType) {
-                                  print("onclick>>>>>>>");
-                                  _incomingOrdersController!.respondToOrder(
-                                      orderData,
-                                      pDetailsId,
-                                      responseType,
-                                      context);
-                                }),
-                          ));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[300]!,
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              )
-                            ],
-                            //  boxShadow: kElevationToShadow[1],
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15)),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 15, right: 10),
-                                height: _hight * 0.11,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15)),
-                                    boxShadow: kElevationToShadow[0]),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PostOverView(
+                                    onBottomSheet: () {
+                                      bidSendingBottomSheet(
+                                          _hight,
+                                          _width,
+                                          o[index]["uId"],
+                                          o[index],
+                                          o[index]["ordId"],
+                                          o[index]["pId"],
+                                          u['_id'],
+                                          partnerProfile!['_id'],
+                                          from: "outside");
+                                    },
+                                    orderId: o[index]['ordId'].toString(),
+                                    from: "incomingOrders",
+                                    onclick:
+                                        (orderData, pDetailsId, responseType) {
+                                      print("onclick>>>>>>>");
+                                      _incomingOrdersController!.respondToOrder(
+                                          orderData,
+                                          pDetailsId,
+                                          responseType,
+                                          context);
+                                    }),
+                              ));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey[300]!,
+                                    blurRadius: 4,
+                                    spreadRadius: 1,
+                                  )
+                                ],
+                                //  boxShadow: kElevationToShadow[1],
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15)),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(left: 15, right: 10),
+                                    height: _hight * 0.11,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(15),
+                                            topRight: Radius.circular(15)),
+                                        boxShadow: kElevationToShadow[0]),
+                                    child: Column(
                                       children: [
-                                        TextWid(
-                                          text: partnerProvider!
-                                              .getServiceNameById(
-                                                  o[index]['job']),
-                                          size: _width * 0.04,
-                                          color: Colors.grey[900]!,
-                                          weight: FontWeight.w600,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextWid(
+                                              text: partnerProvider!
+                                                  .getServiceNameById(
+                                                      o[index]['job']),
+                                              size: _width * 0.04,
+                                              color: Colors.grey[900]!,
+                                              weight: FontWeight.w600,
+                                            ),
+                                            Row(
+                                              children: [
+                                                o[index]['orderState'] > 6
+                                                    ? takeOverWid(_width)
+                                                    : Container(),
+                                                IconButton(
+                                                    icon: Icon(
+                                                      Icons.more_horiz,
+                                                      color: Colors.grey[900],
+                                                    ),
+                                                    onPressed: () {
+                                                      onlineOrdersButtomMenu(
+                                                          o[index]['uId'],
+                                                          o[index],
+                                                          o[index]['ordId'],
+                                                          o[index]['pId'],
+                                                          u['_id'],
+                                                          partnerProfile![
+                                                              '_id'],
+                                                          _hight,
+                                                          _width);
+                                                    }),
+                                              ],
+                                            )
+                                          ],
                                         ),
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            o[index]['orderState'] > 6
-                                                ? takeOverWid(_width)
-                                                : Container(),
-                                            IconButton(
-                                                icon: Icon(
-                                                  Icons.more_horiz,
-                                                  color: Colors.grey[900],
-                                                ),
-                                                onPressed: () {
-                                                  onlineOrdersButtomMenu(
-                                                      o[index]['uId'],
-                                                      o[index],
-                                                      o[index]['ordId'],
-                                                      o[index]['pId'],
-                                                      u['_id'],
-                                                      partnerProfile!['_id'],
-                                                      _hight,
-                                                      _width);
-                                                }),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            // width: _width * 0.45,
-                                            // color: Colors.red,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.schedule,
-                                                  color: Colors.grey[900],
-                                                  size: _width * 0.045,
-                                                ),
-                                                SizedBox(
-                                                  width: _width * 0.01,
-                                                ),
-                                                TextWid(
-                                                  text: getDate(
-                                                      o[index]['schedule']),
-                                                  color: Colors.grey[900]!,
-                                                  size: _width * 0.04,
-                                                ),
-                                                TextWid(
-                                                  text: '-' +
-                                                      getTime(
+                                            Expanded(
+                                              child: Container(
+                                                // width: _width * 0.45,
+                                                // color: Colors.red,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.schedule,
+                                                      color: Colors.grey[900],
+                                                      size: _width * 0.045,
+                                                    ),
+                                                    SizedBox(
+                                                      width: _width * 0.01,
+                                                    ),
+                                                    TextWid(
+                                                      text: getDate(
                                                           o[index]['schedule']),
-                                                  color: Colors.grey[900]!,
-                                                  size: _width * 0.04,
+                                                      color: Colors.grey[900]!,
+                                                      size: _width * 0.04,
+                                                    ),
+                                                    TextWid(
+                                                      text: '-' +
+                                                          getTime(o[index]
+                                                              ['schedule']),
+                                                      color: Colors.grey[900]!,
+                                                      size: _width * 0.04,
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: _width * 0.35,
-                                          //  color: Colors.amber,
-                                          alignment: Alignment.centerRight,
-                                          child: o[index]['money'] != null
-                                              ? TextWid(
-                                                  text: 'Rs:  ' +
-                                                      o[index]['money']
-                                                          .toString() +
-                                                      ' /-',
-                                                  color: Colors.grey[900]!,
-                                                  size: _width * 0.04,
-                                                )
-                                              : TextWid(
-                                                  text: "Rs: Not mentioned"),
+                                            Container(
+                                              width: _width * 0.35,
+                                              //  color: Colors.amber,
+                                              alignment: Alignment.centerRight,
+                                              child: o[index]['money'] != null
+                                                  ? TextWid(
+                                                      text: 'Rs:  ' +
+                                                          o[index]['money']
+                                                              .toString() +
+                                                          ' /-',
+                                                      color: Colors.grey[900]!,
+                                                      size: _width * 0.04,
+                                                    )
+                                                  : TextWid(
+                                                      text:
+                                                          "Rs: Not mentioned"),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // margin: EdgeInsets.only(bottom: 20),
-                                padding: EdgeInsets.all(10),
-                                height: _hight * 0.21,
-                                // width: _width * 0.88,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[50],
+                                  ),
+                                  Container(
+                                    // margin: EdgeInsets.only(bottom: 20),
+                                    padding: EdgeInsets.all(10),
+                                    height: _hight * 0.21,
+                                    // width: _width * 0.88,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[50],
 
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15),
-                                      bottomRight: Radius.circular(15)),
-                                  // boxShadow: kElevationToShadow[0]
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: _hight * 0.11,
-                                      decoration: BoxDecoration(
-                                          // color: Colors.grey[50],
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                                // height: _hight * 0.15,
-                                                width: _width * 0.13,
-                                                child: CircleAvatar(
-                                                  backgroundColor: Colors.white,
-                                                  child: images.isNotEmpty
-                                                      ? Image.network(
-                                                          images.first)
-                                                      : Icon(
-                                                          Icons
-                                                              .home_repair_service_outlined,
-                                                          color:
-                                                              Colors.grey[900]!,
-                                                        ),
-                                                )),
-                                          ),
-                                          Container(
-                                            // color: Colors.amber,
-                                            width: _width * 0.53,
-                                            child: TextWid(
-                                              text: toBeginningOfSentenceCase(
-                                                o[index]['problem'].toString(),
-                                              ).toString(),
-                                              align: TextAlign.center,
-                                              flow: TextOverflow.visible,
-                                              size: _width * 0.04,
-                                            ),
-                                          ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons.info,
-                                                color: Colors.grey[400],
-                                              ))
-                                        ],
-                                      ),
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15)),
+                                      // boxShadow: kElevationToShadow[0]
                                     ),
-                                    SizedBox(
-                                      height: _hight * 0.015,
-                                    ),
-
-                                    // o[index]['orderState'] < 7
-                                    //     ?
-                                    SizedBox(
-                                      height: _hight * 0.057,
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: _hight * 0.11,
+                                          decoration: BoxDecoration(
+                                              // color: Colors.grey[50],
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              ElevatedButtonWidget(
-                                                buttonName: 'Reject',
-                                                height: _hight * 0.05,
-                                                minWidth: _width * 0.3,
-                                                bgColor: Colors.grey[200]!,
-                                                textColor: Colors.grey[900]!,
-                                                textSize: _width * 0.04,
-                                                allRadius: true,
-                                                leadingIcon: Icon(
-                                                  Icons.close,
-                                                  color: Colors.grey[900],
+                                              InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                    // height: _hight * 0.15,
+                                                    width: _width * 0.13,
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                      child: images.isNotEmpty
+                                                          ? Image.network(
+                                                              images.first)
+                                                          : Icon(
+                                                              Icons
+                                                                  .home_repair_service_outlined,
+                                                              color: Colors
+                                                                  .grey[900]!,
+                                                            ),
+                                                    )),
+                                              ),
+                                              Container(
+                                                // color: Colors.amber,
+                                                width: _width * 0.53,
+                                                child: TextWid(
+                                                  text:
+                                                      toBeginningOfSentenceCase(
+                                                    o[index]['problem']
+                                                        .toString(),
+                                                  ).toString(),
+                                                  align: TextAlign.center,
+                                                  flow: TextOverflow.visible,
                                                   size: _width * 0.04,
                                                 ),
-                                                borderRadius: 15.0,
-                                                borderSideColor:
-                                                    Colors.grey[50]!,
-                                                onClick: () {
-                                                  _incomingOrdersController!
-                                                      .respondToOrder(
-                                                          o[index],
-                                                          partnerProfile![
-                                                              '_id'],
-                                                          "reject",
-                                                          context);
-                                                },
                                               ),
-                                              SizedBox(
-                                                // height: _hight * 0.057,
-                                                child: ElevatedButtonWidget(
-                                                  buttonName: 'Accept',
-                                                  height: _hight * 0.05,
-                                                  minWidth: _width * 0.55,
-                                                  bgColor: Colors.grey[900]!,
-                                                  textColor: Colors.white,
-                                                  textSize: _width * 0.04,
-                                                  allRadius: true,
-                                                  trailingIcon: Icon(
-                                                    Icons.check,
-                                                    color: Colors.white,
-                                                    size: _width * 0.04,
+                                              IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.info,
+                                                    color: Colors.grey[400],
+                                                  ))
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: _hight * 0.015,
+                                        ),
+
+                                        // o[index]['orderState'] < 7
+                                        //     ?
+                                        SizedBox(
+                                          height: _hight * 0.057,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  ElevatedButtonWidget(
+                                                    buttonName: 'Reject',
+                                                    height: _hight * 0.05,
+                                                    minWidth: _width * 0.3,
+                                                    bgColor: Colors.grey[200]!,
+                                                    textColor:
+                                                        Colors.grey[900]!,
+                                                    textSize: _width * 0.04,
+                                                    allRadius: true,
+                                                    leadingIcon: Icon(
+                                                      Icons.close,
+                                                      color: Colors.grey[900],
+                                                      size: _width * 0.04,
+                                                    ),
+                                                    borderRadius: 15.0,
+                                                    borderSideColor:
+                                                        Colors.grey[50]!,
+                                                    onClick: () {
+                                                      _incomingOrdersController!
+                                                          .respondToOrder(
+                                                              o[index],
+                                                              partnerProfile![
+                                                                  '_id'],
+                                                              "reject",
+                                                              context);
+                                                    },
                                                   ),
-                                                  borderRadius: 15.0,
-                                                  borderSideColor:
-                                                      Colors.grey[100]!,
-                                                  onClick: () async {
-                                                    await _incomingOrdersController!
-                                                        .respondToOrder(
-                                                            o[index],
-                                                            partnerProfile![
-                                                                '_id'],
-                                                            "accept",
-                                                            context);
-                                                  },
-                                                ),
+                                                  SizedBox(
+                                                    // height: _hight * 0.057,
+                                                    child: ElevatedButtonWidget(
+                                                      buttonName: 'Accept',
+                                                      height: _hight * 0.05,
+                                                      minWidth: _width * 0.55,
+                                                      bgColor:
+                                                          Colors.grey[900]!,
+                                                      textColor: Colors.white,
+                                                      textSize: _width * 0.04,
+                                                      allRadius: true,
+                                                      trailingIcon: Icon(
+                                                        Icons.check,
+                                                        color: Colors.white,
+                                                        size: _width * 0.04,
+                                                      ),
+                                                      borderRadius: 15.0,
+                                                      borderSideColor:
+                                                          Colors.grey[100]!,
+                                                      onClick: () async {
+                                                        await _incomingOrdersController!
+                                                            .respondToOrder(
+                                                                o[index],
+                                                                partnerProfile![
+                                                                    '_id'],
+                                                                "accept",
+                                                                context);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    )
-                                    // : TextWid(
-                                    //     text: 'Order Accepted',
-                                    //     size: _width * 0.05,
-                                    //     weight: FontWeight.w600,
-                                    //   )
-                                  ],
-                                ),
+                                        )
+                                        // : TextWid(
+                                        //     text: 'Order Accepted',
+                                        //     size: _width * 0.05,
+                                        //     weight: FontWeight.w600,
+                                        //   )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: _hight * 0.01,
+                                  )
+                                ],
                               ),
-                              SizedBox(
-                                height: _hight * 0.01,
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
+                            ),
+                          );
+                        }),
               )),
               Visibility(
                 visible: data.inComingLoader,
