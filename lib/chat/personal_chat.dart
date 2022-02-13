@@ -366,8 +366,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           _chatController?.targetChat = _chatController?.getTargetChat(
               _chatController?.chatList, widget.msgId);
           _chatController?.user = _chatController?.targetChat['uDetails'];
-          _chatController?.orderDetails =
-              _chatController?.targetChat['orderDetails'];
+          if (!_chatController?.targetChat['isNormalChat']) {
+            _chatController?.orderDetails =
+                _chatController?.targetChat['orderDetails'];
+          }
+
           // log(user.toString());
           return InkWell(
             onTap: () {
@@ -375,11 +378,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   builder: (context) => UserDetails(
                       ccontroller: _chatController!,
                       userDetails: _chatController!.user,
-                      isProfileRevealed: _chatController
-                              ?.orderDetails['revealProfileTo']
-                              .contains(myPid)
-                          ? true
-                          : false,
+                      isProfileRevealed:
+                          _chatController?.targetChat['isNormalChat']
+                              ? false
+                              : _chatController?.orderDetails['revealProfileTo']
+                                      .contains(myPid)
+                                  ? true
+                                  : false,
                       onTapPhone: () {
                         calling(context);
                       })));
@@ -414,6 +419,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   void calling(BuildContext context) {
     bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
         option1Click: () {
+      if (_chatController?.targetChat['isNormalChat']) {
+        return snackbar(context, "User not shared contact number to you");
+      }
       if (!_chatController?.orderDetails['revealProfileTo'].contains(myPid)) {
         snackbar(context, "User not shared contact number to you");
         snackbar(context, "Use internent call instead");
@@ -424,7 +432,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(
               msgId: widget.msgId,
-              ordId: _chatController?.targetChat['ordId'],
+              ordId: !_chatController?.targetChat['isNormalChat']
+                  ? _chatController?.targetChat['ordId']
+                  : "",
               uId: _chatController?.user['uId'],
               pId: FirebaseAuth.instance.currentUser?.uid,
               isIncoming: false,
