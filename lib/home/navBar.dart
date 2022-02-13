@@ -130,6 +130,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
         partnerProvider!.setCurrentPid(FirebaseAuth.instance.currentUser!.uid);
         log("login succssfully");
       } else if (resp == "false") {
+        log("logout this user");
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -160,7 +161,6 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   //socket
   void hittingAllApis(currentPid) async {
     log("pid is >>>>>>>>> $pId");
-    await loginPartner();
 
     dynamic details = await partnerDetailsFull(currentPid);
 
@@ -198,6 +198,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   initState() {
     WidgetsBinding.instance!.addObserver(this);
     pId = FirebaseAuth.instance.currentUser!.uid.toString();
+    loginPartner();
 
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
