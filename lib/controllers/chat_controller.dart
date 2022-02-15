@@ -169,23 +169,24 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chooseImage(sendCallBack, String msgId) async {
+  chooseImage(Function sendCallBack, String msgId,
+      {imageSource = ImageSource.camera}) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
       chatimages.removeAt(0);
     }
     final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
+      source: imageSource,
       imageQuality: 10,
     );
-    setState(() {
-      chatimages.add(File(pickedFile!.path));
-    });
-    if (pickedFile!.path.isEmpty) retrieveLostData();
+    // setState(() {
+    chatimages.add(File(pickedFile!.path));
+    // });
+    if (pickedFile.path.isEmpty) retrieveLostData();
     await uploadimage(sendCallBack, msgId);
   }
 
-  pickVideo(sendCallBack, String msgId) async {
+  pickVideo(Function sendCallBack, String msgId) async {
     XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     chatVideo.add(File(pickedFile!.path));
@@ -208,12 +209,13 @@ class ChatController extends ControllerMVC {
   }
 
   Future<void> uploadimage(sendCallBack, String msgId) async {
+    String location = "chat/$msgId";
     int i = 1;
     for (var img in chatimages) {
       setState(() {
         val = i / chatimages.length;
       });
-      var chatImages = FirebaseStorage.instance.ref().child('chatImages');
+      var chatImages = FirebaseStorage.instance.ref().child(location);
       UploadTask uploadTask =
           chatImages.child(DateTime.now().toString() + ".jpg").putFile(img);
       await (await uploadTask)
@@ -228,12 +230,13 @@ class ChatController extends ControllerMVC {
   }
 
   Future<void> uploadVideo(sendCallBack, String msgId) async {
+    String location = "chat/$msgId";
     int i = 1;
     for (var video in chatVideo) {
       setState(() {
         val = i / chatVideo.length;
       });
-      var chatVideos = FirebaseStorage.instance.ref().child('chatVideos');
+      var chatVideos = FirebaseStorage.instance.ref().child(location);
       UploadTask uploadTask =
           chatVideos.child(DateTime.now().toString() + ".mp4").putFile(video);
       await (await uploadTask)
@@ -253,8 +256,9 @@ class ChatController extends ControllerMVC {
     String msgId,
     BuildContext context,
   ) async {
+    String location = "chat/$msgId";
     // FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-    var chatAudio = FirebaseStorage.instance.ref().child('chatVideos');
+    var chatAudio = FirebaseStorage.instance.ref().child(location);
 
     setState(() {
       isUploading = true;
