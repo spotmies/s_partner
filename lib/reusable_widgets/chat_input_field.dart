@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
@@ -19,10 +20,10 @@ List mediaOptions = [
     "name": "Video",
     "icon": Icons.video_camera_back,
   },
-  {
-    "name": "Audio",
-    "icon": Icons.mic,
-  },
+  // {
+  //   "name": "Audio",
+  //   "icon": Icons.mic,
+  // },
 ];
 Container chatInputField(
   sendCallBack,
@@ -72,9 +73,13 @@ Container chatInputField(
                         decoration: InputDecoration(
                           // suffixIcon:
                           prefixIcon: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              chatController.chooseImage((link, type, id) {
+                                sendCallBack(link, type, id, chatProvider);
+                              }, msgId);
+                            },
                             icon: Icon(
-                              Icons.text_format,
+                              Icons.camera_alt_outlined,
                               color: Colors.grey[500],
                               size: width * 0.06,
                             ),
@@ -94,10 +99,21 @@ Container chatInputField(
                                   bottomOptionsMenu(context,
                                       options: mediaOptions, option1Click: () {
                                     chatController.chooseImage(
-                                        sendCallBack, msgId);
+                                        (link, type, id) {
+                                      sendCallBack(
+                                          link, type, id, chatProvider);
+                                    }, msgId);
+                                  }, option2Click: () {
+                                    chatController.chooseImage(
+                                        (link, type, id) {
+                                      sendCallBack(
+                                          link, type, id, chatProvider);
+                                    }, msgId, imageSource: ImageSource.gallery);
                                   }, option3Click: () {
-                                    chatController.pickVideo(
-                                        sendCallBack, msgId);
+                                    chatController.pickVideo((link, type, id) {
+                                      sendCallBack(
+                                          link, type, id, chatProvider);
+                                    }, msgId);
                                   }, option4Click: () {
                                     audioRecoder(context, hight, width,
                                         chatController, sendCallBack, msgId);

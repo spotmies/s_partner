@@ -169,23 +169,24 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chooseImage(sendCallBack, String msgId) async {
+  chooseImage(Function sendCallBack, String msgId,
+      {imageSource = ImageSource.camera}) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
       chatimages.removeAt(0);
     }
     final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
+      source: imageSource,
       imageQuality: 10,
     );
-    setState(() {
-      chatimages.add(File(pickedFile!.path));
-    });
-    if (pickedFile!.path.isEmpty) retrieveLostData();
+    // setState(() {
+    chatimages.add(File(pickedFile!.path));
+    // });
+    if (pickedFile.path.isEmpty) retrieveLostData();
     await uploadimage(sendCallBack, msgId);
   }
 
-  pickVideo(sendCallBack, String msgId) async {
+  pickVideo(Function sendCallBack, String msgId) async {
     XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     chatVideo.add(File(pickedFile!.path));
