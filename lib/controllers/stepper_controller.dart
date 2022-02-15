@@ -235,11 +235,16 @@ class StepperController extends ControllerMVC {
     // var profilepic = await (await pic).ref.getDownloadURL();
     // var adharFront = await (await adharF).ref.getDownloadURL();
     // var adharBack = await (await adharB).ref.getDownloadURL();
-
-    adharFrontpageLink = await uploadFilesToCloud(adharfront);
-    adharBackpageLink = await uploadFilesToCloud(adharback);
-    pictureLink =
-        profilepics != null ? await uploadFilesToCloud(profilepics) : "";
+    final String? pId = FirebaseAuth.instance.currentUser?.uid;
+    final String location1 = "partner/$pId/documents";
+    final String location2 = "partner/$pId/profile";
+    adharFrontpageLink =
+        await uploadFilesToCloud(adharfront, cloudLocation: location1);
+    adharBackpageLink =
+        await uploadFilesToCloud(adharback, cloudLocation: location1);
+    pictureLink = profilepics != null
+        ? await uploadFilesToCloud(profilepics, cloudLocation: location2)
+        : "";
     // clgIdLink = clgId.toString();
   }
 

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +11,7 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 
 class CatelogController extends ControllerMVC {
   File? catelogPic;
@@ -24,7 +25,7 @@ class CatelogController extends ControllerMVC {
   Future<void> catelogImage() async {
     try {
       final image = await ImagePicker().pickImage(
-        source: ImageSource.camera,
+        source: ImageSource.gallery,
         imageQuality: 20,
         preferredCameraDevice: CameraDevice.front,
       );
@@ -39,12 +40,16 @@ class CatelogController extends ControllerMVC {
 
   Future<void> uploadimage() async {
     if (catelogPic == null) return;
-    var postImageRef = FirebaseStorage.instance.ref().child('ProfilePic');
-    UploadTask uploadTask = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(catelogPic!);
-    log(uploadTask.toString());
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    // var postImageRef = FirebaseStorage.instance.ref().child('ProfilePic');
+    // UploadTask uploadTask = postImageRef
+    //     .child(DateTime.now().toString() + ".jpg")
+    //     .putFile(catelogPic!);
+    // log(uploadTask.toString());
+    // var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    final String location =
+        "partner/${FirebaseAuth.instance.currentUser?.uid}/store";
+    String imageUrl =
+        await uploadFilesToCloud(catelogPic, cloudLocation: location);
     imageLink = imageUrl.toString();
     log(imageLink.toString());
   }
@@ -58,13 +63,9 @@ class CatelogController extends ControllerMVC {
     refresh();
   }
 
-  addCatlogList(
-    itemCode,
-    job,
-    BuildContext context
-  ) async {
+  addCatlogList(itemCode, job, BuildContext context) async {
     await uploadimage();
-    var body = {
+    Map<String, String?> body = {
       "name": catNameControl.text,
       "category": "$job",
       "itemCode": "$itemCode",
@@ -79,6 +80,7 @@ class CatelogController extends ControllerMVC {
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       log(response.statusCode.toString());
+      snackbar(context, "Service added successfully");
       return jsonDecode(response.body);
     } else {
       snackbar(context, 'Something went wrong');
@@ -86,7 +88,7 @@ class CatelogController extends ControllerMVC {
     }
   }
 
-  updateCat(catid,BuildContext context) async {
+  updateCat(catid, BuildContext context) async {
     if (imageLink != null) await uploadimage();
     var body = {
       "name": catNameControl.text,
@@ -99,6 +101,7 @@ class CatelogController extends ControllerMVC {
     var response = await Server().editMethod(API.updateCatelog + catid, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
       log(response.statusCode.toString());
+      snackbar(context, "Service updated successfully");
       return jsonDecode(response.body);
     } else {
       snackbar(context, 'Something went wrong');
