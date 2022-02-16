@@ -27,11 +27,12 @@
     
     <application 
         android:requestLegacyExternalStorage="true"
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="spotmies partner"
         android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDsBYFDuPmxR3AtMFz-rO8vZrM2C-UoNdo"/>
+               
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
