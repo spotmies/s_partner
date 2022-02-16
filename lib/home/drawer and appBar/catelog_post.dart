@@ -9,6 +9,7 @@ import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class CatelogPost extends StatefulWidget {
   final int? index;
@@ -224,6 +225,10 @@ class _CatelogPostState extends State<CatelogPost> {
                   borderRadius: 10.0,
                   borderSideColor: Colors.grey[900]!,
                   onClick: () async {
+                    if (catelogController.catelogPic == null) {
+                      return snackbar(context, "Please upload image");
+                    }
+
                     if (catelogController.catformkey.currentState!.validate()) {
                       setState(() {
                         partnerDetailsProvider!.offlineScreenLoader = true;
