@@ -328,6 +328,7 @@ class MainContent extends StatelessWidget {
       : _list = list,
         super(key: key);
 
+  // ignore: unused_field
   final List _list;
   final index;
 
