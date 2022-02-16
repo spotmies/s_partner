@@ -125,6 +125,7 @@ class EditProfileController extends ControllerMVC {
 
       // log("$profilePic $adharF $adharB  ");
       editProvider?.setEditLoader(true, loaderName: "Uploading Images");
+      snackbar(context, "Uploading Images");
       await uploadFile();
       editProvider?.setEditLoader(false);
 
@@ -151,6 +152,7 @@ class EditProfileController extends ControllerMVC {
       };
       log("body $body");
       editProvider?.setEditLoader(true, loaderName: "Applying Changes");
+      snackbar(context, "Applying Changes");
       log("uid>> $pId");
       var response = await Server().editMethod(API.partnerDetails + pId, body);
       editProvider?.setEditLoader(false);
@@ -171,12 +173,16 @@ class EditProfileController extends ControllerMVC {
   }
 
   Future<void> uploadFile() async {
-    var listMedia = [];
+    final String location1 = "partner/$pId/documents";
+    final String location2 = "partner/$pId/profile";
+    List<dynamic> listMedia = [];
     listMedia.add(profilePic ?? " ");
     listMedia.add(adharF ?? " ");
     listMedia.add(adharB ?? " ");
     for (int i = 0; i < listMedia.length; i++) {
-      var downloadedLink = await uploadFilesToCloud(listMedia[i]);
+      String cloudLoc = i == 0 ? location2 : location1;
+      var downloadedLink =
+          await uploadFilesToCloud(listMedia[i], cloudLocation: cloudLoc);
       log("douwnload link $downloadedLink");
       if (downloadedLink != null) {
         switch (i) {

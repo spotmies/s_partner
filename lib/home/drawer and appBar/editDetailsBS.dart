@@ -23,7 +23,7 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 photoPicker() async {
   final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
-      imageQuality: 30,
+      imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear);
   return pickedFile;
 }
@@ -322,92 +322,86 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Expanded(
-                                              // width: width(context) * 0.9,
-                                              // padding: EdgeInsets.only(bottom: 15),
-                                              child: Container(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: DropdownButton(
-                                                  underline: SizedBox(),
-                                                  value: _editProfileController!
-                                                      .job,
-                                                  icon: Icon(
-                                                    Icons
-                                                        .arrow_drop_down_circle,
-                                                    size: width(context) * 0.06,
-                                                    color: Colors.indigo[900],
-                                                  ),
-                                                  items: data.getServiceList
-                                                      .map((location) {
-                                                    return DropdownMenuItem(
+                                            Container(
+                                              alignment: Alignment.centerRight,
+                                              child: DropdownButton(
+                                                underline: SizedBox(),
+                                                value:
+                                                    _editProfileController!.job,
+                                                icon: Icon(
+                                                  Icons.arrow_drop_down_circle,
+                                                  size: width(context) * 0.06,
+                                                  color: Colors.indigo[900],
+                                                ),
+                                                items: data.getServiceList
+                                                    .where((element) =>
+                                                        element[
+                                                            'isMainService'] ==
+                                                        true)
+                                                    .map((location) {
+                                                  return DropdownMenuItem(
+                                                    child: TextWid(
+                                                      text: location[
+                                                          'nameOfService'],
+                                                      color: Colors.grey[900]!,
+                                                      size: width(context) *
+                                                          0.035,
+                                                      weight: FontWeight.w500,
+                                                    ),
+                                                    value:
+                                                        location['serviceId'],
+                                                  );
+                                                }).toList(),
+                                                onChanged: (newVal) {
+                                                  _editProfileController!.job =
+                                                      newVal as int?;
+
+                                                  _editProfileController!
+                                                      .refresh();
+                                                  setState(() {});
+                                                },
+                                              ),
+                                            ),
+                                            Container(
+                                              // width: width(context) * 0.4,
+                                              alignment: Alignment.centerRight,
+                                              // color: Colors.amber,
+                                              child: DropdownButton(
+                                                isDense: true,
+                                                underline: SizedBox(),
+                                                value: _editProfileController!
+                                                    .dropDownValue,
+                                                icon: Icon(
+                                                  Icons.arrow_drop_down_circle,
+                                                  size: width(context) * 0.06,
+                                                  color: Colors.indigo[900],
+                                                ),
+                                                items: _editProfileController!
+                                                    .accountType!
+                                                    .map((type) {
+                                                  return DropdownMenuItem(
+                                                      value:
+                                                          _editProfileController!
+                                                              .accountType!
+                                                              .indexOf(type),
                                                       child: TextWid(
-                                                        text: location[
-                                                            'nameOfService'],
+                                                        text: type,
                                                         color:
                                                             Colors.grey[900]!,
                                                         size: width(context) *
                                                             0.035,
                                                         weight: FontWeight.w500,
-                                                      ),
-                                                      value:
-                                                          location['serviceId'],
-                                                    );
-                                                  }).toList(),
-                                                  onChanged: (newVal) {
-                                                    _editProfileController!
-                                                        .job = newVal as int?;
-
-                                                    _editProfileController!
-                                                        .refresh();
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                // color: Colors.amber,
-                                                child: DropdownButton(
-                                                  underline: SizedBox(),
-                                                  value: _editProfileController!
-                                                      .dropDownValue,
-                                                  icon: Icon(
-                                                    Icons
-                                                        .arrow_drop_down_circle,
-                                                    size: width(context) * 0.06,
-                                                    color: Colors.indigo[900],
-                                                  ),
-                                                  items: _editProfileController!
-                                                      .accountType!
-                                                      .map((type) {
-                                                    return DropdownMenuItem(
-                                                        value:
-                                                            _editProfileController!
-                                                                .accountType!
-                                                                .indexOf(type),
-                                                        child: TextWid(
-                                                          text: type,
-                                                          color:
-                                                              Colors.grey[900]!,
-                                                          size: width(context) *
-                                                              0.035,
-                                                          weight:
-                                                              FontWeight.w500,
-                                                        ));
-                                                  }).toList(),
-                                                  onChanged: (newVal) {
-                                                    if (newVal == 0) return;
-                                                    _editProfileController!
-                                                            .dropDownValue =
-                                                        newVal as int?;
-                                                    _editProfileController!
-                                                        .refresh();
-                                                    setState(() {});
-                                                  },
-                                                ),
+                                                      ));
+                                                }).toList(),
+                                                onChanged: (newVal) {
+                                                  if (newVal == 0) return;
+                                                  _editProfileController!
+                                                          .dropDownValue =
+                                                      newVal as int?;
+                                                  _editProfileController!
+                                                      .refresh();
+                                                  setState(() {});
+                                                },
                                               ),
                                             ),
                                           ],
