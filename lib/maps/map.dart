@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/addressExtractor.dart';
@@ -209,7 +210,7 @@ class _MapsState extends State<Maps> {
                     height: height(context) * 0.07,
                     width: width(context) * 0.9,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey[300]!,
@@ -290,14 +291,14 @@ class _MapsState extends State<Maps> {
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: SpotmiesTheme.secondary,
                       ),
                       TextWid(
                         text: lat.toString() + ", " + long.toString(),
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: SpotmiesTheme.secondary,
                       ),
                     ],
                   ),
@@ -308,18 +309,18 @@ class _MapsState extends State<Maps> {
                     ElevatedButtonWidget(
                       minWidth: width * 0.3,
                       height: hight * 0.05,
-                      bgColor: Colors.indigo[50],
+                      bgColor: SpotmiesTheme.primaryVariant,
                       buttonName: 'Close',
-                      textColor: Colors.grey[900],
+                      textColor: SpotmiesTheme.secondaryVariant,
                       allRadius: true,
                       borderRadius: 15.0,
                       textSize: width * 0.04,
                       leadingIcon: Icon(
                         Icons.clear,
                         size: width * 0.04,
-                        color: Colors.grey[900],
+                        color: SpotmiesTheme.secondaryVariant,
                       ),
-                      borderSideColor: Colors.indigo[50],
+                      borderSideColor: SpotmiesTheme.primaryVariant,
                       onClick: () {
                         Navigator.pop(context);
                       },
@@ -328,7 +329,7 @@ class _MapsState extends State<Maps> {
                         ? ElevatedButtonWidget(
                             minWidth: width * 0.5,
                             height: hight * 0.05,
-                            bgColor: Colors.indigo[900],
+                            bgColor: SpotmiesTheme.primary,
                             onClick: () async {
                               try {
                                 launch(
@@ -338,21 +339,21 @@ class _MapsState extends State<Maps> {
                               }
                             },
                             buttonName: 'Navigate',
-                            textColor: Colors.white,
+                            textColor: SpotmiesTheme.background,
                             allRadius: true,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
                             trailingIcon: Icon(
                               Icons.near_me,
                               size: width * 0.03,
-                              color: Colors.white,
+                              color: SpotmiesTheme.background,
                             ),
-                            borderSideColor: Colors.indigo[900],
+                            borderSideColor: SpotmiesTheme.primary,
                           )
                         : ElevatedButtonWidget(
                             minWidth: width * 0.5,
                             height: hight * 0.05,
-                            bgColor: Colors.indigo[900],
+                            bgColor: SpotmiesTheme.primary,
                             onClick: () async {
                               final coordinates = {
                                 'latitide': lat,
@@ -365,16 +366,16 @@ class _MapsState extends State<Maps> {
                               widget.onSave!(generatedCoordinates);
                             },
                             buttonName: widget.actionLabel,
-                            textColor: Colors.white,
+                            textColor: SpotmiesTheme.background,
                             borderRadius: 15.0,
                             allRadius: true,
                             textSize: width * 0.04,
                             trailingIcon: Icon(
                               Icons.gps_fixed,
                               size: width * 0.03,
-                              color: Colors.white,
+                              color: SpotmiesTheme.background,
                             ),
-                            borderSideColor: Colors.indigo[900],
+                            borderSideColor: SpotmiesTheme.primary,
                           )
                   ],
                 )

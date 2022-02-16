@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/login/stepper/stepperpersonalinfo.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
@@ -95,17 +96,19 @@ class _AccountTypeState extends State<AccountType> {
                     // height: _hight * 0.06,
                     width: _width * 0.9,
                     decoration: BoxDecoration(
-                        color: freelanace ? Colors.indigo[900] : Colors.white,
+                        color: freelanace
+                            ? SpotmiesTheme.primary
+                            : SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !freelanace
                                 ? Colors.blueGrey[200]!
-                                : Colors.white)),
+                                : SpotmiesTheme.background)),
                     child: Row(
                       children: [
                         Checkbox(
-                            activeColor: Colors.white,
-                            checkColor: Colors.indigo[900],
+                            activeColor: SpotmiesTheme.background,
+                            checkColor: SpotmiesTheme.primary,
                             value: userAccountType == "business",
                             shape: CircleBorder(),
                             onChanged: (bool? value) {
@@ -121,8 +124,9 @@ class _AccountTypeState extends State<AccountType> {
                             size: _width * 0.055,
                             weight: FontWeight.w600,
                             maxlines: 3,
-                            color:
-                                freelanace ? Colors.white : Colors.grey[700]!,
+                            color: freelanace
+                                ? SpotmiesTheme.background
+                                : SpotmiesTheme.secondary,
                           ),
                         ),
                       ],
@@ -146,17 +150,19 @@ class _AccountTypeState extends State<AccountType> {
                     height: _hight * 0.06,
                     width: _width * 0.9,
                     decoration: BoxDecoration(
-                        color: student ? Colors.indigo[900] : Colors.white,
+                        color: student
+                            ? SpotmiesTheme.primary
+                            : SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !student
                                 ? Colors.blueGrey[200]!
-                                : Colors.white)),
+                                : SpotmiesTheme.background)),
                     child: Row(
                       children: [
                         Checkbox(
-                            activeColor: Colors.white,
-                            checkColor: Colors.indigo[900],
+                            activeColor: SpotmiesTheme.background,
+                            checkColor: SpotmiesTheme.primary,
                             value: userAccountType == "student",
                             shape: CircleBorder(),
                             onChanged: (bool? value) {
@@ -170,7 +176,9 @@ class _AccountTypeState extends State<AccountType> {
                           text: "Student",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
-                          color: student ? Colors.white : Colors.grey[700]!,
+                          color: student
+                              ? SpotmiesTheme.background
+                              : SpotmiesTheme.secondary,
                         ),
                       ],
                     ),
@@ -193,17 +201,19 @@ class _AccountTypeState extends State<AccountType> {
                     height: _hight * 0.06,
                     width: _width * 0.9,
                     decoration: BoxDecoration(
-                        color: student ? Colors.indigo[900] : Colors.white,
+                        color: student
+                            ? SpotmiesTheme.primary
+                            : SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                             color: !student
                                 ? Colors.blueGrey[200]!
-                                : Colors.white)),
+                                : SpotmiesTheme.background)),
                     child: Row(
                       children: [
                         Checkbox(
-                            activeColor: Colors.white,
-                            checkColor: Colors.indigo[900],
+                            activeColor: SpotmiesTheme.background,
+                            checkColor: SpotmiesTheme.primary,
                             value: userAccountType == "freelancer",
                             shape: CircleBorder(),
                             onChanged: (bool? value) {
@@ -217,7 +227,9 @@ class _AccountTypeState extends State<AccountType> {
                           text: "freelancer",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
-                          color: student ? Colors.white : Colors.grey[700]!,
+                          color: student
+                              ? SpotmiesTheme.background
+                              : SpotmiesTheme.secondary,
                         ),
                       ],
                     ),
@@ -230,8 +242,8 @@ class _AccountTypeState extends State<AccountType> {
                     height: _hight * 0.06,
                     minWidth: _width * 0.35,
                     buttonName: 'Join',
-                    bgColor: Colors.indigo[900]!,
-                    textColor: Colors.white,
+                    bgColor: SpotmiesTheme.primary,
+                    textColor: SpotmiesTheme.background,
                     textSize: _width * 0.05,
                     borderRadius: 15.0,
                     allRadius: true,

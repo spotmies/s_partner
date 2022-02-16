@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -52,7 +53,7 @@ class _UserDetailsState extends State<UserDetails> {
                 slivers: [
                   SliverAppBar(
                     elevation: 0,
-                    backgroundColor: Colors.grey[100],
+                    backgroundColor: SpotmiesTheme.onSurface,
                     stretch: true,
                     leading: IconButton(
                         onPressed: () {
@@ -60,7 +61,7 @@ class _UserDetailsState extends State<UserDetails> {
                         },
                         icon: Icon(
                           Icons.arrow_back,
-                          color: Colors.grey[900],
+                          color: SpotmiesTheme.secondaryVariant,
                         )),
                     onStretchTrigger: () {
                       return Future<void>.value();
@@ -77,15 +78,16 @@ class _UserDetailsState extends State<UserDetails> {
                       // titlePadding: EdgeInsets.only(left: _width*0.15,bottom: _width*0.04),
                       title: TextWid(
                         text: toBeginningOfSentenceCase(
-                            widget.userDetails!['name']).toString(),
+                                widget.userDetails!['name'])
+                            .toString(),
                         size: _width * 0.06,
-                        color: Colors.grey[900]!,
+                        color: SpotmiesTheme.secondaryVariant,
                         weight: FontWeight.w600,
                       ),
                       centerTitle: false,
                       background: Container(
                         width: _width * 1,
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         child:
                             //  widget.userDetails['pic'] == null
                             //     ?
@@ -99,8 +101,8 @@ class _UserDetailsState extends State<UserDetails> {
                                       name: widget.userDetails!['name'],
                                       profile: widget.userDetails!['pic'],
                                       status: false,
-                                      bgColor: Colors.grey[100]!,
-                                      textColor: Colors.grey[900]!,
+                                      bgColor: SpotmiesTheme.onSurface,
+                                      textColor: SpotmiesTheme.secondaryVariant,
                                       textSize: _width * 0.25,
                                       size: _width * 0.25,
                                       badge: false,
@@ -118,7 +120,7 @@ class _UserDetailsState extends State<UserDetails> {
                       [
                         Divider(
                           thickness: 5,
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                         ),
                         Container(
                           // height: _hight * 0.27,
@@ -144,7 +146,7 @@ class _UserDetailsState extends State<UserDetails> {
                                   child: TextWid(
                                     text: 'Spotmies Using From',
                                     size: _width * 0.05,
-                                    color: Colors.grey[700]!,
+                                    color: SpotmiesTheme.secondary,
                                     weight: FontWeight.w600,
                                   )),
                               Container(
@@ -156,7 +158,7 @@ class _UserDetailsState extends State<UserDetails> {
                                   child: TextWid(
                                     text: getDate(widget.userDetails!['join']),
                                     size: _width * 0.035,
-                                    color: Colors.grey[700]!,
+                                    color: SpotmiesTheme.secondary,
                                     weight: FontWeight.w600,
                                   )),
                               SizedBox(
@@ -166,7 +168,7 @@ class _UserDetailsState extends State<UserDetails> {
                                 indent: _width * 0.04,
                                 endIndent: _width * 0.04,
                                 thickness: 1,
-                                color: Colors.grey[300],
+                                color: SpotmiesTheme.shadow,
                               ),
                               Container(
                                 // height: _hight * 0.10,
@@ -177,7 +179,7 @@ class _UserDetailsState extends State<UserDetails> {
                                     TextWid(
                                       text: 'Contact',
                                       size: _width * 0.05,
-                                      color: Colors.grey[700]!,
+                                      color: SpotmiesTheme.secondary,
                                       weight: FontWeight.w600,
                                       align: TextAlign.start,
                                     ),
@@ -226,7 +228,8 @@ class _UserDetailsState extends State<UserDetails> {
                                                 IconButton(
                                                     icon: Icon(
                                                       Icons.message,
-                                                      color: Colors.indigo[900],
+                                                      color:
+                                                          SpotmiesTheme.primary,
                                                     ),
                                                     onPressed: () {
                                                       Navigator.pop(context);
@@ -234,7 +237,8 @@ class _UserDetailsState extends State<UserDetails> {
                                                 IconButton(
                                                     icon: Icon(
                                                       Icons.call,
-                                                      color: Colors.indigo[900],
+                                                      color:
+                                                          SpotmiesTheme.primary,
                                                     ),
                                                     onPressed: () {
                                                       // launch("tel://$num");
@@ -265,7 +269,8 @@ class _UserDetailsState extends State<UserDetails> {
                             "Delete Chat",
                             Colors.redAccent,
                             Icons.delete_sweep_rounded, onTap: () {
-                          widget.ccontroller!.deleteChat(context, chatProvider!);
+                          widget.ccontroller!
+                              .deleteChat(context, chatProvider!);
                         }),
                         /* ------------------------- reveal my profile code ------------------------- */
                         // Container(
@@ -424,7 +429,7 @@ class _UserDetailsState extends State<UserDetails> {
       {VoidCallback? onTap}) {
     Divider divider = Divider(
       thickness: 10,
-      color: Colors.grey[200],
+      color: SpotmiesTheme.surfaceVariant2,
     );
     return Column(
       children: [

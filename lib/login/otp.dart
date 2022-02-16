@@ -7,6 +7,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
@@ -34,10 +35,10 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
-    color: Colors.indigo[50],
+    color: SpotmiesTheme.primaryVariant,
     borderRadius: BorderRadius.circular(10.0),
     border: Border.all(
-      color: Colors.white,
+      color: SpotmiesTheme.background,
     ),
   );
   startTimer() {
@@ -81,7 +82,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     // startTimer();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: SpotmiesTheme.background,
       key: _loginPageController!.scaffoldkey,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Column(
@@ -118,7 +119,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.075,
-                              color: Colors.indigo[900]!,
+                              color: SpotmiesTheme.primary,
                             ),
                           ),
                           SizedBox(
@@ -131,7 +132,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.04,
-                              color: Colors.indigo[900]!,
+                              color: SpotmiesTheme.primary,
                             ),
                           ),
                         ],
@@ -163,7 +164,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               ],
                               fieldsCount: 6,
                               textStyle: fonts(_width * 0.045, FontWeight.w600,
-                                  Colors.indigo[900]),
+                                  SpotmiesTheme.primary),
                               eachFieldWidth: _width * 0.1,
                               eachFieldHeight: _hight * 0.08,
                               focusNode: _pinPutFocusNode,
@@ -200,15 +201,15 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                   lineWidth: 3,
                                   animation: true,
                                   animationDuration: 99999,
-                                  progressColor: Colors.indigo[50],
+                                  progressColor: SpotmiesTheme.primaryVariant,
                                   percent: 1.0,
-                                  backgroundColor: Colors.indigo[900]!,
+                                  backgroundColor: SpotmiesTheme.primary,
                                   center: Text(
                                     '${data.countDown}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20.0,
-                                        color: Colors.indigo[900]),
+                                        color: SpotmiesTheme.primary),
                                   )),
                             )
                           : Container(
@@ -221,7 +222,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 bgColor: Colors.transparent,
                                 borderSideColor: Colors.transparent,
                                 textSize: _width * 0.037,
-                                textColor: Colors.indigo[900]!,
+                                textColor: SpotmiesTheme.primary,
                               ),
                             ),
                     if (pinlength == 6)
@@ -237,16 +238,16 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           textStyle: FontWeight.w600,
                           minWidth: _width * 0.45,
                           buttonName: "Submit",
-                          bgColor: Colors.white,
+                          bgColor: SpotmiesTheme.background,
                           borderSideColor: Colors.transparent,
                           textSize: _width * 0.045,
                           borderRadius: 10,
                           elevation: 1,
-                          textColor: Colors.blue[900]!,
+                          textColor: SpotmiesTheme.primary,
                           trailingIcon: Icon(
                             Icons.arrow_forward,
                             size: 20,
-                            color: Colors.blue[900],
+                            color: SpotmiesTheme.tertiary,
                           ),
                         ),
                       )

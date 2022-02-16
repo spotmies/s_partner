@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 String? updatedEmail;
 String? updatedob;
@@ -29,17 +30,17 @@ class _SettingState extends State<Setting> {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: SpotmiesTheme.onSurface,
         iconTheme: IconThemeData(
-          color: Colors.grey[900],
+          color: SpotmiesTheme.secondaryVariant,
         ),
         title: Text(
           'Profile Info',
-          style: TextStyle(color: Colors.grey[900]),
+          style: TextStyle(color: SpotmiesTheme.secondaryVariant),
         ),
         elevation: 0,
       ),
-      backgroundColor: Colors.grey[100],
+      backgroundColor: SpotmiesTheme.onSurface,
       body: Center(
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -64,7 +65,7 @@ class _SettingState extends State<Setting> {
                         padding: EdgeInsets.all(20),
                         height: _hight * 0.15,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Row(
@@ -74,7 +75,7 @@ class _SettingState extends State<Setting> {
                               height: _width * 0.15,
                               width: _width * 0.15,
                               child: CircleAvatar(
-                                backgroundColor: Colors.grey[100],
+                                backgroundColor: SpotmiesTheme.onSurface,
                                 child: ClipOval(
                                   child: Center(
                                     child: document['profilepic'] == null
@@ -103,7 +104,7 @@ class _SettingState extends State<Setting> {
                                       'Change',
                                       style: TextStyle(
                                           fontSize: 18,
-                                          color: Colors.grey[700]),
+                                          color: SpotmiesTheme.secondary),
                                     ))
                                 : TextButton(
                                     onPressed: () async {
@@ -113,7 +114,7 @@ class _SettingState extends State<Setting> {
                                       'Upload',
                                       style: TextStyle(
                                           fontSize: 18,
-                                          color: Colors.grey[700]),
+                                          color: SpotmiesTheme.secondary),
                                     )),
                           ],
                         ),
@@ -126,7 +127,7 @@ class _SettingState extends State<Setting> {
                         height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.circular(30),
                           // boxShadow: kElevationToShadow[1]
                         ),
@@ -144,7 +145,8 @@ class _SettingState extends State<Setting> {
                                 child: Text(
                                   'Change',
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[700]),
+                                      fontSize: 18,
+                                      color: SpotmiesTheme.secondary),
                                 ))
                           ],
                         ),
@@ -157,7 +159,7 @@ class _SettingState extends State<Setting> {
                         height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.circular(30),
                           // boxShadow: kElevationToShadow[1]
                         ),
@@ -175,7 +177,8 @@ class _SettingState extends State<Setting> {
                                 child: Text(
                                   'Change',
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[700]),
+                                      fontSize: 18,
+                                      color: SpotmiesTheme.secondary),
                                 ))
                           ],
                         ),
@@ -188,7 +191,7 @@ class _SettingState extends State<Setting> {
                         height: _hight * 0.15,
                         // width: 330,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.circular(30),
                           // boxShadow: kElevationToShadow[1]
                         ),
@@ -208,7 +211,8 @@ class _SettingState extends State<Setting> {
                                 child: Text(
                                   'Change',
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[700]),
+                                      fontSize: 18,
+                                      color: SpotmiesTheme.secondary),
                                 ))
                           ],
                         ),
@@ -295,7 +299,7 @@ Future<void> emailUpdate(BuildContext context) async {
                     height: 60,
                     width: 380,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       cursorColor: Colors.amber,
@@ -307,7 +311,7 @@ Future<void> emailUpdate(BuildContext context) async {
                         hintText: 'Enter Email',
                         suffixIcon: Icon(
                           Icons.email,
-                          color: Colors.blue[800],
+                          color: SpotmiesTheme.tertiary,
                         ),
                         //border: InputBorder.none,
                         contentPadding: EdgeInsets.all(20),
@@ -328,7 +332,7 @@ Future<void> emailUpdate(BuildContext context) async {
                           },
                           child: Text(
                             'Change',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: SpotmiesTheme.background),
                           )))
                 ],
               ),
@@ -351,7 +355,7 @@ Future<void> dobUpdate(BuildContext context) async {
                     height: 60,
                     width: 380,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       cursorColor: Colors.amber,
@@ -363,7 +367,7 @@ Future<void> dobUpdate(BuildContext context) async {
                         hintText: 'Enter DoB',
                         suffixIcon: Icon(
                           Icons.calendar_today,
-                          color: Colors.blue[800],
+                          color: SpotmiesTheme.tertiary,
                         ),
                         //border: InputBorder.none,
                         contentPadding: EdgeInsets.all(20),
@@ -384,7 +388,7 @@ Future<void> dobUpdate(BuildContext context) async {
                           },
                           child: Text(
                             'Change',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: SpotmiesTheme.background),
                           )))
                 ],
               ),
@@ -407,7 +411,7 @@ Future<void> altNumUpdate(BuildContext context) async {
                     height: 60,
                     width: 380,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       cursorColor: Colors.amber,
@@ -419,7 +423,7 @@ Future<void> altNumUpdate(BuildContext context) async {
                         hintText: 'Enter Number',
                         suffixIcon: Icon(
                           Icons.phone_android,
-                          color: Colors.blue[800],
+                          color: SpotmiesTheme.tertiary,
                         ),
                         //border: InputBorder.none,
                         contentPadding: EdgeInsets.all(20),
@@ -440,7 +444,7 @@ Future<void> altNumUpdate(BuildContext context) async {
                           },
                           child: Text(
                             'Change',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: SpotmiesTheme.background),
                           )))
                 ],
               ),
@@ -463,7 +467,7 @@ Future<void> updatedProfilePic(BuildContext context) async {
                     height: 200,
                     width: 380,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SpotmiesTheme.background,
                         borderRadius: BorderRadius.circular(15)),
                     child: Column(
                       children: [CircleAvatar()],
@@ -480,7 +484,7 @@ Future<void> updatedProfilePic(BuildContext context) async {
                           },
                           child: Text(
                             'Change',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: SpotmiesTheme.background),
                           )))
                 ],
               ),

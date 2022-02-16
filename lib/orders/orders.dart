@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/orders/posts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class Orders extends StatefulWidget {
@@ -28,17 +29,17 @@ class _OrdersState extends State<Orders> {
               ),
             ),
             toolbarHeight: _hight * 0.04,
-            backgroundColor: Colors.white,
+            backgroundColor: SpotmiesTheme.background,
             elevation: 1,
             //title: Text('Tabs'),
             bottom: TabBar(
                 indicator: UnderlineTabIndicator(
                     borderSide: BorderSide(
-                      color: Colors.grey[800]!,
+                      color: SpotmiesTheme.secondaryVariant,
                       width: 3.0,
                     ),
                     insets: EdgeInsets.symmetric(horizontal: 0.0)),
-                indicatorColor: Colors.white,
+                indicatorColor: SpotmiesTheme.background,
                 tabs: [
                   Tab(
                     icon: Row(

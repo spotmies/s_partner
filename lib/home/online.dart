@@ -12,6 +12,7 @@ import 'package:spotmies_partner/controllers/incomingOrders_controller.dart';
 import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
@@ -62,7 +63,7 @@ class _OnlineState extends StateMVC<Online> {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _incomingOrdersController!.incomingscaffoldkey,
-        backgroundColor: Colors.grey[50],
+        backgroundColor: SpotmiesTheme.surfaceVariant,
         body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
           List<dynamic>? ld = data.getIncomingOrder;
           List<dynamic>? o = List.from(ld.reversed);
@@ -144,7 +145,7 @@ class _OnlineState extends StateMVC<Online> {
                                         EdgeInsets.only(left: 15, right: 10),
                                     height: _hight * 0.11,
                                     decoration: BoxDecoration(
-                                        color: Colors.grey[200],
+                                        color: SpotmiesTheme.surfaceVariant2,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(15),
                                             topRight: Radius.circular(15)),
@@ -160,7 +161,8 @@ class _OnlineState extends StateMVC<Online> {
                                                   .getServiceNameById(
                                                       o[index]['job']),
                                               size: _width * 0.04,
-                                              color: Colors.grey[900]!,
+                                              color: SpotmiesTheme
+                                                  .secondaryVariant,
                                               weight: FontWeight.w600,
                                             ),
                                             Row(
@@ -171,7 +173,8 @@ class _OnlineState extends StateMVC<Online> {
                                                 IconButton(
                                                     icon: Icon(
                                                       Icons.more_horiz,
-                                                      color: Colors.grey[900],
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                     ),
                                                     onPressed: () {
                                                       onlineOrdersButtomMenu(
@@ -196,12 +199,12 @@ class _OnlineState extends StateMVC<Online> {
                                             Expanded(
                                               child: Container(
                                                 // width: _width * 0.45,
-                                                // color: Colors.red,
                                                 child: Row(
                                                   children: [
                                                     Icon(
                                                       Icons.schedule,
-                                                      color: Colors.grey[900],
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: _width * 0.045,
                                                     ),
                                                     SizedBox(
@@ -210,14 +213,16 @@ class _OnlineState extends StateMVC<Online> {
                                                     TextWid(
                                                       text: getDate(
                                                           o[index]['schedule']),
-                                                      color: Colors.grey[900]!,
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: _width * 0.04,
                                                     ),
                                                     TextWid(
                                                       text: '-' +
                                                           getTime(o[index]
                                                               ['schedule']),
-                                                      color: Colors.grey[900]!,
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: _width * 0.04,
                                                     ),
                                                   ],
@@ -226,7 +231,6 @@ class _OnlineState extends StateMVC<Online> {
                                             ),
                                             Container(
                                               width: _width * 0.35,
-                                              //  color: Colors.amber,
                                               alignment: Alignment.centerRight,
                                               child: o[index]['money'] != null
                                                   ? TextWid(
@@ -234,7 +238,8 @@ class _OnlineState extends StateMVC<Online> {
                                                           o[index]['money']
                                                               .toString() +
                                                           ' /-',
-                                                      color: Colors.grey[900]!,
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: _width * 0.04,
                                                     )
                                                   : TextWid(
@@ -252,7 +257,7 @@ class _OnlineState extends StateMVC<Online> {
                                     height: _hight * 0.21,
                                     // width: _width * 0.88,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[50],
+                                      color: SpotmiesTheme.surfaceVariant,
 
                                       borderRadius: BorderRadius.only(
                                           bottomLeft: Radius.circular(15),
@@ -264,7 +269,6 @@ class _OnlineState extends StateMVC<Online> {
                                         Container(
                                           height: _hight * 0.11,
                                           decoration: BoxDecoration(
-                                              // color: Colors.grey[50],
                                               borderRadius:
                                                   BorderRadius.circular(15)),
                                           child: Row(
@@ -278,20 +282,20 @@ class _OnlineState extends StateMVC<Online> {
                                                     width: _width * 0.13,
                                                     child: CircleAvatar(
                                                       backgroundColor:
-                                                          Colors.white,
+                                                          SpotmiesTheme
+                                                              .background,
                                                       child: images.isNotEmpty
                                                           ? Image.network(
                                                               images.first)
                                                           : Icon(
                                                               Icons
                                                                   .home_repair_service_outlined,
-                                                              color: Colors
-                                                                  .grey[900]!,
+                                                              color: SpotmiesTheme
+                                                                  .secondaryVariant,
                                                             ),
                                                     )),
                                               ),
                                               Container(
-                                                // color: Colors.amber,
                                                 width: _width * 0.53,
                                                 child: TextWid(
                                                   text:
@@ -332,19 +336,22 @@ class _OnlineState extends StateMVC<Online> {
                                                     buttonName: 'Reject',
                                                     height: _hight * 0.05,
                                                     minWidth: _width * 0.3,
-                                                    bgColor: Colors.grey[200]!,
-                                                    textColor:
-                                                        Colors.grey[900]!,
+                                                    bgColor: SpotmiesTheme
+                                                        .surfaceVariant,
+                                                    textColor: SpotmiesTheme
+                                                        .secondaryVariant,
                                                     textSize: _width * 0.04,
                                                     allRadius: true,
                                                     leadingIcon: Icon(
                                                       Icons.close,
-                                                      color: Colors.grey[900],
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: _width * 0.04,
                                                     ),
                                                     borderRadius: 15.0,
                                                     borderSideColor:
-                                                        Colors.grey[50]!,
+                                                        SpotmiesTheme
+                                                            .surfaceVariant,
                                                     onClick: () {
                                                       _incomingOrdersController!
                                                           .respondToOrder(
@@ -361,14 +368,16 @@ class _OnlineState extends StateMVC<Online> {
                                                       buttonName: 'Accept',
                                                       height: _hight * 0.05,
                                                       minWidth: _width * 0.55,
-                                                      bgColor:
-                                                          Colors.grey[900]!,
-                                                      textColor: Colors.white,
+                                                      bgColor: SpotmiesTheme
+                                                          .secondaryVariant,
+                                                      textColor: SpotmiesTheme
+                                                          .background,
                                                       textSize: _width * 0.04,
                                                       allRadius: true,
                                                       trailingIcon: Icon(
                                                         Icons.check,
-                                                        color: Colors.white,
+                                                        color: SpotmiesTheme
+                                                            .background,
                                                         size: _width * 0.04,
                                                       ),
                                                       borderRadius: 15.0,
@@ -413,7 +422,6 @@ class _OnlineState extends StateMVC<Online> {
                     child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
                   child: Center(child: CircularProgressIndicator()),
-                  // Container(color: Colors.grey[100].withOpacity(0))
                 )),
               ),
             ],
@@ -432,7 +440,7 @@ class _OnlineState extends StateMVC<Online> {
         children: [
           Icon(
             Icons.error_outline,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
             size: _width * 0.04,
           ),
           SizedBox(
@@ -440,7 +448,7 @@ class _OnlineState extends StateMVC<Online> {
           ),
           TextWid(
               text: "Take over by Someone else",
-              color: Colors.grey[900]!,
+              color: SpotmiesTheme.secondaryVariant,
               weight: FontWeight.w600,
               size: _width * 0.03)
         ],
@@ -638,7 +646,7 @@ class _OnlineState extends StateMVC<Online> {
                         formatter: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         ],
-                        focusBorderColor: Colors.grey[900]!,
+                        focusBorderColor: SpotmiesTheme.secondaryVariant,
                         enableBorderRadius: 15,
                         focusBorderRadius: 15,
                         errorBorderRadius: 15,
@@ -675,13 +683,13 @@ class _OnlineState extends StateMVC<Online> {
                             },
                           ),
                           ElevatedButtonWidget(
-                            bgColor: Colors.grey[900]!,
+                            bgColor: SpotmiesTheme.secondaryVariant,
                             borderSideColor: Colors.white,
                             minWidth: width * 0.55,
                             height: hight * 0.06,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
-                            textColor: Colors.white,
+                            textColor: SpotmiesTheme.background,
                             allRadius: true,
                             buttonName: 'Change',
                             trailingIcon: Icon(Icons.send),
@@ -741,7 +749,7 @@ class _OnlineState extends StateMVC<Online> {
                                         height: 60,
                                         width: 380,
                                         decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: SpotmiesTheme.background,
                                             borderRadius:
                                                 BorderRadius.circular(15)),
                                         child: Row(
@@ -763,7 +771,7 @@ class _OnlineState extends StateMVC<Online> {
                                       height: 60,
                                       width: 380,
                                       decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: SpotmiesTheme.background,
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextField(
@@ -776,7 +784,7 @@ class _OnlineState extends StateMVC<Online> {
                                           hintText: 'Money',
                                           suffixIcon: Icon(
                                             Icons.change_history,
-                                            color: Colors.blue[800],
+                                            color: SpotmiesTheme.tertiary,
                                           ),
                                           //border: InputBorder.none,
                                           contentPadding: EdgeInsets.all(20),
@@ -793,7 +801,6 @@ class _OnlineState extends StateMVC<Online> {
                               actions: <Widget>[
                                 Center(
                                   child: ElevatedButton(
-                                      // color: Colors.blue[800],
                                       child: Text('Done'),
                                       onPressed: () async {
                                         var body = {
@@ -829,7 +836,7 @@ class _OnlineState extends StateMVC<Online> {
                           });
                     },
                     child: Text('Update Bid',
-                        style: TextStyle(color: Colors.black))),
+                        style: TextStyle(color: SpotmiesTheme.onBackground))),
               ],
               cancelButton: CupertinoActionSheetAction(
                   onPressed: () {
@@ -837,7 +844,7 @@ class _OnlineState extends StateMVC<Online> {
                   },
                   child: Text(
                     'Cancel',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: SpotmiesTheme.onBackground),
                   )),
             ));
   }

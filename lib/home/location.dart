@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:im_animations/im_animations.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 
 class Location extends StatefulWidget {
@@ -37,14 +38,14 @@ class _LocationState extends State<Location> {
     getCurrentLocation();
     getAddressofLocation();
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: SpotmiesTheme.surfaceVariant,
       appBar: AppBar(
         leading: Icon(
           Icons.arrow_back_ios,
           size: 20,
-          color: Colors.white,
+          color: SpotmiesTheme.background,
         ),
-        backgroundColor: Colors.blue[900],
+        backgroundColor: SpotmiesTheme.tertiaryVariant,
         title: Text(
           'Set Loction',
         ),
@@ -62,7 +63,7 @@ class _LocationState extends State<Location> {
           )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blue[900],
+        backgroundColor: SpotmiesTheme.tertiaryVariant,
         onPressed: () {
           FirebaseFirestore.instance
               .collection('partner')

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/call_ui/components/rounded_button.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 // import '../constants.dart';
 import '../size.config.dart';
@@ -31,10 +32,10 @@ class CallingUi extends StatefulWidget {
 
 class _CallingUiState extends State<CallingUi> {
   ChatProvider? chatProvider;
- String screenType = '';
-   bool clickMic = false;
+  String screenType = '';
+  bool clickMic = false;
   bool clickSpeaker = false;
-   callStatus(state) {
+  callStatus(state) {
     switch (state) {
       case 0:
         return "connecting...";
@@ -51,7 +52,7 @@ class _CallingUiState extends State<CallingUi> {
     }
   }
 
-    changeScreen(screenName) {
+  changeScreen(screenName) {
     setState(() {
       screenType = screenName;
     });
@@ -71,7 +72,7 @@ class _CallingUiState extends State<CallingUi> {
 
     return parsedTime;
   }
-  
+
   @override
   initState() {
     setState(() {
@@ -79,6 +80,7 @@ class _CallingUiState extends State<CallingUi> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -98,7 +100,7 @@ class _CallingUiState extends State<CallingUi> {
                   ),
             DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
+                color: SpotmiesTheme.onBackground.withOpacity(0.3),
               ),
             ),
             Padding(
@@ -112,7 +114,7 @@ class _CallingUiState extends State<CallingUi> {
                       style: Theme.of(context)
                           .textTheme
                           .headline3
-                          ?.copyWith(color: Colors.white),
+                          ?.copyWith(color: SpotmiesTheme.background),
                     ),
                     VerticalSpacing(of: 10),
                     Text(
@@ -120,7 +122,8 @@ class _CallingUiState extends State<CallingUi> {
                           ? "Duration ${formatedTime(data.duration)}   ${callStatus(data.getCallStatus)}"
                               .toUpperCase()
                           : "INCOMING CALL.....",
-                      style: TextStyle(color: Colors.white60),
+                      style: TextStyle(
+                          color: SpotmiesTheme.background.withOpacity(60)),
                     ),
                     Spacer(),
                     Visibility(
@@ -133,7 +136,7 @@ class _CallingUiState extends State<CallingUi> {
                             width: 60,
                             decoration: BoxDecoration(
                                 color: !clickMic
-                                    ? Colors.white
+                                    ? SpotmiesTheme.background
                                     : Colors.indigoAccent,
                                 shape: BoxShape.circle),
                             child: IconButton(
@@ -145,8 +148,9 @@ class _CallingUiState extends State<CallingUi> {
                               },
                               icon: Icon(
                                 Icons.mic,
-                                color:
-                                    !clickMic ? Colors.grey[900] : Colors.white,
+                                color: !clickMic
+                                    ? SpotmiesTheme.secondaryVariant
+                                    : SpotmiesTheme.background,
                               ),
                             ),
                           ),
@@ -162,17 +166,16 @@ class _CallingUiState extends State<CallingUi> {
                               },
                               icon: Icon(
                                 Icons.call_end,
-                                color: Colors.white,
+                                color: SpotmiesTheme.background,
                               ),
                             ),
                           ),
-                     
                           Container(
                             height: 60,
                             width: 60,
                             decoration: BoxDecoration(
                                 color: !clickSpeaker
-                                    ? Colors.white
+                                    ? SpotmiesTheme.background
                                     : Colors.indigoAccent,
                                 shape: BoxShape.circle),
                             child: IconButton(
@@ -181,17 +184,15 @@ class _CallingUiState extends State<CallingUi> {
                                   clickSpeaker = !clickSpeaker;
                                 });
                                 widget.onSpeaker!(clickSpeaker);
-                           
                               },
                               icon: Icon(
                                 Icons.volume_up,
                                 color: !clickSpeaker
-                                    ? Colors.grey[900]
-                                    : Colors.white,
+                                    ? SpotmiesTheme.secondaryVariant
+                                    : SpotmiesTheme.background,
                               ),
                             ),
                           ),
-                          
                         ],
                       ),
                     ),

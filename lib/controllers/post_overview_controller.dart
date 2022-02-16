@@ -10,6 +10,7 @@ import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 
@@ -54,7 +55,8 @@ class PostOverViewController extends ControllerMVC {
     };
 
     partnerProvider.setOrderViewLoader(true);
-    dynamic response = await Server().editMethod(API.acceptOrder + ordId!, body);
+    dynamic response =
+        await Server().editMethod(API.acceptOrder + ordId!, body);
     partnerProvider.setOrderViewLoader(false);
     if (response.statusCode == 200) {
       return snackbar(context, "Order completed successfully");
@@ -78,10 +80,10 @@ class PostOverViewController extends ControllerMVC {
       },
       child: CircleAvatar(
           radius: 20,
-          backgroundColor: Colors.grey[100],
+          backgroundColor: SpotmiesTheme.onSurface,
           child: Icon(
             Icons.edit,
-            color: Colors.blue[900],
+            color: SpotmiesTheme.tertiaryVariant,
           )),
     );
   }
@@ -231,7 +233,7 @@ class PostOverViewController extends ControllerMVC {
                         right: width * 0.03,
                         top: width * 0.03),
                     decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: SpotmiesTheme.onSurface,
                         borderRadius: BorderRadius.circular(15)),
                     height: hight * 0.10,
                     width: width * 0.7,
@@ -249,17 +251,17 @@ class PostOverViewController extends ControllerMVC {
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey[100]!)),
+                            borderSide: BorderSide(
+                                width: 1, color: SpotmiesTheme.onSurface)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey[100]!)),
+                            borderSide: BorderSide(
+                                width: 1, color: SpotmiesTheme.onSurface)),
                         hintStyle: TextStyle(fontSize: 17),
                         hintText: edit == 'problem' ? 'Problem' : 'Amount',
                         suffixIcon: Icon(
                           Icons.error_outline_rounded,
-                          color: Colors.blue[900],
+                          color: SpotmiesTheme.tertiaryVariant,
                         ),
                         contentPadding: EdgeInsets.only(
                             left: hight * 0.03, top: hight * 0.04),
@@ -282,11 +284,11 @@ class PostOverViewController extends ControllerMVC {
                   },
                   icon: Icon(
                     Icons.done_all,
-                    color: Colors.blue[900],
+                    color: SpotmiesTheme.tertiaryVariant,
                   ),
                   label: Text(
                     'Change',
-                    style: TextStyle(color: Colors.blue[900]),
+                    style: TextStyle(color: SpotmiesTheme.tertiaryVariant),
                   ))
             ],
           );

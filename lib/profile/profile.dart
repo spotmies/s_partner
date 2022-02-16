@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/login/login.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class Profile extends StatefulWidget {
@@ -11,7 +12,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   //static final String path = "lib/src/pages/settings/settings3.dart";
   final TextStyle headerStyle = TextStyle(
-    color: Colors.grey.shade800,
+    color: SpotmiesTheme.secondaryVariant,
     fontWeight: FontWeight.bold,
     fontSize: 20.0,
   );
@@ -23,11 +24,11 @@ class _ProfileState extends State<Profile> {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: SpotmiesTheme.onSurface,
         leading: IconButton(
             icon: Icon(
               Icons.person,
-              color: Colors.black,
+              color: SpotmiesTheme.onBackground,
             ),
             onPressed: () {
               // Navigator.push(context,
@@ -35,11 +36,11 @@ class _ProfileState extends State<Profile> {
             }),
         title: Text(
           'Profile',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: SpotmiesTheme.onBackground),
         ),
         elevation: 0,
       ),
-      backgroundColor: Colors.grey[100],
+      backgroundColor: SpotmiesTheme.onSurface,
       body: InkWell(
           onTap: () async {
             await FirebaseAuth.instance.signOut().then((action) {
@@ -52,7 +53,7 @@ class _ProfileState extends State<Profile> {
           child: Container(
             height: _hight * 0.0728,
             width: _width * 1,
-            color: Colors.white,
+            color: SpotmiesTheme.background,
             child: Row(
               children: [
                 Container(
@@ -427,7 +428,7 @@ class HelpAndSupport extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Help & Support'),
-        backgroundColor: Colors.blue[900],
+        backgroundColor: SpotmiesTheme.tertiaryVariant,
       ),
       body: Container(
         padding: EdgeInsets.all(20),
@@ -457,17 +458,17 @@ class HelpAndSupport extends StatelessWidget {
                     ),
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: SpotmiesTheme.background,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey[200]!,
+                          color: SpotmiesTheme.surfaceVariant2,
                           blurRadius: 3,
                           spreadRadius: 4,
                           offset: Offset(1, 1),
                         ),
                         BoxShadow(
-                          color: Colors.grey[50]!,
+                          color: SpotmiesTheme.surfaceVariant,
                           blurRadius: 3,
                           spreadRadius: 0.1,
                           offset: Offset(-1, -1),
@@ -501,17 +502,17 @@ class HelpAndSupport extends StatelessWidget {
                     ),
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: SpotmiesTheme.background,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey[200]!,
+                          color: SpotmiesTheme.surfaceVariant2,
                           blurRadius: 3,
                           spreadRadius: 4,
                           offset: Offset(1, 1),
                         ),
                         BoxShadow(
-                          color: Colors.grey[50]!,
+                          color: SpotmiesTheme.surfaceVariant,
                           blurRadius: 3,
                           spreadRadius: 0.1,
                           offset: Offset(-1, -1),
@@ -545,17 +546,17 @@ class HelpAndSupport extends StatelessWidget {
                     ),
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: SpotmiesTheme.background,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey[200]!,
+                          color: SpotmiesTheme.surfaceVariant2,
                           blurRadius: 3,
                           spreadRadius: 4,
                           offset: Offset(1, 1),
                         ),
                         BoxShadow(
-                          color: Colors.grey[50]!,
+                          color: SpotmiesTheme.surfaceVariant,
                           blurRadius: 3,
                           spreadRadius: 0.1,
                           offset: Offset(-1, -1),

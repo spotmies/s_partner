@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/login/login.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/custom_drawer/app_theme.dart';
 
@@ -366,12 +367,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           child: Image.asset(listData.imageName,
                               color: widget.screenIndex == listData.index
                                   ? Colors.blue
-                                  : AppTheme.nearlyBlack),
+                                  : SpotmiesTheme.secondaryVariant),
                         )
                       : Icon(listData.icon?.icon,
                           color: widget.screenIndex == listData.index
                               ? Colors.blue
-                              : AppTheme.nearlyBlack),
+                              : SpotmiesTheme.secondaryVariant),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
@@ -382,7 +383,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       fontSize: 16,
                       color: widget.screenIndex == listData.index
                           ? Colors.blue
-                          : AppTheme.nearlyBlack,
+                          : SpotmiesTheme.secondaryVariant,
                     ),
                     textAlign: TextAlign.left,
                   ),

@@ -3,7 +3,7 @@ import 'package:spotmies_partner/call_ui/audioCallWithImage/constants.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/size.config.dart';
 import 'package:spotmies_partner/call_ui/components/dial_user_pic.dart';
 import 'package:spotmies_partner/call_ui/components/rounded_button.dart';
-
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 import 'dial_button.dart';
 
@@ -20,11 +20,11 @@ class Body extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .headline4
-                  ?.copyWith(color: Colors.white),
+                  ?.copyWith(color: SpotmiesTheme.background),
             ),
             Text(
               "Calling....",
-              style: TextStyle(color: Colors.white60),
+              style: TextStyle(color: SpotmiesTheme.background.withOpacity(60)),
             ),
             VerticalSpacing(),
             DailUserPic(
@@ -69,8 +69,8 @@ class Body extends StatelessWidget {
             VerticalSpacing(),
             RoundedButton(
               press: () {},
-              color: kRedColor,
-              iconColor: Colors.white,
+              color: SpotmiesTheme.light1,
+              iconColor: SpotmiesTheme.background,
               iconSrc: "assets/icons/call_end.svg",
             ),
           ],

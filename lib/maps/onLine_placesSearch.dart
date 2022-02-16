@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
 import 'package:spotmies_partner/maps/map.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -75,8 +76,8 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(
-                              color: Colors.indigo[900],
-                              backgroundColor: Colors.grey[100],
+                              color: SpotmiesTheme.primary,
+                              backgroundColor: SpotmiesTheme.surfaceVariant,
                             ),
                             SizedBox(
                               height: 25,
@@ -115,7 +116,8 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                                     )));
                                       },
                                       leading: CircleAvatar(
-                                          backgroundColor: Colors.grey[200],
+                                          backgroundColor:
+                                              SpotmiesTheme.surfaceVariant2,
                                           child: Icon(Icons.gps_fixed)),
                                       title: TextWid(
                                         text: 'Pick my current Location',
@@ -194,10 +196,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                     )));
       },
       leading: CircleAvatar(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: SpotmiesTheme.surfaceVariant2,
         child: Icon(
           Icons.near_me,
-          color: Colors.grey[700],
+          color: SpotmiesTheme.secondary,
         ),
       ),
       title: TextWid(

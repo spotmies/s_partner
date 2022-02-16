@@ -18,6 +18,7 @@ import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/notification_message_view.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
@@ -439,7 +440,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
         // if (pd['isDocumentsVerified'] != false)
         //   return VerifictionInProgress(pd);
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           body: Consumer<ChatProvider>(builder: (context, notifier, child) {
             return Container(
                 child:
@@ -455,7 +456,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
               elevation: 0,
               itemCount: icons.length,
               tabBuilder: (int index, bool isActive) {
-                final color = isActive ? Colors.grey[800] : Colors.grey;
+                final color = isActive ? SpotmiesTheme.secondary : Colors.grey;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -474,7 +475,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                             ),
                             TextWid(
                               text: text[index],
-                              color: color!,
+                              color: color,
                               size: width(context) * 0.03,
                             )
                           ],
@@ -501,7 +502,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                   ],
                 );
               },
-              backgroundColor: Colors.white,
+              backgroundColor: SpotmiesTheme.background,
               activeIndex: _selectedIndex,
               splashColor: Colors.grey[200],
               splashSpeedInMilliseconds: 300,

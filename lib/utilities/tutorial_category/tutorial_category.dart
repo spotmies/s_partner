@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
-
 
 class TutCategory extends StatefulWidget {
   @override
@@ -17,10 +16,10 @@ class _TutCategoryState extends State<TutCategory> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           title: TextWid(
             text: "Learning",
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
             size: _width * 0.05,
             weight: FontWeight.w600,
           ),
