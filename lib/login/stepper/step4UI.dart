@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 Widget step4UI(BuildContext context, StepperController stepperController) {
   var _hight = MediaQuery.of(context).size.height;
@@ -22,7 +23,7 @@ Widget step4UI(BuildContext context, StepperController stepperController) {
               height: 220,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: SpotmiesTheme.background,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30)),
@@ -47,7 +48,7 @@ Widget step4UI(BuildContext context, StepperController stepperController) {
                         ),
                 ),
                 radius: 30,
-                backgroundColor: Colors.grey[100],
+                backgroundColor: SpotmiesTheme.onSurface,
               ),
             ),
           ),
@@ -55,7 +56,7 @@ Widget step4UI(BuildContext context, StepperController stepperController) {
             height: 40,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: SpotmiesTheme.background,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30)),

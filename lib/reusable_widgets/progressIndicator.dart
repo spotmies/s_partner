@@ -17,7 +17,7 @@ linearProgress() {
   return Scaffold(
     body: Center(
       child: LinearProgressIndicator(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: SpotmiesTheme.onSurface,
         color: SpotmiesTheme.primary,
       ),
     ),
@@ -28,7 +28,7 @@ refreshIndicator() {
   return Scaffold(
     body: Center(
         child: RefreshProgressIndicator(
-            backgroundColor: Colors.grey[100],
+            backgroundColor: SpotmiesTheme.onSurface,
             valueColor: AlwaysStoppedAnimation<Color>(SpotmiesTheme.primary))),
   );
 }

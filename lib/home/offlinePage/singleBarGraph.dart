@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 singleBarChart(hight, width) {
   return BarChart(BarChartData(
@@ -13,7 +14,7 @@ singleBarChart(hight, width) {
             },
             getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 fontSize: width * 0.035,
                 fontWeight: FontWeight.w600,
               );
@@ -24,7 +25,7 @@ singleBarChart(hight, width) {
             showTitles: true,
             getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 fontSize: width * 0.035,
                 fontWeight: FontWeight.w600,
               );

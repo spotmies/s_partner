@@ -14,6 +14,7 @@ import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -124,7 +125,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: FloatingActionButton.extended(
-                        backgroundColor: Colors.indigo[50],
+                        backgroundColor: SpotmiesTheme.primaryVariant,
                         onPressed: () {
                           setState(() {
                             isExtended = !isExtended;
@@ -143,7 +144,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ),
                           ),
                           child: isExtended
-                              ? Icon(Icons.post_add, color: Colors.indigo[900])
+                              ? Icon(Icons.post_add,
+                                  color: SpotmiesTheme.primary)
                               : InkWell(
                                   onTap: () {
                                     if (!isExtended) widget.onBottomSheet!();
@@ -155,14 +157,14 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                             const EdgeInsets.only(right: 4.0),
                                         child: Icon(
                                           Icons.post_add,
-                                          color: Colors.indigo[900],
+                                          color: SpotmiesTheme.primary,
                                         ),
                                       ),
                                       TextWid(
                                           text: 'RISE BID',
                                           size: _width * 0.045,
                                           weight: FontWeight.w600,
-                                          color: Colors.indigo[900]!)
+                                          color: SpotmiesTheme.primary)
                                     ],
                                   ),
                                 ),
@@ -170,12 +172,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   )
                 : Container(),
             resizeToAvoidBottomInset: true,
-            backgroundColor: Colors.grey[50],
+            backgroundColor: SpotmiesTheme.primaryVariant,
             appBar: AppBar(
               backgroundColor:
                   d['orderState'] > 8 || d['isOrderCompletedByPartner']
                       ? Colors.green
-                      : Colors.white,
+                      : SpotmiesTheme.background,
               toolbarHeight: widget.from == "incomingOrders"
                   ? _hight * 0.16
                   : _hight * 0.08,
@@ -187,8 +189,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 icon: Icon(
                   Icons.arrow_back,
                   color: d['isOrderCompletedByPartner']
-                      ? Colors.white
-                      : Colors.grey[900],
+                      ? SpotmiesTheme.background
+                      : SpotmiesTheme.secondaryVariant,
                 ),
               ),
               title: Column(
@@ -198,7 +200,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     text: partnerProvider!.getServiceNameById(d['job']),
                     size: _width * 0.04,
                     color: d['orderState'] > 8 || d['isOrderCompletedByPartner']
-                        ? Colors.white
+                        ? SpotmiesTheme.background
                         : Colors.grey[500]!,
                     lSpace: 1.5,
                     weight: FontWeight.w600,
@@ -213,7 +215,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         orderStateIcon(
                             ordState: d['orderState'],
                             isCompleted: d['isOrderCompletedByPartner']),
-                        color: Colors.indigo[900],
+                        color: SpotmiesTheme.primary,
                         size: _width * 0.035,
                       ),
                       SizedBox(
@@ -226,8 +228,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 isCompleted: d['isOrderCompletedByPartner']),
                             color: d['orderState'] > 8 ||
                                     d['isOrderCompletedByPartner']
-                                ? Colors.white
-                                : Colors.grey[700]!,
+                                ? SpotmiesTheme.background
+                                : SpotmiesTheme.secondary,
                             weight: FontWeight.w700,
                             flow: TextOverflow.visible,
                             size: _width * 0.03),
@@ -247,16 +249,17 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                               ElevatedButtonWidget(
                                   height: _hight * 0.05,
                                   minWidth: _width * 0.3,
-                                  bgColor: Colors.indigo[50]!,
-                                  borderSideColor: Colors.grey[200]!,
+                                  bgColor: SpotmiesTheme.primaryVariant,
+                                  borderSideColor:
+                                      SpotmiesTheme.surfaceVariant2,
                                   borderRadius: 10.0,
                                   buttonName: 'Reject',
-                                  textColor: Colors.indigo[900]!,
+                                  textColor: SpotmiesTheme.primary,
                                   textSize: _width * 0.04,
                                   allRadius: true,
                                   leadingIcon: Icon(
                                     Icons.cancel,
-                                    color: Colors.indigo[900],
+                                    color: SpotmiesTheme.primary,
                                     size: _width * 0.045,
                                   ),
                                   onClick: () {
@@ -274,16 +277,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 },
                                 height: _hight * 0.05,
                                 minWidth: _width * 0.6,
-                                bgColor: Colors.indigo[900]!,
-                                borderSideColor: Colors.grey[200]!,
+                                bgColor: SpotmiesTheme.primary,
+                                borderSideColor: SpotmiesTheme.surfaceVariant2,
                                 borderRadius: 10.0,
                                 buttonName: 'Accept',
                                 allRadius: true,
-                                textColor: Colors.white,
+                                textColor: SpotmiesTheme.background,
                                 textSize: _width * 0.04,
                                 trailingIcon: Icon(
                                   Icons.check,
-                                  color: Colors.white,
+                                  color: SpotmiesTheme.background,
                                   size: _width * 0.045,
                                 ),
                               ),
@@ -324,8 +327,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     icon: Icon(
                       Icons.help,
                       color: d['isOrderCompletedByPartner']
-                          ? Colors.white
-                          : Colors.grey[900],
+                          ? SpotmiesTheme.background
+                          : SpotmiesTheme.secondaryVariant,
                     )),
                 // IconButton(
                 //     onPressed: () {
@@ -350,7 +353,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               child: Column(
                 children: [
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   TextWid(
                     // text: d['acceptResponse']['orderState'] > 8
@@ -361,11 +364,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   ),
 
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   Container(
                     width: _width,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     child: Column(
                       children: [
                         Container(
@@ -419,21 +422,21 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     ),
                   ),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   mediaView(_hight, _width, images),
 
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   // warrentyCard(_hight, _width),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   // (d['orderState'] > 6)
                   //     ?
                   Container(
-                      color: Colors.white,
+                      color: SpotmiesTheme.background,
                       child: Column(
                         children: [
                           Container(
@@ -492,25 +495,27 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                   isThisOrderCompleted(
                                                       state: false);
                                                 },
-                                                bgColor: Colors.white,
-                                                borderSideColor:
-                                                    Colors.grey[200]!,
+                                                bgColor:
+                                                    SpotmiesTheme.background,
+                                                borderSideColor: SpotmiesTheme
+                                                    .surfaceVariant2,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Not yet',
                                                 textSize: _width * 0.04,
                                                 allRadius: true,
                                                 leadingIcon: Icon(
                                                   Icons.cancel,
-                                                  color: Colors.grey[900],
+                                                  color: SpotmiesTheme
+                                                      .secondaryVariant,
                                                   size: _width * 0.045,
                                                 ),
                                               ),
                                               ElevatedButtonWidget(
                                                 height: _hight * 0.05,
                                                 minWidth: _width * 0.45,
-                                                bgColor: Colors.indigo[900]!,
-                                                borderSideColor:
-                                                    Colors.grey[200]!,
+                                                bgColor: SpotmiesTheme.primary,
+                                                borderSideColor: SpotmiesTheme
+                                                    .surfaceVariant2,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Completed',
                                                 allRadius: true,
@@ -538,11 +543,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                     log(money.toString());
                                                   });
                                                 },
-                                                textColor: Colors.white,
+                                                textColor:
+                                                    SpotmiesTheme.primary,
                                                 textSize: _width * 0.04,
                                                 leadingIcon: Icon(
                                                   Icons.check_circle,
-                                                  color: Colors.white,
+                                                  color:
+                                                      SpotmiesTheme.background,
                                                   size: _width * 0.045,
                                                 ),
                                               )
@@ -591,7 +598,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           text: title,
           size: width * 0.045,
           weight: FontWeight.w600,
-          color: Colors.grey[900]!,
+          color: SpotmiesTheme.secondaryVariant,
           lSpace: 1.5,
         ),
         subtitle: TextWid(
@@ -610,7 +617,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   mediaView(hight, width, images) {
     return Container(
       // height: hight * 0.22,
-      color: Colors.white,
+      color: SpotmiesTheme.background,
       padding: EdgeInsets.only(bottom: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -698,8 +705,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       width: width,
       margin: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
-          color: Colors.indigo[900],
-          border: Border.all(color: Colors.indigo[900]!),
+          color: SpotmiesTheme.primary,
+          border: Border.all(color: SpotmiesTheme.primary),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -712,7 +719,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               children: [
                 TextWid(
                   text: 'Warranty Card',
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   size: width * 0.05,
                   weight: FontWeight.w600,
                 ),
@@ -727,7 +734,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ),
                 TextWid(
                   text: '09 Oct,2021',
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   size: width * 0.04,
                   weight: FontWeight.w600,
                 ),
@@ -736,7 +743,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ),
                 TextWid(
                   text: 'Claim Warranty >>',
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   size: width * 0.045,
                   weight: FontWeight.w600,
                 )
@@ -857,7 +864,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                                 ).toString(),
                                 size: width * 0.04,
                                 weight: FontWeight.w600,
-                                color: Colors.grey[900]!,
+                                color: SpotmiesTheme.secondaryVariant,
                               )
                             ],
                           ),
@@ -869,14 +876,14 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                                   text: '123456789',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700]!,
+                                  color: SpotmiesTheme.secondary,
                                 ),
                                 TextWid(
                                   // text: pDetails['rate'][0].toString(),
                                   text: '4.5',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700]!,
+                                  color: SpotmiesTheme.secondary,
                                 ),
                                 Icon(
                                   Icons.star,
@@ -894,17 +901,17 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                             Text(
                               'Telugu | ',
                               style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                             Text(
                               'English | ',
                               style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                             Text(
                               'Hindi',
                               style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                           ],
                         ),
@@ -920,7 +927,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                             Text(
                               'Vizag',
                               style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                           ],
                         ),
@@ -967,10 +974,10 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                 children: [
                   CircleAvatar(
                     radius: width * 0.06,
-                    backgroundColor: Colors.white,
+                    backgroundColor: SpotmiesTheme.background,
                     child: Icon(
                       Icons.call,
-                      color: Colors.grey[900],
+                      color: SpotmiesTheme.secondaryVariant,
                       size: width * 0.05,
                     ),
                   ),
@@ -981,7 +988,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                     text: 'Call',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900]!,
+                    color: SpotmiesTheme.secondaryVariant,
                   ),
                 ],
               ),
@@ -994,10 +1001,10 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                 children: [
                   CircleAvatar(
                     radius: width * 0.06,
-                    backgroundColor: Colors.white,
+                    backgroundColor: SpotmiesTheme.background,
                     child: Icon(
                       Icons.chat_bubble,
-                      color: Colors.grey[900],
+                      color: SpotmiesTheme.secondaryVariant,
                       size: width * 0.05,
                     ),
                   ),
@@ -1008,7 +1015,7 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                     text: 'Message',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900]!,
+                    color: SpotmiesTheme.secondaryVariant,
                   ),
                 ],
               ),
@@ -1092,60 +1099,61 @@ class _Timeline2 extends StatelessWidget {
             switch (data[index]) {
               case _TimelineStatus.request:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: SpotmiesTheme.primary,
                   child: Icon(
                     Icons.work_rounded,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                     size: _width * 0.035,
                   ),
                 );
               case _TimelineStatus.accept:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: SpotmiesTheme.primary,
                   child: Icon(
                     Icons.how_to_reg_rounded,
                     size: _width * 0.035,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                   ),
                 );
               case _TimelineStatus.started:
                 return DotIndicator(
-                  color: isServiceStarted() ? Colors.indigo[900] : Colors.grey,
+                  color:
+                      isServiceStarted() ? SpotmiesTheme.primary : Colors.grey,
                   child: Icon(
                     Icons.build,
                     size: _width * 0.035,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                   ),
                 );
               case _TimelineStatus.completed:
                 return DotIndicator(
                   color: orderData['orderState'] > 8
-                      ? Colors.indigo[900]
+                      ? SpotmiesTheme.primary
                       : Colors.grey,
                   child: Icon(
                     Icons.verified_rounded,
                     size: _width * 0.035,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                   ),
                 );
               case _TimelineStatus.feedback:
                 return DotIndicator(
                   color: orderData['orderState'] > 9
-                      ? Colors.indigo[900]
+                      ? SpotmiesTheme.primary
                       : Colors.grey,
                   child: Icon(
                     Icons.reviews,
                     size: _width * 0.035,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                   ),
                 );
               default:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: SpotmiesTheme.primary,
                   child: Icon(
                     Icons.verified_rounded,
                     size: _width * 0.035,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                 );
             }
@@ -1208,7 +1216,7 @@ class TimeLineTitle extends StatelessWidget {
           text: getStatus(),
           size: _width * 0.04,
           weight: FontWeight.w600,
-          color: isCompleted() ? Colors.grey[800]! : Colors.grey[600]!,
+          color: isCompleted() ? Colors.grey[800]! : SpotmiesTheme.secondary,
         ));
   }
 }
@@ -1234,7 +1242,7 @@ Container mediaContent(file, {bool isOnline = false}) {
         child: Icon(
           Icons.mic,
           size: 30,
-          color: Colors.grey[100],
+          color: SpotmiesTheme.onSurface,
         ),
       );
 
@@ -1245,7 +1253,7 @@ Container mediaContent(file, {bool isOnline = false}) {
         child: Icon(
           Icons.slow_motion_video_rounded,
           size: 30,
-          color: Colors.grey[100],
+          color: SpotmiesTheme.onSurface,
         ),
       );
 

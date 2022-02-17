@@ -20,7 +20,7 @@ class DottedBorder extends StatelessWidget {
 
   DottedBorder({
     @required this.child,
-    this.color = Colors.black,
+    required this.color,
     this.strokeWidth = 1,
     this.borderType = BorderType.Rect,
     this.dashPattern = const <double>[3, 1],
@@ -88,7 +88,7 @@ class _DashPainter extends CustomPainter {
   _DashPainter({
     this.strokeWidth = 2,
     this.dashPattern = const <double>[3, 1],
-    this.color = Colors.black,
+    required this.color,
     this.borderType = BorderType.Rect,
     this.radius = const Radius.circular(0),
     this.strokeCap = StrokeCap.butt,

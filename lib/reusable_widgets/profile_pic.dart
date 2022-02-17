@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -40,7 +41,7 @@ class ProfilePic extends StatelessWidget {
           padding: EdgeInsets.all(3),
           width: width * 0.04,
           height: width * 0.04,
-          color: Colors.white,
+          color: SpotmiesTheme.background,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Container(
@@ -112,17 +113,20 @@ class ProfilePic extends StatelessWidget {
                                   child: Center(
                                     child: TextWid(
                                       text: toBeginningOfSentenceCase(name![0]),
-                                      color: textColor ?? Colors.white,
+                                      color:
+                                          textColor ?? SpotmiesTheme.background,
                                       size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
                                 )
                               : Container(
-                                  color: bgColor ?? Colors.grey[300],
+                                  color:
+                                      bgColor ?? SpotmiesTheme.surfaceVariant,
                                   child: Center(
                                     child: TextWid(
                                       text: toBeginningOfSentenceCase(name![0]),
-                                      color: textColor ?? Colors.white,
+                                      color:
+                                          textColor ?? SpotmiesTheme.background,
                                       size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
@@ -163,7 +167,7 @@ class ProfilePic extends StatelessWidget {
         child: SizedBox(
           child: TextWid(
             text: onClickLabel ?? "change",
-            color: Colors.grey[50],
+            color: SpotmiesTheme.surfaceVariant,
             size: width * 0.04,
             weight: FontWeight.bold,
           ),
@@ -183,7 +187,7 @@ List colors = [
   Colors.lightBlue,
   Colors.redAccent,
   Colors.greenAccent,
-  Colors.black,
+  SpotmiesTheme.onBackground,
   Colors.brown,
   Colors.grey,
   Colors.cyanAccent,

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
@@ -62,7 +63,7 @@ class _Step2State extends State<Step2> {
                                       bottom: width(context) * 0.02,
                                       right: width(context) * 0.02,
                                       child: CircleAvatar(
-                                        backgroundColor: Colors.grey[300],
+                                        backgroundColor: SpotmiesTheme.shadow,
                                         radius: width(context) * 0.05,
                                         child: IconButton(
                                             padding: EdgeInsets.all(0.0),
@@ -73,7 +74,8 @@ class _Step2State extends State<Step2> {
                                             },
                                             icon: Icon(
                                               Icons.change_circle,
-                                              color: Colors.grey[900],
+                                              color: SpotmiesTheme
+                                                  .secondaryVariant,
                                               size: width(context) * 0.055,
                                             )),
                                       ))
@@ -81,7 +83,7 @@ class _Step2State extends State<Step2> {
                               ),
                       ),
                       radius: 30,
-                      backgroundColor: Colors.grey[100]!,
+                      backgroundColor: SpotmiesTheme.onSurface,
                     ),
                   ),
                 ),
@@ -101,7 +103,7 @@ class _Step2State extends State<Step2> {
                       bottom: height(context) * 0.01),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey[200]!)),
+                      border: Border.all(color: SpotmiesTheme.surfaceVariant2)),
                   child: ListTile(
                     dense: true,
                     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -169,7 +171,7 @@ class _Step2State extends State<Step2> {
                   width: width(context) * 0.9,
                   height: height(context) * 0.18,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[200]!),
+                      border: Border.all(color: SpotmiesTheme.surfaceVariant2),
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -199,7 +201,7 @@ class _Step2State extends State<Step2> {
                         child: TextFieldWidget(
                           hint: 'Other Languege',
                           isRequired: false,
-                          enableBorderColor: Colors.grey[200]!,
+                          enableBorderColor: SpotmiesTheme.surfaceVariant2,
                           focusBorderColor: Colors.grey,
                           enableBorderRadius: 10,
                           focusBorderRadius: 10,
@@ -218,7 +220,7 @@ class _Step2State extends State<Step2> {
                           //   //   widget.stepperController.localLang
                           //   //       .add(widget.stepperController.otherlan.text);
                           // },
-                          postIconColor: Colors.grey[600]!,
+                          postIconColor: SpotmiesTheme.secondary,
                         ),
                       ),
                     ],
@@ -471,7 +473,7 @@ class _CheckBoxWidState extends State<CheckBoxWid> {
           size: width(context) * 0.04,
         ),
         Checkbox(
-          activeColor: Colors.indigo[900],
+          activeColor: SpotmiesTheme.primary,
           onChanged: (bool? value) {
             setState(() {
               if (widget.lan == 'Telugu') {
@@ -594,7 +596,7 @@ registrationField(BuildContext context, StepperController stepperController,
       // ],
       controller: _controller,
       hint: hint,
-      enableBorderColor: Colors.grey[200]!,
+      enableBorderColor: SpotmiesTheme.surfaceVariant2,
       focusBorderColor: Colors.grey,
       enableBorderRadius: 10,
       focusBorderRadius: 10,
@@ -608,7 +610,7 @@ registrationField(BuildContext context, StepperController stepperController,
         icon,
         size: height(context) * 0.025,
       ),
-      postIconColor: Colors.grey[600]!,
+      postIconColor: SpotmiesTheme.secondary,
     ),
   );
 }

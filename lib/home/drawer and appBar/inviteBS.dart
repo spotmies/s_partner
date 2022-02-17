@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share/share.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -30,7 +31,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                 // color: Colors.amber,
                 child: DottedBorder(
                     dashPattern: [6, 3, 2, 3],
-                    color: Colors.black,
+                    color: SpotmiesTheme.onBackground,
                     borderType: BorderType.RRect,
                     radius: Radius.circular(30),
                     padding: EdgeInsets.all(0),
@@ -46,13 +47,13 @@ Future invites(BuildContext context, double hight, double width, pr) {
                             referalCode(pr),
                             textAlign: TextAlign.center,
                             style: fonts(width * 0.06, FontWeight.w600,
-                                Colors.grey[900]),
+                                SpotmiesTheme.secondaryVariant),
                           ),
                           Text(
                             'Share Your Referal Code With New Spotmies Users and Get Exciting Benifits',
                             textAlign: TextAlign.center,
                             style: fonts(width * 0.03, FontWeight.w500,
-                                Colors.grey[900]),
+                                SpotmiesTheme.secondaryVariant),
                           )
                         ],
                       ),
@@ -66,8 +67,8 @@ Future invites(BuildContext context, double hight, double width, pr) {
                   child: Text(
                     'Invite Your Friend and Get Benifits on Spotmies Partner App',
                     textAlign: TextAlign.center,
-                    style:
-                        fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
+                    style: fonts(width * 0.05, FontWeight.w600,
+                        SpotmiesTheme.secondaryVariant),
                   ),
                 ),
               ),
@@ -79,16 +80,16 @@ Future invites(BuildContext context, double hight, double width, pr) {
                     Container(
                       padding: EdgeInsets.all(5),
                       child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[900]!,
+                        bgColor: SpotmiesTheme.primary,
                         minWidth: width,
                         height: hight * 0.06,
-                        textColor: Colors.white,
+                        textColor: SpotmiesTheme.background,
                         buttonName: 'Invite my friend',
                         textSize: width * 0.05,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,
                         allRadius: true,
-                        borderSideColor: Colors.indigo[900]!,
+                        borderSideColor: SpotmiesTheme.primary,
                         // trailingIcon: Icon(Icons.share),
                         onClick: () async {
                           String referal = await referalCode(pr);
@@ -101,16 +102,16 @@ Future invites(BuildContext context, double hight, double width, pr) {
                     Container(
                       padding: EdgeInsets.all(5),
                       child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[50]!,
+                        bgColor: SpotmiesTheme.primaryVariant,
                         minWidth: width,
                         height: hight * 0.06,
-                        textColor: Colors.grey[900]!,
+                        textColor: SpotmiesTheme.secondaryVariant,
                         buttonName: 'Close',
                         textSize: width * 0.05,
                         allRadius: true,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[50]!,
+                        borderSideColor: SpotmiesTheme.primaryVariant,
                         onClick: () {
                           Navigator.pop(context);
                         },

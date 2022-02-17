@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 circularIndicator(double hight, double width, Color color, String title,
     IconData icon, int value) {
@@ -20,13 +21,13 @@ circularIndicator(double hight, double width, Color color, String title,
                   style: GoogleFonts.josefinSans(
                       fontSize: width * 0.11,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white)),
+                      color: SpotmiesTheme.background)),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15, top: 15),
                 child: Icon(
                   icon,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                 ))
           ],
         ),
@@ -39,7 +40,7 @@ circularIndicator(double hight, double width, Color color, String title,
               lineWidth: 5,
               animation: true,
               animationDuration: 500,
-              progressColor: Colors.white,
+              progressColor: SpotmiesTheme.background,
               percent:
                   (value.isNaN || value.isFinite) ? (100 / 100) : (value / 100),
               backgroundColor: color,
@@ -48,7 +49,7 @@ circularIndicator(double hight, double width, Color color, String title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
-                    color: Colors.white),
+                    color: SpotmiesTheme.background),
               )),
         ),
       ],

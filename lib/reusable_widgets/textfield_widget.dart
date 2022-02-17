@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -82,8 +83,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       decoration: InputDecoration(
           counterText: '',
           border: new OutlineInputBorder(
-              borderSide:
-                  new BorderSide(color: widget.bordercolor ?? Colors.white),
+              borderSide: new BorderSide(
+                  color: widget.bordercolor ?? SpotmiesTheme.background),
               borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
           suffixIcon: widget.postIcon != null
               ? IconButton(
@@ -91,25 +92,27 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                     widget.controller!.clear();
                   },
                   icon: widget.postIcon!,
-                  color: widget.postIconColor ?? Colors.white,
+                  color: widget.postIconColor ?? SpotmiesTheme.background,
                 )
               : null,
           prefix: TextWid(
             text: widget.prefix ?? '',
             size: width(context) * 0.04,
             weight: FontWeight.w600,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(widget.focusBorderRadius ?? 0)),
               borderSide: BorderSide(
-                  width: 1, color: widget.focusBorderColor ?? Colors.white)),
+                  width: 1,
+                  color: widget.focusBorderColor ?? SpotmiesTheme.background)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(widget.enableBorderRadius ?? 0)),
               borderSide: BorderSide(
-                  width: 1, color: widget.enableBorderColor ?? Colors.white)),
+                  width: 1,
+                  color: widget.enableBorderColor ?? SpotmiesTheme.background)),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                   Radius.circular(widget.errorBorderRadius ?? 0)),
@@ -129,12 +132,13 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           //     horizontal: widget.contentPad ?? 0),
           hintText: widget.hint ?? '',
           labelText: widget.label,
-          labelStyle:
-              fonts(width(context) * 0.035, FontWeight.w400, Colors.grey[900])),
+          labelStyle: fonts(
+              width(context) * 0.035, FontWeight.w400, SpotmiesTheme.secondaryVariant)),
       autofocus: widget.autofocus ?? false,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
-      style: fonts(widget.hintSize, FontWeight.w500, Colors.grey[900]),
+      style: fonts(
+          widget.hintSize, FontWeight.w500, SpotmiesTheme.secondaryVariant),
       validator: (value) {
         if (!widget.isRequired!) return null;
         return textFieldValidator(widget.type, value, widget.validateMsg);
@@ -195,29 +199,29 @@ textFieldValidator(type, value, errorMessage) {
     case "phone":
       if (value.length != 10 || int.parse(value) < 6000000000)
         return errorMessage ?? "Enter valid number";
-break;
+      break;
     case "email":
       if (!RegExp(
               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
           .hasMatch(value)) {
         return errorMessage ?? "enter valid email";
       }
-break;
+      break;
     case "address":
       if (!RegExp(r"^[A-Za-z0-9'\.\-\s\,]").hasMatch(value)) {
         return errorMessage ?? "enter valid house address";
       }
-break;
+      break;
     case "number":
       if (!RegExp(r'[0-9]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Number";
       }
-break;
+      break;
     case "name":
       if (!RegExp(r'[a-z]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Name";
       }
-break;
+      break;
     default:
       return null;
   }

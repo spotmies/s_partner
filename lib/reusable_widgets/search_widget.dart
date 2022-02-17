@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final String? text;
@@ -25,11 +26,11 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final styleActive = GoogleFonts.josefinSans(
-        color: Colors.grey[700],
+        color: SpotmiesTheme.secondary,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0);
     final styleHint = GoogleFonts.josefinSans(
-        color: Colors.grey[700],
+        color: SpotmiesTheme.secondary,
         fontWeight: FontWeight.w600,
         fontSize: 17,
         letterSpacing: 1.0);
@@ -40,9 +41,12 @@ class _SearchWidgetState extends State<SearchWidget> {
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: SpotmiesTheme.background,
           boxShadow: [
-            BoxShadow(color: Colors.grey[200]!, blurRadius: 5, spreadRadius: 3)
+            BoxShadow(
+                color: SpotmiesTheme.surfaceVariant2,
+                blurRadius: 5,
+                spreadRadius: 3)
           ]
           // border: Border.all(color: Colors.grey[700]),
           ),

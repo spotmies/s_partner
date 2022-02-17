@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
@@ -74,7 +75,7 @@ class _CatelogPostState extends State<CatelogPost> {
                               bottom: 0,
                               child: CircleAvatar(
                                 radius: width(context) * 0.05,
-                                backgroundColor: Colors.grey[200],
+                                backgroundColor: SpotmiesTheme.surfaceVariant2,
                                 child: IconButton(
                                     onPressed: () async {
                                       await catelogController.catelogImage();
@@ -83,7 +84,7 @@ class _CatelogPostState extends State<CatelogPost> {
                                     icon: Icon(
                                       Icons.sync,
                                       size: width(context) * 0.05,
-                                      color: Colors.grey[900],
+                                      color: SpotmiesTheme.secondaryVariant,
                                     )),
                               ))
                         ],
@@ -107,7 +108,8 @@ class _CatelogPostState extends State<CatelogPost> {
                                   bottom: 0,
                                   child: CircleAvatar(
                                     radius: width(context) * 0.05,
-                                    backgroundColor: Colors.grey[200],
+                                    backgroundColor:
+                                        SpotmiesTheme.surfaceVariant2,
                                     child: IconButton(
                                         onPressed: () async {
                                           await catelogController
@@ -117,7 +119,7 @@ class _CatelogPostState extends State<CatelogPost> {
                                         icon: Icon(
                                           Icons.sync,
                                           size: width(context) * 0.05,
-                                          color: Colors.grey[900],
+                                          color: SpotmiesTheme.secondaryVariant,
                                         )),
                                   ))
                             ],
@@ -126,7 +128,7 @@ class _CatelogPostState extends State<CatelogPost> {
                             height: height(context) * 0.2,
                             width: width(context),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: SpotmiesTheme.background,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(30),
                               ),
@@ -150,7 +152,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   label: 'Service Name',
                   controller: catelogController.catNameControl,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.grey[900]!,
+                  focusBorderColor: SpotmiesTheme.secondaryVariant,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -159,7 +161,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   validateMsg: 'Enter Valid Money',
                   maxLines: 1,
                   postIcon: Icon(Icons.home_repair_service),
-                  postIconColor: Colors.grey[900]!,
+                  postIconColor: SpotmiesTheme.secondaryVariant,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -174,7 +176,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   formatter: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  focusBorderColor: Colors.grey[900]!,
+                  focusBorderColor: SpotmiesTheme.secondaryVariant,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -184,7 +186,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   maxLines: 1,
                   prefix: '₹  ',
                   postIcon: Icon(Icons.attach_money),
-                  postIconColor: Colors.white,
+                  postIconColor: SpotmiesTheme.background,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -196,7 +198,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   enableBorderColor: Colors.grey,
                   isRequired: true,
 
-                  focusBorderColor: Colors.grey[900]!,
+                  focusBorderColor: SpotmiesTheme.secondaryVariant,
                   enableBorderRadius: 15,
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
@@ -205,24 +207,24 @@ class _CatelogPostState extends State<CatelogPost> {
                   maxLines: 8,
                   // maxLength: 150,
                   postIcon: Icon(Icons.info),
-                  postIconColor: Colors.grey[900]!,
+                  postIconColor: SpotmiesTheme.secondaryVariant,
                 ),
                 SizedBox(height: height(context) * 0.1),
                 ElevatedButtonWidget(
                   buttonName: 'Add Service',
                   height: height(context) * 0.055,
                   minWidth: width(context) * 0.5,
-                  bgColor: Colors.indigo[900]!,
-                  textColor: Colors.grey[50]!,
+                  bgColor: SpotmiesTheme.primary,
+                  textColor: SpotmiesTheme.surfaceVariant,
                   textSize: width(context) * 0.04,
                   allRadius: true,
                   leadingIcon: Icon(
                     Icons.add_circle,
-                    color: Colors.grey[50],
+                    color: SpotmiesTheme.surfaceVariant,
                     size: width(context) * 0.05,
                   ),
                   borderRadius: 10.0,
-                  borderSideColor: Colors.grey[900]!,
+                  borderSideColor: SpotmiesTheme.secondaryVariant,
                   onClick: () async {
                     if (catelogController.catformkey.currentState!.validate()) {
                       setState(() {

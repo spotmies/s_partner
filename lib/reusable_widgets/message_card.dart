@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -32,7 +33,7 @@ class _MessageCardState extends State<MessageCard> {
         margin: EdgeInsets.only(left: 15, right: 15, top: 10),
         padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: SpotmiesTheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Row(children: [
           Container(
@@ -62,7 +63,7 @@ class _MessageCardState extends State<MessageCard> {
                 backgroundColor: widget.type == 'offline' ? colora : colorb,
                 child: Icon(
                   widget.type != 'offline' ? Icons.chat_bubble : Icons.info,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                 ),
               ),
               trailing: IconButton(
