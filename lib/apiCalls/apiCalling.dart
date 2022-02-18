@@ -163,6 +163,17 @@ class Server {
     }
   }
 
+  Future<bool> checkStoreIdAvailability(String id) async {
+    String api = API.storeAvailabilityCheck;
+    Map<String, String> body = {"storeId": id};
+    dynamic result = await postMethod(api, body);
+
+    if (result.statusCode == 404) {
+      return true;
+    }
+    return false;
+  }
+
   dynamic processResponse(http.Response response) {
     return response;
     // switch (response.statusCode) {

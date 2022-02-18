@@ -27,6 +27,8 @@ class PartnerDetailsProvider extends ChangeNotifier {
   dynamic freqAskQue;
   bool? statNote = true;
   bool? msgNote = true;
+  String helperText = "";
+  Color helperColor = Colors.grey;
 
 /* ------------------------- constant variables here ------------------------ */
 
@@ -95,6 +97,13 @@ class PartnerDetailsProvider extends ChangeNotifier {
   List get getIncomingOrder => inComingOrders;
   List get getOrders => orders;
   List get getServiceList => servicesList;
+
+  void setHelperText(String text,
+      {Color color = Colors.grey, bool notify = true}) {
+    helperText = text;
+    helperColor = color;
+    if (notify) notifyListeners();
+  }
 
   void setRegistrationInProgress(bool state) {
     registrationInProgress = state;
