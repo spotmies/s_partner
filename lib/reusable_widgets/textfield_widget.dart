@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -35,6 +36,9 @@ class TextFieldWidget extends StatefulWidget {
   final bool? isRequired;
   final String? type;
   final double? contentPad;
+  final Function? onChange;
+  final String? helperText;
+  final Color? helperColor;
 
   TextFieldWidget(
       {this.text,
@@ -67,7 +71,10 @@ class TextFieldWidget extends StatefulWidget {
       this.label,
       this.formatter,
       this.isRequired = true,
-      this.type = "text"});
+      this.type = "text",
+      this.onChange,
+      this.helperText,
+      this.helperColor});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -80,6 +87,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       inputFormatters: inputFormatter(widget.type!),
       controller: widget.controller,
       decoration: InputDecoration(
+          helperText: widget.helperText,
+          helperStyle: TextStyle(color: widget.helperColor ?? Colors.grey),
           counterText: '',
           border: new OutlineInputBorder(
               borderSide:
@@ -142,6 +151,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       onFieldSubmitted: (value) {
         if (widget.onSubmitField != null) widget.onSubmitField!();
       },
+      onChanged: (val) {
+        widget.onChange!(val);
+      },
       keyboardType: widget.keyBoardType,
     );
   }
@@ -195,29 +207,29 @@ textFieldValidator(type, value, errorMessage) {
     case "phone":
       if (value.length != 10 || int.parse(value) < 6000000000)
         return errorMessage ?? "Enter valid number";
-break;
+      break;
     case "email":
       if (!RegExp(
               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
           .hasMatch(value)) {
         return errorMessage ?? "enter valid email";
       }
-break;
+      break;
     case "address":
       if (!RegExp(r"^[A-Za-z0-9'\.\-\s\,]").hasMatch(value)) {
         return errorMessage ?? "enter valid house address";
       }
-break;
+      break;
     case "number":
       if (!RegExp(r'[0-9]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Number";
       }
-break;
+      break;
     case "name":
       if (!RegExp(r'[a-z]').hasMatch(value)) {
         return errorMessage ?? "Enter valid Name";
       }
-break;
+      break;
     default:
       return null;
   }
