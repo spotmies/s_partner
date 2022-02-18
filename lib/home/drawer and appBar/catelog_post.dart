@@ -38,12 +38,9 @@ class _CatelogPostState extends State<CatelogPost> {
 
   @override
   Widget build(BuildContext context) {
-    if (partnerDetailsProvider!.offlineScreenLoader == true)
-      return circleProgress();
     return Scaffold(
       body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-        // var pD = data.getPartnerDetailsFull;
-        // var cat = pD['catelogs'];
+        if (data.offlineScreenLoader) return circleProgress();
         return Container(
           padding: EdgeInsets.only(
               left: width(context) * 0.05, right: width(context) * 0.05),
@@ -210,36 +207,38 @@ class _CatelogPostState extends State<CatelogPost> {
                 ),
                 SizedBox(height: height(context) * 0.1),
                 ElevatedButtonWidget(
-                  buttonName: 'Add Service',
-                  height: height(context) * 0.055,
-                  minWidth: width(context) * 0.5,
-                  bgColor: Colors.indigo[900]!,
-                  textColor: Colors.grey[50]!,
-                  textSize: width(context) * 0.04,
-                  allRadius: true,
-                  leadingIcon: Icon(
-                    Icons.add_circle,
-                    color: Colors.grey[50],
-                    size: width(context) * 0.05,
-                  ),
-                  borderRadius: 10.0,
-                  borderSideColor: Colors.grey[900]!,
-                  onClick: () async {
-                    if (catelogController.catelogPic == null) {
-                      return snackbar(context, "Please upload image");
-                    }
+                    buttonName: 'Add Service',
+                    height: height(context) * 0.055,
+                    minWidth: width(context) * 0.5,
+                    bgColor: Colors.indigo[900]!,
+                    textColor: Colors.grey[50]!,
+                    textSize: width(context) * 0.04,
+                    allRadius: true,
+                    leadingIcon: Icon(
+                      Icons.add_circle,
+                      color: Colors.grey[50],
+                      size: width(context) * 0.05,
+                    ),
+                    borderRadius: 10.0,
+                    borderSideColor: Colors.grey[900]!,
+                    onClick: () async {
+                      if (catelogController.catelogPic == null) {
+                        return snackbar(context, "Please upload image");
+                      }
 
-                    if (catelogController.catformkey.currentState!.validate()) {
-                      setState(() {
-                        partnerDetailsProvider!.offlineScreenLoader = true;
-                      });
+                      if (catelogController.catformkey.currentState!
+                              .validate() ==
+                          false) {
+                        return;
+                      }
+
+                      partnerDetailsProvider?.setOffileLoader(true);
 
                       int itemCode = partnerDetailsProvider!
                           .partnerDetailsFull!['catelogs'].length;
                       int job =
                           partnerDetailsProvider!.partnerDetailsFull!['job'];
 
-                      // log(cat[widget.index]["_id"].toString());
                       var res;
                       var resp;
                       if (widget.cat == null) {
@@ -277,9 +276,7 @@ class _CatelogPostState extends State<CatelogPost> {
 
                         Navigator.pop(context);
                       }
-                    }
-                  },
-                ),
+                    }),
               ],
             ),
           ),

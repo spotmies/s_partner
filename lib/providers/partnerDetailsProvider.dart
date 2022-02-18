@@ -305,7 +305,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   void setOffileLoader(state) {
-    offlineScreenLoader = state;
+    offlineScreenLoader = state ?? true;
     notifyListeners();
   }
 }
