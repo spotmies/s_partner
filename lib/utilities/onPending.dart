@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 onPending(double hight, double width, {dynamic scafffoldKey}) {
@@ -25,7 +26,7 @@ onPending(double hight, double width, {dynamic scafffoldKey}) {
                 TextWid(
                   text: 'Do not press back button',
                   size: width * 0.05,
-                  color: Colors.grey[900],
+                  color: SpotmiesTheme.secondaryVariant,
                   weight: FontWeight.w600,
                 ),
                 SizedBox(
@@ -34,7 +35,7 @@ onPending(double hight, double width, {dynamic scafffoldKey}) {
                 TextWid(
                   text: 'Finalizing your registration process',
                   size: width * 0.05,
-                  color: Colors.grey[900],
+                  color: SpotmiesTheme.secondaryVariant,
                   weight: FontWeight.w600,
                 ),
               ],
@@ -48,7 +49,7 @@ onPending(double hight, double width, {dynamic scafffoldKey}) {
           TextWid(
             text: 'Please Wait...',
             size: width * 0.05,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
             weight: FontWeight.w600,
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/home/offlinePage/lineGraph.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 graphIndicator(
     double hight, double width, Color color, String title, IconData icon, pdo) {
@@ -21,13 +22,13 @@ graphIndicator(
                   style: GoogleFonts.josefinSans(
                       fontSize: width * 0.11,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white)),
+                      color: SpotmiesTheme.background)),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15, top: 15),
                 child: Icon(
                   icon,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                 ))
           ],
         ),
@@ -37,12 +38,12 @@ graphIndicator(
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.25,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white)),
+                    color: SpotmiesTheme.background)),
             Text(title == 'Orders' ? 'Completed' : 'Rupees',
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.065,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white)),
+                    color: SpotmiesTheme.background)),
           ],
         ),
         Container(
@@ -64,7 +65,7 @@ graphIndicator(
                     style: GoogleFonts.josefinSans(
                         fontSize: width * 0.11,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white)),
+                        color: SpotmiesTheme.background)),
               ),
             ],
           ),

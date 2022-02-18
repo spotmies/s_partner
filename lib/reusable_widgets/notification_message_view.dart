@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/home/navBar.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -20,7 +21,7 @@ class _NotificationMessageState extends State<NotificationMessage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: SpotmiesTheme.background,
       body: Container(
         width: width(context),
         child: Column(
@@ -46,11 +47,11 @@ class _NotificationMessageState extends State<NotificationMessage> {
               height: height(context) * 0.6,
               width: width(context) * 0.9,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.grey[200]!,
+                        color: SpotmiesTheme.surfaceVariant2,
                         blurRadius: 5,
                         spreadRadius: 5)
                   ]),
@@ -68,7 +69,7 @@ class _NotificationMessageState extends State<NotificationMessage> {
                   Divider(
                     indent: width(context) * 0.1,
                     endIndent: width(context) * 0.1,
-                    color: Colors.grey[300],
+                    color: SpotmiesTheme.shadow,
                     thickness: 2.0,
                   ),
                   SizedBox(
@@ -93,17 +94,17 @@ class _NotificationMessageState extends State<NotificationMessage> {
               buttonName: 'Home',
               height: height(context) * 0.047,
               minWidth: width(context) * 0.38,
-              bgColor: Colors.white,
-              textColor: Colors.grey[900]!,
+              bgColor: SpotmiesTheme.background,
+              textColor: SpotmiesTheme.secondaryVariant,
               allRadius: true,
               textSize: width(context) * 0.04,
               leadingIcon: Icon(
                 Icons.arrow_back,
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 size: width(context) * 0.05,
               ),
               borderRadius: 15.0,
-              borderSideColor: Colors.grey[900]!,
+              borderSideColor: SpotmiesTheme.secondaryVariant,
               onClick: () {
                 Navigator.push(
                   context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/topics/readTopics.dart';
 
 // class Item {
@@ -68,7 +69,7 @@ class _BuildPanelState extends State<BuildPanel> {
                 bottomRight: Radius.circular(10),
               ),
               child: ExpansionTile(
-                backgroundColor: Colors.indigo[50],
+                backgroundColor: SpotmiesTheme.primaryVariant,
                 collapsedBackgroundColor: Colors.indigo[100],
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -77,10 +78,10 @@ class _BuildPanelState extends State<BuildPanel> {
                   ],
                 ),
                 // expandedAlignment: Alignment.center,
-                textColor: Colors.indigo[900],
-                iconColor: Colors.indigo[900],
-                collapsedIconColor: Colors.indigo[900],
-                collapsedTextColor: Colors.indigo[900],
+                textColor: SpotmiesTheme.primary,
+                iconColor: SpotmiesTheme.primary,
+                collapsedIconColor: SpotmiesTheme.primary,
+                collapsedTextColor: SpotmiesTheme.primary,
                 title: Text(
                   'Course ' + '$index',
                   style: GoogleFonts.josefinSans(
@@ -106,9 +107,9 @@ class _BuildPanelState extends State<BuildPanel> {
                           itemBuilder: (BuildContext ctx, int lineup) {
                             return Container(
                               padding: EdgeInsets.only(left: 20, right: 20),
-                              color: Colors.white,
+                              color: SpotmiesTheme.background,
                               child: ListTile(
-                                hoverColor: Colors.indigo[900],
+                                hoverColor: SpotmiesTheme.primary,
                                 onTap: () {
                                   print(topics[lineup]);
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -119,18 +120,18 @@ class _BuildPanelState extends State<BuildPanel> {
                                 leading: Icon(
                                   Icons.video_library,
                                   size: _width * 0.05,
-                                  color: Colors.indigo[900],
+                                  color: SpotmiesTheme.primary,
                                 ),
                                 trailing: Icon(
                                   Icons.open_in_full,
                                   size: _width * 0.05,
-                                  color: Colors.indigo[900],
+                                  color: SpotmiesTheme.primary,
                                 ),
                                 title: Text(
                                   topics[lineup],
                                   style: GoogleFonts.josefinSans(
                                     fontSize: _width * 0.04,
-                                    color: Colors.grey[900],
+                                    color: SpotmiesTheme.secondaryVariant,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),

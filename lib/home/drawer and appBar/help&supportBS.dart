@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -50,8 +50,8 @@ Future helpAndSupport(BuildContext context, pd) {
                       EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                   child: Text(
                     'If you need any help, you can reach us through below options.',
-                    style:
-                        fonts(width(context) * 0.05, FontWeight.w500, Colors.grey[900]),
+                    style: fonts(width(context) * 0.05, FontWeight.w500,
+                        SpotmiesTheme.secondaryVariant),
                   ),
                 ),
                 Container(
@@ -65,7 +65,7 @@ Future helpAndSupport(BuildContext context, pd) {
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.background,
                               child: IconButton(
                                 onPressed: () {
                                   Navigator.push(context,
@@ -74,7 +74,7 @@ Future helpAndSupport(BuildContext context, pd) {
                                 icon: Icon(
                                   icons[0],
                                   size: width(context) * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -83,8 +83,10 @@ Future helpAndSupport(BuildContext context, pd) {
                             ),
                             Text(
                               names[0],
-                              style: fonts(width(context) * 0.04, FontWeight.w600,
-                                  Colors.grey[900]),
+                              style: fonts(
+                                  width(context) * 0.04,
+                                  FontWeight.w600,
+                                  SpotmiesTheme.secondaryVariant),
                             )
                           ],
                         ),
@@ -94,7 +96,7 @@ Future helpAndSupport(BuildContext context, pd) {
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.background,
                               child: IconButton(
                                 onPressed: () {
                                   // Navigator.pop(context);
@@ -105,7 +107,7 @@ Future helpAndSupport(BuildContext context, pd) {
                                 icon: Icon(
                                   icons[1],
                                   size: width(context) * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -114,8 +116,10 @@ Future helpAndSupport(BuildContext context, pd) {
                             ),
                             Text(
                               names[1],
-                              style: fonts(width(context) * 0.04, FontWeight.w600,
-                                  Colors.grey[900]),
+                              style: fonts(
+                                  width(context) * 0.04,
+                                  FontWeight.w600,
+                                  SpotmiesTheme.secondaryVariant),
                             )
                           ],
                         ),
@@ -125,7 +129,7 @@ Future helpAndSupport(BuildContext context, pd) {
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.background,
                               child: IconButton(
                                 onPressed: () {
                                   launch('tel:+918341980196');
@@ -133,7 +137,7 @@ Future helpAndSupport(BuildContext context, pd) {
                                 icon: Icon(
                                   icons[2],
                                   size: width(context) * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -142,8 +146,10 @@ Future helpAndSupport(BuildContext context, pd) {
                             ),
                             Text(
                               names[2],
-                              style: fonts(width(context) * 0.04, FontWeight.w600,
-                                  Colors.grey[900]),
+                              style: fonts(
+                                  width(context) * 0.04,
+                                  FontWeight.w600,
+                                  SpotmiesTheme.secondaryVariant),
                             )
                           ],
                         ),
@@ -156,23 +162,23 @@ Future helpAndSupport(BuildContext context, pd) {
                   child: Center(
                     child: Text(
                       'Tap to Select Any Option',
-                      style: fonts(
-                          width(context) * 0.05, FontWeight.w400, Colors.grey[500]),
+                      style: fonts(width(context) * 0.05, FontWeight.w400,
+                          Colors.grey[500]),
                     ),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[50]!,
+                    bgColor: SpotmiesTheme.primaryVariant,
                     minWidth: width(context),
                     height: height(context) * 0.06,
-                    textColor: Colors.grey[900]!,
+                    textColor: SpotmiesTheme.secondaryVariant,
                     buttonName: 'Close',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 5.0,
-                    borderSideColor: Colors.indigo[50]!,
+                    borderSideColor: SpotmiesTheme.primaryVariant,
                     onClick: () {
                       Navigator.pop(context);
                     },

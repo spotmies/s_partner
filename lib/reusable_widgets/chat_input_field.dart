@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -50,10 +51,12 @@ Container chatInputField(
             // padding: EdgeInsets.symmetric(horizontal: 14),
             height: hight * 0.08,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: SpotmiesTheme.background,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey[200]!, blurRadius: 2, spreadRadius: 2)
+                    color: SpotmiesTheme.surfaceVariant2,
+                    blurRadius: 2,
+                    spreadRadius: 2)
               ],
               borderRadius: BorderRadius.circular(25),
             ),
@@ -66,8 +69,8 @@ Container chatInputField(
                         // readOnly: true,
                         maxLines: 100,
 
-                        style: fonts(
-                            width * 0.05, FontWeight.w500, Colors.grey[900]),
+                        style: fonts(width * 0.05, FontWeight.w500,
+                            SpotmiesTheme.secondaryVariant),
                         controller: inputController,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -161,7 +164,7 @@ Container chatInputField(
             radius: width * 0.065,
             child: Icon(
               Icons.send,
-              color: Colors.white,
+              color: SpotmiesTheme.background,
             ),
           ),
         )

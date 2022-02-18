@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -38,16 +39,16 @@ class VerifictionInProgress extends StatelessWidget {
           buttonName: 'Need Help',
           height: height(context) * 0.055,
           minWidth: width(context) * 0.5,
-          bgColor: Colors.indigo[900]!,
-          textColor: Colors.grey[50]!,
+          bgColor: SpotmiesTheme.primary,
+          textColor: SpotmiesTheme.surfaceVariant,
           textSize: width(context) * 0.04,
           trailingIcon: Icon(
             Icons.help,
-            color: Colors.grey[50],
+            color: SpotmiesTheme.surfaceVariant,
             size: width(context) * 0.05,
           ),
           borderRadius: 15.0,
-          borderSideColor: Colors.grey[900]!,
+          borderSideColor: SpotmiesTheme.secondaryVariant,
           onClick: () {
             helpAndSupport(context, pd);
           },

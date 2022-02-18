@@ -6,6 +6,7 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/faqList.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
@@ -39,7 +40,7 @@ class _FAQState extends State<FAQ> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -47,7 +48,7 @@ class _FAQState extends State<FAQ> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
             )),
         title: TextWid(
           text: 'Frequently Asked Questions',
@@ -80,12 +81,12 @@ class _FAQState extends State<FAQ> {
                         Radius.circular(10),
                       ),
                       child: ExpansionTile(
-                        backgroundColor: Colors.white,
-                        collapsedBackgroundColor: Colors.white,
-                        textColor: Colors.indigo[900],
-                        iconColor: Colors.indigo[900],
-                        collapsedIconColor: Colors.grey[900],
-                        collapsedTextColor: Colors.grey[900],
+                        backgroundColor: SpotmiesTheme.background,
+                        collapsedBackgroundColor: SpotmiesTheme.background,
+                        textColor: SpotmiesTheme.primary,
+                        iconColor: SpotmiesTheme.primary,
+                        collapsedIconColor: SpotmiesTheme.secondaryVariant,
+                        collapsedTextColor: SpotmiesTheme.secondaryVariant,
                         title: TextWid(
                           text: faq[index]['title'],
                           size: width(context) * 0.05,
@@ -112,8 +113,10 @@ class _FAQState extends State<FAQ> {
                                     return Container(
                                       child: ExpansionTile(
                                         // key: exKey,
-                                        backgroundColor: Colors.white,
-                                        collapsedBackgroundColor: Colors.white,
+                                        backgroundColor:
+                                            SpotmiesTheme.background,
+                                        collapsedBackgroundColor:
+                                            SpotmiesTheme.background,
                                         leading: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -122,16 +125,18 @@ class _FAQState extends State<FAQ> {
                                           ],
                                         ),
                                         // expandedAlignment: Alignment.center,
-                                        textColor: Colors.indigo[900],
-                                        iconColor: Colors.indigo[900],
-                                        collapsedIconColor: Colors.indigo[900],
-                                        collapsedTextColor: Colors.indigo[900],
+                                        textColor: SpotmiesTheme.primary,
+                                        iconColor: SpotmiesTheme.primary,
+                                        collapsedIconColor:
+                                            SpotmiesTheme.primary,
+                                        collapsedTextColor:
+                                            SpotmiesTheme.primary,
                                         title: TextWid(
                                           text: body[index]['question'],
                                           size: width(context) * 0.05,
                                           weight: FontWeight.w500,
                                           flow: TextOverflow.visible,
-                                          color: Colors.indigo[900]!,
+                                          color: SpotmiesTheme.primary,
                                         ),
 
                                         children: [
@@ -143,7 +148,7 @@ class _FAQState extends State<FAQ> {
                                               text: body[index]['answer'],
                                               flow: TextOverflow.visible,
                                               weight: FontWeight.w500,
-                                              color: Colors.grey[700]!,
+                                              color: SpotmiesTheme.secondary,
                                               lineSpace:
                                                   height(context) * 0.002,
                                               lSpace: 0.4,
@@ -166,17 +171,17 @@ class _FAQState extends State<FAQ> {
       floatingActionButton: Container(
         padding: EdgeInsets.all(5),
         child: ElevatedButtonWidget(
-          bgColor: Colors.indigo[900]!,
+          bgColor: SpotmiesTheme.primary,
           minWidth: width(context) * 0.6,
           height: height(context) * 0.06,
-          textColor: Colors.white,
+          textColor: SpotmiesTheme.background,
           buttonName: 'Rise Query',
           textSize: width(context) * 0.05,
           allRadius: true,
           textStyle: FontWeight.w600,
           borderRadius: 10.0,
           trailingIcon: Icon(Icons.question_answer),
-          borderSideColor: Colors.indigo[900]!,
+          borderSideColor: SpotmiesTheme.primary,
           onClick: () {
             var pD = partnerDetailsProvider!.partnerDetailsFull;
             log(pD!["_id"]);
@@ -237,7 +242,7 @@ newQuery(BuildContext context,
                   label: hint,
                   hint: hint,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.indigo[900],
+                  focusBorderColor: SpotmiesTheme.primary,
                   enableBorderRadius: 15,
                   controller: queryControl,
                   isRequired: true,
@@ -250,21 +255,21 @@ newQuery(BuildContext context,
                   validateMsg: 'Please check above text',
                   maxLines: type == "text" ? 9 : 1,
                   // postIcon: Icon(Icons.change_circle),
-                  postIconColor: Colors.indigo[900],
+                  postIconColor: SpotmiesTheme.primary,
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: SpotmiesTheme.primary,
                     minWidth: width(context),
                     allRadius: true,
                     height: height(context) * 0.06,
-                    textColor: Colors.white,
+                    textColor: SpotmiesTheme.background,
                     buttonName: 'Submit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 10.0,
-                    borderSideColor: Colors.indigo[50],
+                    borderSideColor: SpotmiesTheme.primaryVariant,
                     onClick: () async {
                       if (queryForm.currentState!.validate()) {
                         if (onSubmit != null) {

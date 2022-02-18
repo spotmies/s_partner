@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 String myPid = FirebaseAuth.instance.currentUser!.uid.toString();
 
@@ -41,7 +42,7 @@ class TextWid extends StatelessWidget {
           letterSpacing: lSpace ?? 0,
           height: lineSpace,
           fontSize: size ?? 14,
-          color: color ?? Colors.black,
+          color: color ?? SpotmiesTheme.onBackground,
           fontWeight: weight ?? FontWeight.normal,
         ));
   }

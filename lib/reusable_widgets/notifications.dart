@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 //permisiion
 
@@ -57,7 +58,7 @@ void awesomeInitilize() async {
           enableLights: true,
           enableVibration: true,
           defaultColor: Colors.blue,
-          ledColor: Colors.white,
+          ledColor: SpotmiesTheme.background,
           // importance: NotificationImportance.High,
           defaultRingtoneType: DefaultRingtoneType.Notification,
           channelShowBadge: true,
@@ -69,7 +70,7 @@ void awesomeInitilize() async {
             enableLights: true,
             enableVibration: true,
             defaultColor: Colors.blue,
-            ledColor: Colors.white,
+            ledColor: SpotmiesTheme.background,
             // importance: NotificationImportance.High,
             channelShowBadge: true,
             defaultRingtoneType: DefaultRingtoneType.Notification,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 Widget profileShimmer(BuildContext context) {
   final _hight = MediaQuery.of(context).size.height -
@@ -7,8 +8,8 @@ Widget profileShimmer(BuildContext context) {
       kToolbarHeight;
   final _width = MediaQuery.of(context).size.width;
   return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: SpotmiesTheme.shadow,
+      highlightColor: SpotmiesTheme.onSurface,
       enabled: true,
       child: Container(
         height: _hight,
@@ -20,7 +21,7 @@ Widget profileShimmer(BuildContext context) {
               width: _width * 0.9,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: Colors.white,
+                color: SpotmiesTheme.background,
               ),
             ),
             SizedBox(
@@ -31,13 +32,13 @@ Widget profileShimmer(BuildContext context) {
               children: [
                 Container(
                   height: _hight * 0.001,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   width: _width * 0.32,
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 1, right: 1),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: SpotmiesTheme.background,
                       borderRadius: BorderRadius.circular(10)),
                   // color: Colors.amber,
                   height: _hight * 0.03,
@@ -45,7 +46,7 @@ Widget profileShimmer(BuildContext context) {
                 ),
                 Container(
                   height: _hight * 0.001,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   width: _width * 0.32,
                 )
               ],
@@ -65,7 +66,7 @@ Widget profileShimmer(BuildContext context) {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(15),
                               bottomRight: Radius.circular(15))),

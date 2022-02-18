@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class ElevatedButtonWidget extends StatelessWidget {
@@ -64,16 +65,17 @@ class ElevatedButtonWidget extends StatelessWidget {
                           : BorderRadius.only(
                               topLeft: Radius.circular(leftRadius ?? 0),
                               topRight: Radius.circular(rightRadius ?? 0)),
-                      side:
-                          BorderSide(color: borderSideColor ?? Colors.white)))),
+                      side: BorderSide(
+                          color:
+                              borderSideColor ?? SpotmiesTheme.background)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildLeadingIcon(leadingIcon),
               Text(
                 buttonName ?? 'Button',
-                style: fonts(
-                    textSize ?? 10.0, textStyle, textColor ?? Colors.black),
+                style: fonts(textSize ?? 10.0, textStyle,
+                    textColor ?? SpotmiesTheme.onBackground),
               ),
               buildTrailingIcon(trailingIcon),
             ],

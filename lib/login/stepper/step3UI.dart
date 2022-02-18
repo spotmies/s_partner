@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -41,7 +42,7 @@ class _Step3State extends State<Step3> {
                     onTap: widget.provider?.getServiceListFromServer,
                     child: TextWid(
                       text: 'Business type:',
-                      color: Colors.grey[900]!,
+                      color: SpotmiesTheme.secondaryVariant,
                       size: width(context) * 0.05,
                       weight: FontWeight.w600,
                     ),
@@ -54,11 +55,11 @@ class _Step3State extends State<Step3> {
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.grey[300]!,
+                                color: SpotmiesTheme.shadow,
                                 blurRadius: 3,
                                 spreadRadius: 1)
                           ],
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           borderRadius: BorderRadius.circular(15)),
                       child: DropdownButton(
                         underline: SizedBox(),
@@ -66,7 +67,7 @@ class _Step3State extends State<Step3> {
                         icon: Icon(
                           Icons.arrow_drop_down_circle,
                           size: width(context) * 0.06,
-                          color: Colors.indigo[900],
+                          color: SpotmiesTheme.primary,
                         ),
                         items: widget.provider?.getServiceList
                             .where(
@@ -75,7 +76,7 @@ class _Step3State extends State<Step3> {
                           return DropdownMenuItem(
                             child: TextWid(
                               text: location['nameOfService'],
-                              color: Colors.grey[900]!,
+                              color: SpotmiesTheme.secondaryVariant,
                               size: width(context) * 0.04,
                               weight: FontWeight.w500,
                             ),
@@ -84,7 +85,7 @@ class _Step3State extends State<Step3> {
                         }).toList(),
                         hint: TextWid(
                           text: 'Select Service',
-                          color: Colors.grey[900]!,
+                          color: SpotmiesTheme.secondaryVariant,
                           size: width(context) * 0.04,
                           weight: FontWeight.w500,
                         ),
@@ -176,6 +177,7 @@ class _UploadUIState extends State<UploadUI> {
           BoxDecoration(borderRadius: BorderRadiusDirectional.circular(15)),
       child: widget.condition!
           ? DottedBorder(
+              color: SpotmiesTheme.onBackground,
               radius: Radius.circular(30),
               borderType: BorderType.RRect,
               child: Container(
@@ -227,7 +229,7 @@ class _UploadUIState extends State<UploadUI> {
                     bottom: 0,
                     right: width(context) * 0.1,
                     child: CircleAvatar(
-                      backgroundColor: Colors.grey[300],
+                      backgroundColor: SpotmiesTheme.shadow,
                       radius: width(context) * 0.05,
                       child: IconButton(
                           padding: EdgeInsets.all(0.0),
@@ -243,7 +245,7 @@ class _UploadUIState extends State<UploadUI> {
                           },
                           icon: Icon(
                             Icons.change_circle,
-                            color: Colors.grey[900],
+                            color: SpotmiesTheme.secondaryVariant,
                             size: width(context) * 0.055,
                           )),
                     ))

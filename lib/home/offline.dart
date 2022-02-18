@@ -7,6 +7,7 @@ import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/message_card.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -43,7 +44,7 @@ class _OfflineState extends State<Offline> {
             child: Container(
       height: _hight,
       width: _width,
-      decoration: BoxDecoration(color: Colors.grey[200]),
+      decoration: BoxDecoration(color: SpotmiesTheme.surfaceVariant2),
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         dynamic alert = data.getText('home_screen_message');
         dynamic pd = data.getPartnerDetailsFull;
@@ -90,7 +91,7 @@ class _OfflineState extends State<Offline> {
                     circularIndicator(
                         _hight * 0.35,
                         _width * 0.44,
-                        Colors.blue[900]!,
+                        SpotmiesTheme.tertiaryVariant,
                         'Rating',
                         Icons.star_rate,
                         dash?.isEmpty ? 100 : avg(dash, 'rate')),

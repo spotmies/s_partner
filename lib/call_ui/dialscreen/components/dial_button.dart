@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class DialButton extends StatelessWidget {
@@ -33,13 +34,13 @@ class DialButton extends StatelessWidget {
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),
-                          side: BorderSide(color: Colors.white)))),
+                          side: BorderSide(color: SpotmiesTheme.background)))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SvgPicture.asset(
                     iconSrc,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     height: width(context) * 0.1,
                   )
                 ],
@@ -51,7 +52,7 @@ class DialButton extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: Colors.black,
+            color: SpotmiesTheme.onBackground,
             fontSize: 13,
           ),
         )

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 circleProgress() {
   return Scaffold(
     body: Center(
       child: CircularProgressIndicator(
-        backgroundColor: Colors.indigo[100],
-        color: Colors.indigo[900],
+        backgroundColor: SpotmiesTheme.primaryVariant,
+        color: SpotmiesTheme.primary,
       ),
     ),
   );
@@ -16,8 +17,8 @@ linearProgress() {
   return Scaffold(
     body: Center(
       child: LinearProgressIndicator(
-        backgroundColor: Colors.grey[100],
-        color: Colors.indigo[900],
+        backgroundColor: SpotmiesTheme.onSurface,
+        color: SpotmiesTheme.primary,
       ),
     ),
   );
@@ -27,8 +28,8 @@ refreshIndicator() {
   return Scaffold(
     body: Center(
         child: RefreshProgressIndicator(
-            backgroundColor: Colors.grey[100],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo[900]!))),
+            backgroundColor: SpotmiesTheme.onSurface,
+            valueColor: AlwaysStoppedAnimation<Color>(SpotmiesTheme.primary))),
   );
 }
 
@@ -58,6 +59,7 @@ class NoDataPlaceHolder extends StatelessWidget {
           child: TextWid(
             maxlines: 5,
             text: title,
+            color: SpotmiesTheme.onBackground,
             size: 18,
           )),
     );

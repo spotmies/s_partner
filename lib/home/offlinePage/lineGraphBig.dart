@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 final List<FlSpot> dummyData1 = List.generate(7, (index) {
   return FlSpot(index.toDouble(), index * Random().nextDouble());
@@ -26,9 +27,9 @@ lineGraphBig(hight, width) {
             getTitles: (value) {
               return '${value.toInt() + 0}';
             },
-            getTextStyles: (BuildContext context ,double) {
+            getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 fontSize: width * 0.035,
                 fontWeight: FontWeight.w600,
               );
@@ -39,10 +40,10 @@ lineGraphBig(hight, width) {
             showTitles: true,
             getTextStyles: (BuildContext context, double) {
               return GoogleFonts.josefinSans(
-    color: Colors.grey[900],
-    fontSize: width * 0.035,
-    fontWeight: FontWeight.w600,
-  );
+                color: SpotmiesTheme.secondaryVariant,
+                fontSize: width * 0.035,
+                fontWeight: FontWeight.w600,
+              );
             },
             margin: 20,
             getTitles: (value) {
@@ -104,7 +105,7 @@ lineGraphBig(hight, width) {
           isCurved: true,
           barWidth: 3,
           colors: [
-            Colors.blue[900]!,
+            SpotmiesTheme.tertiaryVariant,
           ],
           dotData: FlDotData(
             show: false,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/flutter_audio_recorder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -95,8 +96,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: CircularProgressIndicator(
-                          backgroundColor: Colors.indigo[100],
-                          color: Colors.indigo[900],
+                          backgroundColor: SpotmiesTheme.primaryVariant,
+                          color: SpotmiesTheme.primary,
                         ),
                       ),
                       TextWid(text: 'Sending...'),

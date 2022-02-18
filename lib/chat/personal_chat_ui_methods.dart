@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/audio.dart';
 import 'package:spotmies_partner/reusable_widgets/image_viewer.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -33,10 +34,10 @@ typeofChat(type, message, sender, double hight, double width,
           maxlines: 200,
           lSpace: 1.5,
           color: sender == "partner"
-              ? Colors.grey[800]!
+              ? SpotmiesTheme.secondary
               : sender == "user"
-                  ? Colors.grey[900]!
-                  : Colors.grey[50]!,
+                  ? SpotmiesTheme.secondaryVariant
+                  : SpotmiesTheme.surfaceVariant,
           weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
         );
       case 'img':
@@ -100,7 +101,9 @@ typeofChat(type, message, sender, double hight, double width,
           text: sender != "user" ? "OutGoing Call" : "Incoming Call",
           maxlines: 200,
           lSpace: 1.5,
-          color: sender != "user" ? Colors.grey[800]! : Colors.grey[900]!,
+          color: sender != "user"
+              ? SpotmiesTheme.secondary
+              : SpotmiesTheme.secondaryVariant,
           weight: sender != "user" ? FontWeight.w600 : FontWeight.w600,
         );
       default:

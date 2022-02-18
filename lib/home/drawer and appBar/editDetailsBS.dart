@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/edit_profile_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 import 'package:spotmies_partner/reusable_widgets/basic_app_bar.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
@@ -118,7 +119,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   _editProfileController!.emailController,
                               hint: 'Email',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900]!,
+                              focusBorderColor: SpotmiesTheme.primary,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -127,7 +128,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Email address',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900]!,
+                              postIconColor: SpotmiesTheme.primary,
                             ),
                           ),
                           Container(
@@ -147,7 +148,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   _editProfileController!.mobileController,
                               hint: 'ex : 9876543210',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900]!,
+                              focusBorderColor: SpotmiesTheme.primary,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -155,7 +156,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Phone number',
                               maxLines: 1,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900]!,
+                              postIconColor: SpotmiesTheme.primary,
                             ),
                           ),
                           Container(
@@ -169,7 +170,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   _editProfileController!.tempAddressControl,
                               hint: 'ex: Dr no,street,colony, city',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900]!,
+                              focusBorderColor: SpotmiesTheme.primary,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               errorBorderRadius: 15,
@@ -177,7 +178,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid Temporary address',
                               maxLines: 4,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900]!,
+                              postIconColor: SpotmiesTheme.primary,
                             ),
                           ),
                           Container(
@@ -192,7 +193,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   _editProfileController!.perAddressControl,
                               hint: 'ex: Dr no,street,colony, city',
                               enableBorderColor: Colors.grey,
-                              focusBorderColor: Colors.indigo[900]!,
+                              focusBorderColor: SpotmiesTheme.primary,
                               enableBorderRadius: 15,
                               focusBorderRadius: 15,
                               type: "address",
@@ -201,7 +202,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                               validateMsg: 'Enter Valid perminent address',
                               maxLines: 4,
                               postIcon: Icon(Icons.change_circle),
-                              postIconColor: Colors.indigo[900]!,
+                              postIconColor: SpotmiesTheme.primary,
                             ),
                           ),
                           Container(
@@ -217,11 +218,11 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.grey[300]!,
+                                            color: SpotmiesTheme.shadow,
                                             blurRadius: 3,
                                             spreadRadius: 1)
                                       ],
-                                      color: Colors.grey[50],
+                                      color: SpotmiesTheme.surfaceVariant,
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Column(
                                     children: [
@@ -229,7 +230,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                         children: [
                                           TextWid(
                                             text: 'Date of Birth:',
-                                            color: Colors.grey[900]!,
+                                            color:
+                                                SpotmiesTheme.secondaryVariant,
                                             size: width(context) * 0.05,
                                             weight: FontWeight.w600,
                                           ),
@@ -248,7 +250,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                           (_editProfileController!
                                                               .pickedDate!
                                                               .millisecondsSinceEpoch)))),
-                                              color: Colors.grey[900]!,
+                                              color: SpotmiesTheme
+                                                  .secondaryVariant,
                                               size: width(context) * 0.04,
                                               weight: FontWeight.w500,
                                             ),
@@ -331,7 +334,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                 icon: Icon(
                                                   Icons.arrow_drop_down_circle,
                                                   size: width(context) * 0.06,
-                                                  color: Colors.indigo[900],
+                                                  color: SpotmiesTheme.primary,
                                                 ),
                                                 items: data.getServiceList
                                                     .where((element) =>
@@ -343,7 +346,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                     child: TextWid(
                                                       text: location[
                                                           'nameOfService'],
-                                                      color: Colors.grey[900]!,
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                       size: width(context) *
                                                           0.035,
                                                       weight: FontWeight.w500,
@@ -374,7 +378,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                 icon: Icon(
                                                   Icons.arrow_drop_down_circle,
                                                   size: width(context) * 0.06,
-                                                  color: Colors.indigo[900],
+                                                  color: SpotmiesTheme.primary,
                                                 ),
                                                 items: _editProfileController!
                                                     .accountType!
@@ -386,8 +390,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                                               .indexOf(type),
                                                       child: TextWid(
                                                         text: type,
-                                                        color:
-                                                            Colors.grey[900]!,
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
                                                         size: width(context) *
                                                             0.035,
                                                         weight: FontWeight.w500,
@@ -433,7 +437,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                           ? 'Enter your collge name here'
                                           : 'ex : Interior service pvt',
                                       enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900]!,
+                                      focusBorderColor: SpotmiesTheme.primary,
                                       enableBorderRadius: 15,
                                       focusBorderRadius: 15,
                                       errorBorderRadius: 15,
@@ -445,7 +449,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                           : 'Enter valid Business name',
                                       maxLines: 1,
                                       postIcon: Icon(Icons.change_circle),
-                                      postIconColor: Colors.indigo[900]!,
+                                      postIconColor: SpotmiesTheme.primary,
                                       isRequired: false,
                                     ),
                                   ),
@@ -464,7 +468,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       ],
                                       hint: 'ex : 1 year, 2 year, etc...,',
                                       enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900]!,
+                                      focusBorderColor: SpotmiesTheme.primary,
                                       enableBorderRadius: 15,
                                       focusBorderRadius: 15,
                                       errorBorderRadius: 15,
@@ -472,7 +476,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       validateMsg: 'Enter Valid experience',
                                       maxLines: 1,
                                       postIcon: Icon(Icons.change_circle),
-                                      postIconColor: Colors.indigo[900]!,
+                                      postIconColor: SpotmiesTheme.primary,
                                     ),
                                   ),
                                   Container(
@@ -540,16 +544,16 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             padding: EdgeInsets.symmetric(vertical: 30),
                             child: ElevatedButtonWidget(
                               // trailingIcon: Icon(Icons.cloud_done),
-                              bgColor: Colors.indigo[900]!,
+                              bgColor: SpotmiesTheme.primary,
                               minWidth: width(context),
                               height: height(context) * 0.06,
-                              textColor: Colors.grey[50]!,
+                              textColor: SpotmiesTheme.surfaceVariant,
                               buttonName: 'Save',
                               textSize: width(context) * 0.05,
                               textStyle: FontWeight.w600,
                               borderRadius: 10.0,
                               allRadius: true,
-                              borderSideColor: Colors.indigo[50]!,
+                              borderSideColor: SpotmiesTheme.surfaceVariant,
                               onClick: () {
                                 _editProfileController!.saveChanges(context);
                               },
@@ -584,7 +588,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
           FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
         ],
         enableBorderColor: Colors.grey,
-        focusBorderColor: Colors.indigo[900]!,
+        focusBorderColor: SpotmiesTheme.primary,
         enableBorderRadius: 15,
         focusBorderRadius: 15,
         errorBorderRadius: 15,
@@ -592,7 +596,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
         validateMsg: 'Enter Valid Name',
         maxLines: 1,
         postIcon: Icon(Icons.change_circle),
-        postIconColor: Colors.indigo[900]!,
+        postIconColor: SpotmiesTheme.primary,
       ),
     );
   }
@@ -606,7 +610,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
           title: "Edit profile details",
           leadingIcon: Icon(
             Icons.edit,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
           )),
       body: editDetails(context),
     );

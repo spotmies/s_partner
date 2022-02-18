@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -33,7 +34,7 @@ class _CatalogState extends State<Catalog> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           elevation: 0,
           title: TextWid(
             text: 'Catelog',
@@ -46,24 +47,24 @@ class _CatalogState extends State<Catalog> {
               },
               icon: Icon(
                 Icons.arrow_back,
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
               )),
         ),
         floatingActionButton: ElevatedButtonWidget(
           buttonName: 'Add Service',
           height: height(context) * 0.055,
           minWidth: width(context) * 0.4,
-          bgColor: Colors.indigo[900]!,
-          textColor: Colors.grey[50]!,
+          bgColor: SpotmiesTheme.primary,
+          textColor: SpotmiesTheme.background,
           textSize: width(context) * 0.04,
           allRadius: true,
           leadingIcon: Icon(
             Icons.add_circle,
-            color: Colors.grey[50],
+            color: SpotmiesTheme.surfaceVariant,
             size: width(context) * 0.05,
           ),
           borderRadius: 15.0,
-          borderSideColor: Colors.grey[900]!,
+          borderSideColor: SpotmiesTheme.secondaryVariant,
           onClick: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => CatelogPost()));
@@ -88,7 +89,7 @@ class _CatalogState extends State<Catalog> {
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
-    tileColor: Colors.white,
+    tileColor: SpotmiesTheme.background,
     title: TextWid(text: cat['name'].toString()),
     subtitle: TextWid(text: cat['description'].toString()),
     leading: ProfilePic(
@@ -107,8 +108,8 @@ catelogListCard(BuildContext context, cat, int index) {
             icon: Icon(Icons.more_horiz),
           ),
           Switch(
-              activeTrackColor: Colors.indigo[100],
-              activeColor: Colors.indigo[900],
+              activeTrackColor: SpotmiesTheme.primaryVariant,
+              activeColor: SpotmiesTheme.primary,
               value: cat['isActive'],
               onChanged: (val) {
                 Map<String, String> body = {
@@ -143,16 +144,16 @@ Future bottomMenu(BuildContext context, cat, int index) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900]!,
+                    bgColor: SpotmiesTheme.primary,
                     minWidth: width(context) * 0.45,
                     height: height(context) * 0.06,
-                    textColor: Colors.white,
+                    textColor: SpotmiesTheme.background,
                     buttonName: 'Edit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     allRadius: true,
                     borderRadius: 15.0,
-                    borderSideColor: Colors.indigo[900]!,
+                    borderSideColor: SpotmiesTheme.primary,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
                       Navigator.push(
@@ -165,16 +166,16 @@ Future bottomMenu(BuildContext context, cat, int index) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                  bgColor: Colors.indigo[50]!,
+                  bgColor: SpotmiesTheme.primaryVariant,
                   minWidth: width(context) * 0.45,
                   height: height(context) * 0.06,
-                  textColor: Colors.grey[900]!,
+                  textColor: SpotmiesTheme.secondaryVariant,
                   buttonName: 'Delete',
                   textSize: width(context) * 0.05,
                   textStyle: FontWeight.w600,
                   allRadius: true,
                   borderRadius: 15.0,
-                  borderSideColor: Colors.indigo[50]!,
+                  borderSideColor: SpotmiesTheme.primaryVariant,
                   onClick: () async {
                     var res = await catelogController.deleteCatelog(cat['_id']);
                     if (res == 200 || res == 204) {
@@ -215,17 +216,17 @@ addCatelog(BuildContext context) {
       buttonName: 'Add Service',
       height: height(context) * 0.055,
       minWidth: width(context) * 0.5,
-      bgColor: Colors.indigo[900]!,
-      textColor: Colors.grey[50]!,
+      bgColor: SpotmiesTheme.primary,
+      textColor: SpotmiesTheme.surfaceVariant,
       textSize: width(context) * 0.04,
       allRadius: true,
       leadingIcon: Icon(
         Icons.add_circle,
-        color: Colors.grey[50],
+        color: SpotmiesTheme.surfaceVariant,
         size: width(context) * 0.05,
       ),
       borderRadius: 15.0,
-      borderSideColor: Colors.grey[900]!,
+      borderSideColor: SpotmiesTheme.secondaryVariant,
       onClick: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => CatelogPost()));
@@ -241,9 +242,13 @@ catelogCard(BuildContext context, cat) {
         height: height(context) * 0.22,
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300]!)
-        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(15.0)),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 4, spreadRadius: 2, color: SpotmiesTheme.shadow)
+            ],
+            color: SpotmiesTheme.surfaceVariant,
+            borderRadius: BorderRadius.circular(15.0)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -251,7 +256,7 @@ catelogCard(BuildContext context, cat) {
               height: height(context) * 0.01,
             ),
             Container(
-              decoration: BoxDecoration(color: Colors.grey[100]),
+              decoration: BoxDecoration(color: SpotmiesTheme.onSurface),
               child: TextWid(
                 text: 'Recent catelog',
                 size: width(context) * 0.06,
@@ -316,7 +321,7 @@ catelogCard(BuildContext context, cat) {
               height: height(context) * 0.055,
               minWidth: width(context) * 0.9,
               bgColor: Colors.transparent,
-              textColor: Colors.grey[900]!,
+              textColor: SpotmiesTheme.secondaryVariant,
               textSize: width(context) * 0.04,
               borderRadius: 15.0,
               borderSideColor: Colors.transparent,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
@@ -18,7 +19,7 @@ bottomOptionsMenu(context,
     builder: (BuildContext context) {
       return Container(
         padding: EdgeInsets.only(top: 10),
-        color: Colors.white,
+        color: SpotmiesTheme.background,
         height: _height * 0.18,
         child: Center(
           child: Column(
@@ -64,13 +65,13 @@ bottomOptionsMenu(context,
                           // padding: EdgeInsets.only(right: 20),
                           child: CircleAvatar(
                             radius: _width * 0.099,
-                            backgroundColor: Colors.white,
+                            backgroundColor: SpotmiesTheme.background,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   options[index]['icon'],
-                                  color: Colors.grey[700],
+                                  color: SpotmiesTheme.secondary,
                                 ),
                                 SizedBox(
                                   height: _height * 0.01,

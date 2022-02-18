@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/chat/personal_chat.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
@@ -42,7 +43,7 @@ class _ChatListState extends StateMVC<ChatList> {
     return Scaffold(
       key: _chatController?.scaffoldkey,
       appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           elevation: 0,
           title: TextWid(
             text: 'My Conversations',
@@ -56,7 +57,7 @@ class _ChatListState extends StateMVC<ChatList> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: SpotmiesTheme.background,
               ),
               child: ClipRRect(
                 child: Consumer<ChatProvider>(
@@ -201,13 +202,17 @@ class _ChatListCardState extends State<ChatListCard> {
                 : 'Unkown',
             size: _width * 0.045,
             weight: FontWeight.w600,
-            color: widget.count! > 0 ? Colors.black : Colors.grey[700]!),
+            color: widget.count! > 0
+                ? SpotmiesTheme.onBackground
+                : SpotmiesTheme.secondary),
         subtitle: Row(
           children: [
             Icon(
               typeofLastMessage(widget.type, widget.lastMessage, 'icon'),
               size: 12,
-              color: widget.count! > 0 ? Colors.black : Colors.grey[500],
+              color: widget.count! > 0
+                  ? SpotmiesTheme.onBackground
+                  : Colors.grey[500],
             ),
             SizedBox(
               width: 3,
@@ -222,7 +227,7 @@ class _ChatListCardState extends State<ChatListCard> {
                   flow: TextOverflow.ellipsis,
                   weight: widget.count! > 0 ? FontWeight.w600 : FontWeight.w500,
                   color: widget.count! > 0
-                      ? Colors.blueGrey[600]!
+                      ? SpotmiesTheme.title
                       : Colors.grey[500]!),
             ),
           ],
@@ -242,7 +247,9 @@ class _ChatListCardState extends State<ChatListCard> {
                 text: widget.time!,
                 size: _width * 0.035,
                 weight: FontWeight.w600,
-                color: widget.count! > 0 ? Colors.black : Colors.grey[700]!),
+                color: widget.count! > 0
+                    ? SpotmiesTheme.onBackground
+                    : SpotmiesTheme.secondary),
             SizedBox(
               height: 10,
             ),
@@ -260,7 +267,7 @@ class _ChatListCardState extends State<ChatListCard> {
                           text: widget.count.toString(),
                           size: _width * 0.03,
                           weight: FontWeight.w900,
-                          color: Colors.blueGrey[700]!),
+                          color: SpotmiesTheme.title),
                     ),
                   )
                 : Container(

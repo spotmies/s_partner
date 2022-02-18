@@ -3,12 +3,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:quick_actions/quick_actions.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/local_notifications_and_schedule_notifications.dart';
@@ -29,6 +31,19 @@ Future<void> backGroundHandler(RemoteMessage message) async {
   // }
 }
 
+Future<void> setPrefThemeMode(BuildContext context) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  var system_themeMode =
+      WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
+  var pref_themeMode =
+      (sharedPreferences.getBool("theme_mode") ?? system_themeMode);
+  var themeMode = system_themeMode ? ThemeMode.dark : ThemeMode.light;
+  if (system_themeMode == false && pref_themeMode == true) {
+    themeMode = ThemeMode.dark;
+  }
+  Provider.of<ThemeProvider>(context, listen: false).setThemeMode(themeMode);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -40,18 +55,27 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<UniversalProvider>(
-          create: (context) => UniversalProvider()),
-      ChangeNotifierProvider<IncomingOrdersProvider>(
-          create: (context) => IncomingOrdersProvider()),
-      ChangeNotifierProvider<PartnerDetailsProvider>(
-          create: (context) => PartnerDetailsProvider()),
-      ChangeNotifierProvider<LocationProvider>(
-          create: (context) => LocationProvider()),
-      ChangeNotifierProvider<TimeProvider>(create: (context) => TimeProvider()),
-      ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider())
-    ], child: MyApp()));
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<UniversalProvider>(
+              create: (context) => UniversalProvider()),
+          ChangeNotifierProvider<IncomingOrdersProvider>(
+              create: (context) => IncomingOrdersProvider()),
+          ChangeNotifierProvider<PartnerDetailsProvider>(
+              create: (context) => PartnerDetailsProvider()),
+          ChangeNotifierProvider<LocationProvider>(
+              create: (context) => LocationProvider()),
+          ChangeNotifierProvider<TimeProvider>(
+              create: (context) => TimeProvider()),
+          ChangeNotifierProvider<ChatProvider>(
+              create: (context) => ChatProvider()),
+          ChangeNotifierProvider<ThemeProvider>(
+              create: (context) => ThemeProvider()),
+        ],
+        child: MyApp(),
+      ),
+    );
   });
 }
 
@@ -61,7 +85,30 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    // connect();
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      setPrefThemeMode(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    print("ThemeModeChanged");
+    setPrefThemeMode(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
@@ -116,6 +163,7 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
 
   @override
   Widget build(BuildContext context) {
+    SpotmiesTheme().init(context);
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,

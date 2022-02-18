@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -23,7 +24,7 @@ onSuccess(double hight, double width, BuildContext context) {
             TextWid(
               text: 'Succussfully Published',
               size: width * 0.06,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
               weight: FontWeight.w700,
             ),
             SizedBox(
@@ -37,7 +38,7 @@ onSuccess(double hight, double width, BuildContext context) {
                 size: width * 0.04,
                 flow: TextOverflow.visible,
                 align: TextAlign.center,
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 weight: FontWeight.w500,
               ),
             ),
@@ -47,14 +48,14 @@ onSuccess(double hight, double width, BuildContext context) {
             ElevatedButtonWidget(
               minWidth: width * 0.35,
               height: hight * 0.06,
-              bgColor: Colors.white,
-              borderSideColor: Colors.grey[900],
+              bgColor: SpotmiesTheme.background,
+              borderSideColor: SpotmiesTheme.secondaryVariant,
               buttonName: 'Back',
               textStyle: FontWeight.w600,
               textSize: width * 0.04,
               leadingIcon: Icon(
                 Icons.arrow_back,
-                color: Colors.grey[900],
+                color: SpotmiesTheme.secondaryVariant,
                 size: width * 0.045,
               ),
               borderRadius: 10.0,

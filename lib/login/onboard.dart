@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies_partner/login/login.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       });
     });
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         body: Stack(
           children: [
             showAnimatedContainer
@@ -178,7 +179,7 @@ class SkipButton extends StatelessWidget {
               'Skip',
               style: TextStyle(
                   fontSize: SizeConfig.defaultSize! * 1.4, //14
-                  color: Colors.black,
+                  color: SpotmiesTheme.onBackground,
                   fontWeight: FontWeight.w600),
             ),
           )
@@ -216,7 +217,7 @@ class StepsContainer extends StatelessWidget {
             width: SizeConfig.defaultSize! * 4.5,
             height: SizeConfig.defaultSize! * 4.5,
             child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
+                valueColor: AlwaysStoppedAnimation(SpotmiesTheme.tertiary),
                 value: (page + 1) / (_list.length + 1)),
           ),
           Center(
@@ -235,7 +236,7 @@ class StepsContainer extends StatelessWidget {
                 width: SizeConfig.defaultSize! * 3.5,
                 height: SizeConfig.defaultSize! * 3.5,
                 decoration: BoxDecoration(
-                    color: Colors.blue[800],
+                    color: SpotmiesTheme.tertiary,
                     borderRadius: BorderRadius.all(Radius.circular(100.0))),
                 child: Icon(
                   Icons.arrow_forward_ios,
@@ -278,7 +279,7 @@ class CommonButtonWidget extends StatelessWidget {
       width: width,
       height: height ?? 50,
       decoration: BoxDecoration(
-          color: bgColor ?? Colors.blue[800],
+          color: bgColor ?? SpotmiesTheme.tertiary,
           border:
               Border.all(color: borderColor ?? Colors.transparent, width: 1),
           borderRadius: raduis ??
@@ -288,7 +289,7 @@ class CommonButtonWidget extends StatelessWidget {
       child: Center(
         child: CommonText(
           text: title!,
-          textColor: textColor ?? Colors.black,
+          textColor: textColor ?? SpotmiesTheme.onBackground,
           fontWeight: FontWeight.bold,
           fontSize: textSizePercentage!,
         ),
@@ -316,7 +317,7 @@ class CommonText extends StatelessWidget {
     return Text(
       text!,
       style: TextStyle(
-          color: textColor ?? Colors.black,
+          color: textColor ?? SpotmiesTheme.onBackground,
           fontWeight: fontWeight ?? FontWeight.w400,
           fontSize: SizeConfig.defaultSize! * (fontSize ?? 1.8)),
     );
@@ -354,7 +355,7 @@ class MainContent extends StatelessWidget {
             Text(
               onBoardList[index]!["title"],
               style: TextStyle(
-                  color: Colors.black,
+                  color: SpotmiesTheme.onBackground,
                   fontWeight: FontWeight.w500,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
@@ -368,7 +369,7 @@ class MainContent extends StatelessWidget {
               onBoardList[index]!["content"],
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.black,
+                  color: SpotmiesTheme.onBackground,
                   fontWeight: FontWeight.w400,
                   fontSize: SizeConfig.defaultSize! * 1.4),
             ),

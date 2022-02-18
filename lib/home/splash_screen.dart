@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
 
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,9 +40,10 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
+    SpotmiesTheme().init(context);
     return Scaffold(
         key: thisController.scaffoldkey,
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +59,7 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                   TextWid(
                       text: 'SPOTMIES PARTNER',
                       size: _width * 0.06,
-                      color: Colors.indigo[900]!,
+                      color: SpotmiesTheme.primary,
                       flow: TextOverflow.visible,
                       lSpace: 3.0,
                       weight: FontWeight.w600),
@@ -65,7 +67,7 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                       text: 'BECOME A BOSS TO YOUR WORLD',
                       weight: FontWeight.w600,
                       size: _width * 0.02,
-                      color: Colors.grey[900]!,
+                      color: SpotmiesTheme.secondaryVariant,
                       lSpace: 5.0),
                 ],
               ),

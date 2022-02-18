@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -47,8 +48,8 @@ Future history(BuildContext context, double hight, double width,
                   child: Text(
                     'Spotmies Journey',
                     textAlign: TextAlign.center,
-                    style:
-                        fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
+                    style: fonts(width * 0.05, FontWeight.w600,
+                        SpotmiesTheme.secondaryVariant),
                   ),
                 ),
                 Container(
@@ -64,17 +65,17 @@ Future history(BuildContext context, double hight, double width,
                           margin: EdgeInsets.only(bottom: 10),
                           padding: EdgeInsets.only(left: 10, right: 10),
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: SpotmiesTheme.surfaceVariant2,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             children: [
                               CircleAvatar(
-                                backgroundColor: Colors.white,
+                                backgroundColor: SpotmiesTheme.background,
                                 radius: width * 0.08,
                                 child: (images.length == 0)
                                     ? Icon(
                                         Icons.engineering,
-                                        color: Colors.grey[900],
+                                        color: SpotmiesTheme.secondaryVariant,
                                       )
                                     : Image.network(images.first),
                               ),
@@ -96,7 +97,8 @@ Future history(BuildContext context, double hight, double width,
                                     ),
                                     TextWid(
                                         text: toBeginningOfSentenceCase(
-                                            o[index]['problem']).toString(),
+                                                o[index]['problem'])
+                                            .toString(),
                                         flow: TextOverflow.ellipsis,
                                         size: width * 0.04),
                                     SizedBox(
@@ -106,7 +108,7 @@ Future history(BuildContext context, double hight, double width,
                                       text: getDate(o[index]['schedule']) +
                                           ' - ' +
                                           getTime(o[index]['schedule']),
-                                      color: Colors.grey[600]!,
+                                      color: SpotmiesTheme.secondary,
                                       size: width * 0.02,
                                       weight: FontWeight.w600,
                                     ),

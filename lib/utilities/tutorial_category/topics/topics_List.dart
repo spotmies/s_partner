@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/utilities/tutorial_category/topics/expansionList.dart';
-
 
 class TopicsList extends StatefulWidget {
   const TopicsList({Key? key}) : super(key: key);
@@ -38,22 +38,22 @@ class _TopicsListState extends State<TopicsList>
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
         title: Text(
           'Introduction to Designing',
           style: GoogleFonts.josefinSans(
-            color: Colors.black,
+            color: SpotmiesTheme.onBackground,
             fontSize: _width * 0.055,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.indigo[100],
+        backgroundColor: SpotmiesTheme.primaryVariant,
         elevation: 0,
         leading: Icon(
           Icons.arrow_back_ios_new_outlined,
           size: _width * 0.05,
-          color: Colors.black,
+          color: SpotmiesTheme.onBackground,
         ),
         actions: [
           Padding(
@@ -87,11 +87,11 @@ class _TopicsListState extends State<TopicsList>
               },
               child: CircleAvatar(
                   radius: _width * 0.035,
-                  backgroundColor: Colors.white,
+                  backgroundColor: SpotmiesTheme.background,
                   child: Icon(
                     Icons.bookmark,
                     size: _width * 0.05,
-                    color: Colors.grey[800],
+                    color: SpotmiesTheme.secondaryVariant,
                   )),
             ),
           )
@@ -100,7 +100,7 @@ class _TopicsListState extends State<TopicsList>
       body: ListView(children: [
         Container(
           width: _width * 1,
-          color: Colors.indigo[100],
+          color: SpotmiesTheme.primaryVariant,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -118,8 +118,8 @@ class _TopicsListState extends State<TopicsList>
                 width: _width * 0.35,
                 child: LinearProgressIndicator(
                   value: 0.4,
-                  color: Colors.white,
-                  backgroundColor: Colors.black,
+                  color: SpotmiesTheme.background,
+                  backgroundColor: SpotmiesTheme.onBackground,
                 ),
               ),
               SizedBox(
@@ -133,19 +133,19 @@ class _TopicsListState extends State<TopicsList>
         ),
         Container(
           height: 15,
-          color: Colors.indigo[100],
+          color: SpotmiesTheme.primaryVariant,
           child: Container(
               height: 5,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: SpotmiesTheme.primary,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15)))),
         ),
         TabBar(
-          labelColor: Colors.grey[800],
+          labelColor: SpotmiesTheme.secondaryVariant,
           unselectedLabelColor: Colors.grey[400],
-          indicatorColor: Colors.indigo[300],
+          indicatorColor: SpotmiesTheme.primaryVariant,
           indicatorPadding: EdgeInsets.only(left: 30, right: 30),
           indicatorWeight: 3.0,
           tabs: [

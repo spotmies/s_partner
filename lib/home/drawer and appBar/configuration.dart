@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
-Color primaryGreen = Colors.white;
+Color primaryGreen = SpotmiesTheme.background;
 // Color primaryGreen = Color(0xff416d6d);
 
 List<BoxShadow> shadowList = [
-  BoxShadow(color: Colors.grey[300]!, blurRadius: 30, offset: Offset(0, 10))
+  BoxShadow(color: SpotmiesTheme.shadow, blurRadius: 30, offset: Offset(0, 10))
 ];
 
 List<Map> drawerItems = [

@@ -11,6 +11,7 @@ import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
 import 'package:spotmies_partner/home/offline.dart';
 import 'package:spotmies_partner/home/online.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
@@ -69,21 +70,21 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
         key: _appBarController?.drawerAppbarScoffoldKey,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.grey[100],
+          backgroundColor: SpotmiesTheme.onSurface,
           leading: InkWell(
             onTap: () {
               widget.drawerController.toggle();
             },
             child: Icon(
               Icons.menu,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
             ),
           ),
           title: TextWid(
             text: pd['name'] == 'Fetching...'
                 ? 'User'
                 : toBeginningOfSentenceCase(pd['name']).toString(),
-            color: Colors.grey[900]!,
+            color: SpotmiesTheme.secondaryVariant,
             size: _width * 0.045,
             weight: FontWeight.w600,
           ),
@@ -96,24 +97,24 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
                     BoxShadow(
                         blurRadius: 2,
                         spreadRadius: 2,
-                        color: Colors.grey[100]!),
+                        color: SpotmiesTheme.onSurface),
                   ]),
               child: FlutterSwitch(
-                  activeColor: Colors.grey[200]!,
+                  activeColor: SpotmiesTheme.surfaceVariant2,
                   activeIcon: Icon(
                     Icons.done,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   inactiveIcon: Icon(
                     Icons.work_off,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
-                  inactiveColor: Colors.grey[200]!,
+                  inactiveColor: SpotmiesTheme.surfaceVariant2,
                   activeToggleColor: Colors.greenAccent[700],
                   inactiveToggleColor: Colors.redAccent[700],
                   activeText: 'Online',
-                  activeTextColor: Colors.grey[900]!,
-                  inactiveTextColor: Colors.grey[900]!,
+                  activeTextColor: SpotmiesTheme.secondaryVariant,
+                  inactiveTextColor: SpotmiesTheme.secondaryVariant,
                   inactiveText: 'Offline',
                   width: _width * 0.2,
                   height: _hight * 0.04,

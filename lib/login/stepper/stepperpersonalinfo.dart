@@ -6,6 +6,7 @@ import 'package:spotmies_partner/login/stepper/step1UI.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
 import 'package:spotmies_partner/login/stepper/step3UI.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -63,7 +64,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
           Scaffold(
             key: _stepperController!.scaffoldKey,
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.black),
+              iconTheme: IconThemeData(color: SpotmiesTheme.onBackground),
               title: TextWid(
                 text: _stepperController!
                     .pagename(_stepperController!.currentStep),
@@ -71,15 +72,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 weight: FontWeight.w600,
                 lSpace: 1.0,
               ),
-              backgroundColor: Colors.grey[50],
+              backgroundColor: SpotmiesTheme.surfaceVariant,
               elevation: 0,
             ),
-            backgroundColor: Colors.grey[50],
+            backgroundColor: SpotmiesTheme.surfaceVariant,
             body: Theme(
               data: ThemeData(
                 colorScheme: Theme.of(context)
                     .colorScheme
-                    .copyWith(primary: Colors.indigo[900]),
+                    .copyWith(primary: SpotmiesTheme.primary),
               ),
               child: Stepper(
                   type: StepperType.horizontal,
@@ -97,9 +98,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                           ElevatedButtonWidget(
                             height: _hight * 0.05,
                             minWidth: _width * 0.35,
-                            bgColor: Colors.indigo[900]!,
+                            bgColor: SpotmiesTheme.primary,
                             buttonName: 'Back',
-                            textColor: Colors.white,
+                            textColor: SpotmiesTheme.background,
                             textSize: _width * 0.04,
                             allRadius: true,
                             leadingIcon: Icon(Icons.navigate_before,
@@ -112,12 +113,12 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                           ElevatedButtonWidget(
                             height: _hight * 0.05,
                             minWidth: _width * 0.35,
-                            bgColor: Colors.indigo[900]!,
+                            bgColor: SpotmiesTheme.primary,
                             allRadius: true,
                             buttonName: _stepperController!.currentStep == 2
                                 ? 'Finish'
                                 : 'Next',
-                            textColor: Colors.white,
+                            textColor: SpotmiesTheme.background,
                             textSize: _width * 0.04,
                             trailingIcon:
                                 Icon(Icons.navigate_next, size: _width * 0.04),

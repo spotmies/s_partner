@@ -7,6 +7,7 @@ import 'package:spotmies_partner/chat/personal_chat_ui_methods.dart';
 import 'package:spotmies_partner/chat/userDetails.dart';
 import 'package:spotmies_partner/controllers/chat_controller.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/chat_input_field.dart';
 import 'package:provider/provider.dart';
@@ -151,7 +152,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.grey[900],
+                                              color: SpotmiesTheme
+                                                  .secondaryVariant,
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           padding: EdgeInsets.only(
@@ -168,7 +170,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 : _chatController?.dateCompare(
                                                     rawMsgData['time'],
                                                     rawMsgDataprev['time']),
-                                            color: Colors.white,
+                                            color: SpotmiesTheme.background,
                                           ),
                                         ),
                                       ],
@@ -194,10 +196,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                           ),
                                           decoration: BoxDecoration(
                                               color: sender == "user"
-                                                  ? Colors.white
+                                                  ? SpotmiesTheme.background
                                                   : sender == "partner"
                                                       ? Colors.blueGrey[50]
-                                                      : Colors.grey[900],
+                                                      : SpotmiesTheme
+                                                          .secondaryVariant,
                                               border: Border.all(
                                                   color: Colors.blueGrey[500]!,
                                                   width: 0.3),
@@ -310,13 +313,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   ? FloatingActionButton(
                       elevation: 0,
                       mini: true,
-                      backgroundColor: Colors.white,
+                      backgroundColor: SpotmiesTheme.background,
                       onPressed: () {
                         _chatController?.scrollToBottom();
                       },
                       child: Icon(
                         Icons.keyboard_arrow_down,
-                        color: Colors.blue[900],
+                        color: SpotmiesTheme.tertiaryVariant,
                         size: _width * 0.07,
                       ),
                     )
@@ -330,14 +333,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   _buildAppBar(BuildContext context, double hight, double width) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.grey[50],
+      backgroundColor: SpotmiesTheme.surfaceVariant,
       leading: IconButton(
           onPressed: () {
             Navigator.pop(context, false);
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: SpotmiesTheme.onBackground,
           )),
       actions: [
         IconButton(
@@ -346,14 +349,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           },
           icon: Icon(
             Icons.phone,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
           ),
         ),
         IconButton(
             padding: EdgeInsets.only(bottom: 0),
             icon: Icon(
               Icons.more_vert,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
             ),
             onPressed: () {
               bottomOptionsMenu(context,

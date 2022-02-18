@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -21,7 +22,7 @@ class _RatingScreenState extends State<RatingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         elevation: 0,
         title: TextWid(
           text: 'Reviews',
@@ -34,7 +35,7 @@ class _RatingScreenState extends State<RatingScreen> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
             )),
       ),
       body: Padding(
@@ -49,7 +50,7 @@ class _RatingScreenState extends State<RatingScreen> {
                     children: [
                       CircleAvatar(
                         radius: width(context) * 0.08,
-                        backgroundColor: Colors.grey[200],
+                        backgroundColor: SpotmiesTheme.surfaceVariant2,
                         child: TextWid(
                           // text: widget.rating[index]['uDetails']?['name'][0],
                           text: 'S',
@@ -80,7 +81,7 @@ class _RatingScreenState extends State<RatingScreen> {
                                     percent: widget.rating[index]
                                             ['feedBackDetails']?['rating'] /
                                         100,
-                                    backgroundColor: Colors.grey[300],
+                                    backgroundColor: SpotmiesTheme.shadow,
                                   ))
                             ],
                           ),
@@ -123,7 +124,7 @@ class _RatingScreenState extends State<RatingScreen> {
                   if (index != 2)
                     Divider(
                       thickness: 1,
-                      color: Colors.grey[300],
+                      color: SpotmiesTheme.shadow,
                       indent: width(context) * 0.07,
                       endIndent: width(context) * 0.02,
                     ),
@@ -157,9 +158,12 @@ reviewMsgs(BuildContext context, rating) {
     width: width(context),
     padding: EdgeInsets.only(top: width(context) * 0.06),
     margin: EdgeInsets.all(10),
-    decoration: BoxDecoration(boxShadow: [
-      BoxShadow(blurRadius: 4, spreadRadius: 2, color: Colors.grey[300]!)
-    ], color: Colors.grey[50], borderRadius: BorderRadius.circular(15.0)),
+    decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(blurRadius: 4, spreadRadius: 2, color: SpotmiesTheme.shadow)
+        ],
+        color: SpotmiesTheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(15.0)),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -190,7 +194,7 @@ reviewMsgs(BuildContext context, rating) {
                         // if (rating[index]['feedBackDetails']?['rating'] != null)
                         CircleAvatar(
                           radius: width(context) * 0.07,
-                          backgroundColor: Colors.grey[200],
+                          backgroundColor: SpotmiesTheme.surfaceVariant2,
                           child: TextWid(
                             // text: rating[index]['uDetails']['name'][0],
                             text: 'S',
@@ -222,7 +226,7 @@ reviewMsgs(BuildContext context, rating) {
                                       percent: rating[index]['feedBackDetails']
                                               ?['rating']! /
                                           100,
-                                      backgroundColor: Colors.grey[300],
+                                      backgroundColor: SpotmiesTheme.shadow,
                                     ))
                               ],
                             ),
@@ -265,7 +269,7 @@ reviewMsgs(BuildContext context, rating) {
                     if (index != 2)
                       Divider(
                         thickness: 1,
-                        color: Colors.grey[300],
+                        color: SpotmiesTheme.shadow,
                         indent: width(context) * 0.07,
                         endIndent: width(context) * 0.02,
                       ),
@@ -279,7 +283,7 @@ reviewMsgs(BuildContext context, rating) {
                         height: height(context) * 0.055,
                         minWidth: width(context) * 0.9,
                         bgColor: Colors.transparent,
-                        textColor: Colors.grey[900]!,
+                        textColor: SpotmiesTheme.secondaryVariant,
                         textSize: width(context) * 0.04,
                         borderRadius: 15.0,
                         borderSideColor: Colors.transparent,

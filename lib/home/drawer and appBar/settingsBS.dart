@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -37,8 +38,8 @@ void settings(BuildContext context, double hight, double width) async {
                       padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Select Light Modes',
-                        style: fonts(
-                            width * 0.05, FontWeight.w700, Colors.grey[900]),
+                        style: fonts(width * 0.05, FontWeight.w700,
+                            SpotmiesTheme.secondaryVariant),
                       ),
                     ),
                     Row(
@@ -48,7 +49,7 @@ void settings(BuildContext context, double hight, double width) async {
                           width: width * 0.4,
                           height: hight * 0.06,
                           decoration: BoxDecoration(
-                              color: Colors.indigo[50],
+                              color: SpotmiesTheme.primaryVariant,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +58,7 @@ void settings(BuildContext context, double hight, double width) async {
                               Text(
                                 'Light Mode',
                                 style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.grey[900]),
+                                    SpotmiesTheme.secondaryVariant),
                               )
                             ],
                           ),
@@ -66,7 +67,7 @@ void settings(BuildContext context, double hight, double width) async {
                           width: width * 0.4,
                           height: hight * 0.06,
                           decoration: BoxDecoration(
-                              color: Colors.grey[900],
+                              color: SpotmiesTheme.secondaryVariant,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,11 +75,11 @@ void settings(BuildContext context, double hight, double width) async {
                               Text(
                                 'Dark Mode',
                                 style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.white),
+                                    SpotmiesTheme.background),
                               ),
                               Icon(
                                 Icons.dark_mode,
-                                color: Colors.white,
+                                color: SpotmiesTheme.background,
                               ),
                             ],
                           ),
@@ -100,8 +101,8 @@ void settings(BuildContext context, double hight, double width) async {
                       padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Choose Your Languege',
-                        style: fonts(
-                            width * 0.05, FontWeight.w700, Colors.grey[900]),
+                        style: fonts(width * 0.05, FontWeight.w700,
+                            SpotmiesTheme.secondaryVariant),
                       ),
                     ),
                     Row(
@@ -111,7 +112,7 @@ void settings(BuildContext context, double hight, double width) async {
                           width: width * 0.3,
                           height: hight * 0.045,
                           decoration: BoxDecoration(
-                              color: Colors.indigo[50],
+                              color: SpotmiesTheme.primaryVariant,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,7 +120,7 @@ void settings(BuildContext context, double hight, double width) async {
                               Text(
                                 'English',
                                 style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.grey[900]),
+                                    SpotmiesTheme.secondaryVariant),
                               )
                             ],
                           ),
@@ -128,7 +129,7 @@ void settings(BuildContext context, double hight, double width) async {
                           width: width * 0.3,
                           height: hight * 0.045,
                           decoration: BoxDecoration(
-                              color: Colors.grey[900],
+                              color: SpotmiesTheme.secondaryVariant,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -136,7 +137,7 @@ void settings(BuildContext context, double hight, double width) async {
                               Text(
                                 'తెలుగు',
                                 style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.white),
+                                    SpotmiesTheme.background),
                               ),
                             ],
                           ),
@@ -145,7 +146,7 @@ void settings(BuildContext context, double hight, double width) async {
                           width: width * 0.3,
                           height: hight * 0.045,
                           decoration: BoxDecoration(
-                              color: Colors.indigo[50],
+                              color: SpotmiesTheme.primaryVariant,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,7 +154,7 @@ void settings(BuildContext context, double hight, double width) async {
                               Text(
                                 'हिंदी',
                                 style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.grey[900]),
+                                    SpotmiesTheme.secondaryVariant),
                               )
                             ],
                           ),
@@ -164,22 +165,22 @@ void settings(BuildContext context, double hight, double width) async {
                 ),
               ),
               Container(
-                      padding: EdgeInsets.all(5),
-                      child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[50]!,
-                        minWidth: width,
-                        height: hight * 0.06,
-                        textColor: Colors.grey[900]!,
-                        buttonName: 'Close',
-                        textSize: width * 0.05,
-                        textStyle: FontWeight.w600,
-                        borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[50]!,
-                        onClick: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
+                padding: EdgeInsets.all(5),
+                child: ElevatedButtonWidget(
+                  bgColor: SpotmiesTheme.primaryVariant,
+                  minWidth: width,
+                  height: hight * 0.06,
+                  textColor: SpotmiesTheme.secondaryVariant,
+                  buttonName: 'Close',
+                  textSize: width * 0.05,
+                  textStyle: FontWeight.w600,
+                  borderRadius: 5.0,
+                  borderSideColor: SpotmiesTheme.primaryVariant,
+                  onClick: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
             ],
           ),
         );

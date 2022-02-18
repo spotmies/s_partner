@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
@@ -38,18 +39,18 @@ class _VideoState extends State<Video> {
             elevation: 0,
             title: TextWid(
               text: 'Media',
-              size: width*0.05,
+              size: width * 0.05,
               weight: FontWeight.w600,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.secondaryVariant,
             ),
-            backgroundColor: Colors.indigo[50],
+            backgroundColor: SpotmiesTheme.primaryVariant,
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.grey[900],
+                  color: SpotmiesTheme.secondaryVariant,
                 ))),
         // backgroundColor: Colors.transparent,
         body: ListView(
@@ -57,7 +58,9 @@ class _VideoState extends State<Video> {
             Container(
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: VideoPlayerWidget(controller: videoPlayerController!)),
-                SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               // height: MediaQuery.of(context).size.height * 0.05,
               child: TextWid(
@@ -68,7 +71,9 @@ class _VideoState extends State<Video> {
                     '*This video/image describes the issues facing the user. \nyou cannot use or publish this video on other social media platforms it causes sevier actions',
               ),
             ),
-            SizedBox(height: width*0.05,),
+            SizedBox(
+              height: width * 0.05,
+            ),
             Container(
                 //  height: MediaQuery.of(context).size.height*0.2,
                 child: ElevatedButtonWidget(
@@ -76,8 +81,8 @@ class _VideoState extends State<Video> {
               textSize: 18,
               height: width * 0.21,
               minWidth: width * 0.9,
-              bgColor: Colors.indigo[50],
-              textColor: Colors.grey[900],
+              bgColor: SpotmiesTheme.primaryVariant,
+              textColor: SpotmiesTheme.secondaryVariant,
               textStyle: FontWeight.w600,
               borderRadius: 0.0,
               onClick: () {
@@ -98,10 +103,9 @@ class VideoPlayerWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-       controller.value.isInitialized
-          ? Container(alignment: Alignment.topCenter, child: buildVideo())
-          : Container(child: circleProgress());
+  Widget build(BuildContext context) => controller.value.isInitialized
+      ? Container(alignment: Alignment.topCenter, child: buildVideo())
+      : Container(child: circleProgress());
 
   Widget buildVideo() => Stack(
         children: <Widget>[
@@ -151,7 +155,8 @@ class BasicOverlayWidget extends StatelessWidget {
       ? Container()
       : Container(
           alignment: Alignment.center,
-          color: Colors.black26,
-          child: Icon(Icons.play_circle_fill, color: Colors.white, size: 80),
+          color: SpotmiesTheme.onBackground.withOpacity(26),
+          child: Icon(Icons.play_circle_fill,
+              color: SpotmiesTheme.background, size: 80),
         );
 }

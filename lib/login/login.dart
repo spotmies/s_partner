@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -34,7 +35,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
     return Consumer<TimeProvider>(builder: (context, data, child) {
       return Scaffold(
           key: _loginPageController!.scaffoldkey,
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           body: ListView(children: [
             Form(
               key: _loginPageController!.formkey,
@@ -66,14 +67,14 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         text: 'SPOTMIES PARTNER',
                                         weight: FontWeight.w600,
                                         size: _width * 0.06,
-                                        color: Colors.indigo[900]!,
+                                        color: SpotmiesTheme.primary,
                                         lSpace: 1.0,
                                       ),
                                       TextWid(
                                           text: 'BECOME A BOSS TO YOUR WORLD',
                                           weight: FontWeight.w600,
                                           size: _width * 0.019,
-                                          color: Colors.grey[900]!,
+                                          color: SpotmiesTheme.secondaryVariant,
                                           lSpace: 4.0),
                                     ],
                                   )
@@ -96,7 +97,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                   text: 'LOGIN',
                                   weight: FontWeight.w600,
                                   size: _width * 0.06,
-                                  color: Colors.indigo[900]!,
+                                  color: SpotmiesTheme.primary,
                                   lSpace: 1.0,
                                 ),
                                 SizedBox(
@@ -127,7 +128,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                   margin: EdgeInsets.only(
                                       top: 0, right: 5, left: 5),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[50],
+                                    color: SpotmiesTheme.surfaceVariant,
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Container(
@@ -135,7 +136,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         top: 0, right: 5, left: 5),
                                     width: _width,
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: SpotmiesTheme.background,
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: TextFormField(
@@ -148,23 +149,28 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                       decoration: InputDecoration(
                                         border: new OutlineInputBorder(
                                             borderSide: new BorderSide(
-                                                color: Colors.white),
+                                                color:
+                                                    SpotmiesTheme.background),
                                             borderRadius:
                                                 BorderRadius.circular(15)),
                                         suffixIcon: Icon(
                                           Icons.phone_android,
-                                          color: Colors.indigo[900],
+                                          color: SpotmiesTheme.primary,
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15)),
                                             borderSide: BorderSide(
-                                                width: 1, color: Colors.white)),
+                                                width: 1,
+                                                color:
+                                                    SpotmiesTheme.background)),
                                         enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15)),
                                             borderSide: BorderSide(
-                                                width: 1, color: Colors.white)),
+                                                width: 1,
+                                                color:
+                                                    SpotmiesTheme.background)),
                                         hintStyle: fonts(_width * 0.045,
                                             FontWeight.w600, Colors.grey[400]),
                                         hintText: 'Phone number',
@@ -180,6 +186,10 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                         return null;
                                       },
                                       maxLength: 10,
+                                      style: fonts(
+                                          _width * 0.045,
+                                          FontWeight.w600,
+                                          SpotmiesTheme.onBackground),
                                       keyboardAppearance: Brightness.dark,
                                       buildCounter: (BuildContext context,
                                               {int? currentLength,
@@ -208,10 +218,14 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                         //   // minWidth: _width * 1,
                         // ),
                         child: FloatingActionButton(
-                            backgroundColor: Colors.indigo[900],
+                            backgroundColor: SpotmiesTheme.primary,
                             child: data.loader
-                                ? CircularProgressIndicator(color: Colors.white)
-                                : Icon(Icons.arrow_forward_ios),
+                                ? CircularProgressIndicator(
+                                    color: SpotmiesTheme.background)
+                                : Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: SpotmiesTheme.background,
+                                  ),
                             onPressed: () {
                               // _loginPageController.dataToOTP();
                               if (data.loader) return;

@@ -17,6 +17,7 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/settingsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/signoutBS.dart';
 import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
@@ -131,7 +132,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                                   onPressed: () {},
                                   icon: Icon(
                                     element['icon'],
-                                    color: Colors.grey[900],
+                                    color: SpotmiesTheme.secondaryVariant,
                                     size: _width * 0.05,
                                   ),
                                 ),
@@ -140,7 +141,7 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
                                 ),
                                 Text(element['title'],
                                     style: GoogleFonts.josefinSans(
-                                      color: Colors.grey[900],
+                                      color: SpotmiesTheme.secondaryVariant,
                                       fontSize: _width * 0.045,
                                       fontWeight: FontWeight.w600,
                                     ))

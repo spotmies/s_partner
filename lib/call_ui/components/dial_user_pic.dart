@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/size.config.dart';
-
+import 'package:spotmies_partner/providers/theme_provider.dart';
 
 class DailUserPic extends StatelessWidget {
   const DailUserPic({
@@ -20,8 +20,8 @@ class DailUserPic extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(colors: [
-          Colors.white.withOpacity(0.02),
-          Colors.white.withOpacity(0.05),
+          SpotmiesTheme.background.withOpacity(0.02),
+          SpotmiesTheme.background.withOpacity(0.05),
         ], stops: [
           0.5,
           1

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/orders_controller.dart';
 import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
@@ -51,7 +52,7 @@ class _PostListState extends StateMVC<PostList> {
                 height: _hight * 1,
                 width: _width * 1,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                 ),
                 child: Consumer<PartnerDetailsProvider>(
                   builder: (context, data, child) {
@@ -96,7 +97,7 @@ class _PostListState extends StateMVC<PostList> {
                                         height: _hight * 0.265,
                                         width: _width * 1,
                                         decoration: BoxDecoration(
-                                          color: Colors.grey[50],
+                                          color: SpotmiesTheme.surfaceVariant,
                                           // borderRadius: BorderRadius.circular(15),
                                         ),
                                         child: Column(
@@ -153,8 +154,8 @@ class _PostListState extends StateMVC<PostList> {
                                                               height: _hight *
                                                                   0.032,
                                                               decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
+                                                                  color: SpotmiesTheme
+                                                                      .background,
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -169,9 +170,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                         ordState: o[index]['isOrderCompletedByPartner']
                                                                             ? 9
                                                                             : o[index]['orderState']),
-                                                                    color: Colors
-                                                                            .indigo[
-                                                                        900],
+                                                                    color: SpotmiesTheme
+                                                                        .primary,
                                                                     size:
                                                                         _width *
                                                                             0.04,
@@ -189,9 +189,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                           : o[index]
                                                                               [
                                                                               'orderState']),
-                                                                      color: Colors
-                                                                              .indigo[
-                                                                          900]!,
+                                                                      color: SpotmiesTheme
+                                                                          .primary,
                                                                       weight: FontWeight
                                                                           .w600,
                                                                       size: _width *
@@ -208,8 +207,8 @@ class _PostListState extends StateMVC<PostList> {
                                                               ' - ' +
                                                               getTime(o[index]
                                                                   ['schedule']),
-                                                          color:
-                                                              Colors.grey[600]!,
+                                                          color: SpotmiesTheme
+                                                              .secondary,
                                                           size: _width * 0.03,
                                                           weight:
                                                               FontWeight.w600,
@@ -232,14 +231,15 @@ class _PostListState extends StateMVC<PostList> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: Colors.grey[50],
+                                                      color: SpotmiesTheme
+                                                          .surfaceVariant,
                                                       shape: BoxShape.rectangle,
                                                     ),
                                                     child: (images.length == 0)
                                                         ? Icon(
                                                             Icons.engineering,
-                                                            color: Colors
-                                                                .grey[900],
+                                                            color: SpotmiesTheme
+                                                                .secondaryVariant,
                                                           )
                                                         : Image.network(
                                                             images.first),
@@ -267,9 +267,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                   Icon(
                                                                     Icons
                                                                         .account_balance_wallet,
-                                                                    color: Colors
-                                                                            .grey[
-                                                                        900],
+                                                                    color: SpotmiesTheme
+                                                                        .secondaryVariant,
                                                                     size:
                                                                         _width *
                                                                             0.04,
@@ -327,14 +326,14 @@ class _PostListState extends StateMVC<PostList> {
                                                                         radius: _width *
                                                                             0.02,
                                                                         backgroundColor:
-                                                                            Colors.indigo[
-                                                                                900],
+                                                                            SpotmiesTheme
+                                                                                .primary,
                                                                         child:
                                                                             TextWid(
                                                                           text:
                                                                               '5',
                                                                           color:
-                                                                              Colors.white,
+                                                                              SpotmiesTheme.background,
                                                                           size: _width *
                                                                               0.025,
                                                                         )))
@@ -356,36 +355,42 @@ class _PostListState extends StateMVC<PostList> {
                                                   ElevatedButtonWidget(
                                                     minWidth: _width * 0.498,
                                                     height: _hight * 0.06,
-                                                    bgColor: Colors.grey[50]!,
+                                                    bgColor: SpotmiesTheme
+                                                        .surfaceVariant,
                                                     buttonName: 'Need Help ?',
-                                                    textColor:
-                                                        Colors.grey[900]!,
+                                                    textColor: SpotmiesTheme
+                                                        .secondaryVariant,
                                                     borderRadius: 0.0,
                                                     textSize: _width * 0.04,
                                                     leadingIcon: Icon(
                                                       Icons.help,
                                                       size: _width * 0.04,
-                                                      color: Colors.grey[900],
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                     ),
                                                     borderSideColor:
-                                                        Colors.grey[50]!,
+                                                        SpotmiesTheme
+                                                            .surfaceVariant,
                                                   ),
                                                   ElevatedButtonWidget(
                                                     minWidth: _width * 0.498,
                                                     height: _hight * 0.06,
-                                                    bgColor: Colors.grey[50]!,
+                                                    bgColor: SpotmiesTheme
+                                                        .surfaceVariant,
                                                     buttonName: 'View Menu',
-                                                    textColor:
-                                                        Colors.grey[900]!,
+                                                    textColor: SpotmiesTheme
+                                                        .secondaryVariant,
                                                     borderRadius: 0.0,
                                                     textSize: _width * 0.04,
                                                     trailingIcon: Icon(
                                                       Icons.menu,
                                                       size: _width * 0.04,
-                                                      color: Colors.grey[900],
+                                                      color: SpotmiesTheme
+                                                          .secondaryVariant,
                                                     ),
                                                     borderSideColor:
-                                                        Colors.grey[50]!,
+                                                        SpotmiesTheme
+                                                            .surfaceVariant,
                                                     onClick: () {
                                                       // postmenu(orderid, _hight, _width);
                                                     },
@@ -412,7 +417,7 @@ class _PostListState extends StateMVC<PostList> {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 20),
       height: 50,
-      color: Colors.white,
+      color: SpotmiesTheme.background,
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
@@ -424,7 +429,7 @@ class _PostListState extends StateMVC<PostList> {
                 margin: EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.blueAccent),
-                    color: Colors.grey[50],
+                    color: SpotmiesTheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(15)),
                 child: Container(
                     alignment: Alignment.center,
