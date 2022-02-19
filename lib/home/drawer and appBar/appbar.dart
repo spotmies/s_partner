@@ -62,102 +62,104 @@ class _AppBarScreenState extends StateMVC<AppBarScreen> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
 
-    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      pd = data.getProfileDetails.isEmpty
-          ? {'name': 'Fetching...', 'availability': false}
-          : data.getProfileDetails;
-      return Scaffold(
-        key: _appBarController?.drawerAppbarScoffoldKey,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: SpotmiesTheme.onSurface,
-          leading: InkWell(
-            onTap: () {
-              widget.drawerController.toggle();
-            },
-            child: Icon(
-              Icons.menu,
+    return Consumer<ThemeProvider>(builder: (context, data, child) {
+      return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+        pd = data.getProfileDetails.isEmpty
+            ? {'name': 'Fetching...', 'availability': false}
+            : data.getProfileDetails;
+        return Scaffold(
+          key: _appBarController?.drawerAppbarScoffoldKey,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: SpotmiesTheme.onSurface,
+            leading: InkWell(
+              onTap: () {
+                widget.drawerController.toggle();
+              },
+              child: Icon(
+                Icons.menu,
+                color: SpotmiesTheme.secondaryVariant,
+              ),
+            ),
+            title: TextWid(
+              text: pd['name'] == 'Fetching...'
+                  ? 'User'
+                  : toBeginningOfSentenceCase(pd['name']).toString(),
               color: SpotmiesTheme.secondaryVariant,
+              size: _width * 0.045,
+              weight: FontWeight.w600,
             ),
-          ),
-          title: TextWid(
-            text: pd['name'] == 'Fetching...'
-                ? 'User'
-                : toBeginningOfSentenceCase(pd['name']).toString(),
-            color: SpotmiesTheme.secondaryVariant,
-            size: _width * 0.045,
-            weight: FontWeight.w600,
-          ),
-          actions: [
-            Container(
-              padding: EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 2,
-                        spreadRadius: 2,
-                        color: SpotmiesTheme.onSurface),
-                  ]),
-              child: FlutterSwitch(
-                  activeColor: SpotmiesTheme.surfaceVariant2,
-                  activeIcon: Icon(
-                    Icons.done,
-                    color: SpotmiesTheme.background,
-                  ),
-                  inactiveIcon: Icon(
-                    Icons.work_off,
-                    color: SpotmiesTheme.background,
-                  ),
-                  inactiveColor: SpotmiesTheme.surfaceVariant2,
-                  activeToggleColor: Colors.greenAccent[700],
-                  inactiveToggleColor: Colors.redAccent[700],
-                  activeText: 'Online',
-                  activeTextColor: SpotmiesTheme.secondaryVariant,
-                  inactiveTextColor: SpotmiesTheme.secondaryVariant,
-                  inactiveText: 'Offline',
-                  width: _width * 0.2,
-                  height: _hight * 0.04,
-                  valueFontSize: _width * 0.03,
-                  toggleSize: _width * 0.05,
-                  borderRadius: 30.0,
-                  padding: 5.0,
-                  showOnOff: true,
-                  value: pd['availability'],
-                  onToggle: (value) {
-                    //  displayAwesomeNotification(context);
-                    if (value && pd['permission'] < 10) {
-                      return snackbar(context,
-                          "Your account In verfication please Try again later");
-                    }
-                    if (data.offlineScreenLoader) return;
-                    data.setOffileLoader(true);
-                    data.setAvailability(value);
+            actions: [
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 2,
+                          color: SpotmiesTheme.onSurface),
+                    ]),
+                child: FlutterSwitch(
+                    activeColor: SpotmiesTheme.surfaceVariant2,
+                    activeIcon: Icon(
+                      Icons.done,
+                      color: SpotmiesTheme.background,
+                    ),
+                    inactiveIcon: Icon(
+                      Icons.work_off,
+                      color: SpotmiesTheme.background,
+                    ),
+                    inactiveColor: SpotmiesTheme.surfaceVariant2,
+                    activeToggleColor: Colors.greenAccent[700],
+                    inactiveToggleColor: Colors.redAccent[700],
+                    activeText: 'Online',
+                    activeTextColor: SpotmiesTheme.secondaryVariant,
+                    inactiveTextColor: SpotmiesTheme.secondaryVariant,
+                    inactiveText: 'Offline',
+                    width: _width * 0.2,
+                    height: _hight * 0.04,
+                    valueFontSize: _width * 0.03,
+                    toggleSize: _width * 0.05,
+                    borderRadius: 30.0,
+                    padding: 5.0,
+                    showOnOff: true,
+                    value: pd['availability'],
+                    onToggle: (value) {
+                      //  displayAwesomeNotification(context);
+                      if (value && pd['permission'] < 10) {
+                        return snackbar(context,
+                            "Your account In verfication please Try again later");
+                      }
+                      if (data.offlineScreenLoader) return;
+                      data.setOffileLoader(true);
+                      data.setAvailability(value);
 
-                    Map<String, String> body = {
-                      "availability": value.toString(),
-                    };
-                    updatePartnerData(body);
-                  }),
-            ),
-          ],
-        ),
-        body: GestureDetector(
-          onPanUpdate: (details) {
-            //   Swiping in right direction.
-            if (details.delta.dx > 0) {
-              // print("right");
-              widget.drawerController.open();
-            } else if (details.delta.dx < 0) {
-              // print("left");
-              widget.drawerController.close();
-            }
-          },
-          child: Container(
-            child: pd['availability'] == true ? Online(pd) : Offline(),
+                      Map<String, String> body = {
+                        "availability": value.toString(),
+                      };
+                      updatePartnerData(body);
+                    }),
+              ),
+            ],
           ),
-        ),
-      );
+          body: GestureDetector(
+            onPanUpdate: (details) {
+              //   Swiping in right direction.
+              if (details.delta.dx > 0) {
+                // print("right");
+                widget.drawerController.open();
+              } else if (details.delta.dx < 0) {
+                // print("left");
+                widget.drawerController.close();
+              }
+            },
+            child: Container(
+              child: pd['availability'] == true ? Online(pd) : Offline(),
+            ),
+          ),
+        );
+      });
     });
   }
 }

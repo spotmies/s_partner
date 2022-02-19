@@ -24,7 +24,7 @@ typeofChat(type, message, sender, double hight, double width,
         child: TextWid(
             text: message,
             weight: FontWeight.w600,
-            color: SpotmiesTheme.chatButton,
+            color: SpotmiesTheme.onBackground,
             decoration: TextDecoration.underline));
   } else {
     switch (type) {
@@ -71,7 +71,7 @@ typeofChat(type, message, sender, double hight, double width,
                 TextWid(
                     text: 'Play Video',
                     weight: FontWeight.w600,
-                    color: SpotmiesTheme.chatButton,
+                    color: SpotmiesTheme.onBackground,
                     decoration: TextDecoration.underline),
               ],
             ));
@@ -92,7 +92,7 @@ typeofChat(type, message, sender, double hight, double width,
                 TextWid(
                     text: 'Play Audio',
                     weight: FontWeight.w600,
-                    color: SpotmiesTheme.chatButton,
+                    color: SpotmiesTheme.onBackground,
                     decoration: TextDecoration.underline),
               ],
             ));

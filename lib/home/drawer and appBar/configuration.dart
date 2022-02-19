@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 
-Color primaryGreen = SpotmiesTheme.background;
+// Color primaryGreen = SpotmiesTheme.background;
 // Color primaryGreen = Color(0xff416d6d);
 
 List<BoxShadow> shadowList = [

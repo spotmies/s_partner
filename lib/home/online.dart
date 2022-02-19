@@ -61,373 +61,380 @@ class _OnlineState extends StateMVC<Online> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        key: _incomingOrdersController!.incomingscaffoldkey,
-        backgroundColor: SpotmiesTheme.surfaceVariant,
-        body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          List<dynamic>? ld = data.getIncomingOrder;
-          List<dynamic>? o = List.from(ld.reversed);
-          partnerProfile = data.getProfileDetails;
-          // if (data.reloadIncomingOrders == true)
-          //   _incomingOrdersController.incomingOrders(notify: false);
-          return Stack(
-            children: [
-              Container(
-                  child: RefreshIndicator(
-                onRefresh: partnerProvider!.getOnlyIncomingOrders,
-                child: o.length < 1
-                    ? Container(
-                        padding: EdgeInsets.all(width(context) * 0.09),
-                        alignment: Alignment.center,
-                        child: NoDataPlaceHolder(
-                            height: height(context),
-                            width: width(context),
-                            title:
-                                "You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications "),
-                      )
-                    : ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: o.length,
-                        padding: EdgeInsets.all(15),
-                        itemBuilder: (BuildContext ctxt, int index) {
-                          var u = o[index]['uDetails'];
-                          List<String> images = List.from(o[index]['media']);
+    return Consumer<ThemeProvider>(builder: (context, data, child) {
+      return Scaffold(
+          key: _incomingOrdersController!.incomingscaffoldkey,
+          backgroundColor: SpotmiesTheme.background,
+          body:
+              Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+            List<dynamic>? ld = data.getIncomingOrder;
+            List<dynamic>? o = List.from(ld.reversed);
+            partnerProfile = data.getProfileDetails;
+            // if (data.reloadIncomingOrders == true)
+            //   _incomingOrdersController.incomingOrders(notify: false);
+            return Stack(
+              children: [
+                Container(
+                    child: RefreshIndicator(
+                  onRefresh: partnerProvider!.getOnlyIncomingOrders,
+                  child: o.length < 1
+                      ? Container(
+                          padding: EdgeInsets.all(width(context) * 0.09),
+                          alignment: Alignment.center,
+                          child: NoDataPlaceHolder(
+                              height: height(context),
+                              width: width(context),
+                              title:
+                                  "You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications "),
+                        )
+                      : ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: o.length,
+                          padding: EdgeInsets.all(15),
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            var u = o[index]['uDetails'];
+                            List<String> images = List.from(o[index]['media']);
 
-                          return InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PostOverView(
-                                    onBottomSheet: () {
-                                      bidSendingBottomSheet(
-                                          _hight,
-                                          _width,
-                                          o[index]["uId"],
-                                          o[index],
-                                          o[index]["ordId"],
-                                          o[index]["pId"],
-                                          u['_id'],
-                                          partnerProfile!['_id'],
-                                          from: "outside");
-                                    },
-                                    orderId: o[index]['ordId'].toString(),
-                                    from: "incomingOrders",
-                                    onclick:
-                                        (orderData, pDetailsId, responseType) {
-                                      print("onclick>>>>>>>");
-                                      _incomingOrdersController!.respondToOrder(
-                                          orderData,
-                                          pDetailsId,
-                                          responseType,
-                                          context);
-                                    }),
-                              ));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey[300]!,
-                                    blurRadius: 4,
-                                    spreadRadius: 1,
-                                  )
-                                ],
-                                //  boxShadow: kElevationToShadow[1],
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15)),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 10),
-                                    height: _hight * 0.11,
-                                    decoration: BoxDecoration(
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PostOverView(
+                                      onBottomSheet: () {
+                                        bidSendingBottomSheet(
+                                            _hight,
+                                            _width,
+                                            o[index]["uId"],
+                                            o[index],
+                                            o[index]["ordId"],
+                                            o[index]["pId"],
+                                            u['_id'],
+                                            partnerProfile!['_id'],
+                                            from: "outside");
+                                      },
+                                      orderId: o[index]['ordId'].toString(),
+                                      from: "incomingOrders",
+                                      onclick: (orderData, pDetailsId,
+                                          responseType) {
+                                        print("onclick>>>>>>>");
+                                        _incomingOrdersController!
+                                            .respondToOrder(
+                                                orderData,
+                                                pDetailsId,
+                                                responseType,
+                                                context);
+                                      }),
+                                ));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: SpotmiesTheme.shadow,
+                                      blurRadius: 0,
+                                      spreadRadius: 0,
+                                    )
+                                  ],
+                                  //  boxShadow: kElevationToShadow[1],
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15)),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding:
+                                          EdgeInsets.only(left: 15, right: 10),
+                                      height: _hight * 0.11,
+                                      decoration: BoxDecoration(
                                         color: SpotmiesTheme.surfaceVariant2,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(15),
                                             topRight: Radius.circular(15)),
-                                        boxShadow: kElevationToShadow[0]),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextWid(
-                                              text: partnerProvider!
-                                                  .getServiceNameById(
-                                                      o[index]['job']),
-                                              size: _width * 0.04,
-                                              color: SpotmiesTheme
-                                                  .secondaryVariant,
-                                              weight: FontWeight.w600,
-                                            ),
-                                            Row(
-                                              children: [
-                                                o[index]['orderState'] > 6
-                                                    ? takeOverWid(_width)
-                                                    : Container(),
-                                                IconButton(
-                                                    icon: Icon(
-                                                      Icons.more_horiz,
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                    ),
-                                                    onPressed: () {
-                                                      onlineOrdersButtomMenu(
-                                                          o[index]['uId'],
-                                                          o[index],
-                                                          o[index]['ordId'],
-                                                          o[index]['pId'],
-                                                          u['_id'],
-                                                          partnerProfile![
-                                                              '_id'],
-                                                          _hight,
-                                                          _width);
-                                                    }),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                // width: _width * 0.45,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.schedule,
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                      size: _width * 0.045,
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width * 0.01,
-                                                    ),
-                                                    TextWid(
-                                                      text: getDate(
-                                                          o[index]['schedule']),
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    TextWid(
-                                                      text: '-' +
-                                                          getTime(o[index]
-                                                              ['schedule']),
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                      size: _width * 0.04,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: _width * 0.35,
-                                              alignment: Alignment.centerRight,
-                                              child: o[index]['money'] != null
-                                                  ? TextWid(
-                                                      text: 'Rs:  ' +
-                                                          o[index]['money']
-                                                              .toString() +
-                                                          ' /-',
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                      size: _width * 0.04,
-                                                    )
-                                                  : TextWid(
-                                                      text:
-                                                          "Rs: Not mentioned"),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    // margin: EdgeInsets.only(bottom: 20),
-                                    padding: EdgeInsets.all(10),
-                                    height: _hight * 0.21,
-                                    // width: _width * 0.88,
-                                    decoration: BoxDecoration(
-                                      color: SpotmiesTheme.surfaceVariant,
-
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15)),
-                                      // boxShadow: kElevationToShadow[0]
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: _hight * 0.11,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Row(
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              InkWell(
-                                                onTap: () {},
-                                                child: Container(
-                                                    // height: _hight * 0.15,
-                                                    width: _width * 0.13,
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          SpotmiesTheme
-                                                              .background,
-                                                      child: images.isNotEmpty
-                                                          ? Image.network(
-                                                              images.first)
-                                                          : Icon(
-                                                              Icons
-                                                                  .home_repair_service_outlined,
-                                                              color: SpotmiesTheme
-                                                                  .secondaryVariant,
-                                                            ),
-                                                    )),
+                                              TextWid(
+                                                text: partnerProvider!
+                                                    .getServiceNameById(
+                                                        o[index]['job']),
+                                                size: _width * 0.04,
+                                                color: SpotmiesTheme
+                                                    .secondaryVariant,
+                                                weight: FontWeight.w600,
                                               ),
-                                              Container(
-                                                width: _width * 0.53,
-                                                child: TextWid(
-                                                  text:
-                                                      toBeginningOfSentenceCase(
-                                                    o[index]['problem']
-                                                        .toString(),
-                                                  ).toString(),
-                                                  align: TextAlign.center,
-                                                  flow: TextOverflow.visible,
-                                                  size: _width * 0.04,
-                                                ),
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.info,
-                                                    color: Colors.grey[400],
-                                                  ))
+                                              Row(
+                                                children: [
+                                                  o[index]['orderState'] > 6
+                                                      ? takeOverWid(_width)
+                                                      : Container(),
+                                                  IconButton(
+                                                      icon: Icon(
+                                                        Icons.more_horiz,
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                      ),
+                                                      onPressed: () {
+                                                        onlineOrdersButtomMenu(
+                                                            o[index]['uId'],
+                                                            o[index],
+                                                            o[index]['ordId'],
+                                                            o[index]['pId'],
+                                                            u['_id'],
+                                                            partnerProfile![
+                                                                '_id'],
+                                                            _hight,
+                                                            _width);
+                                                      }),
+                                                ],
+                                              )
                                             ],
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: _hight * 0.015,
-                                        ),
-
-                                        // o[index]['orderState'] < 7
-                                        //     ?
-                                        SizedBox(
-                                          height: _hight * 0.057,
-                                          child: Column(
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  ElevatedButtonWidget(
-                                                    buttonName: 'Reject',
-                                                    height: _hight * 0.05,
-                                                    minWidth: _width * 0.3,
-                                                    bgColor: SpotmiesTheme
-                                                        .surfaceVariant,
-                                                    textColor: SpotmiesTheme
-                                                        .secondaryVariant,
-                                                    textSize: _width * 0.04,
-                                                    allRadius: true,
-                                                    leadingIcon: Icon(
-                                                      Icons.close,
-                                                      color: SpotmiesTheme
-                                                          .secondaryVariant,
-                                                      size: _width * 0.04,
-                                                    ),
-                                                    borderRadius: 15.0,
-                                                    borderSideColor:
-                                                        SpotmiesTheme
-                                                            .surfaceVariant,
-                                                    onClick: () {
-                                                      _incomingOrdersController!
-                                                          .respondToOrder(
-                                                              o[index],
-                                                              partnerProfile![
-                                                                  '_id'],
-                                                              "reject",
-                                                              context);
-                                                    },
+                                              Expanded(
+                                                child: Container(
+                                                  // width: _width * 0.45,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.schedule,
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                        size: _width * 0.045,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      TextWid(
+                                                        text: getDate(o[index]
+                                                            ['schedule']),
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                        size: _width * 0.04,
+                                                      ),
+                                                      TextWid(
+                                                        text: '-' +
+                                                            getTime(o[index]
+                                                                ['schedule']),
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                        size: _width * 0.04,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  SizedBox(
-                                                    // height: _hight * 0.057,
-                                                    child: ElevatedButtonWidget(
-                                                      buttonName: 'Accept',
+                                                ),
+                                              ),
+                                              Container(
+                                                width: _width * 0.35,
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: o[index]['money'] != null
+                                                    ? TextWid(
+                                                        text: 'Rs:  ' +
+                                                            o[index]['money']
+                                                                .toString() +
+                                                            ' /-',
+                                                        color: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                        size: _width * 0.04,
+                                                      )
+                                                    : TextWid(
+                                                        text:
+                                                            "Rs: Not mentioned"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      // margin: EdgeInsets.only(bottom: 20),
+                                      padding: EdgeInsets.all(10),
+                                      height: _hight * 0.21,
+                                      // width: _width * 0.88,
+                                      decoration: BoxDecoration(
+                                        color: SpotmiesTheme.surfaceVariant,
+
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15)),
+                                        // boxShadow: kElevationToShadow[0]
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: _hight * 0.11,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                      // height: _hight * 0.15,
+                                                      width: _width * 0.13,
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            SpotmiesTheme
+                                                                .background,
+                                                        child: images.isNotEmpty
+                                                            ? Image.network(
+                                                                images.first)
+                                                            : Icon(
+                                                                Icons
+                                                                    .home_repair_service_outlined,
+                                                                color: SpotmiesTheme
+                                                                    .secondaryVariant,
+                                                              ),
+                                                      )),
+                                                ),
+                                                Container(
+                                                  width: _width * 0.53,
+                                                  child: TextWid(
+                                                    text:
+                                                        toBeginningOfSentenceCase(
+                                                      o[index]['problem']
+                                                          .toString(),
+                                                    ).toString(),
+                                                    align: TextAlign.center,
+                                                    flow: TextOverflow.visible,
+                                                    size: _width * 0.04,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.info,
+                                                      color: Colors.grey[400],
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: _hight * 0.015,
+                                          ),
+
+                                          // o[index]['orderState'] < 7
+                                          //     ?
+                                          SizedBox(
+                                            height: _hight * 0.057,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    ElevatedButtonWidget(
+                                                      buttonName: 'Reject',
                                                       height: _hight * 0.05,
-                                                      minWidth: _width * 0.55,
+                                                      minWidth: _width * 0.3,
                                                       bgColor: SpotmiesTheme
-                                                          .secondaryVariant,
+                                                          .surfaceVariant,
                                                       textColor: SpotmiesTheme
-                                                          .background,
+                                                          .secondaryVariant,
                                                       textSize: _width * 0.04,
                                                       allRadius: true,
-                                                      trailingIcon: Icon(
-                                                        Icons.check,
+                                                      leadingIcon: Icon(
+                                                        Icons.close,
                                                         color: SpotmiesTheme
-                                                            .background,
+                                                            .secondaryVariant,
                                                         size: _width * 0.04,
                                                       ),
                                                       borderRadius: 15.0,
                                                       borderSideColor:
-                                                          Colors.grey[100]!,
-                                                      onClick: () async {
-                                                        await _incomingOrdersController!
+                                                          SpotmiesTheme
+                                                              .surfaceVariant,
+                                                      onClick: () {
+                                                        _incomingOrdersController!
                                                             .respondToOrder(
                                                                 o[index],
                                                                 partnerProfile![
                                                                     '_id'],
-                                                                "accept",
+                                                                "reject",
                                                                 context);
                                                       },
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                        // : TextWid(
-                                        //     text: 'Order Accepted',
-                                        //     size: _width * 0.05,
-                                        //     weight: FontWeight.w600,
-                                        //   )
-                                      ],
+                                                    SizedBox(
+                                                      // height: _hight * 0.057,
+                                                      child:
+                                                          ElevatedButtonWidget(
+                                                        buttonName: 'Accept',
+                                                        height: _hight * 0.05,
+                                                        minWidth: _width * 0.55,
+                                                        bgColor: SpotmiesTheme
+                                                            .secondaryVariant,
+                                                        textColor: SpotmiesTheme
+                                                            .background,
+                                                        textSize: _width * 0.04,
+                                                        allRadius: true,
+                                                        trailingIcon: Icon(
+                                                          Icons.check,
+                                                          color: SpotmiesTheme
+                                                              .background,
+                                                          size: _width * 0.04,
+                                                        ),
+                                                        borderRadius: 15.0,
+                                                        borderSideColor:
+                                                            Colors.grey[100]!,
+                                                        onClick: () async {
+                                                          await _incomingOrdersController!
+                                                              .respondToOrder(
+                                                                  o[index],
+                                                                  partnerProfile![
+                                                                      '_id'],
+                                                                  "accept",
+                                                                  context);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                          // : TextWid(
+                                          //     text: 'Order Accepted',
+                                          //     size: _width * 0.05,
+                                          //     weight: FontWeight.w600,
+                                          //   )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: _hight * 0.01,
-                                  )
-                                ],
+                                    SizedBox(
+                                      height: _hight * 0.01,
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-              )),
-              Visibility(
-                visible: data.inComingLoader,
-                child: Positioned.fill(
-                    child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
-                  child: Center(child: CircularProgressIndicator()),
+                            );
+                          }),
                 )),
-              ),
-            ],
-          );
-          // });
-        }));
+                Visibility(
+                  visible: data.inComingLoader,
+                  child: Positioned.fill(
+                      child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
+                    child: Center(child: CircularProgressIndicator()),
+                  )),
+                ),
+              ],
+            );
+            // });
+          }));
+    });
   }
 
   Container takeOverWid(double _width) {

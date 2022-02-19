@@ -200,7 +200,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                   ? SpotmiesTheme
                                                       .surfaceVariant2
                                                   : sender == "partner"
-                                                      ? SpotmiesTheme.chatBubble
+                                                      ? SpotmiesTheme
+                                                          .onBackground
                                                       : SpotmiesTheme
                                                           .secondaryVariant,
                                               border: Border.all(

@@ -49,111 +49,115 @@ class _DrawerScreenState extends StateMVC<DrawerScreen> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      dynamic pd = data.getProfileDetails;
-      if (data.getProfileDetails.isEmpty) {
-        return Center(child: CircularProgressIndicator());
-      }
-      // log(pr.toString());
-      return Container(
-        color: primaryGreen,
-        padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
+    return Consumer<ThemeProvider>(builder: (context, data, child) {
+      return Scaffold(
+        body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+          dynamic pd = data.getProfileDetails;
+          if (data.getProfileDetails.isEmpty) {
+            return Center(child: CircularProgressIndicator());
+          }
+          // log(pr.toString());
+          return Container(
+            color: SpotmiesTheme.background,
+            padding: EdgeInsets.only(top: 60, bottom: 30, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ProfilePic(
-                  badge: false,
-                  profile: pd['partnerPic']!,
-                  name: pd['name']!,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    TextWid(
-                      text: toBeginningOfSentenceCase(
-                        pd['name'],
-                      ).toString(),
-                      size: _width * 0.045,
-                      weight: FontWeight.w600,
+                    ProfilePic(
+                      badge: false,
+                      profile: pd['partnerPic']!,
+                      name: pd['name']!,
                     ),
-                    Row(
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWid(
                           text: toBeginningOfSentenceCase(
-                            pd['availability'] == false
-                                ? 'Offline     '
-                                : 'Online      ',
+                            pd['name'],
                           ).toString(),
-                          size: _width * 0.03,
-                          weight: FontWeight.w500,
+                          size: _width * 0.045,
+                          weight: FontWeight.w600,
                         ),
-                        Text('  |  '),
-                        TextWid(
-                          text: partnerDetailsProvider!
-                              .getServiceNameById(pd['job']),
-                          size: _width * 0.03,
-                          weight: FontWeight.w500,
-                        )
+                        Row(
+                          children: [
+                            TextWid(
+                              text: toBeginningOfSentenceCase(
+                                pd['availability'] == false
+                                    ? 'Offline     '
+                                    : 'Online      ',
+                              ).toString(),
+                              size: _width * 0.03,
+                              weight: FontWeight.w500,
+                            ),
+                            Text('  |  '),
+                            TextWid(
+                              text: partnerDetailsProvider!
+                                  .getServiceNameById(pd['job']),
+                              size: _width * 0.03,
+                              weight: FontWeight.w500,
+                            )
+                          ],
+                        ),
                       ],
-                    ),
+                    )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: _hight * 0.05,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: drawerItems
+                        .map((element) => Container(
+                              child: InkWell(
+                                onTap: () {
+                                  widget.drawerController.toggle();
+                                  drawerItemsFunction(
+                                      element['title'],
+                                      context,
+                                      _hight,
+                                      _width,
+                                      pd,
+                                      partnerDetailsProvider!,
+                                      _drawerController!);
+                                  log(element['title']);
+                                },
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        element['icon'],
+                                        color: SpotmiesTheme.secondaryVariant,
+                                        size: _width * 0.05,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(element['title'],
+                                        style: GoogleFonts.josefinSans(
+                                          color: SpotmiesTheme.secondaryVariant,
+                                          fontSize: _width * 0.045,
+                                          fontWeight: FontWeight.w600,
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                ),
               ],
             ),
-            SizedBox(
-              height: _hight * 0.05,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: drawerItems
-                    .map((element) => Container(
-                          child: InkWell(
-                            onTap: () {
-                              widget.drawerController.toggle();
-                              drawerItemsFunction(
-                                  element['title'],
-                                  context,
-                                  _hight,
-                                  _width,
-                                  pd,
-                                  partnerDetailsProvider!,
-                                  _drawerController!);
-                              log(element['title']);
-                            },
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    element['icon'],
-                                    color: SpotmiesTheme.secondaryVariant,
-                                    size: _width * 0.05,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(element['title'],
-                                    style: GoogleFonts.josefinSans(
-                                      color: SpotmiesTheme.secondaryVariant,
-                                      fontSize: _width * 0.045,
-                                      fontWeight: FontWeight.w600,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ),
-          ],
-        ),
+          );
+        }),
       );
     });
   }
