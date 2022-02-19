@@ -28,7 +28,7 @@ lineGraph() {
           isCurved: true,
           barWidth: 4,
           colors: [
-            SpotmiesTheme.background,
+            Colors.white,
           ],
           dotData: FlDotData(
             show: true,

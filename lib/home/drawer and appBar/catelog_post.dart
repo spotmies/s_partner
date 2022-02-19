@@ -41,6 +41,7 @@ class _CatelogPostState extends State<CatelogPost> {
     if (partnerDetailsProvider!.offlineScreenLoader == true)
       return circleProgress();
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         // var pD = data.getPartnerDetailsFull;
         // var cat = pD['catelogs'];

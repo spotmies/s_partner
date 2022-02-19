@@ -20,6 +20,7 @@ Future history(BuildContext context, double hight, double width,
   //   },
   // ];
   return showModalBottomSheet(
+      backgroundColor: SpotmiesTheme.background,
       context: context,
       elevation: 22,
       isScrollControlled: true,

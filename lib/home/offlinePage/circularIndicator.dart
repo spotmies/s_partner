@@ -21,13 +21,13 @@ circularIndicator(double hight, double width, Color color, String title,
                   style: GoogleFonts.josefinSans(
                       fontSize: width * 0.11,
                       fontWeight: FontWeight.w500,
-                      color: SpotmiesTheme.background)),
+                      color: Colors.white)),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15, top: 15),
                 child: Icon(
                   icon,
-                  color: SpotmiesTheme.background,
+                  color: Colors.white,
                 ))
           ],
         ),
@@ -40,7 +40,7 @@ circularIndicator(double hight, double width, Color color, String title,
               lineWidth: 5,
               animation: true,
               animationDuration: 500,
-              progressColor: SpotmiesTheme.background,
+              progressColor: Colors.white,
               percent:
                   (value.isNaN || value.isFinite) ? (100 / 100) : (value / 100),
               backgroundColor: color,
@@ -49,7 +49,7 @@ circularIndicator(double hight, double width, Color color, String title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
-                    color: SpotmiesTheme.background),
+                    color: Colors.white),
               )),
         ),
       ],

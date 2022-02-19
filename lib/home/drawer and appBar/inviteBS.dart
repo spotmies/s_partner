@@ -9,6 +9,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Future invites(BuildContext context, double hight, double width, pr) {
   return showModalBottomSheet(
+      backgroundColor: SpotmiesTheme.background,
       context: context,
       elevation: 22,
       isScrollControlled: true,

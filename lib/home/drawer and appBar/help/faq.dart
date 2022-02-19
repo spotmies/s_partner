@@ -39,6 +39,7 @@ class _FAQState extends State<FAQ> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
         backgroundColor: SpotmiesTheme.background,
         elevation: 0,
@@ -207,6 +208,7 @@ newQuery(BuildContext context,
   GlobalKey<FormState> queryForm = GlobalKey<FormState>();
   // bool loader = false;
   return showModalBottomSheet(
+      backgroundColor: SpotmiesTheme.background,
       context: context,
       elevation: 22,
       isScrollControlled: true,

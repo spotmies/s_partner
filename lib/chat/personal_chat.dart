@@ -95,6 +95,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     final _width = MediaQuery.of(context).size.width;
     // log(_chatController?.isUploading.toString());
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         key: _chatController?.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
         body: Consumer<ChatProvider>(builder: (context, data, child) {
@@ -196,9 +197,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                           ),
                                           decoration: BoxDecoration(
                                               color: sender == "user"
-                                                  ? SpotmiesTheme.background
+                                                  ? SpotmiesTheme
+                                                      .surfaceVariant2
                                                   : sender == "partner"
-                                                      ? Colors.blueGrey[50]
+                                                      ? SpotmiesTheme.chatBubble
                                                       : SpotmiesTheme
                                                           .secondaryVariant,
                                               border: Border.all(
@@ -228,8 +230,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                           Alignment.centerLeft,
                                                       child: TextWid(
                                                         weight: FontWeight.w800,
-                                                        color:
-                                                            Colors.grey[600]!,
+                                                        color: Colors.grey,
                                                         text: sender ==
                                                                 'partner'
                                                             ? 'You'

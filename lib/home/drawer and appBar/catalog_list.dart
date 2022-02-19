@@ -33,6 +33,7 @@ class _CatalogState extends State<Catalog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         appBar: AppBar(
           backgroundColor: SpotmiesTheme.background,
           elevation: 0,
