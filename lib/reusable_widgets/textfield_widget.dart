@@ -36,6 +36,9 @@ class TextFieldWidget extends StatefulWidget {
   final bool? isRequired;
   final String? type;
   final double? contentPad;
+  final Function? onChange;
+  final String? helperText;
+  final Color? helperColor;
 
   TextFieldWidget(
       {this.text,
@@ -68,7 +71,10 @@ class TextFieldWidget extends StatefulWidget {
       this.label,
       this.formatter,
       this.isRequired = true,
-      this.type = "text"});
+      this.type = "text",
+      this.onChange,
+      this.helperText,
+      this.helperColor});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -81,6 +87,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       inputFormatters: inputFormatter(widget.type!),
       controller: widget.controller,
       decoration: InputDecoration(
+          helperText: widget.helperText,
+          helperStyle: TextStyle(color: widget.helperColor ?? Colors.grey),
           counterText: '',
           border: new OutlineInputBorder(
               borderSide: new BorderSide(
@@ -145,6 +153,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       },
       onFieldSubmitted: (value) {
         if (widget.onSubmitField != null) widget.onSubmitField!();
+      },
+      onChanged: (val) {
+        widget.onChange!(val);
       },
       keyboardType: widget.keyBoardType,
     );

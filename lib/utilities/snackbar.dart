@@ -13,5 +13,5 @@ snackbar(BuildContext context, description, {Function? ontap, String? label}) {
     ),
   );
 
-  return ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  return ScaffoldMessenger?.of(context).showSnackBar(snackBar);
 }

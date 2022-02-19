@@ -20,7 +20,7 @@ class EditProfileController extends ControllerMVC {
     'student',
     'freelancer'
   ];
-  int? job = 0;
+  int job = 0;
 
   dynamic profilePic;
   dynamic adharF;
@@ -36,6 +36,7 @@ class EditProfileController extends ControllerMVC {
   TextEditingController businessNameControl = TextEditingController();
   TextEditingController collgeNameControl = TextEditingController();
   TextEditingController experienceControl = TextEditingController();
+  TextEditingController storeIdControl = TextEditingController();
 
   GlobalKey<FormState> editProfileForm = GlobalKey<FormState>();
 
@@ -73,6 +74,7 @@ class EditProfileController extends ControllerMVC {
     collgeNameControl.text = partner!['collegeName'] ?? "";
     experienceControl.text =
         partner!['experience'] != null ? partner!['experience'].toString() : "";
+    storeIdControl.text = partner!['storeId'] ?? "";
     setAccountType(partner!['accountType']);
     refresh();
   }
@@ -130,12 +132,12 @@ class EditProfileController extends ControllerMVC {
       editProvider?.setEditLoader(false);
 
       log("loop completed");
-      var docs = {
+      Map<String, dynamic> docs = {
         "adharF": adharF.toString(),
         "adharB": adharB.toString(),
         "otherDocs": partner!['docs']['otherDocs']
       };
-      var body = {
+      Map<String, String> body = {
         "name": "${nameController.text}",
         "altNum": "${mobileController.text}",
         "eMail": "${emailController.text}",
@@ -148,13 +150,16 @@ class EditProfileController extends ControllerMVC {
         "perAdd": "${perAddressControl.text}",
         "tempAdd": "${tempAddressControl.text}",
         "partnerPic": "$profilePic",
+        if (storeIdControl.text.length > 3)
+          "storeId": storeIdControl.text.toString(),
         "docs": jsonEncode(docs),
       };
       log("body $body");
       editProvider?.setEditLoader(true, loaderName: "Applying Changes");
       snackbar(context, "Applying Changes");
       log("uid>> $pId");
-      var response = await Server().editMethod(API.partnerDetails + pId, body);
+      dynamic response =
+          await Server().editMethod(API.partnerDetails + pId, body);
       editProvider?.setEditLoader(false);
       if (response.statusCode == 200) {
         //log("change applyed");
@@ -170,6 +175,16 @@ class EditProfileController extends ControllerMVC {
 
       //log("body is $body");
     }
+  }
+
+  checkStoreId(String value) async {
+    return await Server().checkStoreIdAvailability(value);
+    // bool result = await Server().checkStoreIdAvailability(value);
+    // log(result.toString());
+    // if (result) {
+    //   return editProvider?.setHelperText("✅ This name available");
+    // }
+    // return editProvider?.setHelperText("❌ Not available");
   }
 
   Future<void> uploadFile() async {

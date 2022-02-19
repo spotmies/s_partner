@@ -80,10 +80,10 @@ class CatelogController extends ControllerMVC {
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       log(response.statusCode.toString());
-      snackbar(context, "Service added successfully");
+      // snackbar(context, "Service added successfully");
       return jsonDecode(response.body);
     } else {
-      snackbar(context, 'Something went wrong');
+      // snackbar(context, 'Something went wrong');
       return null;
     }
   }

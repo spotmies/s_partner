@@ -72,8 +72,8 @@ class _CatalogState extends State<Catalog> {
           },
         ),
         body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          var pD = data.getPartnerDetailsFull;
-          var cat = pD['catelogs'];
+          Map<dynamic, dynamic> pD = data.getPartnerDetailsFull;
+          dynamic cat = pD['catelogs'];
           log(cat.toString());
           if (cat == null) {
             return addCatelog(context);
