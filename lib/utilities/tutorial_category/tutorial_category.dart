@@ -14,6 +14,7 @@ class _TutCategoryState extends State<TutCategory> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: SpotmiesTheme.background,

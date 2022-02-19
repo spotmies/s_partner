@@ -41,6 +41,7 @@ class _ChatListState extends StateMVC<ChatList> {
     final _height = MediaQuery.of(context).size.height;
     print('======render chatList screen =======');
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       key: _chatController?.scaffoldkey,
       appBar: AppBar(
           backgroundColor: SpotmiesTheme.background,

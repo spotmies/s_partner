@@ -172,7 +172,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   )
                 : Container(),
             resizeToAvoidBottomInset: true,
-            backgroundColor: SpotmiesTheme.primaryVariant,
+            backgroundColor: SpotmiesTheme.background,
             appBar: AppBar(
               backgroundColor:
                   d['orderState'] > 8 || d['isOrderCompletedByPartner']
@@ -353,7 +353,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               child: Column(
                 children: [
                   Divider(
-                    color: SpotmiesTheme.background,
+                    color: SpotmiesTheme.dull,
                   ),
                   TextWid(
                     // text: d['acceptResponse']['orderState'] > 8
@@ -364,7 +364,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   ),
 
                   Divider(
-                    color: SpotmiesTheme.background,
+                    color: SpotmiesTheme.dull,
                   ),
                   Container(
                     width: _width,
@@ -422,16 +422,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     ),
                   ),
                   Divider(
-                    color: SpotmiesTheme.background,
+                    color: SpotmiesTheme.dull,
                   ),
                   mediaView(_hight, _width, images),
 
                   Divider(
-                    color: SpotmiesTheme.background,
+                    color: SpotmiesTheme.dull,
                   ),
                   // warrentyCard(_hight, _width),
                   Divider(
-                    color: SpotmiesTheme.background,
+                    color: SpotmiesTheme.dull,
                   ),
                   // (d['orderState'] > 6)
                   //     ?

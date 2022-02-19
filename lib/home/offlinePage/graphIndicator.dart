@@ -22,13 +22,13 @@ graphIndicator(
                   style: GoogleFonts.josefinSans(
                       fontSize: width * 0.11,
                       fontWeight: FontWeight.w500,
-                      color: SpotmiesTheme.background)),
+                      color: Colors.white)),
             ),
             Container(
                 padding: EdgeInsets.only(right: 15, top: 15),
                 child: Icon(
                   icon,
-                  color: SpotmiesTheme.background,
+                  color: Colors.white,
                 ))
           ],
         ),
@@ -38,12 +38,12 @@ graphIndicator(
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.25,
                     fontWeight: FontWeight.w600,
-                    color: SpotmiesTheme.background)),
+                    color: Colors.white)),
             Text(title == 'Orders' ? 'Completed' : 'Rupees',
                 style: GoogleFonts.josefinSans(
                     fontSize: width * 0.065,
                     fontWeight: FontWeight.w600,
-                    color: SpotmiesTheme.background)),
+                    color: Colors.white)),
           ],
         ),
         Container(
@@ -65,7 +65,7 @@ graphIndicator(
                     style: GoogleFonts.josefinSans(
                         fontSize: width * 0.11,
                         fontWeight: FontWeight.w500,
-                        color: SpotmiesTheme.background)),
+                        color: Colors.white)),
               ),
             ],
           ),

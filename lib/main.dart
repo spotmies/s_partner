@@ -38,8 +38,9 @@ Future<void> setPrefThemeMode(BuildContext context) async {
   var pref_themeMode =
       (sharedPreferences.getBool("theme_mode") ?? system_themeMode);
   var themeMode = system_themeMode ? ThemeMode.dark : ThemeMode.light;
+  print("systeMode:$system_themeMode");
   if (system_themeMode == false && pref_themeMode == true) {
-    themeMode = ThemeMode.dark;
+    //themeMode = ThemeMode.dark;
   }
   Provider.of<ThemeProvider>(context, listen: false).setThemeMode(themeMode);
 }
@@ -80,7 +81,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  //const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    SpotmiesTheme().init(context);
     return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }
@@ -163,7 +165,6 @@ class _NotificationsDemoState extends State<NotificationsDemo> {
 
   @override
   Widget build(BuildContext context) {
-    SpotmiesTheme().init(context);
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -13,6 +13,7 @@ Future helpAndSupport(BuildContext context, pd) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
+      backgroundColor: SpotmiesTheme.background,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

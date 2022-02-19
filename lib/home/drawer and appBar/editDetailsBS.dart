@@ -83,6 +83,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
         children: [
           SingleChildScrollView(
             child: Container(
+              color: SpotmiesTheme.background,
               padding: MediaQuery.of(context).viewInsets,
               child: Column(
                 children: [
@@ -606,6 +607,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
     log("===============  Render editform ================");
     return Scaffold(
       key: _editProfileController!.scaffoldkey,
+      backgroundColor: SpotmiesTheme.background,
       appBar: basicAppbar(context,
           title: "Edit profile details",
           leadingIcon: Icon(
