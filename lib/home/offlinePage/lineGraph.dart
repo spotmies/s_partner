@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/providers/theme_provider.dart';
 
 lineGraph() {
   return LineChart(

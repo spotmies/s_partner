@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/home/offlinePage/lineGraph.dart';
-import 'package:spotmies_partner/providers/theme_provider.dart';
 
 graphIndicator(
     double hight, double width, Color color, String title, IconData icon, pdo) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies_partner/call_ui/audioCallWithImage/constants.dart';
 import 'package:spotmies_partner/call_ui/audioCallWithImage/size.config.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 
