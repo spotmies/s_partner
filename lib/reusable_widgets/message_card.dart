@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:share/share.dart';
+import 'package:spotmies_partner/controllers/edit_profile_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
+
+import '../home/drawer and appBar/catalog_list.dart';
 
 Color colora = ([...Colors.primaries]..shuffle()).first;
 Color colorb = ([...Colors.primaries]..shuffle()).first;
@@ -112,5 +121,164 @@ verifyText(value) {
     case 10:
       return 'Your document verication process completed successfully';
     default:
+  }
+}
+
+class SharingCard extends StatefulWidget {
+  final PartnerDetailsProvider? provider;
+  const SharingCard({Key? key, this.provider}) : super(key: key);
+  @override
+  _SharingCardState createState() => _SharingCardState();
+}
+
+class _SharingCardState extends State<SharingCard> {
+  bool loading = false;
+  List<dynamic>? getText() {
+    Map<dynamic, dynamic>? partnerFull = widget.provider?.partnerDetailsFull;
+    Map<dynamic, dynamic>? partner = widget.provider?.profileDetails;
+    if (partnerFull?['catelogs'].length < 1) {
+      return [
+        "Create your Online Store",
+        "description for cate online store",
+        "spotmies.com/store",
+        Icons.store_outlined,
+        "Create now",
+        0
+      ];
+    }
+    if (partner?["storeId"] == null || partner?["storeId"] == "") {
+      return [
+        "Create your Store name",
+        "Name your store Share your own web store's link on Social media to attract more customers to your service",
+        "spotmies.com/your store id",
+        Icons.edit,
+        "Create now",
+        1
+      ];
+    }
+    return [
+      "Share More to Earn More",
+      "Share your own web store's link on Social media to attract more customers to your service",
+      "spotmies.com/store/${partner?["storeId"]}",
+      Icons.share,
+      "Share",
+      2,
+      "https://www.spotmies.com/store/${partner?["storeId"]}"
+    ];
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    TextEditingController storeIdControl = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          // return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: TextWid(
+              text: "Create Store Name",
+            ),
+            content: StoreIdFormField(
+                onChange: (String val) {
+                  storeIdControl.text = val;
+                },
+                text: widget.provider?.partnerDetailsFull!['storeId'] ?? "",
+                hint: widget.provider?.partnerDetailsFull!['businessName']),
+            actions: [
+              ElevatedButtonWidget(
+                  onClick: () async {
+                    Map<String, String> body = {"storeId": storeIdControl.text};
+                    setState(() {
+                      loading = true;
+                    });
+                    dynamic result =
+                        await updatePartnerDetails(widget.provider!, body);
+                    setState(() {
+                      loading = false;
+                    });
+                    if (result.statusCode == 200) {
+                      snackbar(context,
+                          "Your storeId created now you can share with your customers");
+                      Navigator.pop(context);
+                    }
+                  },
+                  allRadius: true,
+                  borderRadius: 5,
+                  textSize: width(context) * 0.04,
+                  height: 40,
+                  minWidth: 120,
+                  buttonName: "Save",
+                  textColor: Colors.white,
+                  leadingIcon: loading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Icon(
+                          Icons.check_circle_outline,
+                        )),
+            ],
+          );
+          // });
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 10),
+      padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+      decoration: BoxDecoration(
+          color: Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextWid(
+            text: getText()![0],
+            weight: FontWeight.bold,
+            size: width(context) * 0.04,
+          ),
+          TextWid(text: getText()![1], maxlines: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextWid(
+                text: getText()![2],
+                weight: FontWeight.w600,
+                color: Colors.indigo,
+              ),
+              ElevatedButtonWidget(
+                height: 40,
+                buttonName: getText()![4],
+                allRadius: true,
+                borderRadius: 15,
+                textSize: width(context) * 0.04,
+                textColor: Colors.white,
+                leadingIcon: Icon(
+                  getText()![3],
+                  color: Colors.white,
+                ),
+                onClick: () {
+                  switch (getText()![5]) {
+                    case 0:
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => Catalog()));
+                      break;
+
+                    case 1:
+                      _displayTextInputDialog(context);
+                      break;
+                    case 2:
+                      Share.share(getText()![6],
+                          subject: "Check my online store");
+
+                      break;
+                    default:
+                  }
+                },
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
