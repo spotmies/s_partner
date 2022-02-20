@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_card.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
