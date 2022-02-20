@@ -24,6 +24,14 @@ class _TutCategoryState extends State<TutCategory> {
             size: _width * 0.05,
             weight: FontWeight.w600,
           ),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: SpotmiesTheme.onBackground,
+              )),
         ),
         body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(
