@@ -43,42 +43,52 @@ class ElevatedButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: minWidth ?? double.infinity,
-      height: height ?? 50.0,
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(borderRadius ?? 0)),
-      child: ElevatedButton(
-          onPressed: () {
-            return onClick!();
-          },
-          style: ButtonStyle(
-              elevation: MaterialStateProperty.all(elevation ?? 0),
-              backgroundColor: MaterialStateProperty.all(
-                bgColor ?? Colors.blue,
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: allRadius == true
-                          ? BorderRadius.circular(borderRadius ?? 0)
-                          : BorderRadius.only(
-                              topLeft: Radius.circular(leftRadius ?? 0),
-                              topRight: Radius.circular(rightRadius ?? 0)),
-                      side:
-                          BorderSide(color: borderSideColor ?? Colors.white)))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildLeadingIcon(leadingIcon),
-              Text(
-                buttonName ?? 'Button',
-                style: fonts(
-                    textSize ?? 10.0, textStyle, textColor ?? Colors.black),
-              ),
-              buildTrailingIcon(trailingIcon),
-            ],
-          )),
-    );
+    return minWidth != null
+        ? Container(
+            width: minWidth,
+            height: height ?? 50.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius ?? 0)),
+            child: elevatedbutt(),
+          )
+        : Container(
+            height: height ?? 50.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius ?? 0)),
+            child: elevatedbutt(),
+          );
+  }
+
+  ElevatedButton elevatedbutt() {
+    return ElevatedButton(
+        onPressed: () {
+          return onClick!();
+        },
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all(elevation ?? 0),
+            backgroundColor: MaterialStateProperty.all(
+              bgColor ?? Colors.blue,
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: allRadius == true
+                        ? BorderRadius.circular(borderRadius ?? 0)
+                        : BorderRadius.only(
+                            topLeft: Radius.circular(leftRadius ?? 0),
+                            topRight: Radius.circular(rightRadius ?? 0)),
+                    side: BorderSide(color: borderSideColor ?? Colors.white)))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            buildLeadingIcon(leadingIcon),
+            Text(
+              buttonName ?? 'Button',
+              style:
+                  fonts(textSize ?? 10.0, textStyle, textColor ?? Colors.black),
+            ),
+            buildTrailingIcon(trailingIcon),
+          ],
+        ));
   }
 }
 

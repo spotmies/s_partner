@@ -47,13 +47,16 @@ class _OfflineState extends State<Offline> {
       child: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
         dynamic alert = data.getText('home_screen_message');
         dynamic pd = data.getPartnerDetailsFull;
+        // log(pd.toString());
 
         dynamic dash = data.orders;
         log('---------------------------------46------------');
         // log(dash[0].toString());
         log(pd["pId"].toString());
         if (pd["pId"] == null || pd["pId"] == "null") return circleProgress();
-        dynamic cat = pd['catelogs'];
+        dynamic cat = pd!['catelogs'] ?? [];
+        // log("cat");
+        // log(cat.toString());
 
         return ListView(children: [
           // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
@@ -79,9 +82,16 @@ class _OfflineState extends State<Offline> {
                 },
               ),
             ),
+          Container(
+            width: _width * 0.9,
+            height: 150,
+            child: SharingCard(
+              provider: partnerDetailsProvider,
+            ),
+          ),
 
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+            margin: EdgeInsets.only(left: 15, right: 15, top: 20),
             child: Row(
               children: [
                 Column(
@@ -132,7 +142,9 @@ class _OfflineState extends State<Offline> {
           SizedBox(
             height: _width * 0.05,
           ),
-          cat.isEmpty ? Container() : catelogCard(context, cat),
+          cat == null || cat.length < 1
+              ? Container()
+              : catelogCard(context, cat),
           SizedBox(
             height: _width * 0.02,
           ),

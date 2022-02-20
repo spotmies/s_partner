@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
@@ -8,6 +9,8 @@ import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
+
+GlobalKey<ScaffoldState> scaffoldkeyEditProfile = GlobalKey<ScaffoldState>();
 
 class EditProfileController extends ControllerMVC {
   PartnerDetailsProvider? editProvider;
@@ -36,11 +39,9 @@ class EditProfileController extends ControllerMVC {
   TextEditingController businessNameControl = TextEditingController();
   TextEditingController collgeNameControl = TextEditingController();
   TextEditingController experienceControl = TextEditingController();
-  TextEditingController storeIdControl = TextEditingController();
+  TextEditingController storeIdControl = TextEditingController(text: "");
 
   GlobalKey<FormState> editProfileForm = GlobalKey<FormState>();
-
-  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
 
   // void initState() {
   //   editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
@@ -220,4 +221,15 @@ class EditProfileController extends ControllerMVC {
 
     log("$profilePic $adharF $adharB  ");
   }
+}
+
+updatePartnerDetails(PartnerDetailsProvider provider, body) async {
+  dynamic response = await Server().editMethod(
+      API.partnerDetails + FirebaseAuth.instance.currentUser!.uid, body);
+  if (response.statusCode == 200) {
+    dynamic body = jsonDecode(response.body);
+    log(body.toString());
+    provider.setPartnerDetailsOnly(body!);
+  }
+  return response;
 }
