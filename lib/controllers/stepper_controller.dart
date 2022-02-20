@@ -59,11 +59,13 @@ class StepperController extends ControllerMVC {
   File? profilepics;
   String? pictureLink = "";
   File? adharfront;
-  String? adharBackpageLink = "";
+  String? adharBackpageLink =
+      "https://firebasestorage.googleapis.com/v0/b/spotmiess.appspot.com/o/assets%2Fadharcardsdemo%2Faadhaar_back.jpeg?alt=media&token=20121bc6-37c6-49e8-98a5-303241e84d33";
   String? clgIdLink = "";
   File? adharback;
   File? clgId;
-  String? adharFrontpageLink = "";
+  String? adharFrontpageLink =
+      "https://firebasestorage.googleapis.com/v0/b/spotmiess.appspot.com/o/assets%2Fadharcardsdemo%2Faadhaar_front.jpeg?alt=media&token=b97993d5-66ea-47b7-ae2b-0a07028d556f";
   Map<String, double>? workLocation;
 
   List? offlineTermsAndConditions = [
@@ -133,12 +135,13 @@ class StepperController extends ControllerMVC {
   step3(BuildContext context, String type, String phone, Map coordinates) {
     if (dropDownValue == null || dropDownValue! < 0)
       return snackbar(context, "please select business type");
-    if (adharfront != null &&
-        adharback != null &&
+    if (
+        // adharfront != null &&
+        //   adharback != null &&
         step3Formkey.currentState!.validate()) {
       step4(context, type, phone, coordinates);
     } else {
-      snackbar(context, 'Need to Upload Documents');
+      snackbar(context, 'Please check all fields');
     }
   }
 
@@ -222,26 +225,13 @@ class StepperController extends ControllerMVC {
   //utilities
 
   Future<void> imageUpload() async {
-    // var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
-    // UploadTask pic = postImageRef
-    //     .child(DateTime.now().toString() + ".jpg")
-    //     .putFile(profilepics);
-    // UploadTask adharF = postImageRef
-    //     .child(DateTime.now().toString() + ".jpg")
-    //     .putFile(adharfront);
-    // UploadTask adharB = postImageRef
-    //     .child(DateTime.now().toString() + ".jpg")
-    //     .putFile(adharback);
-    // var profilepic = await (await pic).ref.getDownloadURL();
-    // var adharFront = await (await adharF).ref.getDownloadURL();
-    // var adharBack = await (await adharB).ref.getDownloadURL();
     final String? pId = FirebaseAuth.instance.currentUser?.uid;
     final String location1 = "partner/$pId/documents";
     final String location2 = "partner/$pId/profile";
-    adharFrontpageLink =
-        await uploadFilesToCloud(adharfront, cloudLocation: location1);
-    adharBackpageLink =
-        await uploadFilesToCloud(adharback, cloudLocation: location1);
+    // adharFrontpageLink =
+    //     await uploadFilesToCloud(adharfront, cloudLocation: location1);
+    // adharBackpageLink =
+    //     await uploadFilesToCloud(adharback, cloudLocation: location1);
     pictureLink = profilepics != null
         ? await uploadFilesToCloud(profilepics, cloudLocation: location2)
         : "";

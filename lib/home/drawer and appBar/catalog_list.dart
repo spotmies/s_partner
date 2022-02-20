@@ -8,6 +8,7 @@ import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/message_card.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -30,6 +31,24 @@ class _CatalogState extends State<Catalog> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
   }
 
+  catelogList(BuildContext context, cat, int index) {
+    return Container(
+        child: index != 0
+            ? catelogListCard(context, cat, index)
+            : Column(
+                children: [
+                  Container(
+                    height: 150,
+                    margin: EdgeInsets.only(bottom: 15),
+                    child: SharingCard(
+                      provider: partnerDetailsProvider,
+                    ),
+                  ),
+                  catelogListCard(context, cat, index)
+                ],
+              ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +57,7 @@ class _CatalogState extends State<Catalog> {
           backgroundColor: SpotmiesTheme.background,
           elevation: 0,
           title: TextWid(
-            text: 'Catelog',
+            text: 'Services Store',
             size: width(context) * 0.05,
             weight: FontWeight.w600,
           ),
@@ -78,10 +97,19 @@ class _CatalogState extends State<Catalog> {
           if (cat == null) {
             return addCatelog(context);
           }
+          if (cat.length < 1) {
+            return Container(
+              height: 150,
+              margin: EdgeInsets.only(bottom: 15),
+              child: SharingCard(
+                provider: partnerDetailsProvider,
+              ),
+            );
+          }
           return ListView.builder(
               itemCount: cat.length,
               itemBuilder: (context, index) {
-                return catelogListCard(context, cat[index], index);
+                return catelogList(context, cat[index], index);
               });
         }));
   }

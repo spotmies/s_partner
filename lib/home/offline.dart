@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_card.dart';
 import 'package:spotmies_partner/home/offlinePage/circularIndicator.dart';
 import 'package:spotmies_partner/home/offlinePage/graphIndicator.dart';
 import 'package:spotmies_partner/home/rating_screen.dart';
@@ -10,6 +11,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/message_card.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
+import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Offline extends StatefulWidget {
@@ -39,118 +41,139 @@ class _OfflineState extends State<Offline> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
 
-    return Consumer<ThemeProvider>(builder: (context, data, child) {
+    return Consumer<ThemeProvider>(builder: (context, value, child) {
       return Scaffold(
+          backgroundColor: SpotmiesTheme.background,
           body: Center(
               child: Container(
-        height: _hight,
-        width: _width,
-        decoration: BoxDecoration(color: SpotmiesTheme.background),
-        child:
-            Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          dynamic alert = data.getText('home_screen_message');
-          dynamic pd = data.getPartnerDetailsFull;
+            height: _hight,
+            width: _width,
+            decoration: BoxDecoration(
+              color: SpotmiesTheme.background,
+            ),
+            child: Consumer<PartnerDetailsProvider>(
+                builder: (context, data, child) {
+              dynamic alert = data.getText('home_screen_message');
+              dynamic pd = data.getPartnerDetailsFull;
+              // log(pd.toString());
 
-          dynamic dash = data.orders;
-          log('---------------------------------46------------');
-          // log(dash[0].toString());
-          log(pd["pId"].toString());
-          if (pd["pId"] == null || pd["pId"] == "null") return circleProgress();
-          dynamic cat = pd['catelogs'];
+              dynamic dash = data.orders;
+              log('---------------------------------46------------');
+              // log(dash[0].toString());
+              log(pd["pId"].toString());
+              if (pd["pId"] == null || pd["pId"] == "null")
+                return circleProgress();
+              dynamic cat = pd!['catelogs'] ?? [];
+              // log("cat");
+              // log(cat.toString());
 
-          return ListView(children: [
-            // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
-            if (pd['permission'] < 10)
-              Container(
-                height: height(context) * (pd['permission'] == 10 ? 0.15 : 0.2),
-                child: MessageCard(
-                  statusCode: pd['permission'],
-                  pd: pd,
-                  type: 'offline',
-                  onClick: () {},
-                ),
-              ),
-            if (alert != 'loading..' && alert != 'null' && data.msgNote!)
-              Container(
-                height: height(context) * (alert.length < 60 ? 0.15 : 0.2),
-                child: MessageCard(
-                  alertMessage: alert,
-                  pd: pd,
-                  type: 'online',
-                  onClick: () {
-                    data.msgNote == false;
-                  },
-                ),
-              ),
+              return ListView(children: [
+                // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
+                if (pd['permission'] < 10)
+                  Container(
+                    height:
+                        height(context) * (pd['permission'] == 10 ? 0.15 : 0.2),
+                    child: MessageCard(
+                      statusCode: pd['permission'],
+                      pd: pd,
+                      type: 'offline',
+                      onClick: () {},
+                    ),
+                  ),
+                if (alert != 'loading..' && alert != 'null' && data.msgNote!)
+                  Container(
+                    height: height(context) * (alert.length < 60 ? 0.15 : 0.2),
+                    child: MessageCard(
+                      alertMessage: alert,
+                      pd: pd,
+                      type: 'online',
+                      onClick: () {
+                        data.msgNote == false;
+                      },
+                    ),
+                  ),
 
-            Container(
-              padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Container(
+                  padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+                  child: Row(
                     children: [
-                      circularIndicator(
-                          _hight * 0.35,
-                          _width * 0.44,
-                          SpotmiesTheme.tertiaryVariant,
-                          'Rating',
-                          Icons.star_rate,
-                          dash?.isEmpty ? 100 : avg(dash, 'rate')),
-                      SizedBox(
-                        height: _hight * 0.02,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          circularIndicator(
+                              _hight * 0.35,
+                              _width * 0.44,
+                              SpotmiesTheme.tertiaryVariant,
+                              'Rating',
+                              Icons.star_rate,
+                              dash?.isEmpty ? 100 : avg(dash, 'rate')),
+                          SizedBox(
+                            height: _hight * 0.02,
+                          ),
+                          graphIndicator(
+                              _hight * 0.45,
+                              _width * 0.44,
+                              Colors.red[400]!,
+                              'Earnings',
+                              Icons.account_balance_wallet,
+                              earnSum(dash))
+                        ],
                       ),
-                      graphIndicator(
-                          _hight * 0.45,
-                          _width * 0.44,
-                          Colors.red[400]!,
-                          'Earnings',
-                          Icons.account_balance_wallet,
-                          earnSum(dash))
+                      SizedBox(
+                        width: _width * 0.035,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          graphIndicator(_hight * 0.45, _width * 0.44,
+                              Colors.amber, 'Orders', Icons.work, data.orders),
+                          SizedBox(
+                            height: _hight * 0.02,
+                          ),
+                          circularIndicator(
+                              _hight * 0.35,
+                              _width * 0.44,
+                              Colors.lightBlue[700]!,
+                              'Acceptance',
+                              Icons.done_rounded,
+                              avg(pd['acceptance'], 'acce')),
+                        ],
+                      )
                     ],
                   ),
-                  SizedBox(
-                    width: _width * 0.035,
+                ),
+                SizedBox(
+                  height: _width * 0.05,
+                ),
+                Container(
+                  width: _width * 0.9,
+                  height: height(context) * 0.2,
+                  child: SharingCard(
+                    provider: partnerDetailsProvider,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      graphIndicator(_hight * 0.45, _width * 0.44, Colors.amber,
-                          'Orders', Icons.work, data.orders),
-                      SizedBox(
-                        height: _hight * 0.02,
+                ),
+
+                SizedBox(
+                  height: _width * 0.0,
+                ),
+                cat == null || cat.length < 1
+                    ? Container()
+                    : catelogCard(context, cat),
+                SizedBox(
+                  height: _width * 0.02,
+                ),
+                dash.isEmpty
+                    ? Container()
+                    : reviewMsgs(
+                        context,
+                        rateFilter(dash!),
                       ),
-                      circularIndicator(
-                          _hight * 0.35,
-                          _width * 0.44,
-                          Colors.lightBlue[700]!,
-                          'Acceptance',
-                          Icons.done_rounded,
-                          avg(pd['acceptance'], 'acce')),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: _width * 0.05,
-            ),
-            cat.isEmpty ? Container() : catelogCard(context, cat),
-            SizedBox(
-              height: _width * 0.02,
-            ),
-            dash.isEmpty
-                ? Container()
-                : reviewMsgs(
-                    context,
-                    rateFilter(dash!),
-                  ),
-            SizedBox(
-              height: _width * 0.25,
-            ),
-          ]);
-        }),
-      )));
+                SizedBox(
+                  height: _width * 0.25,
+                ),
+              ]);
+            }),
+          )));
     });
   }
 }
@@ -212,6 +235,56 @@ earnSum(
 
 
 
+
+ // Container(
+          //   margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+          //   child: Row(
+          //     children: [
+          //       Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: [
+          //           circularIndicator(
+          //               _hight * 0.35,
+          //               _width * 0.44,
+          //               Colors.blue[900]!,
+          //               'Rating',
+          //               Icons.star_rate,
+          //               dash?.isEmpty ? 100 : avg(dash, 'rate')),
+          //           SizedBox(
+          //             height: _hight * 0.02,
+          //           ),
+          //           graphIndicator(
+          //               _hight * 0.45,
+          //               _width * 0.44,
+          //               Colors.red[400]!,
+          //               'Earnings',
+          //               Icons.account_balance_wallet,
+          //               earnSum(dash))
+          //         ],
+          //       ),
+          //       SizedBox(
+          //         width: _width * 0.035,
+          //       ),
+          //       Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: [
+          //           graphIndicator(_hight * 0.45, _width * 0.44, Colors.amber,
+          //               'Orders', Icons.work, data.orders),
+          //           SizedBox(
+          //             height: _hight * 0.02,
+          //           ),
+          //           circularIndicator(
+          //               _hight * 0.35,
+          //               _width * 0.44,
+          //               Colors.lightBlue[700]!,
+          //               'Acceptance',
+          //               Icons.done_rounded,
+          //               avg(pd['acceptance'], 'acce')),
+          //         ],
+          //       )
+          //     ],
+          //   ),
+          // ),
 
 
 // indicator(_width) {

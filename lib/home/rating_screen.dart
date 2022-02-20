@@ -154,7 +154,7 @@ reviewMsgs(BuildContext context, rating) {
   // }
 
   return Container(
-    height: (len * (height(context) * 0.19)) + height(context) * 0.1,
+    // height: (len * (height(context) * 0.19)) + height(context) * 0.1,
     width: width(context),
     padding: EdgeInsets.only(top: width(context) * 0.06),
     margin: EdgeInsets.all(10),

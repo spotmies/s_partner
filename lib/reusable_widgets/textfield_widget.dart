@@ -89,6 +89,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       decoration: InputDecoration(
           helperText: widget.helperText,
           helperStyle: TextStyle(color: widget.helperColor ?? Colors.grey),
+          helperMaxLines: 4,
           counterText: '',
           border: new OutlineInputBorder(
               borderSide: new BorderSide(
@@ -155,7 +156,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         if (widget.onSubmitField != null) widget.onSubmitField!();
       },
       onChanged: (val) {
-        widget.onChange!(val);
+        if (widget.onChange != null) widget.onChange!(val);
       },
       keyboardType: widget.keyBoardType,
     );

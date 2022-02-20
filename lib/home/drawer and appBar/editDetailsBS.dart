@@ -22,6 +22,8 @@ import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
+import '../../apiCalls/apiCalling.dart';
+
 photoPicker() async {
   final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -38,9 +40,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends StateMVC<EditProfile> {
-  EditProfileController? _editProfileController = EditProfileController();
-  Timer? _debounce;
-  int _debouncetime = 500;
+  EditProfileController? _editProfileController;
+  // Timer? _debounce;
+  // int _debouncetime = 500;
 
   PartnerDetailsProvider? editProvider;
   void changeImages(whichImage, controller) async {
@@ -70,46 +72,47 @@ class _EditProfileState extends StateMVC<EditProfile> {
   }
 
   void initState() {
+    _editProfileController = EditProfileController();
     editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
     _editProfileController!.fillAllForms(widget.partner);
-    _editProfileController?.storeIdControl.addListener(_onSearchChanged);
+    // _editProfileController?.storeIdControl.addListener(_onSearchChanged);
     log("date ${_editProfileController!.partner} ");
     log("other ${_editProfileController!.otherDocs![0]} ");
 
     super.initState();
   }
 
-  _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(Duration(milliseconds: _debouncetime), () async {
-      String val = _editProfileController!.storeIdControl.text;
-      val = val.replaceAll(" ", "");
-      if (val.length > 3) {
-        ///here you perform your search
-        if (val == editProvider?.partnerDetailsFull!['storeId']) {
-          return editProvider?.setHelperText(
-              "www.spotmies.com/store/$val is your store url",
-              color: Color.fromARGB(255, 53, 134, 56));
-        }
-        editProvider?.setHelperText("Checking ....");
-        bool result = await _editProfileController?.checkStoreId(val);
+  // _onSearchChanged() {
+  //   if (_debounce?.isActive ?? false) _debounce?.cancel();
+  //   _debounce = Timer(Duration(milliseconds: _debouncetime), () async {
+  //     String val = _editProfileController!.storeIdControl.text;
+  //     val = val.replaceAll(" ", "");
+  //     if (val.length > 3) {
+  //       ///here you perform your search
+  //       if (val == editProvider?.partnerDetailsFull!['storeId']) {
+  //         return editProvider?.setHelperText(
+  //             "www.spotmies.com/store/$val is your store url",
+  //             color: Color.fromARGB(255, 53, 134, 56));
+  //       }
+  //       editProvider?.setHelperText("Checking ....");
+  //       bool result = await _editProfileController?.checkStoreId(val);
 
-        if (result) {
-          return editProvider?.setHelperText(
-              "✅  www.spotmies.com/store/$val  available",
-              color: Color.fromARGB(255, 53, 134, 56));
-        }
-        return editProvider?.setHelperText(
-            "❌ www.spotmies.com/store/$val Not available",
-            color: Colors.red);
-      }
-    });
-  }
+  //       if (result) {
+  //         return editProvider?.setHelperText(
+  //             "✅  www.spotmies.com/store/$val  available",
+  //             color: Color.fromARGB(255, 53, 134, 56));
+  //       }
+  //       return editProvider?.setHelperText(
+  //           "❌ www.spotmies.com/store/$val Not available",
+  //           color: Colors.red);
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
     editProvider?.setHelperText("", notify: false);
-    _editProfileController!.storeIdControl.removeListener(_onSearchChanged);
+    // _editProfileController!.storeIdControl.removeListener(_onSearchChanged);
     _editProfileController!.storeIdControl.dispose();
 
     super.dispose();
@@ -494,43 +497,15 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                     isRequired: false,
                                   ),
                                 ),
-                                Container(
-                                  // color: Colors.green,
-                                  width: width(context) * 0.9,
-                                  padding: EdgeInsets.only(bottom: 15),
-                                  child: TextFieldWidget(
-                                    label: "Your store Url",
-                                    controller:
-                                        _editProfileController!.storeIdControl,
-                                    maxLength: 20,
-                                    isRequired: false,
-                                    hint:
-                                        'ex : ${_editProfileController!.businessNameControl.text}',
-                                    enableBorderColor: Colors.grey,
-                                    focusBorderColor: Colors.indigo[900]!,
-                                    enableBorderRadius: 15,
-                                    focusBorderRadius: 15,
-                                    errorBorderRadius: 15,
-                                    focusErrorRadius: 15,
-                                    validateMsg: 'Enter valid url',
-                                    maxLines: 1,
-                                    postIcon: Icon(Icons.change_circle),
-                                    postIconColor: Colors.indigo[900]!,
-                                    helperText: data.helperText,
-                                    helperColor: data.helperColor,
-                                    formatter: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp("[a-z]")),
-                                    ],
-                                    onChange: (val) async {
-                                      log("val $val");
-                                      if (val?.length < 4) {
-                                        return editProvider?.setHelperText(
-                                            "❌ www.spotmies.com/store/$val Not available",
-                                            color: Colors.red);
-                                      }
-                                    },
-                                  ),
+                                StoreIdFormField(
+                                  onChange: (val) {
+                                    _editProfileController!
+                                        .storeIdControl.text = val;
+                                  },
+                                  text: _editProfileController!
+                                      .storeIdControl.text,
+                                  hint: _editProfileController!
+                                      .businessNameControl.text,
                                 ),
                                 Container(
                                   // color: Colors.green,
@@ -694,8 +669,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
   Widget build(BuildContext context) {
     log("===============  Render editform ================");
     return Scaffold(
-      key: _editProfileController!.scaffoldkey,
-      backgroundColor: SpotmiesTheme.background,
+      key: scaffoldkeyEditProfile,
       appBar: basicAppbar(context,
           title: "Edit profile details",
           leadingIcon: Icon(
@@ -704,5 +678,116 @@ class _EditProfileState extends StateMVC<EditProfile> {
           )),
       body: editDetails(context),
     );
+  }
+}
+
+class StoreIdFormField extends StatefulWidget {
+  const StoreIdFormField(
+      {Key? key,
+      required this.onChange,
+      required this.text,
+      required this.hint})
+      : super(key: key);
+
+  final Function onChange;
+  final String text;
+  final String hint;
+
+  @override
+  State<StoreIdFormField> createState() => _StoreIdFormFieldState();
+}
+
+class _StoreIdFormFieldState extends State<StoreIdFormField> {
+  PartnerDetailsProvider? editProvider;
+  TextEditingController storeIdControl = TextEditingController();
+
+  Timer? _debounce;
+  int _debouncetime = 500;
+  void initState() {
+    editProvider = Provider.of<PartnerDetailsProvider>(context, listen: false);
+    storeIdControl.addListener(_onSearchChanged);
+    storeIdControl.text = widget.text;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    editProvider?.setHelperText("", notify: false);
+    storeIdControl.removeListener(_onSearchChanged);
+    storeIdControl.dispose();
+
+    super.dispose();
+  }
+
+  _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(Duration(milliseconds: _debouncetime), () async {
+      String val = storeIdControl.text;
+      val = val.replaceAll(" ", "");
+      if (val.length > 3) {
+        ///here you perform your search
+        if (val == editProvider?.partnerDetailsFull!['storeId']) {
+          return editProvider?.setHelperText(
+              "www.spotmies.com/store/$val is your store url",
+              color: Color.fromARGB(255, 53, 134, 56));
+        }
+        editProvider?.setHelperText("Checking ....");
+        bool result = await checkStoreId(val);
+
+        if (result) {
+          return editProvider?.setHelperText(
+              "✅  www.spotmies.com/store/$val  available",
+              color: Color.fromARGB(255, 53, 134, 56));
+        }
+        return editProvider?.setHelperText(
+            "❌ www.spotmies.com/store/$val Not available",
+            color: Colors.red);
+      }
+    });
+  }
+
+  checkStoreId(String value) async {
+    return await Server().checkStoreIdAvailability(value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+      return Container(
+        width: width(context) * 0.9,
+        padding: EdgeInsets.only(bottom: 15),
+        child: TextFieldWidget(
+          label: "Your store Url",
+          controller: storeIdControl,
+          maxLength: 20,
+          isRequired: false,
+          hint: 'ex : ${widget.hint}',
+          enableBorderColor: Colors.grey,
+          focusBorderColor: Colors.indigo[900]!,
+          enableBorderRadius: 15,
+          focusBorderRadius: 15,
+          errorBorderRadius: 15,
+          focusErrorRadius: 15,
+          validateMsg: 'Enter valid url',
+          maxLines: 1,
+          postIcon: Icon(Icons.change_circle),
+          postIconColor: Colors.indigo[900]!,
+          helperText: editProvider?.helperText,
+          helperColor: editProvider?.helperColor,
+          formatter: [
+            FilteringTextInputFormatter.allow(RegExp("[a-z]")),
+          ],
+          onChange: (val) async {
+            widget.onChange(val);
+            if (val?.length < 4) {
+              return editProvider?.setHelperText(
+                  "❌ www.spotmies.com/store/$val Not available",
+                  color: Colors.red);
+            }
+          },
+        ),
+      );
+    });
   }
 }

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:share/share.dart';
+import 'package:spotmies_partner/controllers/edit_profile_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:spotmies_partner/utilities/snackbar.dart';
+
+import '../home/drawer and appBar/catalog_list.dart';
 
 Color colora = ([...Colors.primaries]..shuffle()).first;
 Color colorb = ([...Colors.primaries]..shuffle()).first;
@@ -115,3 +124,4 @@ verifyText(value) {
     default:
   }
 }
+

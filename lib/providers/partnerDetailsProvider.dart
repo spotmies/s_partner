@@ -234,9 +234,17 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
   void setPartnerDetailsOnly(data) {
     dynamic dataTemp = data;
-    dataTemp.removeWhere(
-        (key, value) => key == "inComingOrders" || key == "orders");
+    dataTemp.removeWhere((key, value) =>
+        key == "inComingOrders" ||
+        key == "orders" ||
+        key == "catelogs" ||
+        key == "rate" ||
+        key == "ref" ||
+        key == "feedBack" ||
+        key == "complaints" ||
+        key == "reports");
     profileDetails = dataTemp;
+    partnerDetailsFull = {...partnerDetailsFull!, ...dataTemp};
     notifyListeners();
   }
 
@@ -315,6 +323,12 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
   void setOffileLoader(state) {
     offlineScreenLoader = state ?? true;
+    notifyListeners();
+  }
+
+  void mergePartnerDetails(data) {
+    // partnerDetailsFull = {...partnerDetailsFull!, ...data};
+    partnerDetailsFull = data;
     notifyListeners();
   }
 }
