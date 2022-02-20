@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/drawerAndAppbar_controller.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/configuration.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/editDetailsBS.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
@@ -19,6 +18,8 @@ import 'package:spotmies_partner/profile/profile.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+
+import '../../utilities/tutorial_category/tutorial_category.dart';
 
 class DrawerScreen extends StatefulWidget {
   final drawerController;
@@ -190,9 +191,9 @@ drawerItemsFunction(
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => PrivacyPolicyWebView()));
 
-    case 'Catelog':
+    case 'Learn':
       return Navigator.push(
-          context, MaterialPageRoute(builder: (_) => Catalog()));
+          context, MaterialPageRoute(builder: (_) => TutCategory()));
 
     case 'Invite':
       return invites(context, hight, width, pr);
