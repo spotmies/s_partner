@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
@@ -10,11 +11,13 @@ import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/message_card.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
 class Catalog extends StatefulWidget {
-  const Catalog({Key? key}) : super(key: key);
+  final bool? showCard;
+  const Catalog({Key? key, this.showCard}) : super(key: key);
 
   @override
   _CatalogState createState() => _CatalogState();
@@ -37,13 +40,15 @@ class _CatalogState extends State<Catalog> {
             ? catelogListCard(context, cat, index)
             : Column(
                 children: [
-                  Container(
-                    height: 150,
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: SharingCard(
-                      provider: partnerDetailsProvider,
-                    ),
-                  ),
+                  widget.showCard! == false
+                      ? Container(
+                          height: height(context) * 0.21,
+                          margin: EdgeInsets.only(bottom: 5),
+                          child: SharingCard(
+                            provider: partnerDetailsProvider,
+                          ),
+                        )
+                      : SizedBox(),
                   catelogListCard(context, cat, index)
                 ],
               ));
@@ -58,15 +63,22 @@ class _CatalogState extends State<Catalog> {
           elevation: 0,
           title: TextWid(
             text: 'Services Store',
-            size: width(context) * 0.05,
+            size: width(context) * 0.045,
             weight: FontWeight.w600,
           ),
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                if (widget.showCard! == true) {
+                  Navigator.pop(context);
+                }
               },
               icon: Icon(
-                Icons.arrow_back,
+                widget.showCard! == true
+                    ? Icons.arrow_back
+                    : Icons.store_rounded,
+                size: widget.showCard! == true
+                    ? width(context) * 0.06
+                    : width(context) * 0.05,
                 color: SpotmiesTheme.secondaryVariant,
               )),
         ),
@@ -97,15 +109,17 @@ class _CatalogState extends State<Catalog> {
           if (cat == null) {
             return addCatelog(context);
           }
+
           if (cat.length < 1) {
             return Container(
-              height: 150,
-              margin: EdgeInsets.only(bottom: 15),
+              height: height(context) * 0.21,
+              margin: EdgeInsets.only(bottom: 5),
               child: SharingCard(
                 provider: partnerDetailsProvider,
               ),
             );
           }
+
           return ListView.builder(
               itemCount: cat.length,
               itemBuilder: (context, index) {
@@ -134,7 +148,10 @@ catelogListCard(BuildContext context, cat, int index) {
             onPressed: () {
               bottomMenu(context, cat, index);
             },
-            icon: Icon(Icons.more_horiz),
+            icon: Icon(
+              Icons.more_horiz,
+              color: SpotmiesTheme.onBackground,
+            ),
           ),
           Switch(
               activeTrackColor: SpotmiesTheme.primaryVariant,
@@ -262,106 +279,4 @@ addCatelog(BuildContext context) {
       },
     ),
   ]);
-}
-
-catelogCard(BuildContext context, cat) {
-  return Column(
-    children: [
-      Container(
-        height: height(context) * 0.22,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 4, spreadRadius: 2, color: SpotmiesTheme.shadow)
-            ],
-            color: SpotmiesTheme.surfaceVariant,
-            borderRadius: BorderRadius.circular(15.0)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            Container(
-              decoration: BoxDecoration(color: SpotmiesTheme.onSurface),
-              child: TextWid(
-                text: 'Recent catelog',
-                size: width(context) * 0.06,
-                weight: FontWeight.w600,
-                // align: TextAlign.left,
-                flow: TextOverflow.ellipsis,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: width(context) * 0.85,
-                  padding: EdgeInsets.only(bottom: 10, top: 10),
-                  child: Column(
-                    children: [
-                      TextWid(
-                        text: cat.last['name'],
-                        size: width(context) * 0.06,
-                        weight: FontWeight.w500,
-                        align: TextAlign.center,
-                        flow: TextOverflow.ellipsis,
-                      ),
-                      TextWid(
-                        text: cat.last['description'],
-                        size: width(context) * 0.04,
-                        weight: FontWeight.w400,
-                        align: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-                // Container(
-                //   height: height(context) * 0.055,
-                //   width: width(context) * 0.005,
-                //   color: Colors.grey[500],
-                // ),
-                // Container(
-                //   width: width(context) * 0.23,
-                //   padding: EdgeInsets.only(bottom: 10, top: 10),
-                //   child: Column(
-                //     children: [
-                //       TextWid(
-                //         text: '${cat.length}',
-                //         size: width(context) * 0.06,
-                //         weight: FontWeight.w600,
-                //         align: TextAlign.center,
-                //       ),
-                //       TextWid(
-                //         text: 'Catelogs',
-                //         size: width(context) * 0.04,
-                //         weight: FontWeight.w400,
-                //         align: TextAlign.center,
-                //       )
-                //     ],
-                //   ),
-                // ),
-              ],
-            ),
-            ElevatedButtonWidget(
-              buttonName: 'View all',
-              height: height(context) * 0.055,
-              minWidth: width(context) * 0.9,
-              bgColor: Colors.transparent,
-              textColor: SpotmiesTheme.secondaryVariant,
-              textSize: width(context) * 0.04,
-              borderRadius: 15.0,
-              borderSideColor: Colors.transparent,
-              onClick: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => Catalog()));
-              },
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
 }

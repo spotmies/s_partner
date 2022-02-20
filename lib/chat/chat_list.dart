@@ -46,6 +46,11 @@ class _ChatListState extends StateMVC<ChatList> {
       appBar: AppBar(
           backgroundColor: SpotmiesTheme.background,
           elevation: 0,
+          leading: Icon(
+            Icons.quickreply,
+            size: width(context) * 0.05,
+            color: SpotmiesTheme.secondaryVariant,
+          ),
           title: TextWid(
             text: 'My Conversations',
             size: _width * 0.045,

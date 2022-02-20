@@ -226,7 +226,7 @@ class StepperController extends ControllerMVC {
 
   Future<void> imageUpload() async {
     final String? pId = FirebaseAuth.instance.currentUser?.uid;
-    final String location1 = "partner/$pId/documents";
+    // final String location1 = "partner/$pId/documents";
     final String location2 = "partner/$pId/profile";
     // adharFrontpageLink =
     //     await uploadFilesToCloud(adharfront, cloudLocation: location1);

@@ -4,15 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
   bool isDarkThemeEnabled = false;
-  setThemeMode(ThemeMode? themeMode) async {
+  setThemeMode(ThemeMode themeMode) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (themeMode == ThemeMode.dark) {
       isDarkThemeEnabled = true;
     } else {
       isDarkThemeEnabled = false;
     }
-    await sharedPreferences.setBool("theme_mode", isDarkThemeEnabled);
+    sharedPreferences.setBool("theme_mode", isDarkThemeEnabled);
     notifyListeners();
+
     print("Changding data $isDarkThemeEnabled");
   }
 }
@@ -31,6 +32,7 @@ class SpotmiesTheme {
   static Color surfaceVariant = Colors.grey.shade50;
   static Color primaryVariant = Colors.indigo.shade50;
   static Color surfaceVariant2 = Colors.grey.shade200;
+  static Color dull = Colors.grey.shade100;
 
   static Color title = Colors.blueGrey.shade600;
   static Color titleVariant = Colors.blueGrey.shade900;
@@ -39,16 +41,14 @@ class SpotmiesTheme {
   static Color light2 = Colors.blue.shade300;
   static Color light3 = Colors.green.shade300;
   static Color light4 = Colors.orange.shade300;
-
-  static Color dull = Colors.grey.shade100;
-
-  static Color chatBubble = Colors.blueGrey.shade50;
-  static Color chatButton = Colors.indigo;
+  static Color equal = Colors.grey.shade500;
+  static Color lite = Colors.white;
+  static Color cyan = Colors.cyan;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
     colorScheme.onBackground: Colors.black,
-    colorScheme.primary: Colors.indigo.shade900,
+    colorScheme.primary: Color(0xff0088ad), //s.cyan.shade700
     colorScheme.secondary: Colors.grey.shade700,
     colorScheme.tertiary: Colors.blue.shade800,
     colorScheme.secondaryVariant: Colors.grey.shade900,
@@ -66,19 +66,19 @@ class SpotmiesTheme {
     colorScheme.light3: Colors.green.shade50,
     colorScheme.light4: Colors.orange.shade50,
     colorScheme.dull: Colors.grey.shade100,
-    colorScheme.chatBubble: Colors.blueGrey.shade50,
-    colorScheme.chatButton: Colors.indigo,
+    colorScheme.equal: Colors.grey.shade500,
+    colorScheme.lite: Colors.white,
+    colorScheme.cyan: Colors.cyan,
   };
   Map<colorScheme, Color> darkColorScheme = {
-    colorScheme.dull: Colors.grey.shade700,
     colorScheme.background: Colors.grey.shade800,
-    colorScheme.onBackground: Colors.white,
-    colorScheme.primary: Colors.grey.shade100,
+    colorScheme.onBackground: Colors.grey.shade50,
+    colorScheme.primary: Color(0xff0088ad), //Colors.grey.shade100,
     colorScheme.secondary: Colors.grey.shade300,
     colorScheme.tertiary: Colors.blue.shade400,
     colorScheme.secondaryVariant: Colors.grey.shade300,
     colorScheme.surface: Colors.grey.shade600,
-    colorScheme.onSurface: Colors.grey.shade800,
+    colorScheme.onSurface: Colors.grey.shade100,
     colorScheme.tertiaryVariant: Colors.blue.shade300,
     colorScheme.surfaceVariant: Colors.grey.shade700,
     colorScheme.primaryVariant: Colors.indigo.shade400,
@@ -90,14 +90,16 @@ class SpotmiesTheme {
     colorScheme.light2: Colors.grey.shade700,
     colorScheme.light3: Colors.grey.shade700,
     colorScheme.light4: Colors.grey.shade700,
-    colorScheme.chatBubble: Colors.blueGrey.shade600,
-    colorScheme.chatButton: Colors.indigo.shade200
+    colorScheme.dull: Colors.grey.shade700,
+    colorScheme.equal: Colors.grey.shade500,
+    colorScheme.lite: Colors.grey.shade700,
+    colorScheme.cyan: Colors.grey.shade700,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
       themeMode =
           Provider.of<ThemeProvider>(context, listen: false).isDarkThemeEnabled;
-      print("ThemeMode2: $themeMode");
+      print(themeMode);
       background = (themeMode
           ? darkColorScheme[colorScheme.background]
           : lightColorScheme[colorScheme.background])!;
@@ -160,17 +162,18 @@ class SpotmiesTheme {
       light4 = (themeMode
           ? darkColorScheme[colorScheme.light4]
           : lightColorScheme[colorScheme.light4])!;
-      chatBubble = (themeMode
-          ? darkColorScheme[colorScheme.chatBubble]
-          : lightColorScheme[colorScheme.chatBubble])!;
-
-      chatButton = (themeMode
-          ? darkColorScheme[colorScheme.chatButton]
-          : lightColorScheme[colorScheme.chatButton])!;
-
       dull = (themeMode
           ? darkColorScheme[colorScheme.dull]
           : lightColorScheme[colorScheme.dull])!;
+      equal = (themeMode
+          ? darkColorScheme[colorScheme.equal]
+          : lightColorScheme[colorScheme.equal])!;
+      lite = (themeMode
+          ? darkColorScheme[colorScheme.lite]
+          : lightColorScheme[colorScheme.lite])!;
+      cyan = (themeMode
+          ? darkColorScheme[colorScheme.cyan]
+          : lightColorScheme[colorScheme.cyan])!;
     });
   }
 }
@@ -195,7 +198,8 @@ enum colorScheme {
   light2,
   light3,
   light4,
-  chatBubble,
-  chatButton,
-  dull
+  dull,
+  equal,
+  lite,
+  cyan
 }
