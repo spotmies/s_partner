@@ -94,7 +94,7 @@ class _Step2State extends State<Step2> {
                     Icons.text_format,
                     "name",
                     TextInputType.name,
-                    16),
+                    18),
                 Container(
                   height: height(context) * 0.08,
                   margin: EdgeInsetsDirectional.only(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
@@ -153,7 +152,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         if (widget.onSubmitField != null) widget.onSubmitField!();
       },
       onChanged: (val) {
-        widget.onChange!(val);
+        if (widget.onChange != null) widget.onChange!(val);
       },
       keyboardType: widget.keyBoardType,
     );

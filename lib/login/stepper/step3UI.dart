@@ -123,26 +123,26 @@ class _Step3State extends State<Step3> {
                 'number',
                 TextInputType.number,
                 2),
-            UploadUI(
-              imageType: 'front',
-              stepperController: widget.stepperController,
-              condition: widget.stepperController?.adharfront == null,
-              onClick: () async {
-                await widget.stepperController?.adharfrontpage();
+            // UploadUI(
+            //   imageType: 'front',
+            //   stepperController: widget.stepperController,
+            //   condition: widget.stepperController?.adharfront == null,
+            //   onClick: () async {
+            //     await widget.stepperController?.adharfrontpage();
 
-                setState(() {});
-              },
-            ),
-            UploadUI(
-              imageType: 'back',
-              stepperController: widget.stepperController,
-              condition: widget.stepperController?.adharback == null,
-              onClick: () async {
-                await widget.stepperController?.adharBack();
+            //     setState(() {});
+            //   },
+            // ),
+            // UploadUI(
+            //   imageType: 'back',
+            //   stepperController: widget.stepperController,
+            //   condition: widget.stepperController?.adharback == null,
+            //   onClick: () async {
+            //     await widget.stepperController?.adharBack();
 
-                setState(() {});
-              },
-            ),
+            //     setState(() {});
+            //   },
+            // ),
           ],
         ),
       ),

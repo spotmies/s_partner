@@ -8,6 +8,7 @@ import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
+import 'package:spotmies_partner/home/drawer%20and%20appBar/catalog_list.dart';
 import 'package:spotmies_partner/home/home.dart';
 import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/login/accountType.dart';
@@ -25,7 +26,6 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
-import 'package:spotmies_partner/utilities/tutorial_category/tutorial_category.dart';
 
 void main() => runApp(NavBar());
 String pId = "123456"; //user id
@@ -389,7 +389,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       child: Orders(),
     ),
     Center(
-      child: TutCategory(),
+      // child: TutCategory(),
+      child: Catalog(),
       // child: Profile(),
     ),
   ];
@@ -419,13 +420,19 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   }
 
   List icons = [
+    Icons.home_outlined,
+    Icons.quickreply_outlined,
+    Icons.home_repair_service_outlined,
+    Icons.store_outlined
+  ];
+  List filledIcons = [
     Icons.home,
-    Icons.chat,
-    Icons.home_repair_service,
-    Icons.person
+    Icons.quickreply,
+    Icons.home_repair_service_rounded,
+    Icons.store_rounded
   ];
 
-  List text = ['Home', 'Chat', 'Jobs', 'Learn'];
+  List text = ['Home', 'Chat', 'Jobs', 'Store'];
 
   @override
   Widget build(BuildContext context) {
@@ -455,7 +462,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
               elevation: 0,
               itemCount: icons.length,
               tabBuilder: (int index, bool isActive) {
-                final color = isActive ? Colors.grey[800] : Colors.grey;
+                final color =
+                    isActive ? Color.fromARGB(255, 34, 34, 34) : Colors.grey;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -465,7 +473,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                         Column(
                           children: [
                             Icon(
-                              icons[index],
+                              isActive ? filledIcons[index] : icons[index],
                               size: width(context) * 0.05,
                               color: color,
                             ),
@@ -474,7 +482,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
                             ),
                             TextWid(
                               text: text[index],
-                              color: color!,
+                              color: color,
                               size: width(context) * 0.03,
                             )
                           ],
@@ -503,8 +511,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
               },
               backgroundColor: Colors.white,
               activeIndex: _selectedIndex,
-              splashColor: Colors.grey[200],
-              splashSpeedInMilliseconds: 300,
+              splashColor: Color.fromARGB(255, 255, 255, 255),
+              splashSpeedInMilliseconds: 50,
               notchSmoothness: NotchSmoothness.verySmoothEdge,
               gapLocation: GapLocation.none,
               leftCornerRadius: 32,
