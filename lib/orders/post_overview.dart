@@ -21,6 +21,7 @@ import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/addressExtractor.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/media_player.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
@@ -405,7 +406,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             _hight,
                             'Location',
                             Icons.location_on,
-                            fullAddress['addressLine'] ??
+                            fullAddress['street'] ??
                                 "Unable to get service address", onClick: () {
                           Map<String, double> cords = {
                             "latitude": double.parse(fullAddress['latitude']),
@@ -873,7 +874,10 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                               // mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextWid(
-                                  text: '123456789',
+                                  text: orderDetails!['uDetails']!['phNum']!
+                                          .toString()
+                                          .substring(0, 5) +
+                                      "*****",
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
                                   color: SpotmiesTheme.secondary,
@@ -925,7 +929,8 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
                               size: width * 0.03,
                             ),
                             Text(
-                              'Vizag',
+                              getAddressFromJson(
+                                  orderDetails["address"])['locality'],
                               style: fonts(width * 0.03, FontWeight.w600,
                                   SpotmiesTheme.secondaryVariant),
                             ),

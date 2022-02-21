@@ -161,8 +161,12 @@ class _SharingCardState extends State<SharingCard> {
                 onClick: () {
                   switch (getText()![5]) {
                     case 0:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => Catalog()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => Catalog(
+                                    showCard: true,
+                                  )));
                       break;
 
                     case 1:

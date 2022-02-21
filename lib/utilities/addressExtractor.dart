@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
 import 'dart:developer';
 
 addressExtractor(address) {
@@ -34,4 +35,23 @@ addressExtractor2(address) {
     "thoroughfare": address.thoroughfare.toString(),
   };
   return val;
+}
+
+Map getAddressFromJson(address) {
+  try {
+    Map<String, dynamic> temp = jsonDecode(address);
+    return temp;
+  } catch (e) {
+    return {
+      "locality": "",
+      "latitude": "",
+      "logitude": "",
+      "street": "",
+      "subAdminArea": "",
+      "postalCode": "",
+      "adminArea": "",
+      "isoCountrycode": "",
+      "from": ""
+    };
+  }
 }
