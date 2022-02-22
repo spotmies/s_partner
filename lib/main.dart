@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
+import 'package:spotmies_partner/providers/localization_provider.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
@@ -49,6 +51,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   awesomeInitilize();
+
+  await EasyLocalization.ensureInitialized();
   // FirebaseMessaging.onBackgroundMessage((message) => null);
 
   FirebaseMessaging.onBackgroundMessage(backGroundHandler);
@@ -73,8 +77,18 @@ void main() async {
               create: (context) => ChatProvider()),
           ChangeNotifierProvider<ThemeProvider>(
               create: (context) => ThemeProvider()),
+          ChangeNotifierProvider<LocalizationProvider>(
+              create: (context) => LocalizationProvider()),
         ],
-        child: MyApp(),
+        child: EasyLocalization(
+          child: MyApp(),
+          supportedLocales: [
+            Locale("en", "US"),
+            Locale("hi", "IN"),
+            Locale("te", "IN")
+          ],
+          path: 'assets/translations',
+        ),
       ),
     );
   });
@@ -113,7 +127,29 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     SpotmiesTheme().init(context);
-    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
+    var localizationProvider =
+        Provider.of<LocalizationProvider>(context, listen: true);
+    localizationProvider.addListener(() {
+      var locale = localizationProvider.language;
+      var localeVar = locale == 0
+          ? Locale("en", "US")
+          : locale == 1
+              ? Locale("te", "IN")
+              : Locale("hi", "IN");
+      setState(() {
+        EasyLocalization.of(context)?.setLocale(localeVar);
+      });
+      print(localeVar);
+    });
+
+    return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.fallback().copyWith(useMaterial3: true),
+      home: SplashScreen(),
+    );
   }
 }
 
