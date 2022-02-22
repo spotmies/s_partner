@@ -13,10 +13,7 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
-import 'package:spotmies_partner/reusable_widgets/local_notifications_and_schedule_notifications.dart';
 import 'package:spotmies_partner/reusable_widgets/notifications.dart';
-import 'package:spotmies_partner/reusable_widgets/utils.dart';
-import 'package:spotmies_partner/utilities/snackbar.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
@@ -117,106 +114,111 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 }
 
-class NotificationsDemo extends StatefulWidget {
-  const NotificationsDemo({Key? key}) : super(key: key);
 
-  @override
-  _NotificationsDemoState createState() => _NotificationsDemoState();
-}
 
-class _NotificationsDemoState extends State<NotificationsDemo> {
-  @override
-  void initState() {
-    // FirebaseMessaging.instance.getInitialMessage().then((message) {
-    //   final routefromMessage = message.data["route"];
-    //   log(routefromMessage);
-    //   Navigator.pushAndRemoveUntil(context,
-    //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-    // });
-    // //forground
-    // FirebaseMessaging.onMessage.listen((message) async {
-    //   if (message.notification != null) {
-    //     print(message.notification.title);
-    //     print(message.notification.body);
-    //     LocalNotificationService.display(message);
-    //   }
-    // });
-    // // when app background but in recent
-    // FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-    //   final routefromMessage = message.data["route"];
-    //   log(routefromMessage);
-    //   LocalNotificationService.display(message);
-    //   Navigator.pushAndRemoveUntil(context,
-    //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
-    // });
-    LocalNotidication.init(initSchedule: true);
-    listenNotifications();
-    super.initState();
-  }
 
-  void listenNotifications() {
-    LocalNotidication.onNotifications.stream.listen(onlickNotificaion);
-  }
 
-  void onlickNotificaion(String payload) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Demo(payload: payload)));
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () async {
-                    LocalNotidication.showNotifications(
-                      title: 'sample',
-                      body: 'something to try',
-                      payload: 'sample.abs',
-                      bigImage: await Utils.downloadFile(
-                          'https://spiderimg.amarujala.com/assets/images/2018/10/22/750x506/prabhas_1540214136.jpeg',
-                          'bigPicture'),
-                      largeIcon: await Utils.downloadFile(
-                          'https://spiderimg.amarujala.com/assets/images/2018/10/22/750x506/prabhas_1540214136.jpeg',
-                          'largeIcon'),
-                    );
-                  },
-                  icon: Icon(Icons.notifications)),
-              IconButton(
-                  onPressed: () {
-                    LocalNotidication.showShedduleNotifications(
-                        title: 'Service',
-                        body: 'Today 2.30 PM',
-                        payload: 'Service_2.30pm.abs',
-                        scheduledDate:
-                            DateTime.now().add(Duration(seconds: 15)));
-                    snackbar(context, 'Scheduled in 15 seconds');
-                  },
-                  icon: Icon(Icons.notifications_active)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none))
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class NotificationsDemo extends StatefulWidget {
+//   const NotificationsDemo({Key? key}) : super(key: key);
 
-class Demo extends StatelessWidget {
-  final String? payload;
-  const Demo({Key? key, this.payload}) : super(key: key);
+//   @override
+//   _NotificationsDemoState createState() => _NotificationsDemoState();
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(payload!),
-      ),
-    );
-  }
-}
+// class _NotificationsDemoState extends State<NotificationsDemo> {
+//   @override
+//   void initState() {
+//     // FirebaseMessaging.instance.getInitialMessage().then((message) {
+//     //   final routefromMessage = message.data["route"];
+//     //   log(routefromMessage);
+//     //   Navigator.pushAndRemoveUntil(context,
+//     //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+//     // });
+//     // //forground
+//     // FirebaseMessaging.onMessage.listen((message) async {
+//     //   if (message.notification != null) {
+//     //     print(message.notification.title);
+//     //     print(message.notification.body);
+//     //     LocalNotificationService.display(message);
+//     //   }
+//     // });
+//     // // when app background but in recent
+//     // FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+//     //   final routefromMessage = message.data["route"];
+//     //   log(routefromMessage);
+//     //   LocalNotificationService.display(message);
+//     //   Navigator.pushAndRemoveUntil(context,
+//     //       MaterialPageRoute(builder: (_) => NavBar()), (route) => false);
+//     // });
+//     LocalNotidication.init(initSchedule: true);
+//     listenNotifications();
+//     super.initState();
+//   }
+
+//   void listenNotifications() {
+//     LocalNotidication.onNotifications.stream.listen(onlickNotificaion);
+//   }
+
+//   void onlickNotificaion(String payload) {
+//     Navigator.of(context)
+//         .push(MaterialPageRoute(builder: (context) => Demo(payload: payload)));
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               IconButton(
+//                   onPressed: () async {
+//                     LocalNotidication.showNotifications(
+//                       title: 'sample',
+//                       body: 'something to try',
+//                       payload: 'sample.abs',
+//                       bigImage: await Utils.downloadFile(
+//                           'https://spiderimg.amarujala.com/assets/images/2018/10/22/750x506/prabhas_1540214136.jpeg',
+//                           'bigPicture'),
+//                       largeIcon: await Utils.downloadFile(
+//                           'https://spiderimg.amarujala.com/assets/images/2018/10/22/750x506/prabhas_1540214136.jpeg',
+//                           'largeIcon'),
+//                     );
+//                   },
+//                   icon: Icon(Icons.notifications)),
+//               IconButton(
+//                   onPressed: () {
+//                     LocalNotidication.showShedduleNotifications(
+//                         title: 'Service',
+//                         body: 'Today 2.30 PM',
+//                         payload: 'Service_2.30pm.abs',
+//                         scheduledDate:
+//                             DateTime.now().add(Duration(seconds: 15)));
+//                     snackbar(context, 'Scheduled in 15 seconds');
+//                   },
+//                   icon: Icon(Icons.notifications_active)),
+//               IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none))
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class Demo extends StatelessWidget {
+//   final String? payload;
+//   const Demo({Key? key, this.payload}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Text(payload!),
+//       ),
+//     );
+//   }
+// }
