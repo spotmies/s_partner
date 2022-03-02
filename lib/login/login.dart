@@ -140,6 +140,12 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: TextFormField(
+                                      onFieldSubmitted: (_) {
+                                        // _loginPageController.dataToOTP();
+                                        if (data.loader) return;
+                                        _loginPageController!
+                                            .dataToOTP(context, timerProvider!);
+                                      },
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'[0-9]')),

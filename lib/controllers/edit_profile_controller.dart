@@ -18,10 +18,10 @@ class EditProfileController extends ControllerMVC {
   DateTime? pickedDate = DateTime.now();
   int? dropDownValue = 0;
   List? accountType = [
-    'Select AccountType',
-    'business',
-    'student',
-    'freelancer'
+    'Select Account Type',
+    'Business',
+    'Student',
+    'Freelancer'
   ];
   int job = 0;
 

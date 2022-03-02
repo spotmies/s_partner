@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies_partner/login/login.dart';
@@ -354,9 +355,10 @@ class MainContent extends StatelessWidget {
             0.9,
             Text(
               onBoardList[index]!["title"],
-              style: TextStyle(
+              textAlign: TextAlign.center,
+              style: GoogleFonts.josefinSans(
                   color: SpotmiesTheme.onBackground,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
           ),
@@ -368,10 +370,11 @@ class MainContent extends StatelessWidget {
             Text(
               onBoardList[index]!["content"],
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.josefinSans(
                   color: SpotmiesTheme.onBackground,
-                  fontWeight: FontWeight.w400,
-                  fontSize: SizeConfig.defaultSize! * 1.4),
+                  fontWeight: FontWeight.w500,
+                  fontSize: SizeConfig.defaultSize! * 1.4,
+                  height: 1.4),
             ),
           ),
         ],
