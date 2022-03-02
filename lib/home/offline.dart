@@ -161,7 +161,7 @@ class _OfflineState extends State<Offline> {
                 SizedBox(
                   height: _width * 0.02,
                 ),
-                dash.isEmpty
+                dash == null
                     ? Container()
                     : reviewMsgs(
                         context,
