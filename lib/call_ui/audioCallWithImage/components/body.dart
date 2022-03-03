@@ -122,8 +122,8 @@ class _CallingUiState extends State<CallingUi> {
                           ? "Duration ${formatedTime(data.duration)}   ${callStatus(data.getCallStatus)}"
                               .toUpperCase()
                           : "INCOMING CALL.....",
-                      style: TextStyle(
-                          color: SpotmiesTheme.background.withOpacity(60)),
+                      // style: TextStyle(
+                      //     color: SpotmiesTheme.background.withOpacity(60)),
                     ),
                     Spacer(),
                     Visibility(
@@ -201,23 +201,37 @@ class _CallingUiState extends State<CallingUi> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          RoundedButton(
-                            press: () {
-                              changeScreen("outgoing");
-                              widget.onAccept!();
-                            },
-                            color: Colors.green,
-                            iconColor: Colors.white,
-                            iconSrc: "assets/icons/call_accept.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: Colors.green, shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                changeScreen("outgoing");
+                                widget.onAccept!();
+                              },
+                              icon: Icon(
+                                Icons.call_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          RoundedButton(
-                            press: () {
-                              widget.onReject!();
-                              Navigator.pop(context);
-                            },
-                            color: Colors.red,
-                            iconColor: Colors.white,
-                            iconSrc: "assets/icons/call_end.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                widget.onReject!();
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.call_end_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),
