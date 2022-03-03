@@ -13,7 +13,6 @@ class ThemeProvider extends ChangeNotifier {
     }
     await sharedPreferences.setBool("theme_mode", isDarkThemeEnabled);
     notifyListeners();
-    print("Changding data $isDarkThemeEnabled");
   }
 }
 
@@ -94,10 +93,10 @@ class SpotmiesTheme {
     colorScheme.chatButton: Colors.indigo.shade200
   };
   init(context) {
-    Provider.of<ThemeProvider>(context, listen: true).addListener(() {
-      themeMode =
-          Provider.of<ThemeProvider>(context, listen: false).isDarkThemeEnabled;
-      print("ThemeMode2: $themeMode");
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    themeProvider.addListener(() {
+      themeMode = themeProvider.isDarkThemeEnabled;
+      print("Theme Changed: $themeMode");
       background = (themeMode
           ? darkColorScheme[colorScheme.background]
           : lightColorScheme[colorScheme.background])!;

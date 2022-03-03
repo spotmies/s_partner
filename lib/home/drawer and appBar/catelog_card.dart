@@ -24,12 +24,7 @@ catelogCard(BuildContext context, cat) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // SizedBox(
-            //   height: height(context) * 0.01,
-            // ),
             Container(
-              // width: width(context) * 0.9,
-              // decoration: BoxDecoration(color: SpotmiesTheme.onSurface),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -69,12 +64,12 @@ catelogCard(BuildContext context, cat) {
                 text: toBeginningOfSentenceCase(cat.last['name']).toString(),
                 size: width(context) * 0.05,
                 weight: FontWeight.w600,
-                color: SpotmiesTheme.primary,
+                color: SpotmiesTheme.onBackground,
                 flow: TextOverflow.ellipsis,
               ),
               subtitle: TextWid(
                 text: cat.last['description'],
-                size: width(context) * 0.04,
+                size: width(context) * 0.035,
                 weight: FontWeight.w400,
                 // align: TextAlign.left,
               ),
@@ -84,74 +79,6 @@ catelogCard(BuildContext context, cat) {
                   profile: cat.last['media'][0]['url'].toString(),
                   name: cat.last['name'].toString()),
             ),
-            // Row(
-            //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     Container(
-            //       width: width(context) * 0.85,
-            //       padding: EdgeInsets.only(bottom: 10, top: 10),
-            //       // child: Column(
-            //       //   // mainAxisAlignment: MainAxisAlignment.start,
-            //       //   crossAxisAlignment: CrossAxisAlignment.start,
-            //       //   children: [
-            //       //     TextWid(
-            //       //       text: toBeginningOfSentenceCase(cat.last['name'])
-            //       //           .toString(),
-            //       //       size: width(context) * 0.06,
-            //       //       weight: FontWeight.w500,
-            //       //       // align: TextAlign.left,
-            //       //       flow: TextOverflow.ellipsis,
-            //       //     ),
-            //       //     TextWid(
-            //       //       text: cat.last['description'],
-            //       //       size: width(context) * 0.04,
-            //       //       weight: FontWeight.w400,
-            //       //       // align: TextAlign.left,
-            //       //     )
-            //       //   ],
-            //       // ),
-            //     ),
-            //     // Container(
-            //     //   height: height(context) * 0.055,
-            //     //   width: width(context) * 0.005,
-            //     //   color: Colors.grey[500],
-            //     // ),
-            //     // Container(
-            //     //   width: width(context) * 0.23,
-            //     //   padding: EdgeInsets.only(bottom: 10, top: 10),
-            //     //   child: Column(
-            //     //     children: [
-            //     //       TextWid(
-            //     //         text: '${cat.length}',
-            //     //         size: width(context) * 0.06,
-            //     //         weight: FontWeight.w600,
-            //     //         align: TextAlign.center,
-            //     //       ),
-            //     //       TextWid(
-            //     //         text: 'Catelogs',
-            //     //         size: width(context) * 0.04,
-            //     //         weight: FontWeight.w400,
-            //     //         align: TextAlign.center,
-            //     //       )
-            //     //     ],
-            //     //   ),
-            //     // ),
-            //   ],
-            // ),
-            // ElevatedButtonWidget(
-            //   buttonName: 'View all',
-            //   height: height(context) * 0.055,
-            //   minWidth: width(context) * 0.9,
-            //   bgColor: Colors.transparent,
-            //   textColor: SpotmiesTheme.secondaryVariant,
-            //   textSize: width(context) * 0.04,
-            //   borderRadius: 15.0,
-            //   borderSideColor: Colors.transparent,
-            //   onClick: () {
-            //     Navigator.push(
-            //         context, MaterialPageRoute(builder: (_) => Catalog()));
-            //   },
-            // ),
           ],
         ),
       ),

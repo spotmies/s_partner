@@ -313,8 +313,18 @@ class _OnlineState extends StateMVC<Online> {
                                                             SpotmiesTheme
                                                                 .background,
                                                         child: images.isNotEmpty
-                                                            ? Image.network(
-                                                                images.first)
+                                                            ? AspectRatio(
+                                                                aspectRatio: 1,
+                                                                child: ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    images
+                                                                        .first,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              )
                                                             : Icon(
                                                                 Icons
                                                                     .home_repair_service_outlined,

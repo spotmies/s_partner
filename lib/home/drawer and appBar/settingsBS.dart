@@ -1,11 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/providers/localization_provider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 void settings(BuildContext context, double hight, double width) async {
+  var activeLanguageButtonColor = Colors.grey[900];
+  var activeLanguageTextColor = Colors.white;
+  var inactiveLanguageButtonColor = Colors.indigo[50];
+  var inactiveLanguageTextColor = Colors.grey[900];
+  var language = -1;
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -16,6 +23,11 @@ void settings(BuildContext context, double hight, double width) async {
         ),
       ),
       builder: (BuildContext context) {
+        language = context.locale == Locale("en", "US")
+            ? 0
+            : context.locale == Locale("te", "IN")
+                ? 1
+                : 2;
         return StatefulBuilder(builder: (
           context,
           StateSetter setState,
@@ -139,55 +151,112 @@ void settings(BuildContext context, double hight, double width) async {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: SpotmiesTheme.primaryVariant,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'English',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      SpotmiesTheme.secondaryVariant),
-                                )
-                              ],
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                print("Button Pressed: English");
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(0);
+                                language = 0;
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                color: language == 0
+                                    ? activeLanguageButtonColor
+                                    : inactiveLanguageButtonColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'English',
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 0
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: SpotmiesTheme.secondaryVariant,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'తెలుగు',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      SpotmiesTheme.background),
-                                ),
-                              ],
+                          InkWell(
+                            onTap: () {
+                              print("Button Pressed: Telugu");
+                              setState(() {
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(1);
+                                language = 1;
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                color: language == 1
+                                    ? activeLanguageButtonColor
+                                    : inactiveLanguageButtonColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'తెలుగు',
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 1
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: SpotmiesTheme.primaryVariant,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'हिंदी',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      SpotmiesTheme.secondaryVariant),
-                                )
-                              ],
+                          InkWell(
+                            onTap: () {
+                              print("Button Pressed: Hindi");
+                              setState(() {
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(2);
+                                language == 2;
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                color: language == 2
+                                    ? activeLanguageButtonColor
+                                    : inactiveLanguageButtonColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'हिंदी',
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 2
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ],

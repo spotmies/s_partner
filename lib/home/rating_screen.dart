@@ -156,7 +156,7 @@ reviewMsgs(BuildContext context, rating) {
   return Container(
     // height: (len * (height(context) * 0.19)) + height(context) * 0.1,
     width: width(context),
-    padding: EdgeInsets.only(top: width(context) * 0.06),
+    padding: EdgeInsets.all(10),
     margin: EdgeInsets.all(10),
     decoration: BoxDecoration(
         boxShadow: [
@@ -167,12 +167,33 @@ reviewMsgs(BuildContext context, rating) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        TextWid(
-          text: 'Recent reviews',
-          size: width(context) * 0.06,
-          weight: FontWeight.w600,
-          align: TextAlign.center,
-          flow: TextOverflow.ellipsis,
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextWid(
+                text: 'Recent reviews',
+                size: width(context) * 0.045,
+                weight: FontWeight.w600,
+                align: TextAlign.center,
+                flow: TextOverflow.ellipsis,
+              ),
+              ElevatedButtonWidget(
+                buttonName: 'View all',
+                height: height(context) * 0.04,
+                minWidth: width(context) * 0.25,
+                bgColor: Colors.transparent,
+                textColor: SpotmiesTheme.secondaryVariant,
+                textSize: width(context) * 0.035,
+                borderRadius: 15.0,
+                borderSideColor: Colors.transparent,
+                onClick: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => RatingScreen(rating)));
+                },
+              ),
+            ],
+          ),
         ),
         SizedBox(
           height: height(context) * 0.02,
@@ -196,8 +217,8 @@ reviewMsgs(BuildContext context, rating) {
                           radius: width(context) * 0.07,
                           backgroundColor: SpotmiesTheme.surfaceVariant2,
                           child: TextWid(
-                            // text: rating[index]['uDetails']['name'][0],
-                            text: 'S',
+                            text: rating[index]['uDetails']['name'][0],
+                            // text: 'S',
                             size: width(context) * 0.06,
                           ),
                         ),
@@ -277,26 +298,26 @@ reviewMsgs(BuildContext context, rating) {
                       SizedBox(
                         height: height(context) * 0.01,
                       ),
-                    if (index == len - 1)
-                      ElevatedButtonWidget(
-                        buttonName: 'View all',
-                        height: height(context) * 0.055,
-                        minWidth: width(context) * 0.9,
-                        bgColor: Colors.transparent,
-                        textColor: SpotmiesTheme.secondaryVariant,
-                        textSize: width(context) * 0.04,
-                        borderRadius: 15.0,
-                        borderSideColor: Colors.transparent,
-                        onClick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => RatingScreen(rating)));
-                        },
-                      ),
-                    SizedBox(
-                      height: height(context) * 0.01,
-                    )
+                    // if (index == len - 1)
+                    // ElevatedButtonWidget(
+                    //   buttonName: 'View all',
+                    //   height: height(context) * 0.055,
+                    //   minWidth: width(context) * 0.9,
+                    //   bgColor: Colors.transparent,
+                    //   textColor: SpotmiesTheme.secondaryVariant,
+                    //   textSize: width(context) * 0.04,
+                    //   borderRadius: 15.0,
+                    //   borderSideColor: Colors.transparent,
+                    //   onClick: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (_) => RatingScreen(rating)));
+                    //   },
+                    // ),
+                    // SizedBox(
+                    //   height: height(context) * 0.01,
+                    // )
                   ],
                 );
               }),

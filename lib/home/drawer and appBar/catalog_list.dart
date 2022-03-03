@@ -83,7 +83,7 @@ class _CatalogState extends State<Catalog> {
         floatingActionButton: ElevatedButtonWidget(
           buttonName: 'Add Service',
           height: height(context) * 0.055,
-          minWidth: width(context) * 0.4,
+          minWidth: width(context) * 0.45,
           bgColor: SpotmiesTheme.primary,
           textColor: SpotmiesTheme.background,
           textSize: width(context) * 0.04,

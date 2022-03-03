@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies_partner/login/login.dart';
@@ -15,7 +16,7 @@ List onBoardList = [];
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   PartnerDetailsProvider? partnerProvider;
-  // List<OnboardingModel> _list = OnboardingModel.list;
+  List<OnboardingModel> _list = OnboardingModel.list;
 
   int page = 0;
   var _controller = PageController();
@@ -24,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
+    // log(onBoardList[0].toString());
     // partnerProvider?.setCurrentConstants("onBoard");
   }
 
@@ -61,15 +63,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Expanded(
                           child: PageView.builder(
                               controller: _controller,
-                              itemCount: onBoardList.length,
+                              itemCount: _list.length,
                               itemBuilder: (context, index) => MainContent(
-                                    list: onBoardList,
+                                    list: _list,
                                     index: index,
                                   )),
                         ),
                         StepsContainer(
                           page: page,
-                          list: onBoardList,
+                          list: _list,
                           controller: _controller,
                           showAnimatedContainerCallBack: (value) {
                             setState(() {
@@ -106,25 +108,25 @@ class OnboardingModel {
   OnboardingModel({this.image, this.content, this.title});
   static List<OnboardingModel> list = [
     OnboardingModel(
-        image: "assets/1.png",
-        title: "takee picture",
+        image: "assets/svgs/step1.svg",
+        title: "Choose your Profession",
         content:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+            "Specify your profession and get service requests related to your selected profession"),
     OnboardingModel(
-        image: "assets/2.png",
-        title: "addd location",
+        image: "assets/svgs/step2.svg",
+        title: "Flexible Coverage Area",
         content:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+            "Set your coverage area and get service requests from selected range."),
     OnboardingModel(
-        image: "assets/3.png",
-        title: "gett quotes from technicians",
+        image: "assets/svgs/step3.svg",
+        title: "Connect with Customers",
         content:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+            "Quote your service price and negotiate with your customers via in-app message or calling features"),
     OnboardingModel(
-        image: "assets/4.png",
-        title: "gett service instantly",
+        image: "assets/svgs/step4.svg",
+        title: "Embrace your Skills",
         content:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities")
+            "Explore and use your skills at customer location and get the credit you deserve")
   ];
 }
 
@@ -326,12 +328,12 @@ class CommonText extends StatelessWidget {
 }
 
 class MainContent extends StatelessWidget {
-  const MainContent({Key? key, required List list, required this.index})
+  const MainContent(
+      {Key? key, required List<OnboardingModel> list, required this.index})
       : _list = list,
         super(key: key);
 
-  // ignore: unused_field
-  final List _list;
+  final List<OnboardingModel> _list;
   final index;
 
   @override
@@ -344,20 +346,19 @@ class MainContent extends StatelessWidget {
             flex: 3,
             child: FadeAnimation(
               0.5,
-              Image.asset(
-                onBoardList[index]!["image"],
-                height: SizeConfig.defaultSize! * 30,
-                width: SizeConfig.defaultSize! * 30,
+              SvgPicture.asset(
+                _list[index].image.toString(),
+                height: SizeConfig.defaultSize! * 25,
+                width: SizeConfig.defaultSize! * 25,
               ),
             ),
           ),
           FadeAnimation(
             0.9,
             Text(
-              onBoardList[index]!["title"],
-              textAlign: TextAlign.center,
+              _list[index].title.toString(),
               style: GoogleFonts.josefinSans(
-                  color: SpotmiesTheme.onBackground,
+                  color: Colors.grey[900],
                   fontWeight: FontWeight.w800,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
@@ -368,7 +369,7 @@ class MainContent extends StatelessWidget {
           FadeAnimation(
             1.1,
             Text(
-              onBoardList[index]!["content"],
+              _list[index].content.toString(),
               textAlign: TextAlign.center,
               style: GoogleFonts.josefinSans(
                   color: SpotmiesTheme.onBackground,

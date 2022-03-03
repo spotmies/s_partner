@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/edit_profile_controller.dart';
@@ -669,7 +669,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
     return Scaffold(
       key: scaffoldkeyEditProfile,
       appBar: basicAppbar(context,
-          title: "Profile",
+          title: tr("profile"),
           leadingIcon: Icon(
             Icons.edit,
             color: SpotmiesTheme.secondaryVariant,
