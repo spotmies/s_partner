@@ -25,7 +25,7 @@ class _SharingCardState extends State<SharingCard> {
     if (partnerFull?['catelogs'].length < 1) {
       return [
         "Create your Online Store",
-        "Add your all services list and let it know by the user",
+        "List all your services to be requested the user",
         "spotmies.com/store",
         Icons.store_outlined,
         "Create now",
@@ -34,9 +34,9 @@ class _SharingCardState extends State<SharingCard> {
     }
     if (partner?["storeId"] == null || partner?["storeId"] == "") {
       return [
-        "Create your Store name",
-        "Name your store Share your own web store's link on Social media to attract more customers to your service",
-        "spotmies.com/your store id",
+        "Go Online!",
+        "Share your web store's link on social media to attract more customers for your service",
+        "spotmies.com/store/your_store_name",
         Icons.edit,
         "Create now",
         1
@@ -65,7 +65,7 @@ class _SharingCardState extends State<SharingCard> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20))),
             title: TextWid(
-              text: "Create Store Name",
+              text: "Name your Online Store",
               size: width(context) * 0.045,
               weight: FontWeight.w600,
             ),
@@ -89,7 +89,7 @@ class _SharingCardState extends State<SharingCard> {
                     });
                     if (result.statusCode == 200) {
                       snackbar(context,
-                          "Your storeId created now you can share with your customers");
+                          "Your online store has been created. Now you can share it with your customers!");
                       Navigator.pop(context);
                     }
                   },
@@ -134,7 +134,7 @@ class _SharingCardState extends State<SharingCard> {
           TextWid(
             text: getText()![0],
             weight: FontWeight.bold,
-            size: width(context) * 0.04,
+            size: width(context) * 0.05,
           ),
           TextWid(text: getText()![1], maxlines: 4),
           Row(
@@ -142,7 +142,7 @@ class _SharingCardState extends State<SharingCard> {
             children: [
               TextWid(
                 text: getText()![2],
-                weight: FontWeight.w600,
+                weight: FontWeight.w700,
                 color: SpotmiesTheme.primary,
               ),
               ElevatedButtonWidget(

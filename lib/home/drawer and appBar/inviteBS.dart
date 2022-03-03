@@ -66,7 +66,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                 // color: Colors.amber,
                 child: Center(
                   child: Text(
-                    'Invite Your Friend and Get Benifits on Spotmies Partner App',
+                    'Invite your Friends and Get Benefits on the Spotmies Partner app',
                     textAlign: TextAlign.center,
                     style: fonts(width * 0.05, FontWeight.w600,
                         SpotmiesTheme.secondaryVariant),
@@ -85,7 +85,7 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         minWidth: width,
                         height: hight * 0.06,
                         textColor: SpotmiesTheme.background,
-                        buttonName: 'Invite my friend',
+                        buttonName: 'Invite Friend',
                         textSize: width * 0.05,
                         textStyle: FontWeight.w600,
                         borderRadius: 5.0,

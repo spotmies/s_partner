@@ -43,7 +43,7 @@ Future signOut(BuildContext context, double hight, double width) {
                     minWidth: width,
                     height: hight * 0.06,
                     textColor: SpotmiesTheme.background,
-                    buttonName: 'Yes ,I Want to Leave',
+                    buttonName: 'Yes, I Want To Leave',
                     textSize: width * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 5.0,

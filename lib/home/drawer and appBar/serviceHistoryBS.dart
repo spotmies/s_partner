@@ -70,15 +70,21 @@ Future history(BuildContext context, double hight, double width,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundColor: SpotmiesTheme.background,
-                                radius: width * 0.08,
-                                child: (images.length == 0)
-                                    ? Icon(
-                                        Icons.engineering,
-                                        color: SpotmiesTheme.secondaryVariant,
-                                      )
-                                    : Image.network(images.first),
+                              AspectRatio(
+                                aspectRatio: 1.0,
+                                child: ClipOval(
+                                  child: CircleAvatar(
+                                    backgroundColor: SpotmiesTheme.background,
+                                    radius: width * 0.08,
+                                    child: (images.length == 0)
+                                        ? Icon(
+                                            Icons.engineering,
+                                            color:
+                                                SpotmiesTheme.secondaryVariant,
+                                          )
+                                        : Image.network(images.first),
+                                  ),
+                                ),
                               ),
                               Container(
                                 width: width * 0.52,

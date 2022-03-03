@@ -50,7 +50,7 @@ class _OrdersState extends State<Orders> {
                           width: 15,
                         ),
                         TextWid(
-                          text: 'Continuing',
+                          text: 'In Progress',
                           weight: FontWeight.bold,
                         ),
                       ],

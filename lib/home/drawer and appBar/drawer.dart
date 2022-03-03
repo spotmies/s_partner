@@ -181,7 +181,7 @@ drawerItemsFunction(
     // return Navigator.push(
     //     context, MaterialPageRoute(builder: (_) => EditProfile(pr)));
 
-    case 'Edit Details':
+    case 'Profile':
       // return editDetails(context, hight, width, pr,partnerDetailsProvider,drawerController);
       return Navigator.push(
           context, MaterialPageRoute(builder: (_) => EditProfile(pr)));

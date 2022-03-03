@@ -200,7 +200,7 @@ class _FAQState extends State<FAQ> {
 newQuery(BuildContext context,
     {Function? onSubmit,
     String? type = "text",
-    String? heading = "Rise a new query",
+    String? heading = "Feedback",
     String? hint = "Ask Question",
     String? defaultContent = ""}) {
   TextEditingController queryControl =

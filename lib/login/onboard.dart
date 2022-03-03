@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
@@ -108,22 +109,22 @@ class OnboardingModel {
   static List<OnboardingModel> list = [
     OnboardingModel(
         image: "assets/svgs/step1.svg",
-        title: "Choose your profession",
+        title: "Choose your Profession",
         content:
             "Specify your profession and get service requests related to your selected profession"),
     OnboardingModel(
         image: "assets/svgs/step2.svg",
-        title: "Flexible coverage area",
+        title: "Flexible Coverage Area",
         content:
             "Set your coverage area and get service requests from selected range."),
     OnboardingModel(
         image: "assets/svgs/step3.svg",
-        title: "Connect with customer",
+        title: "Connect with Customers",
         content:
             "Quote your service price and negotiate with your customers via in-app message or calling features"),
     OnboardingModel(
         image: "assets/svgs/step4.svg",
-        title: "Embrace your skills",
+        title: "Embrace your Skills",
         content:
             "Explore and use your skills at customer location and get the credit you deserve")
   ];
@@ -356,9 +357,9 @@ class MainContent extends StatelessWidget {
             0.9,
             Text(
               _list[index].title.toString(),
-              style: TextStyle(
+              style: GoogleFonts.josefinSans(
                   color: Colors.grey[900],
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
           ),
@@ -370,10 +371,11 @@ class MainContent extends StatelessWidget {
             Text(
               _list[index].content.toString(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.w400,
-                  fontSize: SizeConfig.defaultSize! * 1.4),
+              style: GoogleFonts.josefinSans(
+                  color: SpotmiesTheme.onBackground,
+                  fontWeight: FontWeight.w500,
+                  fontSize: SizeConfig.defaultSize! * 1.4,
+                  height: 1.4),
             ),
           ),
         ],

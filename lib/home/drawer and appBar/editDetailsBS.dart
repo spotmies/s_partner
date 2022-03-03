@@ -208,7 +208,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             width: width(context) * 0.9,
                             padding: EdgeInsets.only(bottom: 15),
                             child: TextFieldWidget(
-                              label: "Temparary address",
+                              label: "Temporary address",
                               type: "address",
                               maxLength: 200,
                               controller:
@@ -232,7 +232,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                             // padding: EdgeInsets.all(15),
                             child: TextFieldWidget(
                               isRequired: false,
-                              label: "perminent address",
+                              label: "Permanent Address",
                               maxLength: 200,
                               controller:
                                   _editProfileController!.perAddressControl,
@@ -285,8 +285,6 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       Container(
                                         // height: hight * 0.07,
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             TextWid(
                                               text: 'Date:  ' +
@@ -563,7 +561,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       Container(
                                         padding: EdgeInsets.all(15),
                                         child: TextWid(
-                                          text: "Aadhar ID Front",
+                                          text: "Aadhar Card Front",
                                           size: width(context) * 0.035,
                                         ),
                                       ),
@@ -592,7 +590,7 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                       Container(
                                         padding: EdgeInsets.all(15),
                                         child: TextWid(
-                                          text: "Aadhar ID Back",
+                                          text: "Aadhar Card Back",
                                           size: width(context) * 0.035,
                                         ),
                                       ),
@@ -758,7 +756,7 @@ class _StoreIdFormFieldState extends State<StoreIdFormField> {
         width: width(context) * 0.9,
         padding: EdgeInsets.only(bottom: 15),
         child: TextFieldWidget(
-          label: "Your store Url",
+          label: "Store URL",
           controller: storeIdControl,
           maxLength: 20,
           isRequired: false,

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -81,11 +82,33 @@ class _OnlineState extends StateMVC<Online> {
                       ? Container(
                           padding: EdgeInsets.all(width(context) * 0.09),
                           alignment: Alignment.center,
-                          child: NoDataPlaceHolder(
-                              height: height(context),
-                              width: width(context),
-                              title:
-                                  "You have no service requests at this time\nwe will notify you if got any new orders, keep checking this page if you missed those notifications "),
+                          child: SizedBox(
+                            height: height(context),
+                            width: width(context),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "You Have No Service Requests At This Time",
+                                  style: GoogleFonts.josefinSans(
+                                    fontSize: height(context) * 0.035,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: height(context) * 0.02,
+                                ),
+                                Text(
+                                  "We will notify you if you get any new orders.\nKeep checking this page if you missed any notifications.",
+                                  style: GoogleFonts.josefinSans(
+                                    fontSize: height(context) * 0.023,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
                         )
                       : ListView.builder(
                           scrollDirection: Axis.vertical,
