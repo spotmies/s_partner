@@ -25,7 +25,7 @@ class _SharingCardState extends State<SharingCard> {
     if (partnerFull?['catelogs'].length < 1) {
       return [
         "Create your Online Store",
-        "description for cate online store",
+        "Add your all services list and let it know by the user",
         "spotmies.com/store",
         Icons.store_outlined,
         "Create now",
