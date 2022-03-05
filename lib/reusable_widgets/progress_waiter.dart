@@ -16,6 +16,7 @@ class ProgressWaiter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("1233 - $loaderState");
     final _width = MediaQuery.of(contextt).size.width;
     return Visibility(
       visible: loaderState,

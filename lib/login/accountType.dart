@@ -224,7 +224,7 @@ class _AccountTypeState extends State<AccountType> {
                               });
                             }),
                         TextWid(
-                          text: "freelancer",
+                          text: "Freelancer",
                           size: _width * 0.055,
                           weight: FontWeight.w600,
                           color: student

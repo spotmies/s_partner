@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -147,6 +148,8 @@ class StepperController extends ControllerMVC {
 
   step4(
       BuildContext context, String type, String phone, Map coordinates) async {
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
     partnerProvider?.setRegistrationInProgress(true);
     snackbar(context, "Uploading images.....");
     // setState(() {

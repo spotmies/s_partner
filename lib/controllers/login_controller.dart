@@ -76,7 +76,7 @@ class LoginPageController extends ControllerMVC {
           },
           codeSent: (String? verficationID, int? resendToken) {
             timerProvider.setLoader(false);
-            snackbar(context, "Otp send successfully ");
+            snackbar(context, "OTP sent successfully.");
 
             _verificationCode = verficationID!;
             timerProvider.setVerificationCode(verficationID);

@@ -134,7 +134,7 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                   child: Container(
                                     margin: EdgeInsets.only(
                                         top: 0, right: 5, left: 5),
-                                    width: _width,
+                                    width: _width * 0.85,
                                     decoration: BoxDecoration(
                                       color: SpotmiesTheme.background,
                                       borderRadius: BorderRadius.circular(15),
