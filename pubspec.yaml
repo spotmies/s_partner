@@ -30,7 +30,7 @@ dependencies:
   firebase_auth: ^3.3.4
   cloud_firestore: ^3.1.5
   # google_nav_bar: 3.0.0
-  share: ^2.0.4
+  share_plus: ^3.1.0
   # im_animations: ^0.1.1
   # awesome_loader: ^0.0.3
   # flutter_spinkit: "^4.1.2"
