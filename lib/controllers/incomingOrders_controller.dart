@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
@@ -147,9 +148,12 @@ class IncomingOrdersController extends ControllerMVC {
     //disable loader here.
     partnerProvider?.setInComingLoader(false);
     if (response.statusCode == 200 || response.statusCode == 204) {
-      if (responseType == "reject")
+      if (responseType == "reject") {
+        partnerProvider =
+            Provider.of<PartnerDetailsProvider>(context, listen: false);
+        partnerProvider?.removeIncomingOrderById(pDetailsId);
         snackbar(incomingscaffoldkey.currentContext!, "Deleted successfully");
-      else {
+      } else {
         snackbar(
             incomingscaffoldkey.currentContext!, "Request send successfully");
         if (responseType == "accept") {
