@@ -107,6 +107,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
   void setRegistrationInProgress(bool state) {
     registrationInProgress = state;
+    print("RIP STATUS - $state $registrationInProgress");
     notifyListeners();
   }
 
@@ -178,6 +179,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   void setEditLoader(value, {loaderName = "Please wait..."}) {
     editProfileLoader = value;
     editProfileLoaderName = loaderName;
+    print("RIP STT - $editProfileLoader");
     notifyListeners();
   }
 

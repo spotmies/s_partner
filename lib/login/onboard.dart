@@ -110,8 +110,7 @@ class OnboardingModel {
     OnboardingModel(
         image: "assets/svgs/step1.svg",
         title: "Choose your Profession",
-        content:
-            "Specify your profession and get service requests related to your selected profession"),
+        content: "Specify your profession and get related service requests"),
     OnboardingModel(
         image: "assets/svgs/step2.svg",
         title: "Flexible Coverage Area",
@@ -121,7 +120,7 @@ class OnboardingModel {
         image: "assets/svgs/step3.svg",
         title: "Connect with Customers",
         content:
-            "Quote your service price and negotiate with your customers via in-app message or calling features"),
+            "Quote your service price and negotiate with your customers via in-app messaging and calling features"),
     OnboardingModel(
         image: "assets/svgs/step4.svg",
         title: "Embrace your Skills",
@@ -180,7 +179,7 @@ class SkipButton extends StatelessWidget {
             },
             child: Text(
               'Skip',
-              style: TextStyle(
+              style: GoogleFonts.josefinSans(
                   fontSize: SizeConfig.defaultSize! * 1.4, //14
                   color: SpotmiesTheme.onBackground,
                   fontWeight: FontWeight.w600),
