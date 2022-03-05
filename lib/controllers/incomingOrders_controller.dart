@@ -136,9 +136,14 @@ class IncomingOrdersController extends ControllerMVC {
           "Your request order accepted by ${partnerProvider?.getProfileDetails['name']}";
       partnerProvider =
           Provider.of<PartnerDetailsProvider>(context, listen: false);
-      partnerProvider?.orders.add(partnerProvider?.getOrderById(pDetailsId));
-      partnerProvider?.inComingOrders.removeWhere(
-          (element) => element = partnerProvider?.getOrderById(pDetailsId));
+      //partnerProvider?.orders.add();
+      var elements = partnerProvider?.inComingOrders.where(
+          (element) => element['ordId'].toString() == pDetailsId.toString());
+      if (elements != null) {
+        partnerProvider?.orders.addAll(elements);
+        partnerProvider?.inComingOrders.removeWhere(
+            (element) => element['ordId'].toString() == pDetailsId.toString());
+      }
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
