@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
@@ -13,7 +14,7 @@ import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
 GlobalKey<ScaffoldState> scaffoldkeyEditProfile = GlobalKey<ScaffoldState>();
 
 class EditProfileController extends ControllerMVC {
-  PartnerDetailsProvider? editProvider;
+  late PartnerDetailsProvider editProvider;
 
   DateTime? pickedDate = DateTime.now();
   int? dropDownValue = 0;
@@ -127,10 +128,13 @@ class EditProfileController extends ControllerMVC {
       }
 
       // log("$profilePic $adharF $adharB  ");
-      editProvider?.setEditLoader(true, loaderName: "Uploading Images");
+      print("Setting RIP true");
+      editProvider =
+          Provider.of<PartnerDetailsProvider>(context, listen: false);
+      editProvider.setEditLoader(true, loaderName: "Uploading Images");
       snackbar(context, "Uploading Images");
       await uploadFile();
-      editProvider?.setEditLoader(false);
+      editProvider.setEditLoader(false);
 
       log("loop completed");
       Map<String, dynamic> docs = {
@@ -156,16 +160,16 @@ class EditProfileController extends ControllerMVC {
         "docs": jsonEncode(docs),
       };
       log("body $body");
-      editProvider?.setEditLoader(true, loaderName: "Applying Changes");
+      editProvider.setEditLoader(true, loaderName: "Applying Changes");
       snackbar(context, "Applying Changes");
       log("uid>> $pId");
       dynamic response =
           await Server().editMethod(API.partnerDetails + pId, body);
-      editProvider?.setEditLoader(false);
+      editProvider.setEditLoader(false);
       if (response.statusCode == 200) {
         //log("change applyed");
         dynamic res = jsonDecode(response.body);
-        editProvider?.setPartnerDetailsOnly(res!);
+        editProvider.setPartnerDetailsOnly(res!);
 
         //log("response $res");
         snackbar(context, "Your changes updated");

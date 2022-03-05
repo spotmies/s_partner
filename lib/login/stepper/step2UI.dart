@@ -100,13 +100,13 @@ class _Step2State extends State<Step2> {
                 Container(
                   height: height(context) * 0.08,
                   margin: EdgeInsetsDirectional.only(
-                      bottom: height(context) * 0.01),
+                      bottom: height(context) * 0.02),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: SpotmiesTheme.surfaceVariant2)),
                   child: ListTile(
                     dense: true,
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                    visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                     onTap: () async {
                       await widget.stepperController?.pickedDates(context);
                       setState(() {});
@@ -146,7 +146,8 @@ class _Step2State extends State<Step2> {
                     Icons.phone_android,
                     "phone",
                     TextInputType.phone,
-                    10),
+                    10,
+                    isRequired: false),
                 // registrationField(
                 //     context,
                 //     widget.stepperController!,
@@ -199,7 +200,7 @@ class _Step2State extends State<Step2> {
                             left: width(context) * 0.03,
                             right: width(context) * 0.03),
                         child: TextFieldWidget(
-                          hint: 'Other Languege',
+                          hint: 'Other Language',
                           isRequired: false,
                           enableBorderColor: SpotmiesTheme.surfaceVariant2,
                           focusBorderColor: Colors.grey,
@@ -581,12 +582,13 @@ class _CheckBoxWidState extends State<CheckBoxWid> {
 // }
 
 registrationField(BuildContext context, StepperController stepperController,
-    hint, validmsg, _controller, icon, validator, keyboardtype, length) {
+    hint, validmsg, _controller, icon, validator, keyboardtype, length,
+    {bool isRequired = true}) {
   return Container(
     height: height(context) * 0.08,
     margin: EdgeInsets.only(bottom: height(context) * 0.01),
     child: TextFieldWidget(
-      isRequired: true,
+      isRequired: isRequired,
 
       type: validator,
       maxLength: length,

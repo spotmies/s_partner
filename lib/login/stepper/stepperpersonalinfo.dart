@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
 import 'package:spotmies_partner/login/stepper/step1UI.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
@@ -52,6 +53,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
+    var partnerProviderNN =
+        Provider.of<PartnerDetailsProvider>(context, listen: true);
+    partnerProviderNN.addListener(() {
+      print("RIP: ${partnerProviderNN.registrationInProgress}");
+    });
     // if (_stepperController.isProcess == true) return onPending(_hight, _width);
     // if (_stepperController.isFail == true)
     //   return onFail(_hight, _width, context, _stepperController);
