@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:spotmies_partner/apiCalls/apiCalling.dart';
@@ -133,6 +134,16 @@ class IncomingOrdersController extends ControllerMVC {
       body['schedule'] = orderData['schedule'].toString();
       body['notificationBody'] =
           "Your request order accepted by ${partnerProvider?.getProfileDetails['name']}";
+      partnerProvider =
+          Provider.of<PartnerDetailsProvider>(context, listen: false);
+      //partnerProvider?.orders.add();
+      var elements = partnerProvider?.inComingOrders.where(
+          (element) => element['ordId'].toString() == pDetailsId.toString());
+      if (elements != null) {
+        partnerProvider?.orders.addAll(elements);
+        partnerProvider?.inComingOrders.removeWhere(
+            (element) => element['ordId'].toString() == pDetailsId.toString());
+      }
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
