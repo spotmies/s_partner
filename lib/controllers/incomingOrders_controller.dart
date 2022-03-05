@@ -158,12 +158,9 @@ class IncomingOrdersController extends ControllerMVC {
     //disable loader here.
     partnerProvider?.setInComingLoader(false);
     if (response.statusCode == 200 || response.statusCode == 204) {
-      if (responseType == "reject") {
-        partnerProvider =
-            Provider.of<PartnerDetailsProvider>(context, listen: false);
-        partnerProvider?.removeIncomingOrderById(pDetailsId);
+      if (responseType == "reject")
         snackbar(incomingscaffoldkey.currentContext!, "Deleted successfully");
-      } else {
+      else {
         snackbar(
             incomingscaffoldkey.currentContext!, "Request send successfully");
         if (responseType == "accept") {

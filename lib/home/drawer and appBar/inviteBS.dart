@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/dottedBorder.dart';
@@ -94,8 +94,9 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         // trailingIcon: Icon(Icons.share),
                         onClick: () async {
                           String referal = await referalCode(pr);
-                          Share.share(
-                              "Install and explore the SPOTMIES PARTNER app to get unlimited freelancing service requests and earn organic money.\n\nreferal code = '$referal' \n\nhttps://play.google.com/store/apps/details?id=com.spotmiespartner",
+                          Share.shareFiles(['assets/settings.svg'],
+                              text:
+                                  "Install and explore the SPOTMIES PARTNER app to get unlimited freelancing service requests and earn organic money.\n\nreferal code = '$referal' \n\nhttps://play.google.com/store/apps/details?id=com.spotmiespartner",
                               subject: 'Spotmies partner app');
                         },
                       ),
