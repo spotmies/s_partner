@@ -134,6 +134,11 @@ class IncomingOrdersController extends ControllerMVC {
       body['schedule'] = orderData['schedule'].toString();
       body['notificationBody'] =
           "Your request order accepted by ${partnerProvider?.getProfileDetails['name']}";
+      partnerProvider =
+          Provider.of<PartnerDetailsProvider>(context, listen: false);
+      partnerProvider?.orders.add(partnerProvider?.getOrderById(pDetailsId));
+      partnerProvider?.inComingOrders.removeWhere(
+          (element) => element = partnerProvider?.getOrderById(pDetailsId));
     } else if (responseType == "bid") {
       //below for bid order
       body["money"] = moneyController.text.toString();
