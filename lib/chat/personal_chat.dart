@@ -201,29 +201,33 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 minWidth: 30,
                                                 maxWidth: _width * 0.55,
                                               ),
+                                              margin: EdgeInsets.only(
+                                                  bottom:
+                                                      sender == "bot" ? 10 : 0),
                                               decoration: BoxDecoration(
                                                   color: sender == "user"
                                                       ? SpotmiesTheme
                                                           .surfaceVariant2
                                                       : sender == "partner"
-                                                          ? SpotmiesTheme
-                                                              .onBackground
+                                                          ? Colors.blueGrey[100]
                                                           : SpotmiesTheme
                                                               .secondaryVariant,
                                                   border: Border.all(
                                                       color:
-                                                          Colors.blueGrey[500]!,
+                                                          Colors.blueGrey[100]!,
                                                       width: 0.3),
                                                   borderRadius: BorderRadius.only(
                                                       topLeft:
                                                           Radius.circular(15),
                                                       topRight:
                                                           Radius.circular(15),
-                                                      bottomRight:
-                                                          Radius.circular(
-                                                              sender == "user"
-                                                                  ? 15
-                                                                  : 0),
+                                                      bottomRight: Radius
+                                                          .circular(sender ==
+                                                                      "user" ||
+                                                                  sender ==
+                                                                      "bot"
+                                                              ? 15
+                                                              : 0),
                                                       bottomLeft:
                                                           Radius.circular(
                                                               sender != "user"

@@ -93,7 +93,7 @@ class _OnlineState extends StateMVC<Online> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "You Have No Service Requests At This Time",
+                                    "You have no service requests at this time",
                                     style: GoogleFonts.josefinSans(
                                       fontSize: height(context) * 0.035,
                                       fontWeight: FontWeight.w800,

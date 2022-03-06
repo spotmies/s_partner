@@ -8,6 +8,7 @@ import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 Future invites(BuildContext context, double hight, double width, pr) {
+  // String directory = "assets/icons";
   return showModalBottomSheet(
       backgroundColor: SpotmiesTheme.background,
       context: context,
@@ -94,9 +95,11 @@ Future invites(BuildContext context, double hight, double width, pr) {
                         // trailingIcon: Icon(Icons.share),
                         onClick: () async {
                           String referal = await referalCode(pr);
-                          Share.shareFiles(['assets/settings.svg'],
-                              text:
-                                  "Install and explore the SPOTMIES PARTNER app to get unlimited freelancing service requests and earn organic money.\n\nreferal code = '$referal' \n\nhttps://play.google.com/store/apps/details?id=com.spotmiespartner",
+                          Share.share(
+                              //   ['${directory}/website.jpg'],
+                              // mimeTypes: ,
+                              //     text:
+                              "Install and explore the SPOTMIES PARTNER app to get unlimited freelancing service requests and earn organic money.\n\nreferal code = '$referal' \n\nhttps://play.google.com/store/apps/details?id=com.spotmiespartner",
                               subject: 'Spotmies partner app');
                         },
                       ),

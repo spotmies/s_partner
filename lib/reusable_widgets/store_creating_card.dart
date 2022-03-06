@@ -36,7 +36,7 @@ class _SharingCardState extends State<SharingCard> {
       return [
         "Go Online!",
         "Share your web store's link on social media to attract more customers for your service",
-        "spotmies.com/store/your_store_name",
+        "spotmies.com/store/your_store",
         Icons.edit,
         "Create now",
         1
