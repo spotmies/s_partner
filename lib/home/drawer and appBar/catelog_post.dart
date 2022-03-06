@@ -225,7 +225,8 @@ class _CatelogPostState extends State<CatelogPost> {
                     borderRadius: 10.0,
                     borderSideColor: Colors.grey[900]!,
                     onClick: () async {
-                      if (catelogController.catelogPic == null) {
+                      if (catelogController.catelogPic == null &&
+                          !catelogController.isEditForm) {
                         return snackbar(context, "Please upload image");
                       }
 

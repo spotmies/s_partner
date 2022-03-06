@@ -131,7 +131,14 @@ catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
     tileColor: SpotmiesTheme.background,
-    title: TextWid(text: cat['name'].toString()),
+    onTap: () {
+      bottomMenu(context, cat, index);
+    },
+    title: TextWid(
+      text: cat['name'].toString(),
+      size: width(context) * 0.05,
+      weight: FontWeight.w600,
+    ),
     subtitle: TextWid(text: cat['description'].toString()),
     leading: ProfilePic(
         profile: cat['media'][0]['url'].toString(),

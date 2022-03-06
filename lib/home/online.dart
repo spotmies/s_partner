@@ -79,34 +79,39 @@ class _OnlineState extends StateMVC<Online> {
                     child: RefreshIndicator(
                   onRefresh: partnerProvider!.getOnlyIncomingOrders,
                   child: o.length < 1
-                      ? Container(
-                          padding: EdgeInsets.all(width(context) * 0.09),
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            height: height(context),
+                      ? SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Container(
+                            padding: EdgeInsets.all(width(context) * 0.09),
+                            alignment: Alignment.center,
+                            height: height(context) * 0.9,
                             width: width(context),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "You Have No Service Requests At This Time",
-                                  style: GoogleFonts.josefinSans(
-                                    fontSize: height(context) * 0.035,
-                                    fontWeight: FontWeight.w800,
+                            child: SizedBox(
+                              height: height(context),
+                              width: width(context),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "You Have No Service Requests At This Time",
+                                    style: GoogleFonts.josefinSans(
+                                      fontSize: height(context) * 0.035,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(
-                                  height: height(context) * 0.02,
-                                ),
-                                Text(
-                                  "We will notify you if you get any new orders.\nKeep checking this page if you missed any notifications.",
-                                  style: GoogleFonts.josefinSans(
-                                    fontSize: height(context) * 0.023,
+                                  SizedBox(
+                                    height: height(context) * 0.02,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                                  Text(
+                                    "We will notify you if you get any new orders.\nKeep checking this page if you missed any notifications.",
+                                    style: GoogleFonts.josefinSans(
+                                      fontSize: height(context) * 0.023,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )

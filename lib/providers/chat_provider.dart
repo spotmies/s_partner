@@ -17,6 +17,7 @@ class ChatProvider extends ChangeNotifier {
   bool scrollEvent = false;
   int msgCount = 20;
   bool enableFoat = true;
+  bool personalChatLoader = false;
 
   //calling variables
   bool acceptCalls = true;
@@ -91,15 +92,15 @@ class ChatProvider extends ChangeNotifier {
           case "disableChat":
           case "deleteChat":
             disableChatByMsgId(msgId, notify: false);
-          break;
+            break;
 
           case "enableProfile":
             revealProfile(true, msgId, pid, notify: false);
-             break;
+            break;
 
           case "disableProfile":
             revealProfile(false, msgId, pid, notify: false);
-             break;
+            break;
 
           case "acceptOrder": //need to work on later
           case "rejectOrder": //need to work on later
@@ -311,6 +312,11 @@ class ChatProvider extends ChangeNotifier {
     callInitTimeOut = 15;
     stopTimer = false;
     callStatus = 0;
+    notifyListeners();
+  }
+
+  void setPersonalChatLoader({bool state = true}) {
+    personalChatLoader = state;
     notifyListeners();
   }
 }

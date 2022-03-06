@@ -155,7 +155,7 @@ class BasicOverlayWidget extends StatelessWidget {
       ? Container()
       : Container(
           alignment: Alignment.center,
-          color: SpotmiesTheme.onBackground.withOpacity(26),
+          color: SpotmiesTheme.onBackground,
           child: Icon(Icons.play_circle_fill,
               color: SpotmiesTheme.background, size: 80),
         );

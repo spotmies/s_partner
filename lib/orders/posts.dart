@@ -62,7 +62,8 @@ class _PostListState extends StateMVC<PostList> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        await _ordersController!.getOrderFromDB(context);
+                        await _ordersController!
+                            .getOrderFromDB(context, partnerProvider);
                       },
                       child: o.length < 1
                           ? NoDataPlaceHolder(
