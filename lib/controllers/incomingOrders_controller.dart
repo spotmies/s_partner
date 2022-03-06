@@ -99,8 +99,8 @@ class IncomingOrdersController extends ControllerMVC {
     }
   }
 
-  respondToOrder(
-      orderData, pDetailsId, responseType, BuildContext context) async {
+  respondToOrder(orderData, pDetailsId, responseType,
+      PartnerDetailsProvider? partnerProvider, BuildContext context) async {
     //enable loader
     // if (partnerProvider!.inComingLoader) return;
     if (orderData['orderState'] > 6) {
@@ -137,11 +137,11 @@ class IncomingOrdersController extends ControllerMVC {
       partnerProvider =
           Provider.of<PartnerDetailsProvider>(context, listen: false);
       //partnerProvider?.orders.add();
-      var elements = partnerProvider?.inComingOrders.where(
+      var elements = partnerProvider.inComingOrders.where(
           (element) => element['ordId'].toString() == pDetailsId.toString());
       if (elements != null) {
-        partnerProvider?.orders.addAll(elements);
-        partnerProvider?.inComingOrders.removeWhere(
+        partnerProvider.orders.addAll(elements);
+        partnerProvider.inComingOrders.removeWhere(
             (element) => element['ordId'].toString() == pDetailsId.toString());
       }
     } else if (responseType == "bid") {
@@ -174,7 +174,6 @@ class IncomingOrdersController extends ControllerMVC {
                 incomingscaffoldkey.currentContext!, "something went wrong");
         }
       }
-
       partnerProvider?.removeIncomingOrderById(orderData['ordId']);
       moneyController.clear();
     } else {

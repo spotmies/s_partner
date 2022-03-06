@@ -269,6 +269,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   void removeIncomingOrderById(ordId) {
+    log("removing order $ordId");
     inComingOrders.removeWhere(
         (element) => element['ordId'].toString() == ordId.toString());
     notifyListeners();

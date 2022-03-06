@@ -144,6 +144,7 @@ class _OnlineState extends StateMVC<Online> {
                                                 orderData,
                                                 pDetailsId,
                                                 responseType,
+                                                partnerProvider,
                                                 context);
                                       }),
                                 ));
@@ -397,6 +398,7 @@ class _OnlineState extends StateMVC<Online> {
                                                                 partnerProfile![
                                                                     '_id'],
                                                                 "reject",
+                                                                partnerProvider,
                                                                 context);
                                                       },
                                                     ),
@@ -429,6 +431,7 @@ class _OnlineState extends StateMVC<Online> {
                                                                   partnerProfile![
                                                                       '_id'],
                                                                   "accept",
+                                                                  partnerProvider,
                                                                   context);
                                                         },
                                                       ),
@@ -561,6 +564,7 @@ class _OnlineState extends StateMVC<Online> {
                                     orderData,
                                     pDetailsId,
                                     responseType,
+                                    partnerProvider,
                                     context);
                               }),
                         ));
@@ -742,6 +746,7 @@ class _OnlineState extends StateMVC<Online> {
                                     ordDetails,
                                     partnerProfile?['_id'],
                                     "bid",
+                                    partnerProvider,
                                     context);
                                 if (from == "outside") {
                                   Navigator.pop(context);
