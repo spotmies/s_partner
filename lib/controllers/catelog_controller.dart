@@ -19,6 +19,7 @@ class CatelogController extends ControllerMVC {
   GlobalKey<FormState> catformkey = GlobalKey<FormState>();
   String? netcatelogPic;
   bool loader = false;
+  bool isEditForm = false;
   TextEditingController catNameControl = TextEditingController();
   TextEditingController catPriceControl = TextEditingController();
   TextEditingController catDescControl = TextEditingController();
@@ -55,6 +56,7 @@ class CatelogController extends ControllerMVC {
   }
 
   fillAllForms(cat) {
+    isEditForm = true;
     netcatelogPic = cat != null ? cat['media'][0]['url'] : "";
     catNameControl.text = cat['name'] != null ? cat['name'].toString() : "";
     catPriceControl.text = cat['price'] != null ? cat['price'].toString() : "";

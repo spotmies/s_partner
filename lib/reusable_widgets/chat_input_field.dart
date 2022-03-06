@@ -79,7 +79,7 @@ Container chatInputField(
                             onPressed: () {
                               chatController.chooseImage((link, type, id) {
                                 sendCallBack(link, type, id, chatProvider);
-                              }, msgId);
+                              }, msgId, chatProvider);
                             },
                             icon: Icon(
                               Icons.camera_alt_outlined,
@@ -105,18 +105,19 @@ Container chatInputField(
                                         (link, type, id) {
                                       sendCallBack(
                                           link, type, id, chatProvider);
-                                    }, msgId);
+                                    }, msgId, chatProvider);
                                   }, option2Click: () {
                                     chatController.chooseImage(
                                         (link, type, id) {
                                       sendCallBack(
                                           link, type, id, chatProvider);
-                                    }, msgId, imageSource: ImageSource.gallery);
+                                    }, msgId, chatProvider,
+                                        imageSource: ImageSource.gallery);
                                   }, option3Click: () {
                                     chatController.pickVideo((link, type, id) {
                                       sendCallBack(
                                           link, type, id, chatProvider);
-                                    }, msgId);
+                                    }, msgId, chatProvider);
                                   }, option4Click: () {
                                     audioRecoder(context, hight, width,
                                         chatController, sendCallBack, msgId);

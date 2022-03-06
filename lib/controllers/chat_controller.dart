@@ -169,7 +169,7 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chooseImage(Function sendCallBack, String msgId,
+  chooseImage(Function sendCallBack, String msgId, ChatProvider chatProvider,
       {imageSource = ImageSource.camera}) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
@@ -183,15 +183,20 @@ class ChatController extends ControllerMVC {
     chatimages.add(File(pickedFile!.path));
     // });
     if (pickedFile.path.isEmpty) retrieveLostData();
+    chatProvider.setPersonalChatLoader();
     await uploadimage(sendCallBack, msgId);
+    chatProvider.setPersonalChatLoader(state: false);
   }
 
-  pickVideo(Function sendCallBack, String msgId) async {
+  pickVideo(
+      Function sendCallBack, String msgId, ChatProvider chatProvider) async {
     XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     chatVideo.add(File(pickedFile!.path));
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
-    uploadVideo(sendCallBack, msgId);
+    chatProvider.setPersonalChatLoader();
+    await uploadVideo(sendCallBack, msgId);
+    chatProvider.setPersonalChatLoader(state: false);
   }
 
   Future<void> retrieveLostData() async {

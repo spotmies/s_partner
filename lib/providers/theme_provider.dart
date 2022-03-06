@@ -30,6 +30,7 @@ class SpotmiesTheme {
   static Color surfaceVariant = Colors.grey.shade50;
   static Color primaryVariant = Colors.indigo.shade50;
   static Color surfaceVariant2 = Colors.grey.shade200;
+  static Color secondaryText = Colors.white;
 
   static Color title = Colors.blueGrey.shade600;
   static Color titleVariant = Colors.blueGrey.shade900;
