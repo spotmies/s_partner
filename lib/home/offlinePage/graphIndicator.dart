@@ -32,6 +32,7 @@ graphIndicator(
           ],
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(title == 'Orders' ? pdo.length.toString() : pdo.toString(),
                 style: GoogleFonts.josefinSans(
@@ -52,11 +53,17 @@ graphIndicator(
           child: Column(
             children: [
               Container(
-                  padding: EdgeInsets.all(7),
-                  height: hight * 0.4,
-                  width: width,
-                  // child: title == 'Orders' ? multiBarGraph() : lineGraph()),
-                  child: lineGraph()),
+                padding: EdgeInsets.all(7),
+                height: hight * 0.4,
+                width: width,
+                // child: title == 'Orders' ? multiBarGraph() : lineGraph()),
+                // child: lineGraph()
+                child: Icon(icon,
+                    size: width * 0.5,
+                    color: title == 'Orders'
+                        ? Colors.amber[300]
+                        : Colors.red[300]),
+              ),
               Container(
                 padding: EdgeInsets.only(top: 5),
                 child: Text(

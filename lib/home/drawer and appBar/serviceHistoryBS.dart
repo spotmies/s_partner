@@ -71,7 +71,7 @@ Future history(BuildContext context, double hight, double width,
                           child: Row(
                             children: [
                               AspectRatio(
-                                aspectRatio: 1.0,
+                                aspectRatio: 0.6,
                                 child: ClipOval(
                                   child: CircleAvatar(
                                     backgroundColor: SpotmiesTheme.background,

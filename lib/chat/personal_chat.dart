@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
@@ -105,205 +106,227 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           _chatController?.user = _chatController?.targetChat['uDetails'];
           _chatController?.partner = _chatController?.targetChat['pDetails'];
           List? messages = _chatController?.targetChat['msgs'];
-          return Container(
-            child: Column(children: [
-              Expanded(
-                child: Container(
-                    child: ListView.builder(
-                        reverse: true,
-                        controller: _chatController?.scrollController,
-                        itemCount: data.getMsgCount() < messages?.length
-                            ? data.getMsgCount()
-                            : messages?.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Map rawMsgData = jsonDecode(
-                              messages?[(messages.length - 1) - index]);
-                          // Map rawMsgDataprev = rawMsgData;
+          return Stack(
+            children: [
+              Container(
+                child: Column(children: [
+                  Expanded(
+                    child: Container(
+                        child: ListView.builder(
+                            reverse: true,
+                            controller: _chatController?.scrollController,
+                            itemCount: data.getMsgCount() < messages?.length
+                                ? data.getMsgCount()
+                                : messages?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Map rawMsgData = jsonDecode(
+                                  messages?[(messages.length - 1) - index]);
+                              // Map rawMsgDataprev = rawMsgData;
 
-                          Map rawMsgDataprev;
-                          if (index == (messages?.length)! - 1) {
-                            rawMsgDataprev = rawMsgData;
-                          } else {
-                            rawMsgDataprev = jsonDecode(
-                                messages?[(messages.length - 1) - (index + 1)]);
-                          }
-                          String message = rawMsgData['msg'];
-                          String sender = rawMsgData['sender'];
-                          String type = rawMsgData['type'];
+                              Map rawMsgDataprev;
+                              if (index == (messages?.length)! - 1) {
+                                rawMsgDataprev = rawMsgData;
+                              } else {
+                                rawMsgDataprev = jsonDecode(messages?[
+                                    (messages.length - 1) - (index + 1)]);
+                              }
+                              String message = rawMsgData['msg'];
+                              String sender = rawMsgData['sender'];
+                              String type = rawMsgData['type'];
 
-                          return Container(
-                            padding: EdgeInsets.only(
-                                left: sender == "user" ? 10 : 0,
-                                bottom: 5,
-                                right: sender == "user" ? 0 : 10),
-                            child: Column(
-                              children: [
-                                Visibility(
-                                  visible: _chatController?.dateCompare(
-                                              rawMsgData['time'],
-                                              rawMsgDataprev['time']) !=
-                                          "false" ||
-                                      index == (messages?.length)! - 1,
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: SpotmiesTheme
-                                                  .secondaryVariant,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 7,
-                                              bottom: 7),
-                                          alignment: Alignment.center,
-                                          child: TextWid(
-                                            text: index ==
-                                                    (messages?.length)! - 1
-                                                ? _chatController?.getDate(
-                                                    rawMsgData['time'])
-                                                : _chatController?.dateCompare(
-                                                    rawMsgData['time'],
-                                                    rawMsgDataprev['time']),
-                                            color: SpotmiesTheme.background,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: sender == "user"
-                                      ? MainAxisAlignment.start
-                                      : sender == "partner"
-                                          ? MainAxisAlignment.end
-                                          : MainAxisAlignment.center,
+                              return Container(
+                                padding: EdgeInsets.only(
+                                    left: sender == "user" ? 10 : 0,
+                                    bottom: 5,
+                                    right: sender == "user" ? 0 : 10),
+                                child: Column(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          constraints: BoxConstraints(
-                                            minHeight: _hight * 0.05,
-                                            minWidth: 30,
-                                            maxWidth: _width * 0.55,
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: sender == "user"
-                                                  ? SpotmiesTheme
-                                                      .surfaceVariant2
-                                                  : sender == "partner"
-                                                      ? SpotmiesTheme
-                                                          .onBackground
-                                                      : SpotmiesTheme
-                                                          .secondaryVariant,
-                                              border: Border.all(
-                                                  color: Colors.blueGrey[500]!,
-                                                  width: 0.3),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight: Radius.circular(15),
-                                                  bottomRight: Radius.circular(
-                                                      sender == "user"
-                                                          ? 15
-                                                          : 0),
-                                                  bottomLeft: Radius.circular(
-                                                      sender != "user"
-                                                          ? 15
-                                                          : 0))),
-                                          child: Column(
-                                            children: [
-                                              sender == "user" ||
-                                                      sender == "partner"
-                                                  ? Container(
-                                                      padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        top: 5,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: TextWid(
-                                                        weight: FontWeight.w800,
-                                                        color: Colors.grey,
-                                                        text: sender ==
-                                                                'partner'
-                                                            ? 'You'
-                                                            : _chatController
-                                                                ?.user['name'],
-                                                      ))
-                                                  : Container(),
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    left: 10,
-                                                    top: 10,
-                                                    right: 10),
-                                                alignment: Alignment.centerLeft,
-                                                child: typeofChat(
-                                                    type,
-                                                    message,
-                                                    sender,
-                                                    _hight,
-                                                    _width,
-                                                    _chatController!,
-                                                    context),
+                                    Visibility(
+                                      visible: _chatController?.dateCompare(
+                                                  rawMsgData['time'],
+                                                  rawMsgDataprev['time']) !=
+                                              "false" ||
+                                          index == (messages?.length)! - 1,
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            top: 30, bottom: 30),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: SpotmiesTheme
+                                                      .secondaryVariant,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              padding: EdgeInsets.only(
+                                                  right: 20,
+                                                  left: 20,
+                                                  top: 7,
+                                                  bottom: 7),
+                                              alignment: Alignment.center,
+                                              child: TextWid(
+                                                text: index ==
+                                                        (messages?.length)! - 1
+                                                    ? _chatController?.getDate(
+                                                        rawMsgData['time'])
+                                                    : _chatController
+                                                        ?.dateCompare(
+                                                            rawMsgData['time'],
+                                                            rawMsgDataprev[
+                                                                'time']),
+                                                color: SpotmiesTheme.background,
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    right: 10, top: 5),
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: TextWid(
-                                                  text: getTime(
-                                                      rawMsgData['time']),
-                                                  size: _width * 0.03,
-                                                  color: sender != "user"
-                                                      ? Colors.grey[500]!
-                                                      : Colors.grey[500]!,
-                                                  weight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        Visibility(
-                                          visible:
-                                              index == 0 && sender == "partner",
-                                          child: readReciept(
-                                              _width,
-                                              _chatController
-                                                  ?.targetChat['pState']),
-                                        )
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: sender == "user"
+                                          ? MainAxisAlignment.start
+                                          : sender == "partner"
+                                              ? MainAxisAlignment.end
+                                              : MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                minHeight: _hight * 0.05,
+                                                minWidth: 30,
+                                                maxWidth: _width * 0.55,
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                  bottom:
+                                                      sender == "bot" ? 10 : 0),
+                                              decoration: BoxDecoration(
+                                                  color: sender == "user"
+                                                      ? SpotmiesTheme
+                                                          .surfaceVariant2
+                                                      : sender == "partner"
+                                                          ? Colors.blueGrey[100]
+                                                          : SpotmiesTheme
+                                                              .secondaryVariant,
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.blueGrey[100]!,
+                                                      width: 0.3),
+                                                  borderRadius: BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      bottomRight: Radius
+                                                          .circular(sender ==
+                                                                      "user" ||
+                                                                  sender ==
+                                                                      "bot"
+                                                              ? 15
+                                                              : 0),
+                                                      bottomLeft:
+                                                          Radius.circular(
+                                                              sender != "user"
+                                                                  ? 15
+                                                                  : 0))),
+                                              child: Column(
+                                                children: [
+                                                  sender == "user" ||
+                                                          sender == "partner"
+                                                      ? Container(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            left: 10,
+                                                            top: 5,
+                                                          ),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: TextWid(
+                                                            weight:
+                                                                FontWeight.w800,
+                                                            color: Colors.grey,
+                                                            text: sender ==
+                                                                    'partner'
+                                                                ? 'You'
+                                                                : _chatController
+                                                                        ?.user[
+                                                                    'name'],
+                                                          ))
+                                                      : Container(),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10,
+                                                        top: 10,
+                                                        right: 10),
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: typeofChat(
+                                                        type,
+                                                        message,
+                                                        sender,
+                                                        _hight,
+                                                        _width,
+                                                        _chatController!,
+                                                        context),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10, top: 5),
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: TextWid(
+                                                      text: getTime(
+                                                          rawMsgData['time']),
+                                                      size: _width * 0.03,
+                                                      color: sender != "user"
+                                                          ? Colors.grey[500]!
+                                                          : Colors.grey[500]!,
+                                                      weight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: index == 0 &&
+                                                  sender == "partner",
+                                              child: readReciept(
+                                                  _width,
+                                                  _chatController
+                                                      ?.targetChat['pState']),
+                                            )
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          );
-                        })),
+                              );
+                            })),
+                  ),
+                  _chatController?.targetChat['cBuild'] == 1
+                      ? chatInputField(
+                          _chatController?.sendMessageHandler,
+                          context,
+                          _hight,
+                          _width,
+                          _chatController!,
+                          widget.msgId,
+                          chatProvider!)
+                      : Container(
+                          child: TextWid(
+                              text:
+                                  "You can't chat because user might be disabled or order completed"),
+                        )
+                ]),
               ),
-              _chatController?.targetChat['cBuild'] == 1
-                  ? chatInputField(
-                      _chatController?.sendMessageHandler,
-                      context,
-                      _hight,
-                      _width,
-                      _chatController!,
-                      widget.msgId,
-                      chatProvider!)
-                  : Container(
-                      child: TextWid(
-                          text:
-                              "You can't chat because user might be disabled or order completed"),
-                    )
-            ]),
+              ProgressWaiter(
+                  contextt: context, loaderState: data.personalChatLoader)
+            ],
           );
         }),
         floatingActionButton: Container(

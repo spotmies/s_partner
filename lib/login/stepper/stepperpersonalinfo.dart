@@ -62,9 +62,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     // if (_stepperController.isFail == true)
     //   return onFail(_hight, _width, context, _stepperController);
     return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-      if (data.registrationInProgress)
-        return onPending(_hight, _width,
-            scafffoldKey: _stepperController!.scaffoldKey);
+      // if (data.registrationInProgress)
+      //   return onPending(_hight, _width,
+      //       scafffoldKey: _stepperController!.scaffoldKey);
       return Stack(
         children: [
           Scaffold(

@@ -545,7 +545,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                   });
                                                 },
                                                 textColor:
-                                                    SpotmiesTheme.primary,
+                                                    SpotmiesTheme.secondaryText,
                                                 textSize: _width * 0.04,
                                                 leadingIcon: Icon(
                                                   Icons.check_circle,

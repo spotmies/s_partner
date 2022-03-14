@@ -89,7 +89,8 @@ class OrdersController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  getOrderFromDB(BuildContext context) async {
+  getOrderFromDB(
+      BuildContext context, PartnerDetailsProvider? partnerProvider) async {
     var response = await Server().getMethod(API.allOrder + pId);
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);

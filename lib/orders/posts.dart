@@ -13,6 +13,8 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
+import '../home/drawer and appBar/help&supportBS.dart';
+
 class PostList extends StatefulWidget {
   final bool? orderCompleted;
 
@@ -62,7 +64,8 @@ class _PostListState extends StateMVC<PostList> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        await _ordersController!.getOrderFromDB(context);
+                        await _ordersController!
+                            .getOrderFromDB(context, partnerProvider);
                       },
                       child: o.length < 1
                           ? NoDataPlaceHolder(
@@ -353,6 +356,12 @@ class _PostListState extends StateMVC<PostList> {
                                                         .spaceBetween,
                                                 children: [
                                                   ElevatedButtonWidget(
+                                                    onClick: () {
+                                                      helpAndSupport(
+                                                          context,
+                                                          partnerProvider!
+                                                              .partnerDetailsFull);
+                                                    },
                                                     minWidth: _width * 0.498,
                                                     height: _hight * 0.06,
                                                     bgColor: SpotmiesTheme
@@ -392,6 +401,16 @@ class _PostListState extends StateMVC<PostList> {
                                                         SpotmiesTheme
                                                             .surfaceVariant,
                                                     onClick: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PostOverView(
+                                                          orderId:
+                                                              orderData['ordId']
+                                                                  .toString(),
+                                                        ),
+                                                      ));
                                                       // postmenu(orderid, _hight, _width);
                                                     },
                                                   ),
