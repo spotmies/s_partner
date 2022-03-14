@@ -93,7 +93,7 @@ class OrdersController extends ControllerMVC {
     var response = await Server().getMethod(API.allOrder + pId);
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);
-      partnerProvider!.setOrder(ordersList);
+      partnerProvider?.setOrder(ordersList);
 
       snackbar(context, "sync with new changes");
     } else
