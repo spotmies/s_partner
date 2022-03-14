@@ -38,7 +38,7 @@ class Maps extends StatefulWidget {
   _MapsState createState() => _MapsState(coordinates);
 }
 
-class _MapsState extends State<Maps> {
+class _MapsState extends State<Maps> with WidgetsBindingObserver {
   TextEditingController searchController = TextEditingController();
 
   Map? coordinates;
@@ -137,6 +137,14 @@ class _MapsState extends State<Maps> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      getCurrentLocation();
+      locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (position == null) {
       return Scaffold(
@@ -188,12 +196,13 @@ class _MapsState extends State<Maps> {
               });
             },
             initialCameraPosition: CameraPosition(
-                target: coordinates != null
-                    ? navigateMaps(
-                        coordinates!['latitude'], coordinates!['logitude'])
-                    //LatLng(coordinates['latitude'], coordinates['logitude'])
-                    : navigateMaps(position!.latitude, position!.longitude),
-                zoom: 17),
+              target: coordinates != null
+                  ? navigateMaps(
+                      coordinates!['latitude'], coordinates!['logitude'])
+                  //LatLng(coordinates['latitude'], coordinates['logitude'])
+                  : navigateMaps(position!.latitude, position!.longitude),
+              zoom: 17,
+            ),
             markers: Set<Marker>.of(markers!.values),
           ),
           if (widget.isSearch!)
