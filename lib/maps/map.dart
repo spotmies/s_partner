@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
+import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/addressExtractor.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
@@ -103,14 +104,23 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
+      Geolocator.openLocationSettings();
       return snackbar(
           context, 'Location services are disabled. Please turn on Location');
     }
 
     permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        print("Hello123 $permission");
+        Geolocator.openAppSettings();
+        return snackbar(
+            context, "Kindly provide permissions to procced further");
+      }
       if (permission == LocationPermission.denied) {
+        print("Hello");
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
         // Android's shouldShowRequestPermissionRationale
