@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
@@ -25,6 +26,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   String query = '';
   Timer? debouncer;
   UniversalProvider? universalProvider;
+  LocationPermission? permission;
 
   @override
   void initState() {
@@ -98,7 +100,36 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                               return Column(
                                 children: [
                                   ListTile(
-                                      onTap: () {
+                                      onTap: () async {
+                                        permission = await Geolocator
+                                            .requestPermission();
+                                        permission =
+                                            await Geolocator.checkPermission();
+
+                                        if (permission ==
+                                            LocationPermission.denied) {
+                                          permission = await Geolocator
+                                              .requestPermission();
+                                        }
+                                        if (permission ==
+                                            LocationPermission.deniedForever) {
+                                          snackbar(context,
+                                              "Kindly provide permissions to procced further");
+                                          print("Hello123 $permission");
+                                          Geolocator.openAppSettings();
+                                          return;
+                                        }
+                                        if (!await Geolocator
+                                            .isLocationServiceEnabled()) {
+                                          snackbar(context,
+                                              "Please TURN ON LOCATION",
+                                              label: "Turn On", ontap: () {
+                                            Geolocator.openLocationSettings();
+                                          });
+
+                                          return;
+                                        }
+
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -170,9 +201,30 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       });
 
   Widget buildBook(dynamic geo) => ListTile(
-      onTap: () {
+      onTap: () async {
         log(geo['coordinates'].toString());
-        // Navigator.pop(context, geo['coordinates);
+
+        permission = await Geolocator.requestPermission();
+        permission = await Geolocator.checkPermission();
+
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+        }
+        if (permission == LocationPermission.deniedForever) {
+          snackbar(context, "Kindly provide permissions to procced further");
+          print("Hello123 $permission");
+          Geolocator.openAppSettings();
+          return;
+        }
+        if (!await Geolocator.isLocationServiceEnabled()) {
+          snackbar(context, "Please TURN ON LOCATION", label: "Turn On",
+              ontap: () {
+            Geolocator.openLocationSettings();
+          });
+
+          return;
+        }
+
         Navigator.push(
             context,
             MaterialPageRoute(

@@ -146,7 +146,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       theme: ThemeData.fallback().copyWith(useMaterial3: true),
-      home: OnlinePlaceSearch(),
+      // home: OnlinePlaceSearch(),
+      home: SplashScreen(),
     );
   }
 }

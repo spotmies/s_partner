@@ -6,7 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
-import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/addressExtractor.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
