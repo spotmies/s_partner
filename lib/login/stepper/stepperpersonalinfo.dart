@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
 import 'package:spotmies_partner/login/stepper/step1UI.dart';
 import 'package:spotmies_partner/login/stepper/step2UI.dart';
@@ -11,7 +10,6 @@ import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
-import 'package:spotmies_partner/utilities/onPending.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
