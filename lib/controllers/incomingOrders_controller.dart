@@ -139,7 +139,7 @@ class IncomingOrdersController extends ControllerMVC {
       //partnerProvider?.orders.add();
       var elements = partnerProvider.inComingOrders.where(
           (element) => element['ordId'].toString() == pDetailsId.toString());
-      if (elements != null) {
+      if (elements.isNotEmpty) {
         partnerProvider.orders.addAll(elements);
         partnerProvider.inComingOrders.removeWhere(
             (element) => element['ordId'].toString() == pDetailsId.toString());

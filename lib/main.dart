@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:quick_actions/quick_actions.dart';
 import 'package:spotmies_partner/home/splash_screen.dart';
+import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/localization_provider.dart';
@@ -145,7 +146,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       theme: ThemeData.fallback().copyWith(useMaterial3: true),
-      home: SplashScreen(),
+      home: OnlinePlaceSearch(),
     );
   }
 }
