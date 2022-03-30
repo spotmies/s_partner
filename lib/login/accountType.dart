@@ -44,6 +44,7 @@ class _AccountTypeState extends State<AccountType> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -106,18 +107,23 @@ class _AccountTypeState extends State<AccountType> {
                                 : SpotmiesTheme.background)),
                     child: Row(
                       children: [
-                        Checkbox(
-                            activeColor: SpotmiesTheme.background,
-                            checkColor: SpotmiesTheme.primary,
-                            value: userAccountType == "business",
-                            shape: CircleBorder(),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                // freelanace = value;
-                                // student = false;
-                                userAccountType = "business";
-                              });
-                            }),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  SpotmiesTheme.primary.withOpacity(0.5)),
+                          child: Checkbox(
+                              activeColor: SpotmiesTheme.background,
+                              checkColor: SpotmiesTheme.primary,
+                              value: userAccountType == "business",
+                              shape: CircleBorder(),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  // freelanace = value;
+                                  // student = false;
+                                  userAccountType = "business";
+                                });
+                              }),
+                        ),
                         Container(
                           child: TextWid(
                             text: "Self Employee / Local Business",
@@ -160,18 +166,23 @@ class _AccountTypeState extends State<AccountType> {
                                 : SpotmiesTheme.background)),
                     child: Row(
                       children: [
-                        Checkbox(
-                            activeColor: SpotmiesTheme.background,
-                            checkColor: SpotmiesTheme.primary,
-                            value: userAccountType == "student",
-                            shape: CircleBorder(),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                // student = value;
-                                // freelanace = false;
-                                userAccountType = "student";
-                              });
-                            }),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  SpotmiesTheme.primary.withOpacity(0.5)),
+                          child: Checkbox(
+                              activeColor: SpotmiesTheme.background,
+                              checkColor: SpotmiesTheme.primary,
+                              value: userAccountType == "student",
+                              shape: CircleBorder(),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  // student = value;
+                                  // freelanace = false;
+                                  userAccountType = "student";
+                                });
+                              }),
+                        ),
                         TextWid(
                           text: "Student",
                           size: _width * 0.045,
@@ -211,18 +222,23 @@ class _AccountTypeState extends State<AccountType> {
                                 : SpotmiesTheme.background)),
                     child: Row(
                       children: [
-                        Checkbox(
-                            activeColor: SpotmiesTheme.background,
-                            checkColor: SpotmiesTheme.primary,
-                            value: userAccountType == "freelancer",
-                            shape: CircleBorder(),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                // student = value;
-                                // freelanace = false;
-                                userAccountType = "freelancer";
-                              });
-                            }),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  SpotmiesTheme.primary.withOpacity(0.5)),
+                          child: Checkbox(
+                              activeColor: SpotmiesTheme.background,
+                              checkColor: SpotmiesTheme.primary,
+                              value: userAccountType == "freelancer",
+                              shape: CircleBorder(),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  // student = value;
+                                  // freelanace = false;
+                                  userAccountType = "freelancer";
+                                });
+                              }),
+                        ),
                         TextWid(
                           text: "Freelancer",
                           size: _width * 0.045,
@@ -249,6 +265,7 @@ class _AccountTypeState extends State<AccountType> {
                     allRadius: true,
                     trailingIcon: Icon(
                       Icons.app_registration,
+                      color: SpotmiesTheme.background,
                     ),
                     onClick: () {
                       userType(student, freelanace, context);

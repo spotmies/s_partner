@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/apiCalls/palcesAPI.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/universal_provider.dart';
@@ -66,6 +67,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         body: Consumer<UniversalProvider>(builder: (context, data, child) {
           return SafeArea(
             child: Column(
@@ -134,17 +136,33 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => Maps(
-                                                      isNavigate: false,
-                                                      onSave: (cords) {
-                                                        if (widget.onSave ==
-                                                            null)
-                                                          return snackbar(
-                                                              context,
-                                                              "something went wrong");
-                                                        widget.onSave!(cords,
-                                                            "fullAddress");
-                                                      },
-                                                    )));
+                                                    isNavigate: false,
+                                                    // onSave: (cords) {
+                                                    //   if (widget.onSave ==
+                                                    //       null)
+                                                    //     return snackbar(
+                                                    //         context,
+                                                    //         "something went wrong");
+                                                    //   widget.onSave!(cords,
+                                                    //       "fullAddress");
+                                                    // },
+                                                    onSave: (Map<String, double>
+                                                        cords, {fullAddress}) {
+                                                      log("onsave $cords $fullAddress");
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    AccountType(
+                                                                      coordinates:
+                                                                          cords,
+                                                                      phoneNumber:
+                                                                          '1234567890',
+                                                                    )),
+                                                        // (route) => false
+                                                      );
+                                                    })));
                                       },
                                       leading: CircleAvatar(
                                           backgroundColor:
@@ -157,7 +175,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                       ),
                                       trailing: IconButton(
                                         onPressed: () {},
-                                        icon: Icon(Icons.directions),
+                                        icon: Icon(
+                                          Icons.directions,
+                                          color: SpotmiesTheme.secondary,
+                                        ),
                                       )),
                                   buildBook(book),
                                 ],
@@ -266,6 +287,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       trailing: IconButton(
         onPressed: () {},
         icon: Icon(Icons.directions),
+        color: SpotmiesTheme.secondary,
       ));
 }
 
