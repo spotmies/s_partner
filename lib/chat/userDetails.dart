@@ -41,11 +41,7 @@ class _UserDetailsState extends State<UserDetails> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        // backgroundColor: Colors.black,
-        // appBar: AppBar(
-        //   title: Text('Customer Details'),
-        //   backgroundColor: Colors.blue[900],
-        // ),
+        backgroundColor: SpotmiesTheme.surfaceVariant,
         body: widget.userDetails!['userState'] == 'active'
             ? CustomScrollView(
                 physics: const BouncingScrollPhysics(
@@ -118,9 +114,10 @@ class _UserDetailsState extends State<UserDetails> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                       [
-                        Divider(
-                          thickness: 5,
-                          color: SpotmiesTheme.background,
+                        Container(
+                          height: 5,
+                          width: double.infinity,
+                          color: SpotmiesTheme.surfaceVariant2,
                         ),
                         Container(
                           // height: _hight * 0.27,
@@ -213,7 +210,8 @@ class _UserDetailsState extends State<UserDetails> {
                                                                       0, 5) +
                                                               "*****",
                                                       size: _width * 0.04,
-                                                      color: Colors.grey[800]!,
+                                                      color: SpotmiesTheme
+                                                          .secondary,
                                                       weight: FontWeight.w600,
                                                     )),
                                               ],
@@ -267,7 +265,9 @@ class _UserDetailsState extends State<UserDetails> {
                             width(context),
                             height(context),
                             "Delete Chat",
-                            Colors.redAccent,
+                            SpotmiesTheme.isDarkMode
+                                ? Colors.red.shade200
+                                : Colors.redAccent,
                             Icons.delete_sweep_rounded, onTap: () {
                           widget.ccontroller!
                               .deleteChat(context, chatProvider!);

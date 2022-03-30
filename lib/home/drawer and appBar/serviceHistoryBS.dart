@@ -70,20 +70,22 @@ Future history(BuildContext context, double hight, double width,
                               borderRadius: BorderRadius.circular(15)),
                           child: Row(
                             children: [
-                              AspectRatio(
-                                aspectRatio: 0.6,
-                                child: ClipOval(
-                                  child: CircleAvatar(
-                                    backgroundColor: SpotmiesTheme.background,
-                                    radius: width * 0.08,
-                                    child: (images.length == 0)
-                                        ? Icon(
-                                            Icons.engineering,
-                                            color:
-                                                SpotmiesTheme.secondaryVariant,
-                                          )
-                                        : Image.network(images.first),
-                                  ),
+                              ClipOval(
+                                child: CircleAvatar(
+                                  backgroundColor: SpotmiesTheme.background,
+                                  radius: width * 0.08,
+                                  child: (images.length == 0)
+                                      ? Icon(
+                                          Icons.engineering,
+                                          color: SpotmiesTheme.secondaryVariant,
+                                        )
+                                      : AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.network(
+                                            images.first,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                 ),
                               ),
                               Container(

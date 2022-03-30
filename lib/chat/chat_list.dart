@@ -30,7 +30,6 @@ class _ChatListState extends StateMVC<ChatList> {
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-
     // chatProvider.setMsgId("");
     super.initState();
   }
