@@ -127,7 +127,7 @@ class _AccountTypeState extends State<AccountType> {
                         Container(
                           child: TextWid(
                             text: "Self Employee / Local Business",
-                            size: _width * 0.055,
+                            size: _width * 0.045,
                             weight: FontWeight.w600,
                             maxlines: 3,
                             color: freelanace
@@ -185,7 +185,7 @@ class _AccountTypeState extends State<AccountType> {
                         ),
                         TextWid(
                           text: "Student",
-                          size: _width * 0.055,
+                          size: _width * 0.045,
                           weight: FontWeight.w600,
                           color: student
                               ? SpotmiesTheme.background
@@ -241,7 +241,7 @@ class _AccountTypeState extends State<AccountType> {
                         ),
                         TextWid(
                           text: "Freelancer",
-                          size: _width * 0.055,
+                          size: _width * 0.045,
                           weight: FontWeight.w600,
                           color: student
                               ? SpotmiesTheme.background

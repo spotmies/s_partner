@@ -16,7 +16,6 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
-import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';

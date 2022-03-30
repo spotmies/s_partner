@@ -33,7 +33,7 @@ class _Step3State extends State<Step3> {
                   right: width(context) * 0.00,
                   bottom: width(context) * 0.03),
               height: height(context) * 0.08,
-              width: height(context) * 0.8,
+              width: height(context) * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // alignment: WrapAlignment.spaceBetween,
@@ -43,7 +43,7 @@ class _Step3State extends State<Step3> {
                     child: TextWid(
                       text: 'Business type:',
                       color: SpotmiesTheme.secondaryVariant,
-                      size: width(context) * 0.05,
+                      size: width(context) * 0.04,
                       weight: FontWeight.w600,
                     ),
                   ),
@@ -51,7 +51,7 @@ class _Step3State extends State<Step3> {
                     child: Container(
                       padding: EdgeInsets.only(
                           left: width(context) * 0.03,
-                          right: width(context) * 0.03),
+                          right: width(context) * 0.01),
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -77,7 +77,7 @@ class _Step3State extends State<Step3> {
                             child: TextWid(
                               text: location['nameOfService'],
                               color: SpotmiesTheme.secondaryVariant,
-                              size: width(context) * 0.04,
+                              size: width(context) * 0.035,
                               weight: FontWeight.w500,
                             ),
                             value: location['serviceId'],
@@ -86,7 +86,7 @@ class _Step3State extends State<Step3> {
                         hint: TextWid(
                           text: 'Select Service',
                           color: SpotmiesTheme.secondaryVariant,
-                          size: width(context) * 0.04,
+                          size: width(context) * 0.035,
                           weight: FontWeight.w500,
                         ),
                         onChanged: (newVal) {

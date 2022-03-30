@@ -51,7 +51,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   IO.Socket? socket;
 
   void socketResponse() {
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+    socket = IO.io("https://spotmies.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
