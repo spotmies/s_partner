@@ -151,7 +151,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData.fallback().copyWith(
           useMaterial3: true,
           unselectedWidgetColor: SpotmiesTheme.primary.withOpacity(0.5)),
-      home: SplashScreen(),
+      home: OnlinePlaceSearch(),
     );
   }
 }
