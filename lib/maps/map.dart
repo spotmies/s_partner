@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
@@ -54,6 +55,15 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
   Placemark? addressline;
   dynamic generatedAddress;
   Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
+  late String _darkMapStyle;
+  late String _lightMapStyle;
+
+  Future _loadMapStyles() async {
+    _darkMapStyle = await rootBundle.loadString('assets/map_styles/night.json');
+    _lightMapStyle = await rootBundle.loadString('assets/map_styles/day.json');
+    print("LOADED");
+  }
+
   void getmarker(double lat, double long) {
     MarkerId markerId = MarkerId(lat.toString() + long.toString());
     Marker _marker = Marker(
@@ -114,10 +124,8 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.deniedForever) {
-        print("Hello123 $permission");
+        snackbar(context, "Kindly provide permissions to procced further");
         Geolocator.openAppSettings();
-        return snackbar(
-            context, "Kindly provide permissions to procced further");
       }
       if (permission == LocationPermission.denied) {
         print("Hello");
@@ -141,7 +149,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
+    _loadMapStyles();
     getCurrentLocation();
     locationProvider = Provider.of<LocationProvider>(context, listen: false);
   }
@@ -156,6 +164,15 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var themeModeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    themeModeProvider.addListener(() {
+      var themeMode = themeModeProvider.isDarkThemeEnabled;
+      setState(() {
+        googleMapController
+            ?.setMapStyle(themeMode ? _darkMapStyle : _lightMapStyle);
+        print('Hello');
+      });
+    });
     if (position == null) {
       return Scaffold(
         body: Center(
@@ -203,6 +220,13 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
             onMapCreated: (GoogleMapController controller) {
               setState(() {
                 googleMapController = controller;
+
+                var themeModeProvider =
+                    Provider.of<ThemeProvider>(context, listen: false);
+                var themeMode = themeModeProvider.isDarkThemeEnabled;
+                googleMapController
+                    ?.setMapStyle(themeMode ? _darkMapStyle : _lightMapStyle);
+                print("THM: $themeMode");
               });
             },
             initialCameraPosition: CameraPosition(
@@ -233,8 +257,8 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey[300]!,
-                              blurRadius: 5,
-                              spreadRadius: 3)
+                              blurRadius: SpotmiesTheme.isDarkMode ? 0 : 5,
+                              spreadRadius: SpotmiesTheme.isDarkMode ? 0 : 3)
                         ],
                         borderRadius: BorderRadius.circular(15)),
                     child: Row(
@@ -281,6 +305,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
         context: context,
         elevation: 22,
         isScrollControlled: true,
+        backgroundColor: SpotmiesTheme.background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),

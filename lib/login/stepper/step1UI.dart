@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:spotmies_partner/controllers/stepper_controller.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
-
-
 
 class Step1 extends StatefulWidget {
   final ScrollController? scrollController;
@@ -62,27 +60,34 @@ class _Step1State extends State<Step1> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Checkbox(
-                                  activeColor: Colors.teal,
-                                  checkColor: Colors.white,
-                                  value: widget.stepperController?.accept,
-                                  shape: CircleBorder(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      widget.stepperController?.accept = value!;
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                    unselectedWidgetColor:
+                                        SpotmiesTheme.primary.withOpacity(0.5)),
+                                child: Checkbox(
+                                    activeColor: Colors.teal,
+                                    checkColor: Colors.white,
+                                    value: widget.stepperController?.accept,
+                                    shape: CircleBorder(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        widget.stepperController?.accept =
+                                            value!;
 
-                                      if (widget.stepperController?.accept ==
-                                          true) {
-                                        widget.stepperController?.tca =
-                                            'accepted';
-                                      }
-                                    });
-                                    widget.stepperController?.refresh();
-                                  }),
+                                        if (widget.stepperController?.accept ==
+                                            true) {
+                                          widget.stepperController?.tca =
+                                              'accepted';
+                                        }
+                                      });
+                                      widget.stepperController?.refresh();
+                                    }),
+                              ),
                               Text(
                                 'I agree to accept the terms and Conditions',
-                                style:
-                                    TextStyle(fontSize: width(context) * 0.03),
+                                style: TextStyle(
+                                    fontSize: width(context) * 0.03,
+                                    color: SpotmiesTheme.onBackground),
                               ),
                             ],
                           ),

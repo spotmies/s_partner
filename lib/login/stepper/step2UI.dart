@@ -124,6 +124,7 @@ class _Step2State extends State<Step2> {
                     trailing: Icon(
                       Icons.calendar_today,
                       size: height(context) * 0.025,
+                      color: SpotmiesTheme.secondary,
                     ),
                   ),
                 ),
@@ -177,22 +178,27 @@ class _Step2State extends State<Step2> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CheckBoxWid(
-                            stepperController: widget.stepperController!,
-                            lan: 'Telugu',
-                          ),
-                          CheckBoxWid(
-                            stepperController: widget.stepperController!,
-                            lan: 'English',
-                          ),
-                          CheckBoxWid(
-                            stepperController: widget.stepperController!,
-                            lan: 'Hindi',
-                          ),
-                        ],
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                            unselectedWidgetColor:
+                                SpotmiesTheme.primary.withOpacity(0.5)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CheckBoxWid(
+                              stepperController: widget.stepperController!,
+                              lan: 'Telugu',
+                            ),
+                            CheckBoxWid(
+                              stepperController: widget.stepperController!,
+                              lan: 'English',
+                            ),
+                            CheckBoxWid(
+                              stepperController: widget.stepperController!,
+                              lan: 'Hindi',
+                            ),
+                          ],
+                        ),
                       ),
                       Container(
                         height: height(context) * 0.07,
@@ -475,6 +481,7 @@ class _CheckBoxWidState extends State<CheckBoxWid> {
         ),
         Checkbox(
           activeColor: SpotmiesTheme.primary,
+          checkColor: SpotmiesTheme.background,
           onChanged: (bool? value) {
             setState(() {
               if (widget.lan == 'Telugu') {

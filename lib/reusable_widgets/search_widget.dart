@@ -41,12 +41,12 @@ class _SearchWidgetState extends State<SearchWidget> {
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: SpotmiesTheme.background,
+          color: SpotmiesTheme.surfaceVariant,
           boxShadow: [
             BoxShadow(
                 color: SpotmiesTheme.surfaceVariant2,
-                blurRadius: 5,
-                spreadRadius: 3)
+                blurRadius: SpotmiesTheme.isDarkMode ? 0 : 5,
+                spreadRadius: SpotmiesTheme.isDarkMode ? 0 : 3)
           ]
           // border: Border.all(color: Colors.grey[700]),
           ),

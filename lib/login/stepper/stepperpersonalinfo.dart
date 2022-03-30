@@ -81,12 +81,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               backgroundColor: SpotmiesTheme.surfaceVariant,
               elevation: 0,
             ),
-            backgroundColor: SpotmiesTheme.surfaceVariant,
+            backgroundColor: SpotmiesTheme.background,
             body: Theme(
               data: ThemeData(
-                colorScheme: Theme.of(context)
-                    .colorScheme
-                    .copyWith(primary: SpotmiesTheme.primary),
+                colorScheme: Theme.of(context).colorScheme.copyWith(
+                      primary: SpotmiesTheme.background == Colors.white
+                          ? SpotmiesTheme.primary
+                          : Colors.grey.shade800,
+                    ),
               ),
               child: Stepper(
                   type: StepperType.horizontal,
@@ -109,8 +111,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             textColor: SpotmiesTheme.background,
                             textSize: _width * 0.04,
                             allRadius: true,
-                            leadingIcon: Icon(Icons.navigate_before,
-                                size: _width * 0.04),
+                            leadingIcon: Icon(
+                              Icons.navigate_before,
+                              size: _width * 0.04,
+                              color: SpotmiesTheme.background,
+                            ),
                             borderRadius: 10.0,
                             onClick: () {
                               controls.onStepCancel!();
@@ -126,8 +131,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 : 'Next',
                             textColor: SpotmiesTheme.background,
                             textSize: _width * 0.04,
-                            trailingIcon:
-                                Icon(Icons.navigate_next, size: _width * 0.04),
+                            trailingIcon: Icon(
+                              Icons.navigate_next,
+                              size: _width * 0.04,
+                              color: SpotmiesTheme.background,
+                            ),
                             borderRadius: 10.0,
                             onClick: () {
                               switch (_stepperController?.currentStep) {
@@ -189,10 +197,12 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         text: 'Step 1',
                         size: _width * 0.045,
                         weight: FontWeight.w700,
+                        color: Colors.grey.shade800,
                       ),
                       subtitle: TextWid(
                         text: 'Terms',
                         size: _width * 0.025,
+                        color: Colors.grey.shade800,
                       ),
                       content: Container(
                           child: Step1(
@@ -210,16 +220,16 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     ),
                     Step(
                       title: TextWid(
-                        text: 'Step 2',
-                        size: _width * 0.045,
-                        weight: _stepperController!.currentStep > 0
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                      ),
+                          text: 'Step 2',
+                          size: _width * 0.045,
+                          weight: _stepperController!.currentStep > 0
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          color: Colors.grey.shade800),
                       subtitle: TextWid(
-                        text: 'Personal Details',
-                        size: _width * 0.025,
-                      ),
+                          text: 'Personal Details',
+                          size: _width * 0.025,
+                          color: Colors.grey.shade800),
                       content: Container(
                           child: Step2(
                               type: widget.type!,
@@ -231,16 +241,16 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     ),
                     Step(
                       title: TextWid(
-                        text: 'Step 3',
-                        size: _width * 0.045,
-                        weight: _stepperController!.currentStep > 1
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                      ),
+                          text: 'Step 3',
+                          size: _width * 0.045,
+                          weight: _stepperController!.currentStep > 1
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          color: Colors.grey.shade800),
                       subtitle: TextWid(
-                        text: 'Business Details',
-                        size: _width * 0.025,
-                      ),
+                          text: 'Business Details',
+                          size: _width * 0.025,
+                          color: Colors.grey.shade800),
                       content: Step3(
                         type: widget.type!,
                         stepperController: _stepperController,

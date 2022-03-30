@@ -17,6 +17,7 @@ class ThemeProvider extends ChangeNotifier {
 }
 
 class SpotmiesTheme {
+  static bool isDarkMode = false;
   static bool themeMode = false;
   static Color background = Colors.white;
   static Color onBackground = Colors.black;
@@ -98,6 +99,7 @@ class SpotmiesTheme {
     themeProvider.addListener(() {
       themeMode = themeProvider.isDarkThemeEnabled;
       print("Theme Changed: $themeMode");
+      isDarkMode = themeMode;
       background = (themeMode
           ? darkColorScheme[colorScheme.background]
           : lightColorScheme[colorScheme.background])!;
