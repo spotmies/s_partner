@@ -496,13 +496,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                   isThisOrderCompleted(
                                                       state: false);
                                                 },
-                                                bgColor:
-                                                    SpotmiesTheme.background,
+                                                bgColor: SpotmiesTheme
+                                                    .surfaceVariant,
                                                 borderSideColor: SpotmiesTheme
                                                     .surfaceVariant2,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Not yet',
                                                 textSize: _width * 0.04,
+                                                textColor: SpotmiesTheme
+                                                    .secondaryVariant,
                                                 allRadius: true,
                                                 leadingIcon: Icon(
                                                   Icons.cancel,
@@ -514,9 +516,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                               ElevatedButtonWidget(
                                                 height: _hight * 0.05,
                                                 minWidth: _width * 0.45,
-                                                bgColor: SpotmiesTheme.primary,
-                                                borderSideColor: SpotmiesTheme
-                                                    .surfaceVariant2,
+                                                bgColor:
+                                                    SpotmiesTheme.isDarkMode
+                                                        ? Color(0xFFFF273d73)
+                                                        : SpotmiesTheme.primary,
+                                                borderSideColor:
+                                                    SpotmiesTheme.isDarkMode
+                                                        ? Color(0xFFFF273d73)
+                                                        : SpotmiesTheme
+                                                            .surfaceVariant2,
                                                 borderRadius: 10.0,
                                                 buttonName: 'Completed',
                                                 allRadius: true,
@@ -550,7 +558,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 leadingIcon: Icon(
                                                   Icons.check_circle,
                                                   color:
-                                                      SpotmiesTheme.background,
+                                                      SpotmiesTheme.isDarkMode
+                                                          ? Colors.white
+                                                          : SpotmiesTheme
+                                                              .background,
                                                   size: _width * 0.045,
                                                 ),
                                               )
@@ -1075,7 +1086,9 @@ class _Timeline2 extends StatelessWidget {
           },
           connectorBuilder: (_, index, connectorType) {
             var solidLineConnector = SolidLineConnector(
-              color: Colors.indigo[700],
+              color: SpotmiesTheme.isDarkMode
+                  ? Colors.indigoAccent
+                  : Colors.indigo[700],
               indent: connectorType == ConnectorType.start ? 0 : 2.0,
               endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
             );
@@ -1221,7 +1234,9 @@ class TimeLineTitle extends StatelessWidget {
           text: getStatus(),
           size: _width * 0.04,
           weight: FontWeight.w600,
-          color: isCompleted() ? Colors.grey[800]! : SpotmiesTheme.secondary,
+          color: isCompleted()
+              ? SpotmiesTheme.secondaryVariant
+              : SpotmiesTheme.secondary,
         ));
   }
 }
