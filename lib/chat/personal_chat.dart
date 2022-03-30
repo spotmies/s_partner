@@ -157,7 +157,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             Container(
                                               decoration: BoxDecoration(
                                                   color: SpotmiesTheme
-                                                      .secondaryVariant,
+                                                      .surfaceVariant,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
@@ -177,7 +177,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                             rawMsgData['time'],
                                                             rawMsgDataprev[
                                                                 'time']),
-                                                color: SpotmiesTheme.background,
+                                                color:
+                                                    SpotmiesTheme.onBackground,
                                               ),
                                             ),
                                           ],
@@ -207,15 +208,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                               decoration: BoxDecoration(
                                                   color: sender == "user"
                                                       ? SpotmiesTheme
-                                                          .surfaceVariant2
+                                                          .surfaceVariant
                                                       : sender == "partner"
-                                                          ? Colors.blueGrey[100]
+                                                          ? SpotmiesTheme
+                                                                  .isDarkMode
+                                                              ? Color(
+                                                                  0xFF273d73)
+                                                              : Colors.indigo
+                                                                  .shade300
                                                           : SpotmiesTheme
                                                               .secondaryVariant,
-                                                  border: Border.all(
-                                                      color:
-                                                          Colors.blueGrey[100]!,
-                                                      width: 0.3),
                                                   borderRadius: BorderRadius.only(
                                                       topLeft:
                                                           Radius.circular(15),

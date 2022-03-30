@@ -110,7 +110,11 @@ class _PostListState extends StateMVC<PostList> {
                                               width: _width * 1,
                                               alignment: Alignment.topCenter,
                                               decoration: BoxDecoration(
-                                                color: Colors.blueGrey[50],
+                                                color: SpotmiesTheme.isDarkMode
+                                                    ? Color(0xFFFF273d73)
+                                                    : Colors
+                                                        .indigoAccent.shade100
+                                                        .withOpacity(0.3),
                                                 // borderRadius: BorderRadius.only(
                                                 //     topLeft: Radius.circular(15),
                                                 //     topRight: Radius.circular(15)),
