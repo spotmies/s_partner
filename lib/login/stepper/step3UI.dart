@@ -63,7 +63,7 @@ class _Step3State extends State<Step3> {
                           borderRadius: BorderRadius.circular(15)),
                       child: DropdownButton(
                         underline: SizedBox(),
-                        value: widget.stepperController?.dropDownValue,
+                        value: widget.stepperController!.dropDownValue,
                         icon: Icon(
                           Icons.arrow_drop_down_circle,
                           size: width(context) * 0.06,
