@@ -20,6 +20,12 @@ class Step3 extends StatefulWidget {
 
 class _Step3State extends State<Step3> {
   @override
+  void initState() {
+    super.initState();
+    widget.provider?.getServiceListFromServer();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: height(context) * 0.72,
@@ -38,14 +44,11 @@ class _Step3State extends State<Step3> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // alignment: WrapAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: widget.provider?.getServiceListFromServer,
-                    child: TextWid(
-                      text: 'Business type:',
-                      color: SpotmiesTheme.secondaryVariant,
-                      size: width(context) * 0.04,
-                      weight: FontWeight.w600,
-                    ),
+                  TextWid(
+                    text: 'Business type:',
+                    color: SpotmiesTheme.secondaryVariant,
+                    size: width(context) * 0.04,
+                    weight: FontWeight.w600,
                   ),
                   Flexible(
                     child: Container(
@@ -91,6 +94,7 @@ class _Step3State extends State<Step3> {
                         ),
                         onChanged: (newVal) {
                           setState(() {
+                            print(newVal);
                             widget.stepperController?.dropDownValue =
                                 newVal as int;
                           });
