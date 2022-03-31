@@ -245,7 +245,7 @@ class StepperController extends ControllerMVC {
   }
 
   //image pick
-  Future<void> profilePic(context) async {
+  Future<void> profilePic(context, Function onSetState) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -287,9 +287,9 @@ class StepperController extends ControllerMVC {
                               imageQuality: 50,
                               preferredCameraDevice: CameraDevice.front,
                             );
-
                             profilepics = File(profile!.path);
                             Navigator.of(context).pop();
+                            onSetState();
                           },
                           child: TextWid(
                             text: 'Camera',
@@ -310,6 +310,7 @@ class StepperController extends ControllerMVC {
 
                             profilepics = File(profile!.path);
                             Navigator.of(context).pop();
+                            onSetState();
                           },
                           child: TextWid(
                             text: 'Choose Image',

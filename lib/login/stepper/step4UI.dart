@@ -64,7 +64,7 @@ Widget step4UI(BuildContext context, StepperController stepperController) {
             ),
             child: TextButton(
                 onPressed: () {
-                  stepperController.profilePic();
+                  stepperController.profilePic(context, () {});
                 },
                 // icon: Icon(Icons.select_all),
                 child: Text(

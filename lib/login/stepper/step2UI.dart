@@ -41,7 +41,9 @@ class _Step2State extends State<Step2> {
                                 padding: EdgeInsets.all(0.0),
                                 onPressed: () async {
                                   await widget.stepperController
-                                      ?.profilePic(context);
+                                      ?.profilePic(context, () {
+                                    setState(() {});
+                                  });
                                   setState(() {});
                                 },
                                 icon: Icon(
@@ -71,7 +73,9 @@ class _Step2State extends State<Step2> {
                                             padding: EdgeInsets.all(0.0),
                                             onPressed: () async {
                                               await widget.stepperController
-                                                  ?.profilePic(context);
+                                                  ?.profilePic(context, () {
+                                                setState(() {});
+                                              });
                                               setState(() {});
                                             },
                                             icon: Icon(
