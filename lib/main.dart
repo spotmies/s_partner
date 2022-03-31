@@ -1,3 +1,4 @@
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:quick_actions/quick_actions.dart';
-import 'package:spotmies_partner/maps/onLine_placesSearch.dart';
+import 'package:spotmies_partner/home/splash_screen.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/inComingOrdersProviders.dart';
 import 'package:spotmies_partner/providers/localization_provider.dart';
@@ -147,7 +148,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData.fallback().copyWith(
           useMaterial3: true,
           unselectedWidgetColor: SpotmiesTheme.primary.withOpacity(0.5)),
-      home: OnlinePlaceSearch(),
+      home: SplashScreen(),
     );
   }
 }
