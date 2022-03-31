@@ -31,15 +31,17 @@ class _Step2State extends State<Step2> {
                   child: Container(
                     // padding: EdgeInsets.all(10),
                     margin: EdgeInsets.only(bottom: width(context) * 0.07),
-                    height: height(context) * 0.25,
+                    height: width(context) * 0.4,
                     width: width(context) * 0.4,
                     child: CircleAvatar(
                       child: Center(
                         child: widget.stepperController?.profilepics == null
                             ? IconButton(
+                                splashRadius: 16,
                                 padding: EdgeInsets.all(0.0),
                                 onPressed: () async {
-                                  await widget.stepperController?.profilePic();
+                                  await widget.stepperController
+                                      ?.profilePic(context);
                                   setState(() {});
                                 },
                                 icon: Icon(
@@ -69,7 +71,7 @@ class _Step2State extends State<Step2> {
                                             padding: EdgeInsets.all(0.0),
                                             onPressed: () async {
                                               await widget.stepperController
-                                                  ?.profilePic();
+                                                  ?.profilePic(context);
                                               setState(() {});
                                             },
                                             icon: Icon(

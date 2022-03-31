@@ -13,6 +13,9 @@ import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiUrl.dart';
 import 'package:spotmies_partner/home/navBar.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
+import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/utilities/uploadFilesToCloud.dart';
@@ -242,14 +245,87 @@ class StepperController extends ControllerMVC {
   }
 
   //image pick
-  Future<void> profilePic() async {
-    var profile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 40,
-      preferredCameraDevice: CameraDevice.rear,
-    );
+  Future<void> profilePic(context) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16), color: Colors.white),
+              width: width(context) * 0.9,
+              height: height(context) * 0.23,
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWid(
+                    text: 'Choose Source',
+                    weight: FontWeight.bold,
+                    size: height(context) * 0.03,
+                    color: SpotmiesTheme.primary,
+                  ),
+                  TextWid(
+                    text:
+                        'Would like to take a picture using your camera or use an existing image as your profile picture.',
+                    size: height(context) * 0.02,
+                    flow: TextOverflow.visible,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          color: SpotmiesTheme.secondary,
+                          onPressed: () async {
+                            var profile = await ImagePicker().pickImage(
+                              source: ImageSource.camera,
+                              imageQuality: 50,
+                              preferredCameraDevice: CameraDevice.front,
+                            );
 
-    profilepics = File(profile!.path);
+                            profilepics = File(profile!.path);
+                            Navigator.of(context).pop();
+                          },
+                          child: TextWid(
+                            text: 'Camera',
+                            weight: FontWeight.bold,
+                            size: height(context) * 0.02,
+                            color: SpotmiesTheme.background,
+                          ),
+                        ),
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          color: SpotmiesTheme.primary,
+                          onPressed: () async {
+                            var profile = await ImagePicker().pickImage(
+                              source: ImageSource.gallery,
+                              imageQuality: 50,
+                            );
+
+                            profilepics = File(profile!.path);
+                            Navigator.of(context).pop();
+                          },
+                          child: TextWid(
+                            text: 'Choose Image',
+                            weight: FontWeight.bold,
+                            size: height(context) * 0.02,
+                            color: SpotmiesTheme.background,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   //image pick
