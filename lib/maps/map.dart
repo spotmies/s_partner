@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spotmies_partner/login/accountType.dart';
 import 'package:spotmies_partner/providers/location_provider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/addressExtractor.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geocoding/geocoding.dart';
@@ -403,10 +405,19 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
                                 'longitude': long
                               };
                               log(coordinates.toString());
+                              await widget.onSave!(generatedCoordinates);
                               if (widget.onSave == null)
                                 return snackbar(
                                     context, "something went wrong");
-                              widget.onSave!(generatedCoordinates);
+                              String phone = await getNumber();
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AccountType(
+                                            coordinates: generatedCoordinates,
+                                            phoneNumber: phone.toString(),
+                                          )));
                             },
                             buttonName: widget.actionLabel,
                             textColor: SpotmiesTheme.background,
