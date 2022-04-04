@@ -37,16 +37,21 @@ class LoginPageController extends ControllerMVC {
   //   super.initState();
   // }
 
-  dataToOTP(BuildContext context, TimeProvider timerProvider) {
+  dataToOTP(
+    BuildContext context,
+    TimeProvider timerProvider,
+    PartnerDetailsProvider partnerProvider,
+  ) {
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
       timerProvider.setPhNumber(loginnum.text.toString());
 
-      verifyPhone(context, timerProvider);
+      verifyPhone(context, timerProvider, partnerProvider);
     }
   }
 
   verifyPhone(BuildContext context, TimeProvider timerProvider,
+      PartnerDetailsProvider partnerProvider,
       {navigate = true}) async {
     timerProvider.resetTimer();
     timerProvider.setLoader(true, loadingValue: "Sending OTP .....");
@@ -61,11 +66,45 @@ class LoginPageController extends ControllerMVC {
               if (value.user != null) {
                 print("user already login");
                 // checkUserRegistered(value.user.uid);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OnlinePlaceSearch()),
-                    (route) => false);
+                // Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => OnlinePlaceSearch()),
+                //     (route) => false);
+                timerProvider.setLoader(true,
+                    loadingValue: "Checking OTP .....");
+                String resp = await checkPartnerRegistered(value.user!.uid);
+                partnerProvider.setCurrentPid(value.user!.uid);
+
+                timerProvider.setLoader(false);
+                saveNumber(timerProvider.phNumber);
+                if (resp == "false") {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              OnlinePlaceSearch(onSave: (cords, fullAddress) {
+                                log("onsave $cords $fullAddress");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AccountType(
+                                            coordinates: cords,
+                                            phoneNumber: timerProvider.phNumber,
+                                          )),
+                                  // (route) => false
+                                );
+                              })),
+                      (route) => false);
+                } else if (resp == "true") {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => NavBar()),
+                      (route) => false);
+                } else {
+                  snackbar(
+                      context, "Something went wrong please try again later");
+                }
               }
             });
           },
@@ -148,6 +187,8 @@ class LoginPageController extends ControllerMVC {
                 context,
                 MaterialPageRoute(builder: (context) => NavBar()),
                 (route) => false);
+          } else {
+            snackbar(context, "Something went wrong please try again later");
           }
         } else {
           timerProvider.setLoader(false);

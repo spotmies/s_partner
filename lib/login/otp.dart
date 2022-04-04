@@ -69,7 +69,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     timerProvider!.resetTimer();
     // _verifyPhone();
 
-    _loginPageController!.verifyPhone(context, timerProvider!, navigate: false);
+    _loginPageController!.verifyPhone(context, timerProvider!, partnerProvider!,
+        navigate: false);
     startTimer();
   }
 

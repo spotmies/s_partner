@@ -8,6 +8,8 @@ import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
+import '../providers/partnerDetailsProvider.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends StateMVC<LoginScreen> {
   LoginPageController? _loginPageController = LoginPageController();
   TimeProvider? timerProvider;
+  PartnerDetailsProvider? partnerProvider;
   // _LoginScreenState() : super(LoginPageController()) {
   //   this._loginPageController = controller;
   // }
@@ -24,6 +27,8 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
   void initState() {
     super.initState();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    partnerProvider =
+        Provider.of<PartnerDetailsProvider>(context, listen: false);
   }
 
   @override
@@ -143,8 +148,8 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                                       onFieldSubmitted: (_) {
                                         // _loginPageController.dataToOTP();
                                         if (data.loader) return;
-                                        _loginPageController!
-                                            .dataToOTP(context, timerProvider!);
+                                        _loginPageController!.dataToOTP(context,
+                                            timerProvider!, partnerProvider!);
                                       },
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
@@ -235,8 +240,8 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                             onPressed: () {
                               // _loginPageController.dataToOTP();
                               if (data.loader) return;
-                              _loginPageController!
-                                  .dataToOTP(context, timerProvider!);
+                              _loginPageController!.dataToOTP(
+                                  context, timerProvider!, partnerProvider!);
                             })),
                   ],
                 ),
