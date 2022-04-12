@@ -122,7 +122,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         children: [
           Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: d['orderState'] < 8
+            floatingActionButton: d['orderState'] < 8 && d['isBooking'] == false
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: FloatingActionButton.extended(
