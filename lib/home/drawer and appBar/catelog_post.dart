@@ -213,7 +213,7 @@ class _CatelogPostState extends State<CatelogPost> {
                     buttonName: 'Add Service',
                     height: height(context) * 0.055,
                     minWidth: width(context) * 0.5,
-                    bgColor: Colors.indigo[900]!,
+                    bgColor: SpotmiesTheme.primary,
                     textColor: Colors.grey[50]!,
                     textSize: width(context) * 0.04,
                     allRadius: true,

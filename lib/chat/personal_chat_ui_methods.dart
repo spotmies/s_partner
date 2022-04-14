@@ -31,14 +31,15 @@ typeofChat(type, message, sender, double hight, double width,
       case 'text':
         return TextWid(
           text: toBeginningOfSentenceCase(message).toString(),
+          size: 16,
           maxlines: 200,
-          lSpace: 1.5,
+          lSpace: 1,
           color: sender == "partner"
-              ? SpotmiesTheme.secondary
+              ? SpotmiesTheme.onBackground
               : sender == "user"
                   ? SpotmiesTheme.secondaryVariant
                   : SpotmiesTheme.surfaceVariant,
-          weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
+          weight: sender == "partner" ? FontWeight.w700 : FontWeight.w600,
         );
       case 'img':
         return InkWell(

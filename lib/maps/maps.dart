@@ -271,7 +271,7 @@
 //                         ? ElevatedButtonWidget(
 //                             minWidth: width * 0.5,
 //                             height: hight * 0.05,
-//                             bgColor: Colors.indigo[900]!,
+//                             bgColor: SpotmiesTheme.primary,
 //                             onClick: () {
 //                               try {
 //                                 launch(
@@ -288,12 +288,12 @@
 //                               size: width * 0.03,
 //                               color: Colors.white,
 //                             ),
-//                             borderSideColor: Colors.indigo[900]!,
+//                             borderSideColor: SpotmiesTheme.primary,
 //                           )
 //                         : ElevatedButtonWidget(
 //                             minWidth: width * 0.5,
 //                             height: hight * 0.05,
-//                             bgColor: Colors.indigo[900]!,
+//                             bgColor: SpotmiesTheme.primary,
 //                             onClick: () {
 //                               if (widget.onComplete == null)
 //                                 return snackbar(
@@ -317,7 +317,7 @@
 //                               size: width * 0.03,
 //                               color: Colors.white,
 //                             ),
-//                             borderSideColor: Colors.indigo[900]!,
+//                             borderSideColor: SpotmiesTheme.primary,
 //                           )
 //                   ],
 //                 )
