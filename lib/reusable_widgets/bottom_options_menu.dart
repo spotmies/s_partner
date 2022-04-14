@@ -27,7 +27,7 @@ bottomOptionsMenu(context,
             children: [
               TextWid(
                   text: menuTitle,
-                  color: Colors.grey[800]!,
+                  color: SpotmiesTheme.secondary,
                   size: _width * 0.04,
                   weight: FontWeight.w300),
               Divider(
@@ -78,7 +78,7 @@ bottomOptionsMenu(context,
                                 ),
                                 TextWid(
                                   text: options[index]['name'],
-                                  color: Colors.grey[800]!,
+                                  color: SpotmiesTheme.secondary,
                                   weight: FontWeight.bold,
                                 )
                               ],
