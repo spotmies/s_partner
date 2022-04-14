@@ -42,7 +42,7 @@ Container chatInputField(
 
   return Container(
     padding: EdgeInsets.all(10),
-    color: Colors.transparent,
+    color: SpotmiesTheme.onBackground.withOpacity(0.05),
     height: 70,
     child: Row(
       children: [
@@ -51,13 +51,7 @@ Container chatInputField(
             // padding: EdgeInsets.symmetric(horizontal: 14),
             height: hight * 0.08,
             decoration: BoxDecoration(
-              color: SpotmiesTheme.background,
-              boxShadow: [
-                BoxShadow(
-                    color: SpotmiesTheme.surfaceVariant2,
-                    blurRadius: 2,
-                    spreadRadius: 2)
-              ],
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(25),
             ),
             child: Row(
@@ -161,7 +155,7 @@ Container chatInputField(
             log(inputController.text);
           },
           child: CircleAvatar(
-            backgroundColor: Colors.blueGrey[500],
+            backgroundColor: SpotmiesTheme.primary.withOpacity(0.8),
             radius: width * 0.065,
             child: Icon(
               Icons.send,

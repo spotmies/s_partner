@@ -215,7 +215,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                               ? Color(
                                                                   0xFF273d73)
                                                               : Colors.indigo
-                                                                  .shade300
+                                                                  .withOpacity(
+                                                                      0.3)
                                                           : SpotmiesTheme
                                                               .secondaryVariant,
                                                   borderRadius: BorderRadius.only(
@@ -250,7 +251,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                           child: TextWid(
                                                             weight:
                                                                 FontWeight.w800,
-                                                            color: Colors.grey,
+                                                            color: sender ==
+                                                                    'partner'
+                                                                ? SpotmiesTheme
+                                                                    .primary
+                                                                : Colors.grey,
                                                             text: sender ==
                                                                     'partner'
                                                                 ? 'You'
