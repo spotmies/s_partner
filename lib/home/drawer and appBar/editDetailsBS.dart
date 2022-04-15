@@ -373,6 +373,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                           Container(
                                             alignment: Alignment.centerRight,
                                             child: DropdownButton(
+                                              dropdownColor:
+                                                  SpotmiesTheme.surface,
                                               underline: SizedBox(),
                                               value:
                                                   _editProfileController!.job,
@@ -415,6 +417,8 @@ class _EditProfileState extends StateMVC<EditProfile> {
                                             alignment: Alignment.centerRight,
                                             // color: Colors.amber,
                                             child: DropdownButton(
+                                              dropdownColor:
+                                                  SpotmiesTheme.surface,
                                               isDense: true,
                                               underline: SizedBox(),
                                               value: _editProfileController!

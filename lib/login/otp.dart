@@ -140,7 +140,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                       ),
                     ),
                     Container(
-                      height: _hight * 0.2,
+                      height: _hight * 0.24,
                       child: Column(
                         children: [
                           Container(

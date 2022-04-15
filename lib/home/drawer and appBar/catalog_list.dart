@@ -110,7 +110,6 @@ class _CatalogState extends State<Catalog> {
 
           if (cat.length < 1) {
             return Container(
-              height: height(context) * 0.21,
               margin: EdgeInsets.only(bottom: 5),
               child: SharingCard(
                 provider: partnerDetailsProvider,
@@ -119,6 +118,7 @@ class _CatalogState extends State<Catalog> {
           }
 
           return ListView.builder(
+              shrinkWrap: true,
               itemCount: cat.length,
               itemBuilder: (context, index) {
                 return catelogList(context, cat[index], index);
