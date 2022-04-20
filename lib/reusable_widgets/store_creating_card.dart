@@ -12,7 +12,8 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class SharingCard extends StatefulWidget {
   final PartnerDetailsProvider? provider;
-  const SharingCard({Key? key, this.provider}) : super(key: key);
+  final Function? onClick;
+  const SharingCard({Key? key, this.provider, this.onClick}) : super(key: key);
   @override
   _SharingCardState createState() => _SharingCardState();
 }
@@ -159,6 +160,10 @@ class _SharingCardState extends State<SharingCard> {
                   size: width(context) * 0.045,
                 ),
                 onClick: () {
+                  if (widget.onClick != null) {
+                    widget.onClick!();
+                    return;
+                  }
                   switch (getText()![5]) {
                     case 0:
                       Navigator.push(

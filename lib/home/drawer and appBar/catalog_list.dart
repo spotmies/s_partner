@@ -109,11 +109,20 @@ class _CatalogState extends State<Catalog> {
           }
 
           if (cat.length < 1) {
-            return Container(
-              margin: EdgeInsets.only(bottom: 5),
-              child: SharingCard(
-                provider: partnerDetailsProvider,
-              ),
+            return Column(
+              children: [
+                Container(
+                  height: height(context) * 0.21,
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: SharingCard(
+                    provider: partnerDetailsProvider,
+                    onClick: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => CatelogPost()));
+                    },
+                  ),
+                ),
+              ],
             );
           }
 
