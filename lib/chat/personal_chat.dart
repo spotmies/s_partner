@@ -88,6 +88,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    inputController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
     final _hight = MediaQuery.of(context).size.height -

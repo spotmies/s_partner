@@ -11,6 +11,7 @@ import 'package:spotmies_partner/utilities/snackbar.dart';
 
 String? chatInput;
 TextEditingController inputController = TextEditingController();
+
 List mediaOptions = [
   {
     "name": "Camera",
@@ -35,6 +36,7 @@ Container chatInputField(
   String msgId,
   ChatProvider chatProvider,
 ) {
+  log("chat input");
   // SoundRecorder recorder
   // bool isInput = false;
 
