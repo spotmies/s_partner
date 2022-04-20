@@ -53,7 +53,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
   Position? position;
   double? lat;
   double? long;
-  Placemark? addressline;
+  String? addressline;
   dynamic generatedAddress;
   Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
   late String _darkMapStyle;
@@ -71,6 +71,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
         markerId: markerId,
         position: LatLng(lat, long),
         onTap: () async {
+          log("loc");
           final coordinated = coordinates == null
               ? LatLng(position!.latitude, position!.longitude)
               : LatLng(coordinates?['latitude'], coordinates?['logitude']);
@@ -87,7 +88,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
             long = coordinates == null
                 ? position?.latitude
                 : coordinates?['logitude'];
-            addressline = firstAddress;
+            addressline = firstAddress.toString();
           });
           coordinates == null
               ? bottomAddressSheet(
@@ -190,12 +191,15 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
         child: Stack(alignment: Alignment.topCenter, children: [
           GoogleMap(
             onTap: (tapped) async {
+              log("loc2");
               final coordinated = LatLng(tapped.latitude, tapped.longitude);
               var address = await placemarkFromCoordinates(
                   coordinated.latitude, coordinated.longitude);
               log(address.first.toString());
               generatedAddress = addressExtractor2(address.first);
-              String firstAddress = address.first.street.toString();
+              String firstAddress =
+                  "${address.first.name},\n${address.first.subLocality},\n${address.first.locality},\n${address.first.subAdministrativeArea} "
+                      .toString();
               if (markers!.isNotEmpty) markers!.clear();
               if (markers!.isEmpty) {
                 getmarker(tapped.latitude, tapped.longitude);
@@ -204,7 +208,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
               setState(() {
                 lat = tapped.latitude;
                 long = tapped.longitude;
-                addressline = firstAddress as Placemark?;
+                addressline = firstAddress;
               });
               bottomAddressSheet(
                 lat!,

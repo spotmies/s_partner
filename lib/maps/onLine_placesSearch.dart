@@ -65,6 +65,45 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
     // setState(() => this.geoLocations = geoLocations);
   }
 
+  yourLocationOnclick() async {
+    permission = await Geolocator.requestPermission();
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.deniedForever) {
+      snackbar(context, "Kindly provide permissions to procced further");
+      print("Hello123 $permission");
+      Geolocator.openAppSettings();
+      return;
+    }
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      snackbar(context, "Please TURN ON LOCATION", label: "Turn On", ontap: () {
+        Geolocator.openLocationSettings();
+      });
+
+      return;
+    }
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Maps(
+                isNavigate: false,
+                onSave: (Map<String, double> cords, {fullAddress}) {
+                  log("onsave $cords $fullAddress");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AccountType(
+                              coordinates: cords,
+                              phoneNumber: '1234567890',
+                            )),
+                  );
+                })));
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: SpotmiesTheme.background,
@@ -74,11 +113,13 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
               children: <Widget>[
                 buildSearch(),
                 data.locationsLoader
+                    // true
                     ? Container(
                         // height: 600,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            yourLocationTile(),
                             CircularProgressIndicator(
                               color: SpotmiesTheme.primary,
                               backgroundColor: SpotmiesTheme.surfaceVariant,
@@ -87,7 +128,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                               height: 25,
                             ),
                             TextWid(
-                              text: 'Please Wait Data is Fetching ....',
+                              text: 'Please wait location loading ....',
                             )
                           ],
                         ),
@@ -101,85 +142,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                             if (index == 0) {
                               return Column(
                                 children: [
-                                  ListTile(
-                                      onTap: () async {
-                                        permission = await Geolocator
-                                            .requestPermission();
-                                        permission =
-                                            await Geolocator.checkPermission();
-
-                                        if (permission ==
-                                            LocationPermission.denied) {
-                                          permission = await Geolocator
-                                              .requestPermission();
-                                        }
-                                        if (permission ==
-                                            LocationPermission.deniedForever) {
-                                          snackbar(context,
-                                              "Kindly provide permissions to procced further");
-                                          print("Hello123 $permission");
-                                          Geolocator.openAppSettings();
-                                          return;
-                                        }
-                                        if (!await Geolocator
-                                            .isLocationServiceEnabled()) {
-                                          snackbar(context,
-                                              "Please TURN ON LOCATION",
-                                              label: "Turn On", ontap: () {
-                                            Geolocator.openLocationSettings();
-                                          });
-
-                                          return;
-                                        }
-
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Maps(
-                                                    isNavigate: false,
-                                                    // onSave: (cords) {
-                                                    //   if (widget.onSave ==
-                                                    //       null)
-                                                    //     return snackbar(
-                                                    //         context,
-                                                    //         "something went wrong");
-                                                    //   widget.onSave!(cords,
-                                                    //       "fullAddress");
-                                                    // },
-                                                    onSave: (Map<String, double>
-                                                        cords, {fullAddress}) {
-                                                      log("onsave $cords $fullAddress");
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    AccountType(
-                                                                      coordinates:
-                                                                          cords,
-                                                                      phoneNumber:
-                                                                          '1234567890',
-                                                                    )),
-                                                        // (route) => false
-                                                      );
-                                                    })));
-                                      },
-                                      leading: CircleAvatar(
-                                          backgroundColor:
-                                              SpotmiesTheme.surfaceVariant2,
-                                          child: Icon(Icons.gps_fixed)),
-                                      title: TextWid(
-                                        text: 'Pick my current Location',
-                                        size: 15,
-                                        weight: FontWeight.w700,
-                                      ),
-                                      trailing: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.directions,
-                                          color: SpotmiesTheme.secondary,
-                                        ),
-                                      )),
+                                  yourLocationTile(),
                                   buildBook(book),
                                 ],
                               );
@@ -194,6 +157,26 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
           );
         }),
       );
+
+  ListTile yourLocationTile() {
+    return ListTile(
+        onTap: yourLocationOnclick,
+        leading: CircleAvatar(
+            backgroundColor: SpotmiesTheme.surfaceVariant2,
+            child: Icon(Icons.gps_fixed)),
+        title: TextWid(
+          text: 'Pick my current Location',
+          size: 15,
+          weight: FontWeight.w700,
+        ),
+        trailing: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.directions,
+            color: SpotmiesTheme.secondary,
+          ),
+        ));
+  }
 
   Widget buildSearch() => SearchWidget(
         text: query,

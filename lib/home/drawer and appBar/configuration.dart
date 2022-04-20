@@ -14,7 +14,7 @@ List<Map> drawerItems = [
   {'icon': Icons.help, 'title': 'Help & Support'},
   {'icon': Icons.history, 'title': 'Service History'},
   {'icon': Icons.feedback, 'title': 'FeedBack'},
-  {'icon': Icons.edit, 'title': 'Profile'},
+  {'icon': Icons.edit, 'title': 'Edit Profile'},
   {'icon': Icons.book, 'title': 'Learn'},
   {'icon': Icons.settings, 'title': 'Settings'},
   {'icon': Icons.power_settings_new, 'title': 'Sign Out'},
