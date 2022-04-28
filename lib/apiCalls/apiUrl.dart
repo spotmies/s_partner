@@ -8,6 +8,7 @@ class API {
   static var pid = FirebaseAuth.instance.currentUser?.uid; //user id
   // static var host = 'spotmies.herokuapp.com'; //server path
   static var host = 'spotmies.herokuapp.com';
+  static var testingHost = 'spotmiesserver.herokuapp.com';
   static var localHost = "http://localhost:4000";
   static var partnerRegister = '/api/partner/newPartner'; //post
   static var partnerDetails = '/api/partner/partners/'; //get with user id

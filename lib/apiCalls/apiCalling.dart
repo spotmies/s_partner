@@ -94,7 +94,7 @@ class Server {
   }
 
   Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
-    var uri = Uri.https(API.host, api);
+    var uri = Uri.https(API.testingHost, api);
     final String accessToken = await fetchAccessToken();
     try {
       var response = await http.post(uri, body: body, headers: {

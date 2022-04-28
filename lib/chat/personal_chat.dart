@@ -89,7 +89,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     inputController.clear();
   }

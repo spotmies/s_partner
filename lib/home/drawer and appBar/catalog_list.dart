@@ -94,7 +94,7 @@ class _CatalogState extends State<Catalog> {
             size: width(context) * 0.05,
           ),
           borderRadius: 15.0,
-          borderSideColor: SpotmiesTheme.secondaryVariant,
+          borderSideColor: SpotmiesTheme.background,
           onClick: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => CatelogPost()));
