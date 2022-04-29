@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends StateMVC<SplashScreen> {
   LoginPageController thisController = LoginPageController();
-
+  bool loading = false;
   PartnerDetailsProvider? partnerProvider;
 
   @override
@@ -27,9 +27,15 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
     super.initState();
     partnerProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
-    Timer(Duration(milliseconds: 500), () async {
+    Timer(Duration(milliseconds: 300), () async {
+      setState(() {
+        loading = true;
+      });
       await partnerProvider?.getConstants(alwaysHit: false);
       await partnerProvider?.fetchServiceList(alwaysHit: false);
+      setState(() {
+        loading = false;
+      });
       thisController.splashScreenNavigation(context, partnerProvider!);
     });
   }
@@ -71,6 +77,15 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
                       lSpace: 5.0),
                 ],
               ),
+              SizedBox(
+                height: _hight * 0.05,
+              ),
+              loading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 4.0,
+                      backgroundColor: SpotmiesTheme.background,
+                    )
+                  : Container(),
             ],
           ),
         ));
