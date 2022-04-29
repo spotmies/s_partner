@@ -457,7 +457,7 @@ class _CatelogPostState extends State<CatelogPost> {
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
                   focusErrorRadius: 15,
-                  validateMsg: 'Enter any description here',
+                  validateMsg: 'Enter Description Here',
                   maxLines: 8,
                   // maxLength: 150,
                   // postIcon: Icon(Icons.info),
@@ -527,6 +527,7 @@ class _CatelogPostState extends State<CatelogPost> {
                 });
 
                 Navigator.pop(context);
+                if (widget.cat != null) Navigator.pop(context);
               }
 
               if (resp != null) {
@@ -535,6 +536,7 @@ class _CatelogPostState extends State<CatelogPost> {
                       .updateCategoryItem(resp, widget.index);
 
                 Navigator.pop(context);
+                if (widget.cat != null) Navigator.pop(context);
               }
             }),
       );

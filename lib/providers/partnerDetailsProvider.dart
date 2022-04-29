@@ -19,6 +19,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool orderViewLoader = false;
   bool inComingOrdersLoader = false;
   bool editProfileLoader = false;
+  bool catelogListLoader = false;
   String editProfileLoaderName = "";
   bool offlineScreenLoader = true;
   bool reloadIncomingOrders = false;
@@ -35,6 +36,11 @@ class PartnerDetailsProvider extends ChangeNotifier {
   Map<dynamic, dynamic> allConstants = {};
   String currentScreen = "";
   dynamic currentConstants;
+
+  void setCatelogListLoader(bool? loading) {
+    catelogListLoader = loading ?? false;
+    notifyListeners();
+  }
 
   void setAllConstants(dynamic constants) {
     allConstants = constants;

@@ -13,6 +13,8 @@ import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 
+import '../apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
+
 class Offline extends StatefulWidget {
   const Offline({Key? key}) : super(key: key);
   @override
@@ -66,111 +68,124 @@ class _OfflineState extends State<Offline> {
               // log("cat");
               // log(cat.toString());
 
-              return ListView(children: [
-                // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
-                if (pd['permission'] < 10)
+              return RefreshIndicator(
+                onRefresh: () async {
+                  dynamic details = await partnerDetailsFull(
+                      partnerDetailsProvider!.currentPid.toString());
+                  partnerDetailsProvider!.setPartnerDetails(details);
+                },
+                child: ListView(children: [
+                  // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')
+                  if (pd['permission'] < 10)
+                    Container(
+                      height: height(context) *
+                          (pd['permission'] == 10 ? 0.15 : 0.2),
+                      child: MessageCard(
+                        statusCode: pd['permission'],
+                        pd: pd,
+                        type: 'offline',
+                        onClick: () {},
+                      ),
+                    ),
+                  if (alert != 'loading..' && alert != 'null' && data.msgNote!)
+                    Container(
+                      height:
+                          height(context) * (alert.length < 60 ? 0.15 : 0.2),
+                      child: MessageCard(
+                        alertMessage: alert,
+                        pd: pd,
+                        type: 'online',
+                        onClick: () {
+                          data.msgNote == false;
+                        },
+                      ),
+                    ),
+
                   Container(
-                    height:
-                        height(context) * (pd['permission'] == 10 ? 0.15 : 0.2),
-                    child: MessageCard(
-                      statusCode: pd['permission'],
-                      pd: pd,
-                      type: 'offline',
-                      onClick: () {},
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+                    child: Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            circularIndicator(
+                                _hight * 0.35,
+                                _width * 0.44,
+                                SpotmiesTheme.tertiaryVariant,
+                                'Rating',
+                                Icons.star_rate,
+                                dash?.isEmpty ? 100 : avg(dash, 'rate')),
+                            SizedBox(
+                              height: _hight * 0.02,
+                            ),
+                            graphIndicator(
+                                _hight * 0.45,
+                                _width * 0.44,
+                                Colors.red[400]!,
+                                'Earnings',
+                                Icons.account_balance_wallet,
+                                earnSum(dash))
+                          ],
+                        ),
+                        SizedBox(
+                          width: _width * 0.035,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            graphIndicator(
+                                _hight * 0.45,
+                                _width * 0.44,
+                                Colors.amber,
+                                'Orders',
+                                Icons.work,
+                                data.orders),
+                            SizedBox(
+                              height: _hight * 0.02,
+                            ),
+                            circularIndicator(
+                                _hight * 0.35,
+                                _width * 0.44,
+                                Colors.lightBlue[700]!,
+                                'Acceptance',
+                                Icons.done_rounded,
+                                avg(pd['acceptance'], 'acce')),
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                if (alert != 'loading..' && alert != 'null' && data.msgNote!)
+                  SizedBox(
+                    height: _width * 0.05,
+                  ),
                   Container(
-                    height: height(context) * (alert.length < 60 ? 0.15 : 0.2),
-                    child: MessageCard(
-                      alertMessage: alert,
-                      pd: pd,
-                      type: 'online',
-                      onClick: () {
-                        data.msgNote == false;
-                      },
+                    width: _width * 0.9,
+                    height: height(context) * 0.2,
+                    child: SharingCard(
+                      provider: partnerDetailsProvider,
                     ),
                   ),
 
-                Container(
-                  padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-                  child: Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          circularIndicator(
-                              _hight * 0.35,
-                              _width * 0.44,
-                              SpotmiesTheme.tertiaryVariant,
-                              'Rating',
-                              Icons.star_rate,
-                              dash?.isEmpty ? 100 : avg(dash, 'rate')),
-                          SizedBox(
-                            height: _hight * 0.02,
-                          ),
-                          graphIndicator(
-                              _hight * 0.45,
-                              _width * 0.44,
-                              Colors.red[400]!,
-                              'Earnings',
-                              Icons.account_balance_wallet,
-                              earnSum(dash))
-                        ],
-                      ),
-                      SizedBox(
-                        width: _width * 0.035,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          graphIndicator(_hight * 0.45, _width * 0.44,
-                              Colors.amber, 'Orders', Icons.work, data.orders),
-                          SizedBox(
-                            height: _hight * 0.02,
-                          ),
-                          circularIndicator(
-                              _hight * 0.35,
-                              _width * 0.44,
-                              Colors.lightBlue[700]!,
-                              'Acceptance',
-                              Icons.done_rounded,
-                              avg(pd['acceptance'], 'acce')),
-                        ],
-                      )
-                    ],
+                  SizedBox(
+                    height: _width * 0.0,
                   ),
-                ),
-                SizedBox(
-                  height: _width * 0.05,
-                ),
-                Container(
-                  width: _width * 0.9,
-                  height: height(context) * 0.2,
-                  child: SharingCard(
-                    provider: partnerDetailsProvider,
+                  cat == null || cat.length < 1
+                      ? Container()
+                      : catelogCard(context, cat),
+                  SizedBox(
+                    height: _width * 0.02,
                   ),
-                ),
-
-                SizedBox(
-                  height: _width * 0.0,
-                ),
-                cat == null || cat.length < 1
-                    ? Container()
-                    : catelogCard(context, cat),
-                SizedBox(
-                  height: _width * 0.02,
-                ),
-                dash == null || dash.length < 1
-                    ? Container()
-                    : reviewMsgs(
-                        context,
-                        rateFilter(dash!),
-                      ),
-                SizedBox(
-                  height: _width * 0.25,
-                ),
-              ]);
+                  dash == null || dash.length < 1
+                      ? Container()
+                      : reviewMsgs(
+                          context,
+                          rateFilter(dash!),
+                        ),
+                  SizedBox(
+                    height: _width * 0.25,
+                  ),
+                ]),
+              );
             }),
           )));
     });

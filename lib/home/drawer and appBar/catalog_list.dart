@@ -9,9 +9,12 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
+import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
+
+import '../../apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 
 class Catalog extends StatefulWidget {
   final bool? showCard;
@@ -125,13 +128,25 @@ class _CatalogState extends State<Catalog> {
               ],
             );
           }
-
-          return ListView.builder(
-              shrinkWrap: true,
-              itemCount: cat.length,
-              itemBuilder: (context, index) {
-                return catelogList(context, cat[index], index);
-              });
+          return Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: () async {
+                  dynamic details = await partnerDetailsFull(
+                      partnerDetailsProvider!.currentPid.toString());
+                  partnerDetailsProvider!.setPartnerDetails(details);
+                },
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: cat.length,
+                    itemBuilder: (context, index) {
+                      return catelogList(context, cat[index], index);
+                    }),
+              ),
+              ProgressWaiter(
+                  contextt: context, loaderState: data.catelogListLoader)
+            ],
+          );
         }));
   }
 }
@@ -237,7 +252,9 @@ Future bottomMenu(BuildContext context, cat, int index) {
                   borderRadius: 15.0,
                   borderSideColor: SpotmiesTheme.primaryVariant,
                   onClick: () async {
+                    partnerDetailsProvider?.setCatelogListLoader(true);
                     var res = await catelogController.deleteCatelog(cat['_id']);
+                    partnerDetailsProvider?.setCatelogListLoader(false);
                     if (res == 200 || res == 204) {
                       partnerDetailsProvider!.removeCategoryItem(cat['_id']);
                       Navigator.pop(context);
