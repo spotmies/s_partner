@@ -101,7 +101,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                     widget.controller!.clear();
                   },
                   icon: widget.postIcon!,
-                  color: widget.postIconColor ?? SpotmiesTheme.background,
+                  color: widget.postIconColor ?? SpotmiesTheme.onBackground,
                 )
               : null,
           prefix: TextWid(

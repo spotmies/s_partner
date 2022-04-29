@@ -69,11 +69,16 @@ class _CatelogPostState extends State<CatelogPost> {
                             decoration: BoxDecoration(
                                 // shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(catelogController
-                                        .netcatelogPic
-                                        .toString()))),
+                                image: catelogController.catelogPic != null
+                                    ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: FileImage(
+                                            catelogController.catelogPic!))
+                                    : DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(catelogController
+                                            .netcatelogPic
+                                            .toString()))),
                           ),
                           Positioned(
                               right: 0,
@@ -83,6 +88,13 @@ class _CatelogPostState extends State<CatelogPost> {
                                 backgroundColor: SpotmiesTheme.surfaceVariant2,
                                 child: IconButton(
                                     onPressed: () async {
+                                      log("onclick 1");
+                                      if (catelogController.catelogPic !=
+                                          null) {
+                                        log("not null");
+                                      }
+                                      log(catelogController.catelogPic
+                                          .toString());
                                       await catelogController.catelogImage();
                                       setState(() {});
                                     },
@@ -117,9 +129,11 @@ class _CatelogPostState extends State<CatelogPost> {
                                         SpotmiesTheme.surfaceVariant2,
                                     child: IconButton(
                                         onPressed: () async {
+                                          log("onclick 2");
                                           await catelogController
                                               .catelogImage();
-                                          setState(() {});
+
+                                          // setState(() {});
                                         },
                                         icon: Icon(
                                           Icons.sync,
@@ -141,6 +155,7 @@ class _CatelogPostState extends State<CatelogPost> {
                             ),
                             child: IconButton(
                                 onPressed: () async {
+                                  log("onclick 3");
                                   await catelogController.catelogImage();
                                   setState(() {});
                                 },
@@ -165,8 +180,8 @@ class _CatelogPostState extends State<CatelogPost> {
                   focusErrorRadius: 15,
                   validateMsg: 'Enter Valid Money',
                   maxLines: 1,
-                  postIcon: Icon(Icons.home_repair_service),
-                  postIconColor: SpotmiesTheme.secondaryVariant,
+                  // postIcon: Icon(Icons.home_repair_service),
+                  // postIconColor: SpotmiesTheme.secondaryVariant,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -190,8 +205,8 @@ class _CatelogPostState extends State<CatelogPost> {
                   validateMsg: 'Enter Valid Money',
                   maxLines: 1,
                   prefix: '₹  ',
-                  postIcon: Icon(Icons.attach_money),
-                  postIconColor: SpotmiesTheme.background,
+                  // postIcon: Icon(Icons.attach_money),
+                  // postIconColor: SpotmiesTheme.background,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -211,116 +226,18 @@ class _CatelogPostState extends State<CatelogPost> {
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
                   focusErrorRadius: 15,
-                  isRequired: true,
+                  isRequired: false,
                   validateMsg: 'Enter Valid Money',
                   maxLines: 1,
                   prefix: '₹  ',
-                  postIcon: Icon(Icons.attach_money),
-                  postIconColor: SpotmiesTheme.background,
+                  // postIcon: Icon(Icons.attach_money),
+                  // postIconColor: SpotmiesTheme.background,
                 ),
-                SizedBox(
-                  height: height(context) * 0.02,
-                ),
-                TextFieldWidget(
-                  controller: catelogController.catTAC,
-                  hint: 'Terms&Conditions',
-                  label: 'Terms&Conditions',
-                  enableBorderColor: Colors.grey,
-                  keyBoardType: TextInputType.name,
-                  // formatter: <TextInputFormatter>[
-                  //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  // ],
-                  focusBorderColor: SpotmiesTheme.secondaryVariant,
-                  enableBorderRadius: 15,
-                  focusBorderRadius: 15,
-                  errorBorderRadius: 15,
-                  focusErrorRadius: 15,
-                  isRequired: true,
-                  validateMsg: 'Enter Valid Text',
-                  maxLines: 1,
-                  postIcon: Icon(Icons.attach_money),
-                  postIconColor: SpotmiesTheme.background,
-                ),
-                SizedBox(
-                  height: height(context) * 0.02,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextWid(
-                          text: " Is under warranty",
-                          weight: FontWeight.w500,
-                          size: width(context) * 0.045,
-                        ),
-                        Switch(
-                            value: catelogController.isWarranty,
-                            activeColor: SpotmiesTheme.primary,
-                            onChanged: (value) {
-                              setState(() {
-                                catelogController.isWarranty = value;
-                              });
-                            }),
-                      ],
-                    ),
-                    if (catelogController.isWarranty == true)
-                      SizedBox(
-                        width: width(context) * 0.55,
-                        child: TextFieldWidget(
-                          controller: catelogController.warrantyVal,
-                          hint: 'Warranty Validity',
-                          label: 'Warranty Validity',
-                          enableBorderColor: Colors.grey,
-                          keyBoardType: TextInputType.number,
-                          formatter: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          ],
-                          focusBorderColor: SpotmiesTheme.secondaryVariant,
-                          enableBorderRadius: 15,
-                          focusBorderRadius: 15,
-                          errorBorderRadius: 15,
-                          focusErrorRadius: 15,
-                          isRequired: true,
-                          validateMsg: 'Enter Valid Text',
-                          maxLines: 1,
-                          postIcon: Icon(Icons.attach_money),
-                          postIconColor: SpotmiesTheme.background,
-                        ),
-                      ),
-                  ],
-                ),
-                if (catelogController.isWarranty == true)
-                  SizedBox(
-                    height: height(context) * 0.02,
-                  ),
-                if (catelogController.isWarranty == true)
-                  TextFieldWidget(
-                    controller: catelogController.warrantyDet,
-                    hint: 'Warranty Details',
-                    label: 'Warranty details',
-                    enableBorderColor: Colors.grey,
-                    keyBoardType: TextInputType.name,
-                    // formatter: <TextInputFormatter>[
-                    //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    // ],
-                    focusBorderColor: SpotmiesTheme.secondaryVariant,
-                    enableBorderRadius: 15,
-                    focusBorderRadius: 15,
-                    errorBorderRadius: 15,
-                    focusErrorRadius: 15,
-                    isRequired: true,
-                    validateMsg: 'Enter Valid Text',
-                    maxLines: 1,
-                    postIcon: Icon(Icons.attach_money),
-                    postIconColor: SpotmiesTheme.background,
-                  ),
                 SizedBox(
                   height: height(context) * 0.02,
                 ),
                 TextWid(
-                  text: " Time to spend on task",
+                  text: " Time to complete work",
                   weight: FontWeight.w500,
                   size: width(context) * 0.045,
                 ),
@@ -349,8 +266,9 @@ class _CatelogPostState extends State<CatelogPost> {
                         isRequired: true,
                         validateMsg: 'Enter Valid Text',
                         maxLines: 1,
-                        postIcon: Icon(Icons.attach_money),
-                        postIconColor: SpotmiesTheme.background,
+                        type: "number",
+                        // postIcon: Icon(Icons.attach_money),
+                        // postIconColor: SpotmiesTheme.background,
                       ),
                     ),
                     SizedBox(
@@ -372,12 +290,88 @@ class _CatelogPostState extends State<CatelogPost> {
                         isRequired: true,
                         validateMsg: 'Enter Valid Text',
                         maxLines: 1,
-                        postIcon: Icon(Icons.attach_money),
-                        postIconColor: SpotmiesTheme.background,
+                        type: "number",
+                        // postIcon: Icon(Icons.attach_money),
+                        // postIconColor: SpotmiesTheme.background,
                       ),
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: height(context) * 0.1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWid(
+                          text: " Is under warranty",
+                          weight: FontWeight.w500,
+                          size: width(context) * 0.045,
+                        ),
+                        Switch(
+                            value: catelogController.isWarranty,
+                            activeColor: SpotmiesTheme.primary,
+                            onChanged: (value) {
+                              setState(() {
+                                catelogController.isWarranty = value;
+                              });
+                            }),
+                      ],
+                    ),
+                    if (catelogController.isWarranty == true)
+                      SizedBox(
+                        width: width(context) * 0.5,
+                        child: TextFieldWidget(
+                          controller: catelogController.warrantyVal,
+                          hint: 'Warranty Validity',
+                          label: 'Warranty Validity',
+                          enableBorderColor: Colors.grey,
+                          keyBoardType: TextInputType.number,
+                          formatter: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          focusBorderColor: SpotmiesTheme.secondaryVariant,
+                          enableBorderRadius: 15,
+                          focusBorderRadius: 15,
+                          errorBorderRadius: 15,
+                          focusErrorRadius: 15,
+                          isRequired: true,
+                          validateMsg: 'Enter Valid Text',
+                          maxLines: 1,
+                          // postIcon: Icon(Icons.attach_money),
+                          // postIconColor: SpotmiesTheme.background,
+                        ),
+                      ),
+                  ],
+                ),
+                if (catelogController.isWarranty == true)
+                  SizedBox(
+                    height: height(context) * 0.02,
+                  ),
+                if (catelogController.isWarranty == true)
+                  TextFieldWidget(
+                    controller: catelogController.warrantyDet,
+                    hint: 'Warranty Details',
+                    label: 'Warranty details',
+                    enableBorderColor: Colors.grey,
+                    keyBoardType: TextInputType.name,
+                    // formatter: <TextInputFormatter>[
+                    //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    // ],
+                    focusBorderColor: SpotmiesTheme.secondaryVariant,
+                    enableBorderRadius: 15,
+                    focusBorderRadius: 15,
+                    errorBorderRadius: 15,
+                    focusErrorRadius: 15,
+                    isRequired: true,
+                    validateMsg: 'Enter Valid Text',
+                    maxLines: 1,
+                    // postIcon: Icon(Icons.attach_money),
+                    // postIconColor: SpotmiesTheme.background,
+                  ),
                 SizedBox(
                   height: height(context) * 0.02,
                 ),
@@ -398,8 +392,8 @@ class _CatelogPostState extends State<CatelogPost> {
                   isRequired: true,
                   validateMsg: 'Enter Valid Text',
                   maxLines: 1,
-                  postIcon: Icon(Icons.attach_money),
-                  postIconColor: SpotmiesTheme.background,
+                  // postIcon: Icon(Icons.attach_money),
+                  // postIconColor: SpotmiesTheme.background,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -421,8 +415,32 @@ class _CatelogPostState extends State<CatelogPost> {
                   isRequired: true,
                   validateMsg: 'Enter Valid Text',
                   maxLines: 1,
-                  postIcon: Icon(Icons.attach_money),
-                  postIconColor: SpotmiesTheme.background,
+                  // postIcon: Icon(Icons.attach_money),
+                  // postIconColor: SpotmiesTheme.background,
+                ),
+                SizedBox(
+                  height: height(context) * 0.02,
+                ),
+                TextFieldWidget(
+                  controller: catelogController.catTAC,
+                  hint: 'Terms&Conditions',
+                  label: 'Terms&Conditions',
+                  enableBorderColor: Colors.grey,
+                  keyBoardType: TextInputType.name,
+                  // formatter: <TextInputFormatter>[
+                  //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  // ],
+
+                  focusBorderColor: SpotmiesTheme.secondaryVariant,
+                  enableBorderRadius: 15,
+                  focusBorderRadius: 15,
+                  errorBorderRadius: 15,
+                  focusErrorRadius: 15,
+                  isRequired: true,
+                  validateMsg: 'Enter Valid Text',
+                  maxLines: 1,
+                  // postIcon: Icon(Icons.attach_money),
+                  // postIconColor: SpotmiesTheme.onBackground,
                 ),
                 SizedBox(
                   height: height(context) * 0.02,
@@ -439,11 +457,11 @@ class _CatelogPostState extends State<CatelogPost> {
                   focusBorderRadius: 15,
                   errorBorderRadius: 15,
                   focusErrorRadius: 15,
-                  validateMsg: 'Enter Valid Money',
+                  validateMsg: 'Enter any description here',
                   maxLines: 8,
                   // maxLength: 150,
-                  postIcon: Icon(Icons.info),
-                  postIconColor: SpotmiesTheme.secondaryVariant,
+                  // postIcon: Icon(Icons.info),
+                  // postIconColor: SpotmiesTheme.secondaryVariant,
                 ),
                 SizedBox(height: height(context) * 0.1),
               ],
@@ -451,7 +469,7 @@ class _CatelogPostState extends State<CatelogPost> {
           ),
         ),
         floatingActionButton: ElevatedButtonWidget(
-            buttonName: 'Add Service',
+            buttonName: widget.cat != null ? "Update" : 'Add Service',
             height: height(context) * 0.055,
             minWidth: width(context) * 0.9,
             bgColor: SpotmiesTheme.primary,

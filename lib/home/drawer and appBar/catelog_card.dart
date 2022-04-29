@@ -11,7 +11,7 @@ catelogCard(BuildContext context, cat) {
   return Column(
     children: [
       Container(
-        height: height(context) * 0.18,
+        height: height(context) * 0.2,
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(

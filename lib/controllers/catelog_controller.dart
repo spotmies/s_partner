@@ -161,6 +161,7 @@ class CatelogController extends ControllerMVC {
       "name": catNameControl.text,
       "price": catPriceControl.text,
       "description": catDescControl.text,
+      "isVerified": false.toString(),
       if (imageLink != null) "media.0.type": "image",
       if (imageLink != null) "media.0.url": imageLink.toString().toString(),
     };
