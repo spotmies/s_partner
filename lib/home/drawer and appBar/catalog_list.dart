@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
@@ -13,7 +14,8 @@ import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
-
+import 'package:spotmies_partner/utilities/snackbar.dart';
+import 'dart:ui' as ui;
 import '../../apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 
 class Catalog extends StatefulWidget {
@@ -154,16 +156,46 @@ class _CatalogState extends State<Catalog> {
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
-    tileColor: SpotmiesTheme.background,
+    tileColor: cat["isVerified"]
+        ? SpotmiesTheme.background
+        : Colors.amber.withOpacity(0.15),
     onTap: () {
       bottomMenu(context, cat, index);
     },
     title: TextWid(
-      text: cat['name'].toString(),
+      text: toBeginningOfSentenceCase(cat['name']).toString(),
       size: width(context) * 0.05,
       weight: FontWeight.w600,
     ),
-    subtitle: TextWid(text: cat['description'].toString()),
+    subtitle: !cat["isVerified"]
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextWid(
+                  text:
+                      toBeginningOfSentenceCase(cat['description'].toString())),
+              Row(
+                children: [
+                  Icon(
+                    Icons.info_rounded,
+                    color: Colors.red.withOpacity(0.5),
+                    size: width(context) * 0.03,
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.02,
+                  ),
+                  TextWid(
+                    text: 'catelog under verification'.toString(),
+                    color: Colors.red.withOpacity(0.5),
+                  ),
+                ],
+              ),
+            ],
+          )
+        : TextWid(
+            text: toBeginningOfSentenceCase(cat['description'].toString())),
+    isThreeLine: cat["isVerified"] ? false : true,
+    //  filter: ui.ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
     leading: ProfilePic(
         profile: cat['media'][0]['url'].toString(),
         name: cat['name'].toString()),
@@ -175,7 +207,11 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              bottomMenu(context, cat, index);
+              if (cat["isVerified"]) {
+                bottomMenu(context, cat, index);
+              } else {
+                snackbar(context, "Catelog under verification");
+              }
             },
             icon: Icon(
               Icons.more_horiz,
@@ -190,8 +226,12 @@ catelogListCard(BuildContext context, cat, int index) {
                 Map<String, String> body = {
                   "isActive": val.toString(),
                 };
-                catelogController.updateCatListState(body, cat['_id']);
-                partnerDetailsProvider!.setCategoryItemState(val, index);
+                if (cat["isVerified"]) {
+                  catelogController.updateCatListState(body, cat['_id']);
+                  partnerDetailsProvider!.setCategoryItemState(val, index);
+                } else {
+                  snackbar(context, "Catelog under verification");
+                }
               }),
         ],
       ),
@@ -203,11 +243,11 @@ Future bottomMenu(BuildContext context, cat, int index) {
   return showModalBottomSheet(
       context: context,
       elevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(15),
+          top: Radius.circular(0),
         ),
       ),
       builder: (BuildContext context) {
@@ -311,3 +351,26 @@ addCatelog(BuildContext context) {
     ),
   ]);
 }
+
+
+
+//  if (index == 1)
+//         Positioned(
+//             top: height(context) * 0.005,
+//             child: BackdropFilter(
+//               filter: ui.ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
+//               child: Container(
+//                 height: height(context) * 0.09,
+//                 width: width(context),
+//                 alignment: Alignment.center,
+//                 decoration: BoxDecoration(
+//                   color: Colors.amber.withOpacity(0.3),
+//                 ),
+//                 child: TextWid(
+//                   text: "Catelog under verification",
+//                   color: SpotmiesTheme.onBackground,
+//                   weight: FontWeight.w800,
+//                   size: width(context) * 0.045,
+//                 ),
+//               ),
+//             ))
