@@ -271,6 +271,10 @@ Future bottomMenu(BuildContext context, cat, int index) {
                     borderSideColor: SpotmiesTheme.primary,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
+                      if (!cat["isVerified"]) {
+                        snackbar(context, "Catelog under verification");
+                        return;
+                      }
                       Navigator.push(
                           context,
                           MaterialPageRoute(
