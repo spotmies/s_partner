@@ -15,7 +15,7 @@ import 'package:spotmies_partner/reusable_widgets/store_creating_card.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
-import 'dart:ui' as ui;
+// import 'dart:ui' as ui;
 import '../../apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 
 class Catalog extends StatefulWidget {
