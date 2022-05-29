@@ -529,28 +529,28 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 buttonName: 'Completed',
                                                 allRadius: true,
                                                 onClick: () {
-                                                  // isThisOrderCompleted(
-                                                  //     state: true,
-                                                  //     responseId:
-                                                  //         d['acceptResponse']
-                                                  //             ['responseId']);
-                                                  newQuery(context,
-                                                      heading:
-                                                          "Enter money you charged from User",
-                                                      type: "number",
-                                                      hint:
-                                                          "Amount you charged",
-                                                      onSubmit: (money) {
-                                                    _postOverViewController!
-                                                        .isServiceCompleted(
-                                                            context,
-                                                            partnerProvider!,
-                                                            money: money
-                                                                .toString(),
-                                                            ordId: d['ordId']
-                                                                .toString());
-                                                    log(money.toString());
-                                                  });
+                                                  _postOverViewController
+                                                      ?.isServiceCompletedQuery(
+                                                          context,
+                                                          partnerProvider,
+                                                          d);
+                                                  // newQuery(context,
+                                                  //     heading:
+                                                  //         "Enter money you charged from User",
+                                                  //     type: "number",
+                                                  //     hint:
+                                                  //         "Amount you charged",
+                                                  //     onSubmit: (money) {
+                                                  //   _postOverViewController!
+                                                  //       .isServiceCompleted(
+                                                  //           context,
+                                                  //           partnerProvider!,
+                                                  //           money: money
+                                                  //               .toString(),
+                                                  //           ordId: d['ordId']
+                                                  //               .toString());
+                                                  //   log(money.toString());
+                                                  // });
                                                 },
                                                 textColor:
                                                     SpotmiesTheme.secondaryText,
@@ -836,8 +836,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   }
 }
 
-userDetails(hight, width, BuildContext context, controller, orderDetails,
-    chatWithPatner) {
+userDetails(hight, width, BuildContext context,
+    PostOverViewController? controller, orderDetails, chatWithPatner) {
   return Container(
     //height: hight * 0.24,
     child: Column(
@@ -961,30 +961,31 @@ userDetails(hight, width, BuildContext context, controller, orderDetails,
           children: [
             InkWell(
               onTap: () {
-                bottomOptionsMenu(context,
-                    options: Constants.bottomSheetOptionsForCalling,
-                    option1Click: () {
-                  if (!orderDetails['revealProfileTo'].contains(myPid)) {
-                    snackbar(context, "User not shared contact number to you");
-                    snackbar(context, "Use internent call instead");
-                    return;
-                  }
-                  launch("tel://${orderDetails['uDetails']['phNum']}");
-                }, option2Click: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MyCalling(
-                            ordId: orderDetails['ordId'].toString(),
-                            uId: orderDetails['uDetails']['uId'],
-                            pId: myPid,
-                            isIncoming: false,
-                            name: orderDetails['uDetails']?['name'].toString(),
-                            profile:
-                                orderDetails['uDetails']?['pic'].toString(),
-                            userDeviceToken: orderDetails['uDetails']
-                                    ?['userDeviceToken']
-                                .toString(),
-                          )));
-                });
+                controller?.callUser(context, orderDetails);
+                // bottomOptionsMenu(context,
+                //     options: Constants.bottomSheetOptionsForCalling,
+                //     option1Click: () {
+                //   if (!orderDetails['revealProfileTo'].contains(myPid)) {
+                //     snackbar(context, "User not shared contact number to you");
+                //     snackbar(context, "Use internent call instead");
+                //     return;
+                //   }
+                //   launch("tel://${orderDetails['uDetails']['phNum']}");
+                // }, option2Click: () {
+                //   Navigator.of(context).push(MaterialPageRoute(
+                //       builder: (context) => MyCalling(
+                //             ordId: orderDetails['ordId'].toString(),
+                //             uId: orderDetails['uDetails']['uId'],
+                //             pId: myPid,
+                //             isIncoming: false,
+                //             name: orderDetails['uDetails']?['name'].toString(),
+                //             profile:
+                //                 orderDetails['uDetails']?['pic'].toString(),
+                //             userDeviceToken: orderDetails['uDetails']
+                //                     ?['userDeviceToken']
+                //                 .toString(),
+                //           )));
+                // });
               },
               child: Row(
                 children: [

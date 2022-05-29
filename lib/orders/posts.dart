@@ -6,6 +6,8 @@ import 'package:spotmies_partner/controllers/orders_controller.dart';
 import 'package:spotmies_partner/orders/post_overview.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
+import 'package:spotmies_partner/reusable_widgets/confirm_dialog.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
@@ -13,6 +15,7 @@ import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 
+import '../controllers/post_overview_controller.dart';
 import '../home/drawer and appBar/help&supportBS.dart';
 
 class PostList extends StatefulWidget {
@@ -25,6 +28,7 @@ class PostList extends StatefulWidget {
 
 class _PostListState extends StateMVC<PostList> {
   OrdersController? _ordersController = OrdersController();
+  PostOverViewController? postController = PostOverViewController();
   PartnerDetailsProvider? partnerProvider;
   // _PostListState() : super(OrdersController()) {
   //   this._ordersController = controller;
@@ -337,8 +341,9 @@ class _PostListState extends StateMVC<PostList> {
                                                                                 .primary,
                                                                         child:
                                                                             TextWid(
-                                                                          text:
-                                                                              '5',
+                                                                          text: o[index]?['messages']
+                                                                              ?.length
+                                                                              ?.toString(),
                                                                           color:
                                                                               SpotmiesTheme.background,
                                                                           size: _width *
@@ -405,17 +410,101 @@ class _PostListState extends StateMVC<PostList> {
                                                         SpotmiesTheme
                                                             .surfaceVariant,
                                                     onClick: () {
-                                                      Navigator.of(context)
-                                                          .push(
-                                                              MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PostOverView(
-                                                          orderId:
+                                                      // Navigator.of(context)
+                                                      //     .push(
+                                                      //         MaterialPageRoute(
+                                                      //   builder: (context) =>
+                                                      //       PostOverView(
+                                                      //     orderId:
+                                                      //         orderData['ordId']
+                                                      //             .toString(),
+                                                      //   ),
+                                                      // ));
+                                                      bottomOptionsMenu(context,
+                                                          option1Click: () {
+                                                        postController
+                                                            ?.callUser(context,
+                                                                orderData);
+                                                      }, option2Click: () {
+                                                        postController
+                                                            ?.isServiceCompletedQuery(
+                                                                context,
+                                                                partnerProvider,
+                                                                orderData);
+                                                      }, option3Click: () {
+                                                        print("ksjdlf");
+                                                        confirmDialog(
+                                                            context,
+                                                            "title",
+                                                            "brief",
+                                                            "Close",
+                                                            "Delete", () {
+                                                          print("onclick");
+                                                          postController?.deleteOrder(
+                                                              context,
+                                                              partnerProvider!,
                                                               orderData['ordId']
-                                                                  .toString(),
-                                                        ),
-                                                      ));
-                                                      // postmenu(orderid, _hight, _width);
+                                                                  .toString());
+                                                        });
+                                                        // showDialog(
+                                                        //     context: context,
+                                                        //     barrierDismissible:
+                                                        //         true,
+                                                        //     builder:
+                                                        //         (BuildContext
+                                                        //             context) {
+                                                        //       return AlertDialog(
+                                                        //         title: Text(
+                                                        //             "Success"),
+                                                        //         titleTextStyle: TextStyle(
+                                                        //             fontWeight:
+                                                        //                 FontWeight
+                                                        //                     .bold,
+                                                        //             color: Colors
+                                                        //                 .black,
+                                                        //             fontSize:
+                                                        //                 20),
+                                                        //         actionsOverflowButtonSpacing:
+                                                        //             20,
+                                                        //         actions: [
+                                                        //           ElevatedButtonWidget(
+                                                        //             buttonName:
+                                                        //                 "Close",
+                                                        //             textSize:
+                                                        //                 _width *
+                                                        //                     0.04,
+                                                        //             onClick:
+                                                        //                 () {
+                                                        //               Navigator.pop(
+                                                        //                   context);
+                                                        //             },
+                                                        //           ),
+                                                        //           ElevatedButtonWidget(
+                                                        //             buttonName:
+                                                        //                 "Delete",
+                                                        //           ),
+                                                        //         ],
+                                                        //         content: Text(
+                                                        //             "Saved successfully"),
+                                                        //       );
+                                                        //     });
+                                                      }, options: [
+                                                        {
+                                                          "icon": Icons
+                                                              .call_outlined,
+                                                          "name": "Call user"
+                                                        },
+                                                        {
+                                                          "icon": Icons
+                                                              .check_circle_outline,
+                                                          "name": "Completed"
+                                                        },
+                                                        {
+                                                          "icon": Icons
+                                                              .delete_forever_outlined,
+                                                          "name": "delete"
+                                                        }
+                                                      ]);
                                                     },
                                                   ),
                                                 ],

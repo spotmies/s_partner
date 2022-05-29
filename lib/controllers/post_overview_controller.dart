@@ -13,6 +13,13 @@ import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:spotmies_partner/reusable_widgets/geo_coder.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../home/drawer and appBar/help/faq.dart';
+import '../internet_calling/calling.dart';
+import '../reusable_widgets/bottom_options_menu.dart';
+import '../reusable_widgets/text_wid.dart';
+import '../utilities/constants.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -46,10 +53,61 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
+  callUser(BuildContext context, Map orderDetails) {
+    bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
+        option1Click: () {
+      if (!orderDetails['revealProfileTo'].contains(myPid)) {
+        snackbar(context, "User not shared contact number to you");
+        snackbar(context, "Use internent call instead");
+        return;
+      }
+      launch("tel://${orderDetails['uDetails']['phNum']}");
+    }, option2Click: () {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MyCalling(
+                ordId: orderDetails['ordId'].toString(),
+                uId: orderDetails['uDetails']['uId'],
+                pId: myPid,
+                isIncoming: false,
+                name: orderDetails['uDetails']?['name'].toString(),
+                profile: orderDetails['uDetails']?['pic'].toString(),
+                userDeviceToken:
+                    orderDetails['uDetails']?['userDeviceToken'].toString(),
+              )));
+    });
+  }
+
+  isServiceCompletedQuery(
+      BuildContext context, PartnerDetailsProvider? partnerProvider, Map d) {
+    newQuery(context,
+        heading: "Enter money you charged from User",
+        type: "number",
+        hint: "Amount you charged", onSubmit: (money) {
+      isServiceCompleted(context, partnerProvider!,
+          money: money.toString(), ordId: d['ordId'].toString());
+      log(money.toString());
+    });
+  }
+
+  deleteOrder(BuildContext context, PartnerDetailsProvider partnerProvider,
+      String? ordId) async {
+    Map<String, String> body = {"isDeletedForPartner": "true"};
+    partnerProvider.setOrderViewLoader(true);
+    dynamic response =
+        await Server().editMethod(API.acceptOrder + ordId!, body);
+    partnerProvider.setOrderViewLoader(false);
+    if (response.statusCode == 200) {
+      partnerProvider.deleteOrderByOrdId(ordId);
+      snackbar(context, "Order deleted");
+    } else {
+      snackbar(context, "Unable to delete order");
+    }
+  }
+
   isServiceCompleted(
       BuildContext context, PartnerDetailsProvider partnerProvider,
       {String? ordId, String? money}) async {
-    Map<String, String> body = {
+    Map<String, dynamic> body = {
       "isOrderCompletedByPartner": "true",
       "moneyTakenByPartner": money!
     };
@@ -59,6 +117,10 @@ class PostOverViewController extends ControllerMVC {
         await Server().editMethod(API.acceptOrder + ordId!, body);
     partnerProvider.setOrderViewLoader(false);
     if (response.statusCode == 200) {
+      partnerProvider.updateOrderBy_id(ordId, {
+        "isOrderCompletedByPartner": true,
+        "moneyTakenByPartner": int.parse(money)
+      });
       return snackbar(context, "Order completed successfully");
     }
     snackbar(context, "Something went wrong");

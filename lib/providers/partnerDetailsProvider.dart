@@ -343,4 +343,16 @@ class PartnerDetailsProvider extends ChangeNotifier {
     partnerDetailsFull = data;
     notifyListeners();
   }
+
+  void updateOrderBy_id(String _id, Map payload) {
+    int i = orders.indexWhere(
+        (order) => order['_id'] == _id || order['ordId'].toString() == _id);
+    orders[i] = {...orders[i], ...payload};
+    notifyListeners();
+  }
+
+  void deleteOrderByOrdId(String ordId) {
+    orders.removeWhere((order) => order['ordId'].toString() == ordId);
+    notifyListeners();
+  }
 }
