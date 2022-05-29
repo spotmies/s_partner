@@ -72,7 +72,8 @@ class _OfflineState extends State<Offline> {
                 onRefresh: () async {
                   dynamic details = await partnerDetailsFull(
                       partnerDetailsProvider!.currentPid.toString());
-                  partnerDetailsProvider!.setPartnerDetails(details);
+                  partnerDetailsProvider!
+                      .setPartnerDetails(details, ignoreOrders: true);
                 },
                 child: ListView(children: [
                   // if (pd['permission'] < 10 || alert != 'loading..' || alert != 'null')

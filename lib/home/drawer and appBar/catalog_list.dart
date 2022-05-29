@@ -136,7 +136,8 @@ class _CatalogState extends State<Catalog> {
                 onRefresh: () async {
                   dynamic details = await partnerDetailsFull(
                       partnerDetailsProvider!.currentPid.toString());
-                  partnerDetailsProvider!.setPartnerDetails(details);
+                  partnerDetailsProvider!
+                      .setPartnerDetails(details, ignoreOrders: true);
                 },
                 child: ListView.builder(
                     shrinkWrap: true,

@@ -205,7 +205,7 @@ class PartnerDetailsProvider extends ChangeNotifier {
     });
   }
 
-  void setPartnerDetails(data) {
+  void setPartnerDetails(data, {bool ignoreOrders = false}) {
     dynamic dataTemp = data;
 
     profileDetails = dataTemp;
@@ -213,7 +213,10 @@ class PartnerDetailsProvider extends ChangeNotifier {
     inComingOrders = dataTemp['inComingOrders'];
     offlineScreenLoader = false;
     sortListByTime();
-    orders = dataTemp['orders'];
+    if (!ignoreOrders) {
+      orders = dataTemp['orders'];
+    }
+
     //setPartnerDetailsOnly(dataTemp);
     notifyListeners();
     saveMyProfile(dataTemp);
