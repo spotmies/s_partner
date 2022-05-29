@@ -298,7 +298,7 @@ class ChatController extends ControllerMVC {
     if (response.statusCode == 200) {
       var chatList = jsonDecode(response.body);
       chatProvider.setChatList2(chatList);
-      snackbar(context, "sync with new changes");
+      snackbar(context, "Updated successfully");
     } else
       snackbar(context, "something went wrong");
   }

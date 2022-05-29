@@ -96,7 +96,7 @@ class OrdersController extends ControllerMVC {
       var ordersList = jsonDecode(response.body);
       partnerProvider?.setOrder(ordersList);
 
-      snackbar(context, "sync with new changes");
+      snackbar(context, "Updated successfully");
     } else
       snackbar(context, "something went wrong");
   }
