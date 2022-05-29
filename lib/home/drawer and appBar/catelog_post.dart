@@ -133,7 +133,7 @@ class _CatelogPostState extends State<CatelogPost> {
                                           await catelogController
                                               .catelogImage();
 
-                                          // setState(() {});
+                                          setState(() {});
                                         },
                                         icon: Icon(
                                           Icons.sync,

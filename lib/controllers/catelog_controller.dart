@@ -78,6 +78,7 @@ class CatelogController extends ControllerMVC {
     hours.text = "";
     wI.text = "the quoted price includes discount";
     wNI.text = "the quoted price does not includes GST";
+    catelogPic = null;
   }
 
   editAllFields(cat) {
@@ -106,7 +107,7 @@ class CatelogController extends ControllerMVC {
     wNI.text = cat['whatNotIncluds'][0] != null
         ? cat['whatNotIncluds'][0].toString()
         : "";
-
+    catelogPic = null;
     refresh();
   }
 
@@ -156,7 +157,9 @@ class CatelogController extends ControllerMVC {
   }
 
   updateCat(catid, BuildContext context) async {
-    if (imageLink != null) await uploadimage();
+    if (catelogPic != null) await uploadimage();
+    log("image link");
+    log(imageLink.toString());
     var body = {
       "name": catNameControl.text,
       "price": catPriceControl.text,
