@@ -227,12 +227,14 @@ catelogListCard(BuildContext context, cat, int index) {
                 Map<String, String> body = {
                   "isActive": val.toString(),
                 };
-                if (cat["isVerified"]) {
-                  catelogController.updateCatListState(body, cat['_id']);
-                  partnerDetailsProvider!.setCategoryItemState(val, index);
-                } else {
-                  snackbar(context, "Catelog under verification");
-                }
+                // if (cat["isVerified"]) {
+                catelogController.updateCatListState(body, cat['_id']);
+                partnerDetailsProvider!.setCategoryItemState(val, index);
+                // } else {
+                if (!cat["isVerified"] && val)
+                  snackbar(
+                      context, "Visible to the customers once it's verified");
+                // }
               }),
         ],
       ),
@@ -272,10 +274,10 @@ Future bottomMenu(BuildContext context, cat, int index) {
                     borderSideColor: SpotmiesTheme.primary,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
-                      if (!cat["isVerified"]) {
-                        snackbar(context, "Catelog under verification");
-                        return;
-                      }
+                      // if (!cat["isVerified"]) {
+                      //   snackbar(context, "Catelog under verification");
+                      //   return;
+                      // }
                       Navigator.push(
                           context,
                           MaterialPageRoute(

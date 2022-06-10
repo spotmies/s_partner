@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,6 @@ import 'package:spotmies_partner/reusable_widgets/progressIndicator.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/textfield_widget.dart';
 import 'package:spotmies_partner/utilities/app_config.dart';
-import 'package:spotmies_partner/utilities/snackbar.dart';
 
 class CatelogPost extends StatefulWidget {
   final int? index;
@@ -31,6 +29,7 @@ class _CatelogPostState extends State<CatelogPost> {
   @override
   void initState() {
     super.initState();
+    catelogController.resetForm();
     partnerDetailsProvider =
         Provider.of<PartnerDetailsProvider>(context, listen: false);
     if (widget.cat != null) {
@@ -39,6 +38,44 @@ class _CatelogPostState extends State<CatelogPost> {
     if (widget.cat == null) {
       catelogController.fillAllForms();
     }
+  }
+
+  changePickedImage() async {
+    log("onclick 2");
+    await catelogController.catelogImage();
+
+    setState(() {});
+  }
+
+  Stack pickedLocalImage(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: height(context) * 0.2,
+          width: width(context),
+          decoration: BoxDecoration(
+              // shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(15),
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: FileImage(catelogController.catelogPic!))),
+        ),
+        Positioned(
+            right: 0,
+            bottom: 0,
+            child: CircleAvatar(
+              radius: width(context) * 0.05,
+              backgroundColor: SpotmiesTheme.surfaceVariant2,
+              child: IconButton(
+                  onPressed: changePickedImage,
+                  icon: Icon(
+                    Icons.sync,
+                    size: width(context) * 0.05,
+                    color: SpotmiesTheme.secondaryVariant,
+                  )),
+            ))
+      ],
+    );
   }
 
   @override
@@ -57,115 +94,72 @@ class _CatelogPostState extends State<CatelogPost> {
             key: catelogController.catformkey,
             child: ListView(
               children: [
-                SizedBox(
-                  height: height(context) * 0.07,
-                ),
-                widget.cat != null
-                    ? Stack(
-                        children: [
-                          Container(
-                            height: height(context) * 0.2,
-                            width: width(context),
-                            decoration: BoxDecoration(
-                                // shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                image: catelogController.catelogPic != null
-                                    ? DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: FileImage(
-                                            catelogController.catelogPic!))
-                                    : DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(catelogController
-                                            .netcatelogPic
-                                            .toString()))),
-                          ),
-                          Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: CircleAvatar(
-                                radius: width(context) * 0.05,
-                                backgroundColor: SpotmiesTheme.surfaceVariant2,
-                                child: IconButton(
-                                    onPressed: () async {
-                                      log("onclick 1");
-                                      if (catelogController.catelogPic !=
-                                          null) {
-                                        log("not null");
-                                      }
-                                      log(catelogController.catelogPic
-                                          .toString());
-                                      await catelogController.catelogImage();
-                                      setState(() {});
-                                    },
-                                    icon: Icon(
-                                      Icons.sync,
-                                      size: width(context) * 0.05,
-                                      color: SpotmiesTheme.secondaryVariant,
-                                    )),
-                              ))
-                        ],
-                      )
-                    : catelogController.catelogPic != null
-                        ? Stack(
-                            children: [
-                              Container(
-                                height: height(context) * 0.2,
-                                width: width(context),
-                                decoration: BoxDecoration(
-                                    // shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: FileImage(
-                                            catelogController.catelogPic!))),
-                              ),
-                              Positioned(
-                                  right: 0,
-                                  bottom: 0,
-                                  child: CircleAvatar(
-                                    radius: width(context) * 0.05,
-                                    backgroundColor:
-                                        SpotmiesTheme.surfaceVariant2,
-                                    child: IconButton(
-                                        onPressed: () async {
-                                          log("onclick 2");
-                                          await catelogController
-                                              .catelogImage();
-
-                                          setState(() {});
-                                        },
-                                        icon: Icon(
-                                          Icons.sync,
-                                          size: width(context) * 0.05,
-                                          color: SpotmiesTheme.secondaryVariant,
-                                        )),
-                                  ))
-                            ],
-                          )
-                        : Container(
-                            height: height(context) * 0.2,
-                            width: width(context),
-                            decoration: BoxDecoration(
-                              color: SpotmiesTheme.background,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
-                              // border: Border.all()
-                            ),
-                            child: IconButton(
-                                onPressed: () async {
-                                  log("onclick 3");
-                                  await catelogController.catelogImage();
-                                  setState(() {});
-                                },
-                                icon: Icon(
-                                  Icons.image,
-                                  size: width(context) * 0.2,
-                                  color: Colors.grey,
-                                ))),
+                // SizedBox(
+                //   height: height(context) * 0.07,
+                // ),
+                // widget.cat != null
+                //     ? onlineImage(context)
+                //     : catelogController.catelogPic != null
+                //         ? pickedLocalImage(context)
+                //         : emptyImagePlaceHolder,
                 SizedBox(
                   height: height(context) * 0.02,
+                ),
+                Container(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: catelogController.netCatelogPics.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: 200,
+                          margin: EdgeInsets.all(5.0),
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                            child: catelogController.netCatelogPics[index]
+                                            ['type'] ==
+                                        "online" ||
+                                    catelogController.netCatelogPics[index]
+                                            ['type'] ==
+                                        "placeHolder"
+                                ? InkWell(
+                                    onTap: () async {
+                                      await catelogController
+                                          .pickCatelogImage(index);
+                                      setState(() {});
+                                    },
+                                    child: catelogController
+                                                    .netCatelogPics[index]
+                                                ['type'] ==
+                                            "online"
+                                        ? Image.network(
+                                            catelogController
+                                                .netCatelogPics[index]['path'],
+                                            fit: BoxFit.cover,
+                                            width: 1000.0)
+                                        : Container(
+                                            height: height(context) * 0.2,
+                                            width: width(context),
+                                            decoration: BoxDecoration(
+                                              color: SpotmiesTheme.dull,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(15),
+                                              ),
+                                              // border: Border.all()
+                                            ),
+                                            child: Icon(
+                                              Icons.image,
+                                              size: width(context) * 0.26,
+                                              color: Colors.grey,
+                                            )),
+                                  )
+                                : Image.file(catelogController
+                                    .netCatelogPics[index]['path']),
+                          ),
+                        );
+                      }),
+                  height: 220,
+                  padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFieldWidget(
                   hint: 'Enter Service Name',
@@ -484,17 +478,20 @@ class _CatelogPostState extends State<CatelogPost> {
             borderRadius: 10.0,
             borderSideColor: SpotmiesTheme.background,
             onClick: () async {
-              if (catelogController.catelogPic == null &&
-                  !catelogController.isEditForm) {
-                return snackbar(context, "Please upload image");
-              }
+              // if (catelogController.catelogPic == null &&
+              //     !catelogController.isEditForm) {
+              //   return snackbar(context, "Please upload image");
+              // }
 
               if (catelogController.catformkey.currentState!.validate() ==
                   false) {
                 return;
               }
-
               partnerDetailsProvider?.setOffileLoader(true);
+              if (!await catelogController.checkAndUploadImages(context)) {
+                partnerDetailsProvider?.setOffileLoader(false);
+                return;
+              }
 
               int itemCode = partnerDetailsProvider!
                   .partnerDetailsFull!['catelogs'].length;
@@ -541,5 +538,41 @@ class _CatelogPostState extends State<CatelogPost> {
             }),
       );
     });
+  }
+
+  Stack onlineImage(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: height(context) * 0.2,
+          width: width(context),
+          decoration: BoxDecoration(
+              // shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(15),
+              image: catelogController.catelogPic != null
+                  ? DecorationImage(
+                      fit: BoxFit.cover,
+                      image: FileImage(catelogController.catelogPic!))
+                  : DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          catelogController.netcatelogPic.toString()))),
+        ),
+        Positioned(
+            right: 0,
+            bottom: 0,
+            child: CircleAvatar(
+              radius: width(context) * 0.05,
+              backgroundColor: SpotmiesTheme.surfaceVariant2,
+              child: IconButton(
+                  onPressed: changePickedImage,
+                  icon: Icon(
+                    Icons.sync,
+                    size: width(context) * 0.05,
+                    color: SpotmiesTheme.secondaryVariant,
+                  )),
+            ))
+      ],
+    );
   }
 }

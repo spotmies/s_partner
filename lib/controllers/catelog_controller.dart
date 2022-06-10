@@ -18,6 +18,8 @@ class CatelogController extends ControllerMVC {
   String? imageLink;
   GlobalKey<FormState> catformkey = GlobalKey<FormState>();
   String? netcatelogPic;
+  List<Map> netCatelogPics = [];
+  List<String> uploadedImages = [];
   bool loader = false;
   bool isEditForm = false;
   bool isWarranty = false;
@@ -48,6 +50,43 @@ class CatelogController extends ControllerMVC {
     }
   }
 
+  Future<void> pickCatelogImage(int index) async {
+    log("index $index");
+    try {
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 40,
+        preferredCameraDevice: CameraDevice.front,
+      );
+      final profilepicTemp = File(image!.path);
+      netCatelogPics.removeAt(index);
+      netCatelogPics.insert(index, {"path": profilepicTemp, "type": "offline"});
+      setState(() {});
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<bool> checkAndUploadImages(BuildContext context) async {
+    final String location =
+        "partner/${FirebaseAuth.instance.currentUser?.uid}/store";
+    for (int i = 0; i < netCatelogPics.length; i++) {
+      if (netCatelogPics[i]['type'] == "offline") {
+        String imageUrl = await uploadFilesToCloud(netCatelogPics[i]['path'],
+            cloudLocation: location);
+        uploadedImages.add(imageUrl);
+      } else if (netCatelogPics[i]['type'] == "online") {
+        uploadedImages.add(netCatelogPics[i]['path']);
+      }
+    }
+    log(uploadedImages.toString());
+    if (uploadedImages.length < 1) {
+      snackbar(context, "Please add atleat 1 image");
+      return false;
+    }
+    return true;
+  }
+
   Future<void> uploadimage() async {
     if (catelogPic == null) return;
     // var postImageRef = FirebaseStorage.instance.ref().child('ProfilePic');
@@ -65,6 +104,14 @@ class CatelogController extends ControllerMVC {
   }
 
   fillAllForms() {
+    for (var i = 0; i < 4; i++) {
+      netCatelogPics.add({
+        "path":
+            "https://toppng.com/uploads/preview/file-upload-image-icon-115632290507ftgixivqp.png",
+        "type": "placeHolder"
+      });
+    }
+    uploadedImages = [];
     catNameControl.text = "";
     catPriceControl.text = "";
     catDescControl.text = "";
@@ -81,9 +128,33 @@ class CatelogController extends ControllerMVC {
     catelogPic = null;
   }
 
+  resetForm() {
+    netCatelogPics = [];
+    uploadedImages = [];
+  }
+
   editAllFields(cat) {
     isEditForm = true;
     netcatelogPic = cat != null ? cat['media'][0]['url'] : "";
+    final List media = cat['media'] as List;
+    log(media.toString());
+    for (var i = 0; i < 4; i++) {
+      if (i < media.length) {
+        netCatelogPics.add({"path": media[i]['url'], "type": "online"});
+      } else {
+        netCatelogPics.add({
+          "path":
+              "https://toppng.com/uploads/preview/file-upload-image-icon-115632290507ftgixivqp.png",
+          "type": "placeHolder"
+        });
+      }
+    }
+
+    // media.forEach((element) {
+    //   netCatelogPics.insert(media.indexOf(element), element['url']);
+    //   // netCatelogPics.add(element['url']);
+    //   log(netCatelogPics.toString());
+    // });
     catNameControl.text = cat['name'] != null ? cat['name'].toString() : "";
     catPriceControl.text = cat['price'] != null ? cat['price'].toString() : "";
     catDescControl.text =
@@ -112,7 +183,7 @@ class CatelogController extends ControllerMVC {
   }
 
   addCatlogList(itemCode, job, BuildContext context, pD) async {
-    await uploadimage();
+    // await uploadimage();
     var range = {
       "coordinates.0": 17.7480656,
       "coordinates.1": 83.2621366,
@@ -124,8 +195,8 @@ class CatelogController extends ControllerMVC {
       "price": catPriceControl.text,
       "description": catDescControl.text,
       "pId": API.pid,
-      "media.0.type": "image",
-      "media.0.url": imageLink.toString(),
+      // "media.0.type": "image",
+      // "media.0.url": imageLink.toString(),
       "isWarranty": isWarranty.toString(),
       "warrantyDays": warrantyVal.text.toString(),
       "warrantyDetails": warrantyDet.text.toString(),
@@ -140,6 +211,10 @@ class CatelogController extends ControllerMVC {
       "offerPrice": catOfferPrice.text.toString(),
       "pDetails": pD.toString()
     };
+    for (int i = 0; i < uploadedImages.length; i++) {
+      body["media.$i.type"] = "image";
+      body["media.$i.url"] = uploadedImages[i].toString();
+    }
     log(body.toString());
 
     var response = await Server().postMethod(API.catelog + API.pid!, body);
@@ -157,17 +232,31 @@ class CatelogController extends ControllerMVC {
   }
 
   updateCat(catid, BuildContext context) async {
-    if (catelogPic != null) await uploadimage();
+    // if (catelogPic != null) await uploadimage();
     log("image link");
     log(imageLink.toString());
-    var body = {
+    Map<String, String> body = {
       "name": catNameControl.text,
       "price": catPriceControl.text,
       "description": catDescControl.text,
-      "isVerified": false.toString(),
-      if (imageLink != null) "media.0.type": "image",
-      if (imageLink != null) "media.0.url": imageLink.toString().toString(),
+      "isVerified": "false",
+      "isWarranty": isWarranty.toString(),
+      "warrantyDays": warrantyVal.text.toString(),
+      "warrantyDetails": warrantyDet.text.toString(),
+      "termsAndConditions.0": catTAC.text.toString(),
+      "daysToComplete": days.text.toString(),
+      "hoursToComplete": hours.text.toString(),
+      "whatIncluds.0": wI.text.toString(),
+      "whatNotIncluds.0": wNI.text.toString(),
+      "offerPrice": catOfferPrice.text.toString(),
+
+      // if (imageLink != null) "media.0.type": "image",
+      // if (imageLink != null) "media.0.url": imageLink.toString().toString(),
     };
+    for (int i = 0; i < uploadedImages.length; i++) {
+      body["media.$i.type"] = "image";
+      body["media.$i.url"] = uploadedImages[i].toString();
+    }
 
     var response = await Server().editMethod(API.updateCatelog + catid, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
