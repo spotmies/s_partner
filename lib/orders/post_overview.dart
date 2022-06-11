@@ -9,13 +9,10 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/post_overview_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/help&supportBS.dart';
-import 'package:spotmies_partner/home/drawer%20and%20appBar/help/faq.dart';
-import 'package:spotmies_partner/internet_calling/calling.dart';
 import 'package:spotmies_partner/maps/map.dart';
 import 'package:spotmies_partner/providers/chat_provider.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
-import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/date_formates.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
@@ -27,7 +24,6 @@ import 'package:spotmies_partner/utilities/media_player.dart';
 import 'package:spotmies_partner/utilities/profile_shimmer.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 import 'package:timelines/timelines.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
   final String? orderId;
