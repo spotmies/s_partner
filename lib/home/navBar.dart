@@ -137,8 +137,9 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    OnlinePlaceSearch(onSave: (cords, fullAddress) {
+                builder: (context) => OnlinePlaceSearch(
+                    heading: "Select your business location",
+                    onSave: (cords, fullAddress) {
                       log("onsave $cords $fullAddress");
                       Navigator.push(
                         context,

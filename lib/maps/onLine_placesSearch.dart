@@ -14,9 +14,12 @@ import 'package:spotmies_partner/reusable_widgets/search_widget.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
+import '../utilities/app_config.dart';
+
 class OnlinePlaceSearch extends StatefulWidget {
   final Function? onSave;
-  OnlinePlaceSearch({this.onSave});
+  final String? heading;
+  OnlinePlaceSearch({this.onSave, this.heading});
 
   @override
   OnlinePlaceSearchState createState() => OnlinePlaceSearchState();
@@ -107,6 +110,14 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: SpotmiesTheme.background,
+        appBar: AppBar(
+            elevation: 0,
+            backgroundColor: SpotmiesTheme.background,
+            title: TextWid(
+              text: widget.heading ?? 'Select location',
+              size: width(context) * 0.05,
+              weight: FontWeight.w600,
+            )),
         body: Consumer<UniversalProvider>(builder: (context, data, child) {
           return SafeArea(
             child: Column(
