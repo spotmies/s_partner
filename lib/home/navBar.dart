@@ -28,6 +28,8 @@ import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
+import '../apiCalls/apiUrl.dart';
+
 void main() => runApp(NavBar());
 String pId = "123456"; //user id
 
@@ -51,7 +53,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   IO.Socket? socket;
 
   void socketResponse() {
-    socket = IO.io("https://spotmies.herokuapp.com", <String, dynamic>{
+    socket = IO.io("https://${API.host}", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
