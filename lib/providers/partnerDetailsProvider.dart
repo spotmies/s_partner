@@ -301,11 +301,17 @@ class PartnerDetailsProvider extends ChangeNotifier {
   }
 
   void updateCategoryItem(body, index) {
-    partnerDetailsFull!['catelogs'][index]['name'] = body['name'];
-    partnerDetailsFull!['catelogs'][index]['description'] = body['description'];
-    partnerDetailsFull!['catelogs'][index]['price'] = body['price'];
-    partnerDetailsFull!['catelogs'][index]['media'][0]['url'] =
-        body['media'][0]['url'];
+    partnerDetailsFull!['catelogs'][index] = body;
+    // partnerDetailsFull!['catelogs'][index]['name'] = body['name'];
+    // partnerDetailsFull!['catelogs'][index]['description'] = body['description'];
+    // partnerDetailsFull!['catelogs'][index]['price'] = body['price'];
+    // partnerDetailsFull!['catelogs'][index]['media'] = body['media'];
+
+//     final List media =     body['media'] as List;
+//     for (int i = 0; i < media.length; i++) {
+// partnerDetailsFull!['catelogs'][index]['media'][i]['url'] = media[i]
+
+//     }
     notifyListeners();
   }
 
