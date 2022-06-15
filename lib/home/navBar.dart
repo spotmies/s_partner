@@ -53,20 +53,23 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   IO.Socket? socket;
 
   void socketResponse() {
-    socket = IO.io("https://${API.host}", <String, dynamic>{
+    socket = IO.io("wss://${API.host}", <String, dynamic>{
+      // socket = IO.io("wss://spotmies.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
+    socket!.onError((data) => {log("error ❌❌❌❌" + data.toString())});
+    socket!.onConnectError((data) => {log(" 62 error ❌❌❌❌" + data.toString())});
     socket!.onConnect((data) {
       setStringToSF(id: "isSocketConnected", value: true);
-      print("Connected");
+      print("Connected  👍 👍👍👍👍");
       socket!.on("message", (msg) {
         print(msg);
       });
     });
     socket!.onDisconnect((data) {
-      log("disconnect $data");
-      log("socket disconnected >>>>>>>>>");
+      log("disconnect ❌❌❌❌❌ $data");
+      log("socket disconnected ❌❌❌❌ >>>>>>>>>");
       setStringToSF(id: "isSocketConnected", value: false);
       logoutUser();
     });
