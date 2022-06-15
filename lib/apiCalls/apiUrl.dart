@@ -36,7 +36,7 @@ class API {
   static var suggestions = "/api/suggestion/new-suggestion";
   static var accessToken = "/api/public/access-token";
   static var storeAvailabilityCheck = "/api/store/check-store-availability";
-  static Map<String, dynamic> defaultQuery = {"from": "partner_app"};
+  static Map<String, dynamic> defaultQuery = {"api_from": "partner_app"};
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"
