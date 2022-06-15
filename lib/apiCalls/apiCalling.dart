@@ -57,9 +57,8 @@ class Server {
     }
   }
 
-  Future<dynamic> getMethod(String api) async {
-    dynamic uri = Uri.https(API.host, api);
-
+  Future<dynamic> getMethod(String api, {Map<String, dynamic>? query}) async {
+    dynamic uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
     try {
       dynamic response = await http.get(
@@ -93,8 +92,9 @@ class Server {
     }
   }
 
-  Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> postMethod(String api, Map<String, dynamic> body,
+      {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
     try {
       var response = await http.post(uri, body: body, headers: {
@@ -109,11 +109,9 @@ class Server {
     }
   }
 
-  Future<dynamic> post(
-    String api,
-    String body,
-  ) async {
-    Uri uri = Uri.https(API.host, api);
+  Future<dynamic> post(String api, String body,
+      {Map<String, dynamic>? query}) async {
+    Uri uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
 
     try {
@@ -130,8 +128,9 @@ class Server {
     }
   }
 
-  Future<dynamic> editMethod(String api, Map<String, dynamic> body) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> editMethod(String api, Map<String, dynamic> body,
+      {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
     try {
       var response = await http.put(uri, body: body, headers: {
@@ -147,8 +146,9 @@ class Server {
     }
   }
 
-  Future<dynamic> deleteMethod(String api) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> deleteMethod(String api,
+      {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
 
     try {

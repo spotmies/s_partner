@@ -75,7 +75,7 @@ class _PostListState extends StateMVC<PostList> {
                           ? NoDataPlaceHolder(
                               height: _hight,
                               width: _width,
-                              title: "Not yet startedd")
+                              title: "Not yet started")
                           : ListView.builder(
                               itemCount: o.length,
                               itemBuilder: (BuildContext ctxt, int index) {
