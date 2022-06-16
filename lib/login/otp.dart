@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies_partner/controllers/login_controller.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
@@ -12,6 +11,8 @@ import 'package:spotmies_partner/providers/timer_provider.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
+import 'package:pinput/pinput.dart';
+import 'package:spotmies_partner/utilities/app_config.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -158,26 +159,38 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
-                            child: PinPut(
+                            child: Pinput(
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.allow(
                                     RegExp(r'[0-9]')),
                               ],
-                              fieldsCount: 6,
-                              textStyle: fonts(_width * 0.045, FontWeight.w600,
-                                  SpotmiesTheme.primary),
-                              eachFieldWidth: _width * 0.1,
-                              eachFieldHeight: _hight * 0.08,
+                              length: 6,
+                              defaultPinTheme: PinTheme(
+                                width: 48,
+                                height: 60,
+                                textStyle: fonts(height(context) * 0.02,
+                                    FontWeight.bold, Colors.black),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: Colors.grey.shade600),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                ),
+                              ),
+                              // textStyle: fonts(_width * 0.045, FontWeight.w600,
+                              //     SpotmiesTheme.primary),
+                              // eachFieldWidth: _width * 0.1,
+                              // eachFieldHeight: _hight * 0.08,
                               focusNode: _pinPutFocusNode,
                               controller: _pinPutController,
-                              submittedFieldDecoration: pinPutDecoration,
-                              selectedFieldDecoration: pinPutDecoration,
-                              followingFieldDecoration: pinPutDecoration,
+                              // decoration: pinPutDecoration,
+                              // decoration: pinPutDecoration,
+                              // decoration: pinPutDecoration,
                               pinAnimationType: PinAnimationType.fade,
                               onChanged: (pin) {
                                 data.setOtp(pin.toString());
                               },
-                              onSubmit: (pin) {
+                              onSubmitted: (pin) {
                                 _loginPageController!.loginUserWithOtp(pin,
                                     context, partnerProvider!, timerProvider!);
                                 setState(() {

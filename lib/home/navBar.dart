@@ -203,7 +203,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
 
   @override
   initState() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     pId = FirebaseAuth.instance.currentUser!.uid.toString();
     loginPartner();
 
@@ -336,7 +336,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
   void dispose() {
     AwesomeNotifications().actionSink.close();
     AwesomeNotifications().createdSink.close();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }

@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 final List<FlSpot> dummyData1 = List.generate(7, (index) {
   return FlSpot(index.toDouble(), index * Random().nextDouble());
@@ -21,52 +21,74 @@ lineGraphBig(hight, width) {
   return LineChart(
     LineChartData(
       titlesData: FlTitlesData(
-        show: true,
-        leftTitles: SideTitles(
-            showTitles: true,
-            getTitles: (value) {
-              return '${value.toInt() + 0}';
-            },
-            getTextStyles: (BuildContext context, double) {
-              return GoogleFonts.josefinSans(
-                color: SpotmiesTheme.secondaryVariant,
-                fontSize: width * 0.035,
-                fontWeight: FontWeight.w600,
-              );
-            },
-            interval: 1.0,
-            margin: 8.0),
-        bottomTitles: SideTitles(
-            showTitles: true,
-            getTextStyles: (BuildContext context, double) {
-              return GoogleFonts.josefinSans(
-                color: SpotmiesTheme.secondaryVariant,
-                fontSize: width * 0.035,
-                fontWeight: FontWeight.w600,
-              );
-            },
-            margin: 20,
-            getTitles: (value) {
-              switch (value.toInt()) {
-                case 0:
-                  return 'Day 1';
-                case 1:
-                  return 'Day 2';
-                case 2:
-                  return 'Day 3';
-                case 3:
-                  return 'Day 4';
-                case 4:
-                  return 'Day 5';
-                case 5:
-                  return 'Day 6';
-                case 6:
-                  return 'Day 7';
-                default:
-                  return '';
-              }
-            }),
-      ),
+          show: true,
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                return TextWid(
+                  text: '${value.toInt() + 0}',
+                );
+              },
+              reservedSize: width * 0.035,
+              // (BuildContext context, double) {
+              //   return GoogleFonts.josefinSans(
+              //     color: SpotmiesTheme.secondaryVariant,
+              //     fontSize: width * 0.035,
+              //     fontWeight: FontWeight.w600,
+              //   );
+              // },
+              interval: 1.0,
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: width * 0.035,
+                //  (BuildContext context, double) {
+                //   return GoogleFonts.josefinSans(
+                //     color: SpotmiesTheme.secondaryVariant,
+                //     fontSize: width * 0.035,
+                //     fontWeight: FontWeight.w600,
+                //   );
+                // },
+                getTitlesWidget: (value, neta) {
+                  switch (value.toInt()) {
+                    case 0:
+                      return TextWid(
+                        text: 'Day 1',
+                      );
+                    case 1:
+                      return TextWid(
+                        text: 'Day 2',
+                      );
+                    case 2:
+                      return TextWid(
+                        text: 'Day 3',
+                      );
+                    case 3:
+                      return TextWid(
+                        text: 'Day 4',
+                      );
+                    case 4:
+                      return TextWid(
+                        text: 'Day 5',
+                      );
+                    case 5:
+                      return TextWid(
+                        text: 'Day 6',
+                      );
+                    case 6:
+                      return TextWid(
+                        text: 'Day 7',
+                      );
+                    default:
+                      return TextWid(
+                        text: '',
+                      );
+                  }
+                }),
+          )),
       lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
         show: true,
@@ -82,9 +104,7 @@ lineGraphBig(hight, width) {
           spots: dummyData1,
           isCurved: true,
           barWidth: 3,
-          colors: [
-            Colors.red,
-          ],
+          color: Colors.red,
           dotData: FlDotData(
             show: false,
           ),
@@ -93,9 +113,7 @@ lineGraphBig(hight, width) {
           spots: dummyData2,
           isCurved: true,
           barWidth: 3,
-          colors: [
-            Colors.greenAccent,
-          ],
+          color: Colors.greenAccent,
           dotData: FlDotData(
             show: false,
           ),
@@ -104,9 +122,7 @@ lineGraphBig(hight, width) {
           spots: dummyData3,
           isCurved: true,
           barWidth: 3,
-          colors: [
-            SpotmiesTheme.tertiaryVariant,
-          ],
+          color: SpotmiesTheme.tertiaryVariant,
           dotData: FlDotData(
             show: false,
           ),
