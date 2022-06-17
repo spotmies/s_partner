@@ -435,8 +435,8 @@ class _PostListState extends StateMVC<PostList> {
                                                         print("ksjdlf");
                                                         confirmDialog(
                                                             context,
-                                                            "title",
-                                                            "brief",
+                                                            "Alert",
+                                                            "Are you sure you want to delete?",
                                                             "Close",
                                                             "Delete", () {
                                                           print("onclick");

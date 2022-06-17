@@ -45,8 +45,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
         duration: const Duration(milliseconds: 0), curve: Curves.fastOutSlowIn);
     scrollController =
         ScrollController(initialScrollOffset: widget.drawerWidth!);
-    scrollController
-      !..addListener(() {
+    scrollController!
+      ..addListener(() {
         if (scrollController!.offset <= 0) {
           if (scrolloffset != 1.0) {
             setState(() {
@@ -79,7 +79,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
               curve: Curves.fastOutSlowIn);
         }
       });
-    WidgetsBinding.instance?.addPostFrameCallback((_) => getInitState());
+    WidgetsBinding.instance.addPostFrameCallback((_) => getInitState());
     super.initState();
   }
 

@@ -26,9 +26,7 @@ lineGraph() {
           ],
           isCurved: true,
           barWidth: 4,
-          colors: [
-            Colors.white,
-          ],
+          color: Colors.white,
           dotData: FlDotData(
             show: true,
           ),

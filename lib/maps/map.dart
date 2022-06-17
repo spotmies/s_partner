@@ -381,8 +381,15 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
                             bgColor: SpotmiesTheme.primary,
                             onClick: () async {
                               try {
-                                launch(
-                                    'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                                launchUrl(
+                                  Uri(
+                                      scheme: "https",
+                                      path:
+                                          'www.google.com/maps/search/?api=1&query=$lat,$long'),
+                                  mode: LaunchMode.externalApplication,
+                                );
+                                // launch(
+                                //     'https://www.google.com/maps/search/?api=1&query=$lat,$long');
                               } catch (e) {
                                 snackbar(context, "something went worng");
                               }
