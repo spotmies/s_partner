@@ -61,7 +61,8 @@ class PostOverViewController extends ControllerMVC {
         snackbar(context, "Use internent call instead");
         return;
       }
-      launch("tel://${orderDetails['uDetails']['phNum']}");
+      launchUrl(Uri(
+          scheme: "tel", path: orderDetails['uDetails']['phNum'].toString()));
     }, option2Click: () {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(

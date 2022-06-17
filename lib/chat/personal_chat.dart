@@ -468,7 +468,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         snackbar(context, "Use internent call instead");
         return;
       }
-      launch("tel://${_chatController?.user['phNum']}");
+      launchUrl(
+          Uri(scheme: "tel", path: _chatController?.user['phNum'].toString()));
     }, option2Click: () {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(

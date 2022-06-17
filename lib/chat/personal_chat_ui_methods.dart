@@ -6,6 +6,7 @@ import 'package:spotmies_partner/reusable_widgets/audio.dart';
 import 'package:spotmies_partner/reusable_widgets/image_viewer.dart';
 import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 import 'package:spotmies_partner/reusable_widgets/video_widget.dart';
+import 'package:spotmies_partner/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 typeofChat(type, message, sender, double hight, double width,
@@ -19,7 +20,10 @@ typeofChat(type, message, sender, double hight, double width,
       type == 'text') {
     return TextButton(
         onPressed: () {
-          launch(message);
+          launchUrl(
+            Uri(scheme: "https", path: removeHttpFromurl(message)),
+            mode: LaunchMode.externalApplication,
+          );
         },
         child: TextWid(
             text: message,

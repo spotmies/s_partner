@@ -108,3 +108,7 @@ checkFileType(String target) {
   }
   return "undefined";
 }
+
+removeHttpFromurl(String url) {
+  return url.replaceAll(RegExp(r"http://|https://"), "");
+}

@@ -206,20 +206,21 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   void _onPlayButtonPressed(String message) {
-    // if (!_isPlaying!) {
-    //   _isPlaying = true;
+    if (!_isPlaying!) {
+      _isPlaying = true;
 
-    //   _audioPlayer!.play(message.isEmpty ? _filePath! : message, isLocal: true);
-    //   _audioPlayer!.onPlayerCompletion.listen((duration) {
-    //     setState(() {
-    //       _isPlaying = false;
-    //     });
-    //   });
-    // } else {
-    //   _audioPlayer!.pause();
-    //   _isPlaying = false;
-    // }
-    // setState(() {});
+      _audioPlayer!
+          .play(DeviceFileSource(message.isEmpty ? _filePath! : message));
+      _audioPlayer!.onPlayerComplete.listen((duration) {
+        setState(() {
+          _isPlaying = false;
+        });
+      });
+    } else {
+      _audioPlayer!.pause();
+      _isPlaying = false;
+    }
+    setState(() {});
   }
 
   Future<void> _startRecording() async {
