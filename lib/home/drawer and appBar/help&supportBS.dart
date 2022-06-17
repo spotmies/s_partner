@@ -133,7 +133,9 @@ Future helpAndSupport(BuildContext context, pd) {
                               backgroundColor: SpotmiesTheme.background,
                               child: IconButton(
                                 onPressed: () {
-                                  launch('tel:+918341980196');
+                                  // launch('tel:+918341980196');
+                                  launchUrl(
+                                      Uri(scheme: "tel", path: "8341980196"));
                                 },
                                 icon: Icon(
                                   icons[2],
@@ -190,10 +192,10 @@ Future helpAndSupport(BuildContext context, pd) {
       });
 }
 
-Future<void> makePhoneCall(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
+// Future<void> makePhoneCall(String url) async {
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw 'Could not launch $url';
+//   }
+// }

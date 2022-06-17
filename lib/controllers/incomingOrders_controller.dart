@@ -64,7 +64,7 @@ class IncomingOrdersController extends ControllerMVC {
   addDataToSocket(neworders, ld) {
     if (neworders != null) {
       if (ld.last['ordId'] != neworders['ordId']) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) async {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString(
               'inComingOrders', jsonEncode(List.from(ld)..addAll([neworders])));

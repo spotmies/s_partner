@@ -31,11 +31,11 @@ circularIndicator(double hight, double width, Color color, String title,
           ],
         ),
         SizedBox(
-          height: hight * 0.2,
+          height: hight * 0.15,
         ),
         Container(
           child: CircularPercentIndicator(
-              radius: width * 0.7,
+              radius: width * 0.4,
               lineWidth: 5,
               animation: true,
               animationDuration: 500,
@@ -47,7 +47,7 @@ circularIndicator(double hight, double width, Color color, String title,
                 title == 'Rating' ? '${value / 20}' : '$value',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+                    fontSize: 24.0,
                     color: Colors.white),
               )),
         ),

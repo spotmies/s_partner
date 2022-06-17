@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies_partner/reusable_widgets/text_wid.dart';
 
 graphIndicator(
     double hight, double width, Color color, String title, IconData icon, pdo) {
@@ -33,16 +34,19 @@ graphIndicator(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title == 'Orders' ? pdo.length.toString() : pdo.toString(),
-                style: GoogleFonts.josefinSans(
-                    fontSize: width * 0.25,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white)),
-            Text(title == 'Orders' ? 'Completed' : 'Rupees',
-                style: GoogleFonts.josefinSans(
-                    fontSize: width * 0.065,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white)),
+            TextWid(
+              text: title == 'Orders'
+                  ? pdo.length.toString()
+                  : "₹ ${pdo.toString()}",
+              weight: FontWeight.w600,
+              size: width * 0.25,
+              color: Colors.white,
+            ),
+            TextWid(
+                text: title == 'Orders' ? 'Completed' : 'Rupees',
+                size: width * 0.065,
+                weight: FontWeight.w600,
+                color: Colors.white),
           ],
         ),
         Container(

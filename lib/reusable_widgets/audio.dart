@@ -209,8 +209,9 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     if (!_isPlaying!) {
       _isPlaying = true;
 
-      _audioPlayer!.play(message.isEmpty ? _filePath! : message, isLocal: true);
-      _audioPlayer!.onPlayerCompletion.listen((duration) {
+      _audioPlayer!
+          .play(DeviceFileSource(message.isEmpty ? _filePath! : message));
+      _audioPlayer!.onPlayerComplete.listen((duration) {
         setState(() {
           _isPlaying = false;
         });
