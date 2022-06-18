@@ -190,6 +190,13 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               onChanged: (pin) {
                                 data.setOtp(pin.toString());
                               },
+                              onCompleted: (pin) {
+                                _loginPageController!.loginUserWithOtp(pin,
+                                    context, partnerProvider!, timerProvider!);
+                                setState(() {
+                                  pinlength = pin.length;
+                                });
+                              },
                               onSubmitted: (pin) {
                                 _loginPageController!.loginUserWithOtp(pin,
                                     context, partnerProvider!, timerProvider!);
@@ -211,8 +218,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           ? Container(
                               height: _hight * 0.3,
                               child: CircularPercentIndicator(
-                                  radius: 55,
-                                  lineWidth: 3,
+                                  radius: width(context) * 0.075,
+                                  lineWidth: 1.5,
                                   animation: true,
                                   animationDuration: 99999,
                                   progressColor: SpotmiesTheme.primaryVariant,
@@ -222,7 +229,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                     '${data.countDown}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20.0,
+                                        fontSize: width(context) * 0.04,
                                         color: SpotmiesTheme.primary),
                                   )),
                             )
@@ -242,13 +249,13 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                     if (pinlength == 6)
                       Container(
                         padding: EdgeInsets.only(
-                            top: data.countDown > 2 ? 0 : _hight * 0.25),
+                            top: data.countDown > 2 ? 0 : _hight * 0.15),
                         child: ElevatedButtonWidget(
                           onClick: () {
                             _loginPageController!.loginUserWithOtp(data.getOtp,
                                 context, partnerProvider!, timerProvider!);
                           },
-                          height: _hight * 0.07,
+                          height: _hight * 0.06,
                           textStyle: FontWeight.w600,
                           minWidth: _width * 0.45,
                           buttonName: "Submit",
