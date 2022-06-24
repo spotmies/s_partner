@@ -37,8 +37,9 @@ class _CatalogState extends State<Catalog> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
   }
 
-  catelogList(BuildContext context, cat, int index) {
+  catelogList(BuildContext context, cat, int index, int length) {
     return Container(
+        padding: EdgeInsets.only(bottom: index == length - 1 ? 60 : 10),
         child: index != 0
             ? catelogListCard(context, cat, index)
             : Column(
@@ -143,11 +144,12 @@ class _CatalogState extends State<Catalog> {
                     shrinkWrap: true,
                     itemCount: cat.length,
                     itemBuilder: (context, index) {
-                      return catelogList(context, cat[index], index);
+                      return catelogList(
+                          context, cat[index], index, cat.length);
                     }),
               ),
               ProgressWaiter(
-                  contextt: context, loaderState: data.catelogListLoader)
+                  contextt: context, loaderState: data.catelogListLoader),
             ],
           );
         }));
