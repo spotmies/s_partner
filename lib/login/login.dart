@@ -219,30 +219,30 @@ class _LoginScreenState extends StateMVC<LoginScreen> {
                         ]),
                     Container(
                         margin: EdgeInsets.all(10),
-                        // width: _width * 0.6,
-                        // height: _hight * 0.06,
+                        width: _width * 0.15,
+                        height: _width * 0.15,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          // color: Colors.amber,
+                          borderRadius: BorderRadius.circular(0),
                         ),
-                        // child: ElevatedButtonWidget(
-                        //   height: _hight * 0.06,
-                        //   // minWidth: _width * 1,
-                        // ),
-                        child: FloatingActionButton(
-                            backgroundColor: SpotmiesTheme.primary,
-                            child: data.loader
-                                ? CircularProgressIndicator(
-                                    color: SpotmiesTheme.background)
-                                : Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: SpotmiesTheme.background,
-                                  ),
-                            onPressed: () {
-                              // _loginPageController.dataToOTP();
-                              if (data.loader) return;
-                              _loginPageController!.dataToOTP(
-                                  context, timerProvider!, partnerProvider!);
-                            })),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: FloatingActionButton(
+                              backgroundColor: SpotmiesTheme.primary,
+                              child: data.loader
+                                  ? CircularProgressIndicator(
+                                      color: SpotmiesTheme.background)
+                                  : Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: SpotmiesTheme.background,
+                                    ),
+                              onPressed: () {
+                                // _loginPageController.dataToOTP();
+                                if (data.loader) return;
+                                _loginPageController!.dataToOTP(
+                                    context, timerProvider!, partnerProvider!);
+                              }),
+                        )),
                   ],
                 ),
               ),
