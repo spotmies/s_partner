@@ -570,7 +570,7 @@ class _CatelogPostState extends State<CatelogPost> {
                     });
 
                     Navigator.pop(context);
-                    if (widget.cat != null) Navigator.pop(context);
+                    // if (widget.cat != null) Navigator.pop(context);
                   }
 
                   if (resp != null) {
@@ -579,7 +579,7 @@ class _CatelogPostState extends State<CatelogPost> {
                           .updateCategoryItem(resp, widget.index);
 
                     Navigator.pop(context);
-                    if (widget.cat != null) Navigator.pop(context);
+                    // if (widget.cat != null) Navigator.pop(context);
                   }
                 }),
           );
