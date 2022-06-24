@@ -211,13 +211,16 @@ catelogListCard(BuildContext context, cat, int index) {
                     color: Colors.amber[700],
                     size: width(context) * 0.03,
                   ),
-                  SizedBox(
-                    width: width(context) * 0.02,
-                  ),
-                  TextWid(
-                    text: cat?["errorMessage"] ??
-                        'catelog under verification'.toString(),
-                    color: Colors.amber[700],
+                  Container(
+                    padding: EdgeInsets.only(left: 5),
+                    width: width(context) * 0.45,
+                    child: TextWid(
+                      text: cat?["errorMessage"] ??
+                          'catelog under verification'.toString(),
+                      color: Colors.amber[700],
+                      flow: TextOverflow.clip,
+                      maxlines: 1,
+                    ),
                   ),
                 ],
               ),
