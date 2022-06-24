@@ -188,8 +188,15 @@ class _CatelogPostState extends State<CatelogPost> {
                                                   color: Colors.grey,
                                                 )),
                                       )
-                                    : Image.file(catelogController
-                                        .netCatelogPics[index]['path']),
+                                    : InkWell(
+                                        onTap: () async {
+                                          await catelogController
+                                              .pickCatelogImage(index);
+                                          setState(() {});
+                                        },
+                                        child: Image.file(catelogController
+                                            .netCatelogPics[index]['path']),
+                                      ),
                               ),
                             );
                           }),
