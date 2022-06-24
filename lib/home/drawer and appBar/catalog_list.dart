@@ -157,17 +157,46 @@ class _CatalogState extends State<Catalog> {
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
-    tileColor: cat["isVerified"]
-        ? SpotmiesTheme.background
-        : Colors.amber.withOpacity(0.15),
+    tileColor:
+        // cat["isVerified"]
+        // ?
+        SpotmiesTheme.background,
+    // : Colors.amber.withOpacity(0.15),
     onTap: () {
-      bottomMenu(context, cat, index);
+      // bottomMenu(context, cat, index);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => CatelogPost(index: index, cat: cat)));
     },
-    title: TextWid(
-      text: toBeginningOfSentenceCase(cat['name']).toString(),
-      size: width(context) * 0.05,
-      weight: FontWeight.w600,
+    title: Container(
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              child: TextWid(
+                text: toBeginningOfSentenceCase(cat['name']).toString(),
+                size: width(context) * 0.05,
+                weight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Container(
+            child: TextWid(
+              text: "₹ ${cat['price']}",
+              size: width(context) * 0.035,
+              weight: FontWeight.w600,
+              flow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     ),
+    // TextWid(
+    //   text: toBeginningOfSentenceCase(cat['name']).toString(),
+    //   size: width(context) * 0.05,
+    //   weight: FontWeight.w600,
+    // ),
     subtitle: !cat["isVerified"]
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,21 +208,23 @@ catelogListCard(BuildContext context, cat, int index) {
                 children: [
                   Icon(
                     Icons.info_rounded,
-                    color: Colors.red.withOpacity(0.5),
+                    color: Colors.amber[700],
                     size: width(context) * 0.03,
                   ),
                   SizedBox(
                     width: width(context) * 0.02,
                   ),
                   TextWid(
-                    text: 'catelog under verification'.toString(),
-                    color: Colors.red.withOpacity(0.5),
+                    text: cat?["errorMessage"] ??
+                        'catelog under verification'.toString(),
+                    color: Colors.amber[700],
                   ),
                 ],
               ),
             ],
           )
         : TextWid(
+            maxlines: 3,
             text: toBeginningOfSentenceCase(cat['description'].toString())),
     isThreeLine: cat["isVerified"] ? false : true,
     //  filter: ui.ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
@@ -208,11 +239,11 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              if (cat["isVerified"]) {
-                bottomMenu(context, cat, index);
-              } else {
-                snackbar(context, "Catelog under verification");
-              }
+              // if (cat["isVerified"]) {
+              bottomMenu(context, cat, index);
+              // } else {
+              //   snackbar(context, "Catelog under verification");
+              // }
             },
             icon: Icon(
               Icons.more_horiz,
