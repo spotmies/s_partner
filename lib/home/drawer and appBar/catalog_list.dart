@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -59,98 +60,132 @@ class _CatalogState extends State<Catalog> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: SpotmiesTheme.background,
-        appBar: AppBar(
+    log("build ------>>>");
+    return Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+      return Scaffold(
           backgroundColor: SpotmiesTheme.background,
-          elevation: 0,
-          title: TextWid(
-            text: 'Services Store',
-            size: width(context) * 0.045,
-            weight: FontWeight.w600,
+          appBar: AppBar(
+            backgroundColor: SpotmiesTheme.background,
+            elevation: 0,
+            title: TextWid(
+              text: 'Services Store',
+              size: width(context) * 0.045,
+              weight: FontWeight.w600,
+            ),
+            leading: IconButton(
+                onPressed: () {
+                  if (widget.showCard! == true) {
+                    Navigator.pop(context);
+                  }
+                },
+                icon: Icon(
+                  widget.showCard! == true
+                      ? Icons.arrow_back
+                      : Icons.store_rounded,
+                  size: widget.showCard! == true
+                      ? width(context) * 0.06
+                      : width(context) * 0.05,
+                  color: SpotmiesTheme.secondaryVariant,
+                )),
           ),
-          leading: IconButton(
-              onPressed: () {
-                if (widget.showCard! == true) {
-                  Navigator.pop(context);
-                }
-              },
-              icon: Icon(
-                widget.showCard! == true
-                    ? Icons.arrow_back
-                    : Icons.store_rounded,
-                size: widget.showCard! == true
-                    ? width(context) * 0.06
-                    : width(context) * 0.05,
-                color: SpotmiesTheme.secondaryVariant,
-              )),
-        ),
-        floatingActionButton: ElevatedButtonWidget(
-          buttonName: 'Add Service',
-          height: height(context) * 0.055,
-          minWidth: width(context) * 0.45,
-          bgColor: SpotmiesTheme.primary,
-          textColor: SpotmiesTheme.background,
-          textSize: width(context) * 0.04,
-          allRadius: true,
-          leadingIcon: Icon(
-            Icons.add_circle,
-            color: SpotmiesTheme.surfaceVariant,
-            size: width(context) * 0.05,
-          ),
-          borderRadius: 15.0,
-          borderSideColor: SpotmiesTheme.background,
-          onClick: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => CatelogPost()));
-          },
-        ),
-        body: Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
-          Map<dynamic, dynamic> pD = data.getPartnerDetailsFull;
-          dynamic cat = pD['catelogs'];
-          log(cat.toString());
-          if (cat == null) {
-            return addCatelog(context);
-          }
+          floatingActionButton: data.isFabVisible == "2"
+              ? ElevatedButtonWidget(
+                  buttonName: 'Add Service',
+                  height: height(context) * 0.055,
+                  minWidth: width(context) * 0.45,
+                  bgColor: SpotmiesTheme.primary,
+                  textColor: SpotmiesTheme.background,
+                  textSize: width(context) * 0.04,
+                  allRadius: true,
+                  leadingIcon: Icon(
+                    Icons.add_circle,
+                    color: SpotmiesTheme.surfaceVariant,
+                    size: width(context) * 0.05,
+                  ),
+                  borderRadius: 15.0,
+                  borderSideColor: SpotmiesTheme.background,
+                  onClick: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => CatelogPost()));
+                  },
+                )
+              : data.isFabVisible == "1"
+                  ? FloatingActionButton(
+                      backgroundColor: SpotmiesTheme.primary,
+                      child: Icon(
+                        Icons.add,
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => CatelogPost()));
+                      })
+                  : Container(),
+          body:
+              Consumer<PartnerDetailsProvider>(builder: (context, data, child) {
+            Map<dynamic, dynamic> pD = data.getPartnerDetailsFull;
+            dynamic cat = pD['catelogs'];
+            // log(cat.toString());
+            if (cat == null) {
+              return addCatelog(context);
+            }
 
-          if (cat.length < 1) {
-            return Column(
+            if (cat.length < 1) {
+              return Column(
+                children: [
+                  Container(
+                    height: height(context) * 0.21,
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: SharingCard(
+                      provider: partnerDetailsProvider,
+                      onClick: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => CatelogPost()));
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Stack(
               children: [
-                Container(
-                  height: height(context) * 0.21,
-                  margin: EdgeInsets.only(bottom: 5),
-                  child: SharingCard(
-                    provider: partnerDetailsProvider,
-                    onClick: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => CatelogPost()));
+                RefreshIndicator(
+                  onRefresh: () async {
+                    dynamic details = await partnerDetailsFull(
+                        partnerDetailsProvider!.currentPid.toString());
+                    partnerDetailsProvider!
+                        .setPartnerDetails(details, ignoreOrders: true);
+                  },
+                  child: NotificationListener<UserScrollNotification>(
+                    onNotification: (notification) {
+                      log(notification.metrics.pixels.toString());
+                      if (notification.metrics.pixels < 5) {
+                        data.setFabVisible("2");
+                      } else if (notification.direction ==
+                              ScrollDirection.reverse ||
+                          notification.direction == ScrollDirection.forward) {
+                        data.setFabVisible("0");
+                      } else if (notification.direction ==
+                          ScrollDirection.idle) {
+                        Future.delayed(Duration(milliseconds: 300), (() {
+                          data.setFabVisible("1");
+                        }));
+                      }
+                      return true;
                     },
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: cat.length,
+                        itemBuilder: (context, index) {
+                          return catelogList(context, cat[index], index);
+                        }),
                   ),
                 ),
+                ProgressWaiter(
+                    contextt: context, loaderState: data.catelogListLoader)
               ],
             );
-          }
-          return Stack(
-            children: [
-              RefreshIndicator(
-                onRefresh: () async {
-                  dynamic details = await partnerDetailsFull(
-                      partnerDetailsProvider!.currentPid.toString());
-                  partnerDetailsProvider!
-                      .setPartnerDetails(details, ignoreOrders: true);
-                },
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: cat.length,
-                    itemBuilder: (context, index) {
-                      return catelogList(context, cat[index], index);
-                    }),
-              ),
-              ProgressWaiter(
-                  contextt: context, loaderState: data.catelogListLoader)
-            ],
-          );
-        }));
+          }));
+    });
   }
 }
 

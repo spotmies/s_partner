@@ -30,12 +30,18 @@ class PartnerDetailsProvider extends ChangeNotifier {
   bool? msgNote = true;
   String helperText = "";
   Color helperColor = Colors.grey;
+  String isFabVisible = "2";
 
 /* ------------------------- constant variables here ------------------------ */
 
   Map<dynamic, dynamic> allConstants = {};
   String currentScreen = "";
   dynamic currentConstants;
+
+  void setFabVisible(String? val) {
+    isFabVisible = val ?? "2";
+    notifyListeners();
+  }
 
   void setCatelogListLoader(bool? loading) {
     catelogListLoader = loading ?? false;
