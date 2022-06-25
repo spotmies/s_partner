@@ -8,6 +8,7 @@ import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
@@ -70,6 +71,23 @@ class _CatalogState extends State<Catalog> {
             size: width(context) * 0.045,
             weight: FontWeight.w600,
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  bottomOptionsMenu(context, options: [
+                    {
+                      "name": "Add services list",
+                      "icon": Icons.store,
+                    },
+                  ], option1Click: () async {
+                    await getCatelogsExample(partnerDetailsProvider);
+                  });
+                },
+                icon: Icon(
+                  Icons.help,
+                  color: SpotmiesTheme.secondaryVariant,
+                ))
+          ],
           leading: IconButton(
               onPressed: () {
                 if (widget.showCard! == true) {
@@ -128,6 +146,38 @@ class _CatalogState extends State<Catalog> {
                     },
                   ),
                 ),
+                SizedBox(
+                  height: height(context) * 0.1,
+                ),
+                TextWid(
+                  text: "Don't know what to add here,",
+                  maxlines: 4,
+                  size: width(context) * 0.07,
+                  weight: FontWeight.w600,
+                ),
+                SizedBox(
+                  height: height(context) * 0.03,
+                ),
+                InkWell(
+                  onTap: () async {
+                    await getCatelogsExample(data);
+                  },
+                  child: TextWid(
+                    text: "Click here to add service list examples",
+                    maxlines: 4,
+                    size: width(context) * 0.04,
+                    weight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(
+                  height: height(context) * 0.03,
+                ),
+                Visibility(
+                  visible: data.catelogListLoader,
+                  child: CircularProgressIndicator(
+                    color: SpotmiesTheme.primary,
+                  ),
+                ),
               ],
             );
           }
@@ -135,10 +185,7 @@ class _CatalogState extends State<Catalog> {
             children: [
               RefreshIndicator(
                 onRefresh: () async {
-                  dynamic details = await partnerDetailsFull(
-                      partnerDetailsProvider!.currentPid.toString());
-                  partnerDetailsProvider!
-                      .setPartnerDetails(details, ignoreOrders: true);
+                  await partnerfullDetails();
                 },
                 child: ListView.builder(
                     shrinkWrap: true,
@@ -153,6 +200,23 @@ class _CatalogState extends State<Catalog> {
             ],
           );
         }));
+  }
+
+  Future<void> getCatelogsExample(PartnerDetailsProvider? data) async {
+    snackbar(context, "Please wait...");
+    if (await data!.getExampleCatelogs()) {
+      data.setCatelogListLoader(true);
+      await partnerfullDetails();
+      data.setCatelogListLoader(false);
+    } else
+      snackbar(
+          context, "service list examples not available, please try again.");
+  }
+
+  Future<void> partnerfullDetails() async {
+    dynamic details =
+        await partnerDetailsFull(partnerDetailsProvider!.currentPid.toString());
+    partnerDetailsProvider!.setPartnerDetails(details, ignoreOrders: true);
   }
 }
 

@@ -29,7 +29,8 @@ partnerDetailsFull(String currentPid) async {
     'extractData': 'true',
   };
   log("uid $pId");
-  var response = await Server().getMethodParems(API.partnerDetails + currentPid, query);
+  var response =
+      await Server().getMethodParems(API.partnerDetails + currentPid, query);
   if (response.statusCode == 200) {
     var partnerDetails = jsonDecode(response.body);
     return partnerDetails;
@@ -39,9 +40,9 @@ partnerDetailsFull(String currentPid) async {
 
 partnerAllOrders(String currentPid) async {
   var response = await Server().getMethod(API.allOrder + currentPid);
-  if(response.statusCode == 200){
-  var responseDecode = jsonDecode(response.body);
-  return responseDecode;
+  if (response.statusCode == 200) {
+    var responseDecode = jsonDecode(response.body);
+    return responseDecode;
   }
   return null;
 }
