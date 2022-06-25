@@ -205,6 +205,16 @@ class PartnerDetailsProvider extends ChangeNotifier {
     });
   }
 
+  Future<bool> getExampleCatelogs() async {
+    setCatelogListLoader(true);
+    dynamic resp = await Server().getMethod(API.exampleCatelogs + currentPid);
+    setCatelogListLoader(false);
+    if (resp.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   void setPartnerDetails(data, {bool ignoreOrders = false}) {
     dynamic dataTemp = data;
 

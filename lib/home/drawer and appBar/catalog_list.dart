@@ -8,6 +8,7 @@ import 'package:spotmies_partner/controllers/catelog_controller.dart';
 import 'package:spotmies_partner/home/drawer%20and%20appBar/catelog_post.dart';
 import 'package:spotmies_partner/providers/partnerDetailsProvider.dart';
 import 'package:spotmies_partner/providers/theme_provider.dart';
+import 'package:spotmies_partner/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies_partner/reusable_widgets/elevatedButtonWidget.dart';
 import 'package:spotmies_partner/reusable_widgets/profile_pic.dart';
 import 'package:spotmies_partner/reusable_widgets/progress_waiter.dart';
@@ -37,8 +38,9 @@ class _CatalogState extends State<Catalog> {
         Provider.of<PartnerDetailsProvider>(context, listen: false);
   }
 
-  catelogList(BuildContext context, cat, int index) {
+  catelogList(BuildContext context, cat, int index, int length) {
     return Container(
+        padding: EdgeInsets.only(bottom: index == length - 1 ? 60 : 10),
         child: index != 0
             ? catelogListCard(context, cat, index)
             : Column(
@@ -69,6 +71,23 @@ class _CatalogState extends State<Catalog> {
             size: width(context) * 0.045,
             weight: FontWeight.w600,
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  bottomOptionsMenu(context, options: [
+                    {
+                      "name": "Add services list",
+                      "icon": Icons.store,
+                    },
+                  ], option1Click: () async {
+                    await getCatelogsExample(partnerDetailsProvider);
+                  });
+                },
+                icon: Icon(
+                  Icons.help,
+                  color: SpotmiesTheme.secondaryVariant,
+                ))
+          ],
           leading: IconButton(
               onPressed: () {
                 if (widget.showCard! == true) {
@@ -127,6 +146,38 @@ class _CatalogState extends State<Catalog> {
                     },
                   ),
                 ),
+                SizedBox(
+                  height: height(context) * 0.1,
+                ),
+                TextWid(
+                  text: "Don't know what to add here,",
+                  maxlines: 4,
+                  size: width(context) * 0.07,
+                  weight: FontWeight.w600,
+                ),
+                SizedBox(
+                  height: height(context) * 0.03,
+                ),
+                InkWell(
+                  onTap: () async {
+                    await getCatelogsExample(data);
+                  },
+                  child: TextWid(
+                    text: "Click here to add service list examples",
+                    maxlines: 4,
+                    size: width(context) * 0.04,
+                    weight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(
+                  height: height(context) * 0.03,
+                ),
+                Visibility(
+                  visible: data.catelogListLoader,
+                  child: CircularProgressIndicator(
+                    color: SpotmiesTheme.primary,
+                  ),
+                ),
               ],
             );
           }
@@ -134,40 +185,84 @@ class _CatalogState extends State<Catalog> {
             children: [
               RefreshIndicator(
                 onRefresh: () async {
-                  dynamic details = await partnerDetailsFull(
-                      partnerDetailsProvider!.currentPid.toString());
-                  partnerDetailsProvider!
-                      .setPartnerDetails(details, ignoreOrders: true);
+                  await partnerfullDetails();
                 },
                 child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: cat.length,
                     itemBuilder: (context, index) {
-                      return catelogList(context, cat[index], index);
+                      return catelogList(
+                          context, cat[index], index, cat.length);
                     }),
               ),
               ProgressWaiter(
-                  contextt: context, loaderState: data.catelogListLoader)
+                  contextt: context, loaderState: data.catelogListLoader),
             ],
           );
         }));
+  }
+
+  Future<void> getCatelogsExample(PartnerDetailsProvider? data) async {
+    snackbar(context, "Please wait...");
+    if (await data!.getExampleCatelogs()) {
+      data.setCatelogListLoader(true);
+      await partnerfullDetails();
+      data.setCatelogListLoader(false);
+    } else
+      snackbar(
+          context, "service list examples not available, please try again.");
+  }
+
+  Future<void> partnerfullDetails() async {
+    dynamic details =
+        await partnerDetailsFull(partnerDetailsProvider!.currentPid.toString());
+    partnerDetailsProvider!.setPartnerDetails(details, ignoreOrders: true);
   }
 }
 
 catelogListCard(BuildContext context, cat, int index) {
   return ListTile(
     minVerticalPadding: height(context) * 0.02,
-    tileColor: cat["isVerified"]
-        ? SpotmiesTheme.background
-        : Colors.amber.withOpacity(0.15),
+    tileColor:
+        // cat["isVerified"]
+        // ?
+        SpotmiesTheme.background,
+    // : Colors.amber.withOpacity(0.15),
     onTap: () {
-      bottomMenu(context, cat, index);
+      // bottomMenu(context, cat, index);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => CatelogPost(index: index, cat: cat)));
     },
-    title: TextWid(
-      text: toBeginningOfSentenceCase(cat['name']).toString(),
-      size: width(context) * 0.05,
-      weight: FontWeight.w600,
+    title: Container(
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              child: TextWid(
+                text: toBeginningOfSentenceCase(cat['name']).toString(),
+                size: width(context) * 0.05,
+                weight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Container(
+            child: TextWid(
+              text: "₹ ${cat['price']}",
+              size: width(context) * 0.035,
+              weight: FontWeight.w600,
+              flow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     ),
+    // TextWid(
+    //   text: toBeginningOfSentenceCase(cat['name']).toString(),
+    //   size: width(context) * 0.05,
+    //   weight: FontWeight.w600,
+    // ),
     subtitle: !cat["isVerified"]
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,21 +274,26 @@ catelogListCard(BuildContext context, cat, int index) {
                 children: [
                   Icon(
                     Icons.info_rounded,
-                    color: Colors.red.withOpacity(0.5),
+                    color: Colors.amber[700],
                     size: width(context) * 0.03,
                   ),
-                  SizedBox(
-                    width: width(context) * 0.02,
-                  ),
-                  TextWid(
-                    text: 'catelog under verification'.toString(),
-                    color: Colors.red.withOpacity(0.5),
+                  Container(
+                    padding: EdgeInsets.only(left: 5),
+                    width: width(context) * 0.45,
+                    child: TextWid(
+                      text: cat?["errorMessage"] ??
+                          'catelog under verification'.toString(),
+                      color: Colors.amber[700],
+                      flow: TextOverflow.clip,
+                      maxlines: 1,
+                    ),
                   ),
                 ],
               ),
             ],
           )
         : TextWid(
+            maxlines: 3,
             text: toBeginningOfSentenceCase(cat['description'].toString())),
     isThreeLine: cat["isVerified"] ? false : true,
     //  filter: ui.ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
@@ -208,11 +308,11 @@ catelogListCard(BuildContext context, cat, int index) {
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             onPressed: () {
-              if (cat["isVerified"]) {
-                bottomMenu(context, cat, index);
-              } else {
-                snackbar(context, "Catelog under verification");
-              }
+              // if (cat["isVerified"]) {
+              bottomMenu(context, cat, index);
+              // } else {
+              //   snackbar(context, "Catelog under verification");
+              // }
             },
             icon: Icon(
               Icons.more_horiz,

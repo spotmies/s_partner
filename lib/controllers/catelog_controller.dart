@@ -209,7 +209,8 @@ class CatelogController extends ControllerMVC {
       "maxRange": 5.toString(),
       "range": range.toString(),
       "offerPrice": catOfferPrice.text.toString(),
-      "pDetails": pD.toString()
+      "pDetails": pD.toString(),
+      "errorMessage": "Service under verification"
     };
     for (int i = 0; i < uploadedImages.length; i++) {
       body["media.$i.type"] = "image";
@@ -249,6 +250,7 @@ class CatelogController extends ControllerMVC {
       "whatIncluds.0": wI.text.toString(),
       "whatNotIncluds.0": wNI.text.toString(),
       "offerPrice": catOfferPrice.text.toString(),
+      "errorMessage": "Service under verification"
 
       // if (imageLink != null) "media.0.type": "image",
       // if (imageLink != null) "media.0.url": imageLink.toString().toString(),
