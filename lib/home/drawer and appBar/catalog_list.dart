@@ -150,7 +150,7 @@ class _CatalogState extends State<Catalog> {
                   height: height(context) * 0.1,
                 ),
                 TextWid(
-                  text: "Don't know what to add here,",
+                  text: "Don't know what to add here ?",
                   maxlines: 4,
                   size: width(context) * 0.07,
                   weight: FontWeight.w600,
@@ -163,8 +163,10 @@ class _CatalogState extends State<Catalog> {
                     await getCatelogsExample(data);
                   },
                   child: TextWid(
-                    text: "Click here to add service list examples",
+                    text: "Click here to get templates",
                     maxlines: 4,
+                    color: Colors.blueGrey,
+                    decoration: TextDecoration.underline,
                     size: width(context) * 0.04,
                     weight: FontWeight.w600,
                   ),
