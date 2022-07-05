@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
@@ -28,8 +29,6 @@ import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
-import '../apiCalls/apiUrl.dart';
-
 void main() => runApp(NavBar());
 String pId = "123456"; //user id
 
@@ -52,8 +51,9 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
 
   IO.Socket? socket;
 
-  void socketResponse() {
-    socket = IO.io("wss://${API.host}", <String, dynamic>{
+  Future<void> socketResponse() async {
+    final host = await Server().getSocketUrl();
+    socket = IO.io("wss://${host}", <String, dynamic>{
       // socket = IO.io("wss://spotmies.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
