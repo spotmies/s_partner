@@ -14,6 +14,7 @@ import 'package:spotmies_partner/utilities/shared_preference.dart';
 
 String? dynamic_base_server_url;
 String? dynamic_base_socket_url;
+String? dynamic_security_type;
 
 class Server {
 /* -------------------------- GET USER ACCESS TOKEN ------------------------- */
@@ -67,16 +68,24 @@ class Server {
   Future<Uri> getServerUri(String api, Map<String, dynamic>? query) async {
     log(dynamic_base_server_url.toString());
     if (dynamic_base_server_url != null)
-      return Uri.https(dynamic_base_server_url.toString(), api,
-          {...?query, ...API.defaultQuery});
+      return dynamic_security_type == "http"
+          ? Uri.http(dynamic_base_server_url.toString(), api,
+              {...?query, ...API.defaultQuery})
+          : Uri.https(dynamic_base_server_url.toString(), api,
+              {...?query, ...API.defaultQuery});
     try {
       log("getting server url from storage");
       String base_server_url = await getDynamicUrl("base_server_url");
+      String security_type = await getDynamicUrl("server_security_type");
       if (base_server_url != "null") {
         dynamic_base_server_url = base_server_url.toString();
         log("server url dynamic" + base_server_url);
-        return Uri.https(dynamic_base_server_url.toString(), api,
-            {...?query, ...API.defaultQuery});
+        if (security_type != "null") dynamic_security_type = security_type;
+        return security_type == "http"
+            ? Uri.http(dynamic_base_server_url.toString(), api,
+                {...?query, ...API.defaultQuery})
+            : Uri.https(dynamic_base_server_url.toString(), api,
+                {...?query, ...API.defaultQuery});
       }
       return Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     } catch (e) {
