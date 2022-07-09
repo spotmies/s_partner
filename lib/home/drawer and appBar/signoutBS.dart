@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies_partner/login/login.dart';
@@ -50,6 +51,7 @@ Future signOut(BuildContext context, double hight, double width) {
                     borderSideColor: SpotmiesTheme.primary,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
+                      await FirebaseMessaging.instance.deleteToken();
                       await FirebaseAuth.instance.signOut().then((action) {
                         Navigator.pushAndRemoveUntil(
                             context,
