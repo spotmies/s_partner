@@ -38,6 +38,7 @@ class API {
   static var storeAvailabilityCheck = "/api/store/check-store-availability";
   static String exampleCatelogs = "/api/catelog/assign-catelogs/";
   static Map<String, dynamic> defaultQuery = {"api_from": "partner_app"};
+  static String allGeoCodes = "/api/geocode/all";
 }
 // api/partner/partners/VTrVbZPiK5hbGW8tlnDAfAyaINV2?showOnly=inComingOrders&extractData=true
 // "api/partner/partners” + ”?” + “showOnly=${field1}&extractData${field2}&ordState${field3}"
