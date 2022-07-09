@@ -87,6 +87,9 @@ class PartnerDetailsProvider extends ChangeNotifier {
 
     dynamic appConstants = await constantsAPI();
     if (appConstants != null) {
+      dynamic_base_server_url = null;
+      dynamic_base_socket_url = null;
+      dynamic_security_type = null;
       log("new constatns downloaded");
       allConstants = appConstants;
     }

@@ -123,7 +123,7 @@ class StepperController extends ControllerMVC {
           () => scrollController!
               .jumpTo(scrollController!.position.maxScrollExtent));
 
-      snackbar(context, 'Need to accept all the terms & conditions');
+      snackbar(context, 'Please accept the Terms & Conditions');
     }
   }
 

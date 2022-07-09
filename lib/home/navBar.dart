@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies_partner/apiCalls/apiCalling.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/chatList.dart';
 import 'package:spotmies_partner/apiCalls/apiInterMediaCalls/partnerDetailsAPI.dart';
 import 'package:spotmies_partner/chat/chat_list.dart';
@@ -28,8 +29,6 @@ import 'package:spotmies_partner/utilities/app_config.dart';
 import 'package:spotmies_partner/utilities/shared_preference.dart';
 import 'package:spotmies_partner/utilities/snackbar.dart';
 
-import '../apiCalls/apiUrl.dart';
-
 void main() => runApp(NavBar());
 String pId = "123456"; //user id
 
@@ -52,14 +51,22 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
 
   IO.Socket? socket;
 
-  void socketResponse() {
-    socket = IO.io("wss://${API.host}", <String, dynamic>{
+  Future<void> socketResponse({reConnect = false}) async {
+    if (reConnect) {
+      socket!.disconnect();
+      log("socket reconnecting... ");
+    }
+    final host = await Server().getSocketUrl();
+    socket = IO.io("wss://${host}", <String, dynamic>{
       // socket = IO.io("wss://spotmies.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
     socket!.onError((data) => {log("error ❌❌❌❌" + data.toString())});
-    socket!.onConnectError((data) => {log(" 62 error ❌❌❌❌" + data.toString())});
+    socket!.onConnectError((data) => {
+          log(" 62 error ❌❌❌❌" + data.toString()),
+          setStringToSF(id: "isSocketConnected", value: false)
+        });
     socket!.onConnect((data) {
       setStringToSF(id: "isSocketConnected", value: true);
       print("Connected  👍 👍👍👍👍");
@@ -176,7 +183,8 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       if (details['appConfig'] == true) {
         partnerProvider!.getServiceListFromServer();
         log('17100');
-        partnerProvider!.getConstants(alwaysHit: true);
+        await partnerProvider!.getConstants(alwaysHit: true);
+        socketResponse(reConnect: true);
       }
     }
     getImportantAPIs(currentPid);
@@ -341,7 +349,14 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  checkSocketStatus() async {
+  checkSocketStatus({hitApis = true}) async {
+    final host = await Server().getSocketUrl();
+    log("host + $host");
+    socket = IO.io("wss://${host}", <String, dynamic>{
+      // socket = IO.io("wss://spotmies.herokuapp.com", <String, dynamic>{
+      "transports": ["websocket", "polling", "flashsocket"],
+      "autoConnect": false,
+    });
     bool socketStatus = await getStringValuesSF("isSocketConnected") ?? true;
     if (!socketStatus) {
       snackbar(context, "socket disconnected trying to connect again");
@@ -349,7 +364,7 @@ class _NavBarState extends State<NavBar> with WidgetsBindingObserver {
       socket!.disconnect();
       socket!.connect();
       socket!.emit('join-room', FirebaseAuth.instance.currentUser!.uid);
-
+      if (!hitApis) return;
       checkPartnerRegistered(FirebaseAuth.instance.currentUser!.uid);
       getImportantAPIs(FirebaseAuth.instance.currentUser!.uid);
       partnerProvider!.getOnlyIncomingOrders();
